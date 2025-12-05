@@ -1,0 +1,89 @@
+import { Button } from "@/components/ui/button";
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuLink,
+} from "@/components/ui/navigation-menu";
+
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+} from "@/components/ui/sheet";
+
+import { Menu } from "lucide-react";
+import Logo from "../assets/logo.png";
+import { Terminal } from 'lucide-react';
+
+export default function Navbar() {
+  return (
+    <nav className="border rounded-3xl bg-white/60 backdrop-blur-xl">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+
+        {/* Logo */}
+        <div >
+          <img src={Logo} className="h-8 w-auto" alt="" />
+        </div>
+
+        {/* Desktop Menu */}
+        <div className="hidden md:flex">
+          <NavigationMenu>
+            <NavigationMenuList className="gap-8">
+              <NavigationMenuItem>
+                <NavigationMenuLink href="/" className="text-md font-semibold">
+                  Home
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink href="/about" className="text-md font-semibold">
+                  About
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink href="/services" className="text-md font-semibold">
+                  Services
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuLink href="/contact" className="text-md font-semibold">
+                  Contact
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+
+        {/* CTA button for desktop */}
+        <div className="hidden md:block">
+          <Button className="rounded-xl" size="lg"> <Terminal /> Get Started</Button>
+        </div>
+
+        {/* Mobile Menu */}
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button size="icon" variant="ghost">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+
+            <SheetContent side="right" className="w-64">
+              <div className="mt-10 flex flex-col gap-4">
+                <a className="text-lg" href="/">Home</a>
+                <a className="text-lg" href="/about">About</a>
+                <a className="text-lg" href="/services">Services</a>
+                <a className="text-lg" href="/contact">Contact</a>
+
+                <Button className="mt-4">Get Started</Button>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </nav>
+  );
+}
