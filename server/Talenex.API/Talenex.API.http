@@ -1,0 +1,6 @@
+@Talenex.API_HostAddress = http://localhost:5296
+
+GET {{Talenex.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
