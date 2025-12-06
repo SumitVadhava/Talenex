@@ -1,0 +1,21 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Talenex.Application.Data;
+
+public static class ServiceRegistration
+{
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
+    {
+        // EF Core
+        services.AddDbContext<AppDBContext>(options =>
+            options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
+
+        //// Repositories & services
+        //services.AddScoped<IUserRepository, UserRepository>();
+        //services.AddScoped<IAuthService, AuthService>();
+        //services.AddScoped<IEmailService, EmailService>();
+
+        return services;
+    }
+}
