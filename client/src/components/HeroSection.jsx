@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { HeartHandshake, UserRoundCheck, Sparkles, AudioWaveformIcon as Waveform, ArrowRightIcon, ChevronRight, Layers2 } from "lucide-react"
+import { HeartHandshake, UserRoundCheck, Sparkles,Shapes, AudioWaveformIcon as Waveform, ArrowRightIcon, ChevronRight, Layers2 } from "lucide-react"
 import { AnimatedShinyText } from "./ui/animated-shiny-text"
 import { cn } from "@/lib/utils"
 import { AnimatedGradientText } from "./ui/animated-gradient-text"
@@ -46,7 +46,7 @@ export default function HeroSection() {
         { icon: <HeartHandshake className="w-6 h-6" />, label: "Skills Shared", value: "1500+" },
         { icon: <UserRoundCheck className="w-6 h-6" />, label: "Users", value: "1000+" },
         { icon: <Sparkles className="w-6 h-6" />, label: "Avg.Rating", value: "4.6+" },
-        { icon: <Layers2 className="w-6 h-6" />, label: "Categories", value: "25+" },
+        { icon: <Shapes className="w-6 h-6" />, label: "Categories", value: "25+" },
     ]
 
     return (

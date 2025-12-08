@@ -21,7 +21,7 @@
 //                         React
 //                     </div>
 //                 </div>
-                
+
 //                 {/* AI Matching Engine */}
 //                 <div className="flex-1 flex flex-col items-center gap-1">
 //                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center border-2 border-emerald-400/50 dark:border-emerald-500/50 shadow-sm">
@@ -30,7 +30,7 @@
 //                     <div className="text-[8px] text-emerald-600 dark:text-emerald-400 font-semibold">AI Match</div>
 //                     <div className="w-full h-px bg-gradient-to-r from-transparent via-emerald-300 dark:via-emerald-700 to-transparent"></div>
 //                 </div>
-                
+
 //                 {/* User 2 */}
 //                 <div className="flex flex-col items-center gap-1.5">
 //                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
@@ -41,7 +41,7 @@
 //                     </div>
 //                 </div>
 //             </div>
-            
+
 //             {/* Match Score */}
 //             <div className="mt-2 flex items-center justify-center gap-1">
 //                 <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">Match Score:</div>
@@ -65,14 +65,14 @@
 //                 <div className="flex-1 h-1.5 bg-blue-200/30 dark:bg-blue-800/30 rounded"></div>
 //                 <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
 //             </div>
-            
+
 //             {/* Filter Pills */}
 //             <div className="flex flex-wrap gap-1.5">
 //                 <div className="px-2 py-1 bg-blue-100/50 dark:bg-blue-900/30 border border-blue-300/50 dark:border-blue-700/50 rounded text-[9px] text-blue-700 dark:text-blue-300 font-medium">Category</div>
 //                 <div className="px-2 py-1 bg-indigo-100/50 dark:bg-indigo-900/30 border border-indigo-300/50 dark:border-indigo-700/50 rounded text-[9px] text-indigo-700 dark:text-indigo-300 font-medium">Level</div>
 //                 <div className="px-2 py-1 bg-cyan-100/50 dark:bg-cyan-900/30 border border-cyan-300/50 dark:border-cyan-700/50 rounded text-[9px] text-cyan-700 dark:text-cyan-300 font-medium">Location</div>
 //             </div>
-            
+
 //             {/* Results Count */}
 //             <div className="flex items-center justify-between pt-1 border-t border-blue-200/50 dark:border-blue-800/50">
 //                 <div className="text-[10px] text-blue-600/70 dark:text-blue-400/70">Results:</div>
@@ -98,14 +98,14 @@
 //                     <div className="h-1.5 w-16 bg-violet-200/30 dark:bg-violet-800/20 rounded"></div>
 //                 </div>
 //             </div>
-            
+
 //             {/* Skills Tags */}
 //             <div className="flex flex-wrap gap-1.5">
 //                 <div className="px-2 py-0.5 bg-violet-100/50 dark:bg-violet-900/30 border border-violet-300/50 dark:border-violet-700/50 rounded text-[9px] text-violet-700 dark:text-violet-300 font-medium">React</div>
 //                 <div className="px-2 py-0.5 bg-purple-100/50 dark:bg-purple-900/30 border border-purple-300/50 dark:border-purple-700/50 rounded text-[9px] text-purple-700 dark:text-purple-300 font-medium">Node.js</div>
 //                 <div className="px-2 py-0.5 bg-fuchsia-100/50 dark:bg-fuchsia-900/30 border border-fuchsia-300/50 dark:border-fuchsia-700/50 rounded text-[9px] text-fuchsia-700 dark:text-fuchsia-300 font-medium">+3</div>
 //             </div>
-            
+
 //             {/* Stats */}
 //             <div className="flex items-center justify-between pt-1.5 border-t border-violet-200/50 dark:border-violet-800/50">
 //                 <div className="text-[9px] text-violet-600/70 dark:text-violet-400/70">Endorsements:</div>
@@ -126,24 +126,24 @@
 //                     <div className="flex-1 h-1.5 bg-orange-200/50 dark:bg-orange-800/30 rounded"></div>
 //                     <div className="text-[9px] text-orange-700 dark:text-orange-300 font-medium">Request</div>
 //                 </div>
-                
+
 //                 {/* Arrow */}
 //                 <div className="flex items-center justify-center">
 //                     <ArrowLeftRight className="w-4 h-4 text-orange-500 dark:text-orange-400" />
 //                 </div>
-                
+
 //                 {/* Step 2: Schedule */}
 //                 <div className="flex items-center gap-2">
 //                     <div className="w-5 h-5 rounded-full bg-gradient-to-br from-amber-400 to-yellow-400 border border-amber-500/50 flex items-center justify-center text-[8px] text-white font-bold shadow-sm">2</div>
 //                     <div className="flex-1 h-1.5 bg-amber-200/50 dark:bg-amber-800/30 rounded"></div>
 //                     <div className="text-[9px] text-amber-700 dark:text-amber-300 font-medium">Schedule</div>
 //                 </div>
-                
+
 //                 {/* Arrow */}
 //                 <div className="flex items-center justify-center">
 //                     <ArrowLeftRight className="w-4 h-4 text-amber-500 dark:text-amber-400" />
 //                 </div>
-                
+
 //                 {/* Step 3: Complete */}
 //                 <div className="flex items-center gap-2">
 //                     <div className="w-5 h-5 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 border border-green-500/50 flex items-center justify-center text-[8px] text-white font-bold shadow-sm">3</div>
@@ -170,7 +170,7 @@
 //                         <div className="h-1.5 w-3/4 bg-sky-300/30 dark:bg-sky-700/30 rounded"></div>
 //                     </div>
 //                 </div>
-                
+
 //                 {/* Message 2 */}
 //                 <div className="flex gap-2 items-start flex-row-reverse">
 //                     <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-[8px] font-bold flex-shrink-0 shadow-sm">
@@ -181,7 +181,7 @@
 //                     </div>
 //                 </div>
 //             </div>
-            
+
 //             {/* Input Area */}
 //             <div className="flex items-center gap-1.5 pt-1.5 border-t border-sky-200/50 dark:border-sky-800/50">
 //                 <div className="flex-1 h-6 bg-white/20 dark:bg-sky-900/20 rounded px-2 flex items-center border border-sky-300/30 dark:border-sky-700/30">
@@ -206,21 +206,21 @@
 //                             <div key={i} className="bg-rose-500/20"></div>
 //                         ))}
 //                     </div>
-                    
+
 //                     {/* User Avatar in Video */}
 //                     <div className="absolute inset-0 flex items-center justify-center">
 //                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold shadow-lg">
 //                             U
 //                         </div>
 //                     </div>
-                    
+
 //                     {/* Live Badge */}
 //                     <div className="absolute top-2 right-2 flex items-center gap-1.5 px-2 py-1 bg-red-500/40 border border-red-500/60 rounded-full shadow-sm">
 //                         <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
 //                         <span className="text-[8px] font-bold text-red-400">LIVE</span>
 //                     </div>
 //                 </div>
-                
+
 //                 {/* Controls */}
 //                 <div className="flex items-center justify-center gap-2">
 //                     <div className="w-6 h-6 rounded-full bg-white/20 dark:bg-rose-900/20 border border-rose-300/50 dark:border-rose-700/50 flex items-center justify-center">
@@ -249,7 +249,7 @@
 //                     <div className="text-sm font-bold text-amber-700 dark:text-amber-300">4.9</div>
 //                 </div>
 //             </div>
-            
+
 //             {/* Rating Breakdown */}
 //             <div className="space-y-1.5">
 //                 {[
@@ -271,7 +271,7 @@
 //                     </div>
 //                 ))}
 //             </div>
-            
+
 //             {/* Review Count */}
 //             <div className="pt-1.5 border-t border-amber-200/50 dark:border-amber-800/50 text-[9px] text-amber-700/70 dark:text-amber-300/70 text-center">
 //                 500+ verified reviews
@@ -833,7 +833,7 @@
 //             --purple-glow: oklch(var(--primary) / 0.2);
 //             --purple-border: oklch(var(--primary) / 0.8);
 //           }
-          
+
 //           .card-responsive {
 //             grid-template-columns: 1fr;
 //             width: 100%;
@@ -841,63 +841,63 @@
 //             margin: 0 auto;
 //             gap: 1rem;
 //           }
-          
+
 //           @media (min-width: 640px) {
 //             .card-responsive {
 //               grid-template-columns: repeat(2, 1fr);
 //               gap: 1.25rem;
 //             }
 //           }
-          
+
 //           @media (min-width: 1024px) {
 //             .card-responsive {
 //               grid-template-columns: repeat(4, 1fr);
 //               grid-auto-rows: minmax(200px, auto);
 //               gap: 1.5rem;
 //             }
-            
+
 //             /* Row 1-2: Large featured card (2x2) - Top Left */
 //             .card-responsive .card:nth-child(1) {
 //               grid-column: 1 / 3;
 //               grid-row: 1 / 3;
 //             }
-            
+
 //             /* Row 1: Wide card (2x1) - Top Right */
 //             .card-responsive .card:nth-child(2) {
 //               grid-column: 3 / 5;
 //               grid-row: 1 / 2;
 //             }
-            
+
 //             /* Row 2: Small card (1x1) - Right Top */
 //             .card-responsive .card:nth-child(3) {
 //               grid-column: 3 / 4;
 //               grid-row: 2 / 3;
 //             }
-            
+
 //             /* Row 2: Small card (1x1) - Right Top */
 //             .card-responsive .card:nth-child(4) {
 //               grid-column: 4 / 5;
 //               grid-row: 2 / 3;
 //             }
-            
+
 //             /* Row 3: Small card (1x1) - Bottom Left */
 //             .card-responsive .card:nth-child(5) {
 //               grid-column: 1 / 2;
 //               grid-row: 3 / 4;
 //             }
-            
+
 //             /* Row 3: Small card (1x1) - Bottom Left Center */
 //             .card-responsive .card:nth-child(6) {
 //               grid-column: 2 / 3;
 //               grid-row: 3 / 4;
 //             }
-            
+
 //             /* Row 3: Wide card (2x1) - Bottom Right */
 //             .card-responsive .card:nth-child(7) {
 //               grid-column: 3 / 5;
 //               grid-row: 3 / 4;
 //             }
-            
+
 //             /* Row 4: Wide card (4x1) - Full width bottom - Shorter height */
 //             .card-responsive .card:nth-child(8) {
 //               grid-column: 1 / 5;
@@ -905,13 +905,13 @@
 //               min-height: 180px;
 //             }
 //           }
-          
+
 //           @media (min-width: 1280px) {
 //             .card-responsive {
 //               gap: 2rem;
 //             }
 //           }
-          
+
 //           .card--border-glow::after {
 //             content: '';
 //             position: absolute;
@@ -932,21 +932,21 @@
 //             transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 //             z-index: 1;
 //           }
-          
+
 //           .card--border-glow:hover::after {
 //             opacity: 1;
 //           }
-          
+
 //           .card--border-glow:hover {
 //             box-shadow: none;
 //             transform: translateY(-2px);
 //           }
-          
+
 //           .card {
 //             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 //             will-change: transform, box-shadow, border-color;
 //           }
-          
+
 //           .card:hover {
 //             transform: translateY(-6px) scale(1.02);
 //             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), 
@@ -954,46 +954,46 @@
 //                         0 0 120px rgba(${glowColor}, 0.08);
 //             border-color: rgba(255, 255, 255, 0.2);
 //           }
-          
+
 //           .card__header {
 //             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 //           }
-          
+
 //           .card:hover .card__header {
 //             transform: translateY(-3px);
 //           }
-          
+
 //           .card:hover .card__label {
 //             opacity: 1;
 //             letter-spacing: 0.08em;
 //             transform: translateX(2px);
 //           }
-          
+
 //           .card:hover .card__title {
 //             transform: translateY(-2px);
 //           }
-          
+
 //           .card__title {
 //             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 //           }
-          
+
 //           .card__description {
 //             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 //           }
-          
+
 //           .card:hover .card__description {
 //             opacity: 1;
 //             transform: translateY(-1px);
 //           }
-          
+
 //           .card:hover .card__content {
 //             transform: translateY(-2px);
 //           }
-          
+
 //           .card__content {
 //             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 //           }
-          
+
 //           .particle::before {
 //             content: '';
 //             position: absolute;
@@ -1005,11 +1005,11 @@
 //             border-radius: 50%;
 //             z-index: -1;
 //           }
-          
+
 //           .particle-container:hover {
 //             box-shadow: 0 4px 20px rgba(46, 24, 78, 0.2), 0 0 30px rgba(${glowColor}, 0.2);
 //           }
-          
+
 //           .text-clamp-1 {
 //             display: -webkit-box;
 //             -webkit-box-orient: vertical;
@@ -1018,7 +1018,7 @@
 //             overflow: hidden;
 //             text-overflow: ellipsis;
 //           }
-          
+
 //           .text-clamp-2 {
 //             display: -webkit-box;
 //             -webkit-box-orient: vertical;
@@ -1027,7 +1027,7 @@
 //             overflow: hidden;
 //             text-overflow: ellipsis;
 //           }
-          
+
 //           @media (max-width: 639px) {
 //             .card-responsive {
 //               grid-template-columns: 1fr;
@@ -1035,7 +1035,7 @@
 //               margin: 0 auto;
 //               gap: 1rem;
 //             }
-            
+
 //             .card-responsive .card {
 //               width: 100%;
 //               min-height: 220px;
@@ -1046,7 +1046,7 @@
 //               0%, 100% { transform: translateY(0px) translateZ(0); }
 //               50% { transform: translateY(-12px) translateZ(0); }
 //             }
-            
+
 //             @keyframes float-delayed {
 //               0%, 100% { transform: translateY(0px) translateZ(0); }
 //               50% { transform: translateY(-10px) translateZ(0); }
@@ -1081,7 +1081,7 @@
 //                 transform: translateY(0) translateZ(0); 
 //               }
 //             }
-            
+
 //             @keyframes shimmer {
 //               0% { background-position: -1000px 0; }
 //               100% { background-position: 1000px 0; }
@@ -1106,18 +1106,18 @@
 //             .animate-spin-slow { 
 //               animation: spin 12s linear infinite; 
 //             }
-            
+
 //             .delay-100 { animation-delay: 100ms; }
 //             .delay-200 { animation-delay: 200ms; }
 //             .delay-300 { animation-delay: 300ms; }
 //             .delay-500 { animation-delay: 500ms; }
 //             .delay-700 { animation-delay: 700ms; }
-            
+
 //             /* Smooth scroll behavior */
 //             html {
 //               scroll-behavior: smooth;
 //             }
-            
+
 //             /* Enhanced focus states */
 //             .card:focus-visible {
 //               outline: 2px solid rgba(${glowColor}, 0.5);
@@ -1379,79 +1379,296 @@
 // };
 
 // export default MagicBento;
-
+// -------------------------------------------------------------------
 
 import { useRef, useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Sparkles, Users, Search, ArrowLeftRight, MessageCircle, Shield, TrendingUp, Star, Calendar, Zap, Check } from 'lucide-react';
+import { Sparkles, Users, Search, ArrowLeftRight, MessageCircle, Shield, TrendingUp, Star, Calendar, Zap, Check, Bot, BotMessageSquare, StarHalf } from 'lucide-react';
 
 // Animated Chart Component
-const MatchingChart = ({ cardColor = '#8b5cf6' }) => {
-  const [animated, setAnimated] = useState(false);
-  
-  useEffect(() => {
-    setAnimated(true);
-  }, []);
+// const MatchingChart = ({ cardColor = '#8b5cf6' }) => {
+//   const [animated, setAnimated] = useState(false);
 
+//   useEffect(() => {
+//     setAnimated(true);
+//   }, []);
+
+//   return (
+//     <div className="space-y-3 mt-6">
+//       {[
+//         { label: 'Skill Match', value: 85 },
+//         { label: 'Availability', value: 92 },
+//         { label: 'Location', value: 78 }
+//       ].map((item, i) => (
+//         <motion.div 
+//           key={i} 
+//           className="space-y-1.5"
+//           initial={{ opacity: 0, x: -10 }}
+//           animate={{ opacity: 1, x: 0 }}
+//           transition={{ delay: i * 0.1, duration: 0.4 }}
+//         >
+//           <div className="flex justify-between text-xs font-medium" style={{ color: '#6b7280' }}>
+//             <span>{item.label}</span>
+//             <motion.span 
+//               className="font-semibold"
+//               style={{ color: '#1f2937' }}
+//               animate={{ scale: [1, 1.1, 1] }}
+//               transition={{ delay: i * 0.2 + 0.5, duration: 0.3 }}
+//             >
+//               {item.value}%
+//             </motion.span>
+//           </div>
+//           <div className="h-2 rounded-full overflow-hidden" style={{ background: '#f3f4f6' }}>
+//             <motion.div 
+//               className="h-full rounded-full relative overflow-hidden"
+//               style={{ background: cardColor }}
+//               initial={{ width: 0 }}
+//               animate={{ width: animated ? `${item.value}%` : '0%' }}
+//               transition={{ 
+//                 duration: 1.2,
+//                 delay: i * 0.15,
+//                 ease: 'easeOut'
+//               }}
+//             >
+//               {/* Shimmer on progress bar */}
+//               <motion.div
+//                 className="absolute inset-0"
+//                 style={{
+//                   background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)'
+//                 }}
+//                 animate={{ x: ['-100%', '200%'] }}
+//                 transition={{ 
+//                   duration: 2,
+//                   repeat: Infinity,
+//                   ease: 'linear',
+//                   delay: i * 0.2
+//                 }}
+//               />
+//             </motion.div>
+//           </div>
+//         </motion.div>
+//       ))}
+//     </div>
+//   );
+// };
+
+// AI Model Illustration Component
+// AI Model Illustration Component
+const MatchingChart = ({ cardColor = '#8b5cf6' }) => {
   return (
-    <div className="space-y-3 mt-6">
-      {[
-        { label: 'Skill Match', value: 85 },
-        { label: 'Availability', value: 92 },
-        { label: 'Location', value: 78 }
-      ].map((item, i) => (
-        <motion.div 
-          key={i} 
-          className="space-y-1.5"
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: i * 0.1, duration: 0.4 }}
-        >
-          <div className="flex justify-between text-xs font-medium" style={{ color: '#6b7280' }}>
-            <span>{item.label}</span>
-            <motion.span 
-              className="font-semibold"
-              style={{ color: '#1f2937' }}
-              animate={{ scale: [1, 1.1, 1] }}
-              transition={{ delay: i * 0.2 + 0.5, duration: 0.3 }}
-            >
-              {item.value}%
-            </motion.span>
-          </div>
-          <div className="h-2 rounded-full overflow-hidden" style={{ background: '#f3f4f6' }}>
-            <motion.div 
-              className="h-full rounded-full relative overflow-hidden"
-              style={{ background: cardColor }}
-              initial={{ width: 0 }}
-              animate={{ width: animated ? `${item.value}%` : '0%' }}
-              transition={{ 
-                duration: 1.2,
-                delay: i * 0.15,
-                ease: 'easeOut'
+    <div className="mt-6 relative">
+      {/* AI Neural Network Visualization */}
+      <div className="relative h-48 flex items-center justify-center">
+        {/* Input nodes (left) - Person icons */}
+        <div className="absolute left-0 flex flex-col gap-8">
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={`input-${i}`}
+              className="w-8 h-8 rounded-full border-2 flex items-center justify-center bg-white"
+              style={{ borderColor: cardColor }}
+              animate={{
+                scale: [1, 1.1, 1],
+                boxShadow: [`0 0 0 0 ${cardColor}40`, `0 0 0 8px ${cardColor}00`, `0 0 0 0 ${cardColor}40`]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.3
               }}
             >
-              {/* Shimmer on progress bar */}
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)'
+              <Users className="w-4 h-4" style={{ color: cardColor }} />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Hidden layer nodes (middle) */}
+        <div className="absolute left-1/2 -translate-x-1/2 flex flex-col gap-4">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <motion.div
+              key={`hidden-${i}`}
+              className="w-4 h-4 rounded-full"
+              style={{ background: cardColor }}
+              animate={{
+                opacity: [0.4, 1, 0.4],
+                scale: [1, 1.2, 1]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.2
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Output nodes (right) - 3 Person icons */}
+        <div className="absolute right-0 flex flex-col gap-8">
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={`output-${i}`}
+              className="w-8 h-8 rounded-full flex items-center justify-center border-2 bg-white"
+              style={{ borderColor: cardColor }}
+              animate={{
+                scale: [1, 1.2, 1],
+                rotate: [0, 5, -5, 0],
+                boxShadow: [`0 0 0 0 ${cardColor}40`, `0 0 0 10px ${cardColor}00`, `0 0 0 0 ${cardColor}40`]
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                delay: i * 0.4
+              }}
+            >
+              <Users className="w-4 h-4" style={{ color: cardColor }} />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Connection lines - Input to Hidden */}
+        {[0, 1, 2].map((inputIdx) =>
+          [0, 1, 2, 3, 4].map((hiddenIdx) => (
+            <motion.svg
+              key={`line-in-${inputIdx}-${hiddenIdx}`}
+              className="absolute inset-0 pointer-events-none"
+              style={{ width: '100%', height: '100%' }}
+            >
+              <motion.line
+                x1="32"
+                y1={32 + inputIdx * 64}
+                x2="50%"
+                y2={24 + hiddenIdx * 32}
+                stroke={cardColor}
+                strokeWidth="1.5"
+                opacity="0.3"
+                strokeDasharray="4 4"
+                animate={{
+                  opacity: [0.1, 0.5, 0.1],
+                  strokeDashoffset: [0, -8]
                 }}
-                animate={{ x: ['-100%', '200%'] }}
-                transition={{ 
+                transition={{
                   duration: 2,
                   repeat: Infinity,
-                  ease: 'linear',
-                  delay: i * 0.2
+                  delay: (inputIdx + hiddenIdx) * 0.1
                 }}
               />
+            </motion.svg>
+          ))
+        )}
+
+        {/* Connection lines - Hidden to Output */}
+        {[0, 1, 2, 3, 4].map((hiddenIdx) =>
+          [0, 1, 2].map((outputIdx) => (
+            <motion.svg
+              key={`line-out-${hiddenIdx}-${outputIdx}`}
+              className="absolute inset-0 pointer-events-none"
+              style={{ width: '100%', height: '100%' }}
+            >
+              <motion.line
+                x1="50%"
+                y1={24 + hiddenIdx * 32}
+                x2="calc(100% - 32px)"
+                y2={32 + outputIdx * 64}
+                stroke={cardColor}
+                strokeWidth="1.5"
+                opacity="0.3"
+                strokeDasharray="4 4"
+                animate={{
+                  opacity: [0.1, 0.6, 0.1],
+                  strokeDashoffset: [0, -8]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  delay: (hiddenIdx + outputIdx) * 0.12
+                }}
+              />
+            </motion.svg>
+          ))
+        )}
+
+        {/* Animated data particles flowing through network */}
+        {[0, 1, 2].map((i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className="absolute w-2 h-2 rounded-full"
+            style={{ background: cardColor, left: 0, top: `${20 + i * 33}%` }}
+            animate={{
+              left: ['5%', '48%', '92%'],
+              opacity: [0, 1, 1, 0],
+              scale: [0.5, 1, 1, 0.5]
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: i * 0.6,
+              ease: 'easeInOut'
+            }}
+          />
+        ))}
+
+        {/* Energy pulses in middle layer */}
+        {[0, 1, 2, 3, 4].map((i) => (
+          <motion.div
+            key={`pulse-${i}`}
+            className="absolute left-1/2 -translate-x-1/2 w-6 h-6 rounded-full border-2"
+            style={{
+              borderColor: cardColor,
+              top: `${10 + i * 16}%`
+            }}
+            animate={{
+              scale: [0.8, 1.5, 0.8],
+              opacity: [0.5, 0, 0.5]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              delay: i * 0.25
+            }}
+          />
+        ))}
+
+        {/* Sparkle effects around person icons */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={`sparkle-${i}`}
+            className="absolute"
+            style={{
+              left: i < 3 ? '5%' : '95%',
+              top: `${25 + (i % 3) * 25}%`
+            }}
+          >
+            <Sparkles
+              className="w-3 h-3"
+              style={{ color: cardColor }}
+              opacity={0}
+            />
+            <motion.div
+              className="absolute inset-0"
+              animate={{
+                opacity: [0, 1, 0],
+                scale: [0.5, 1.5, 0.5],
+                rotate: [0, 180, 360]
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.3
+              }}
+            >
+              <Sparkles className="w-3 h-3" style={{ color: cardColor }} />
             </motion.div>
-          </div>
-        </motion.div>
-      ))}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* AI Label */}
+      <div className="mt-4 text-center">
+        <div className="text-sm font-semibold text-gray-700">Neural Matching Engine</div>
+        <div className="text-xs text-gray-500">AI-powered skill compatibility</div>
+      </div>
     </div>
   );
 };
-
 // Search Stats Component
 const SearchStats = ({ cardColor = '#06b6d4' }) => {
   return (
@@ -1461,8 +1678,8 @@ const SearchStats = ({ cardColor = '#06b6d4' }) => {
         { icon: Star, value: '1000+', label: 'Skills' },
         { icon: TrendingUp, value: '95%', label: 'Match' }
       ].map((stat, i) => (
-        <motion.div 
-          key={i} 
+        <motion.div
+          key={i}
           className="text-center p-3 rounded-xl backdrop-blur-sm border-2 relative overflow-hidden"
           style={{
             background: `${cardColor}10`,
@@ -1470,13 +1687,13 @@ const SearchStats = ({ cardColor = '#06b6d4' }) => {
           }}
           initial={{ opacity: 0, scale: 0.8, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ 
+          transition={{
             delay: i * 0.1,
             duration: 0.5,
             type: 'spring',
             stiffness: 200
           }}
-          whileHover={{ 
+          whileHover={{
             scale: 1.1,
             y: -4,
             boxShadow: `0 8px 16px ${cardColor}30`,
@@ -1491,13 +1708,13 @@ const SearchStats = ({ cardColor = '#06b6d4' }) => {
             whileHover={{ opacity: 0.1 }}
             transition={{ duration: 0.3 }}
           />
-          
+
           <motion.div
             className="relative z-10"
-            animate={{ 
+            animate={{
               rotate: [0, 5, -5, 0],
             }}
-            transition={{ 
+            transition={{
               duration: 2,
               repeat: Infinity,
               repeatDelay: 1,
@@ -1506,11 +1723,11 @@ const SearchStats = ({ cardColor = '#06b6d4' }) => {
           >
             <stat.icon className="w-5 h-5 mx-auto mb-1" style={{ color: cardColor }} />
           </motion.div>
-          <motion.div 
+          <motion.div
             className="text-lg font-bold relative z-10"
             style={{ color: '#1f2937' }}
             animate={{ scale: [1, 1.05, 1] }}
-            transition={{ 
+            transition={{
               duration: 2,
               repeat: Infinity,
               delay: i * 0.3
@@ -1528,32 +1745,36 @@ const SearchStats = ({ cardColor = '#06b6d4' }) => {
 // Community Growth Chart
 const CommunityChart = () => {
   const [show, setShow] = useState(false);
-  
+
   useEffect(() => {
     setShow(true);
   }, []);
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-  const values = [2000, 3500, 5200, 7800, 9500, 10000];
+  const values = [20, 35, 52, 78, 95, 100];
   const maxValue = Math.max(...values);
 
   return (
     <div className="mt-6">
       <div className="flex items-end justify-between h-32 gap-2">
-        {months.map((month, i) => (
-          <div key={i} className="flex-1 flex flex-col items-center gap-2">
-            <div className="w-full bg-gray-100 rounded-t-lg overflow-hidden relative" style={{ height: '100%' }}>
-              <div 
-                className="absolute bottom-0 w-full bg-gradient-to-t from-blue-500 to-cyan-400 rounded-t-lg transition-all duration-1000 ease-out"
-                style={{ 
-                  height: show ? `${(values[i] / maxValue) * 100}%` : '0%',
-                  transitionDelay: `${i * 100}ms`
-                }}
-              />
+        {months.map((month, i) => {
+          // Calculate height as a percentage of maxValue for scaling bars
+          const heightPercent = (values[i] / maxValue) * 100;
+          return (
+            <div key={i} className="flex-1 flex flex-col items-center gap-2">
+              <div className="w-full bg-gray-100 rounded-t-lg overflow-hidden relative flex items-end" style={{ height: '100px', minHeight: '70px' }}>
+                <div
+                  className="w-full bg-gradient-to-t from-[#424242] to-[#31363F]  rounded-t-2xl shadow-lg transition-all duration-1000 ease-out border border-emerald-200"
+                  style={{
+                    height: show ? `${heightPercent}%` : `0%`,
+                    transitionDelay: `${i * 100}ms`,
+                  }}
+                />
+              </div>
+              <span className="text-xs font-medium text-gray-600">{month}</span>
             </div>
-            <span className="text-xs font-medium text-gray-600">{month}</span>
-          </div>
-        ))}
+          );
+        })}
       </div>
       <div className="mt-4 text-center">
         <div className="text-sm font-semibold text-gray-700">Community Growth</div>
@@ -1566,29 +1787,123 @@ const CommunityChart = () => {
 // Swap Workflow Steps
 const SwapWorkflow = () => {
   const steps = [
-    { icon: Search, label: 'Browse', color: 'text-orange-500' },
-    { icon: ArrowLeftRight, label: 'Request', color: 'text-amber-500' },
-    { icon: Calendar, label: 'Schedule', color: 'text-yellow-500' },
-    { icon: Check, label: 'Complete', color: 'text-green-500' }
+    { icon: Search, label: 'Browse', color: 'text-[#37353E]' },
+    { icon: ArrowLeftRight, label: 'Request', color: 'text-[#44444E]' },
+    { icon: Calendar, label: 'Schedule', color: 'text-[#715A5A]' },
+    { icon: Check, label: 'Complete', color: 'text-[#37353E]' }
   ];
 
   return (
-    <div className="mt-6 relative">
-      <div className="absolute top-6 left-0 right-0 h-0.5 bg-gradient-to-r from-orange-200 via-amber-200 to-green-200" />
-      <div className="relative flex justify-between">
-        {steps.map((step, i) => (
-          <div 
-            key={i} 
-            className="flex flex-col items-center gap-2 group"
-            style={{ animation: `fadeInUp 0.6s ease-out ${i * 150}ms forwards`, opacity: 0 }}
-          >
-            <div className={`w-12 h-12 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300 ${step.color}`}>
-              <step.icon className="w-5 h-5" />
+    <div className="space-y-6">
+      {/* Illustration Section */}
+      <div className="relative h-48 flex items-center justify-center overflow-hidden">
+        {/* Background decoration */}
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 opacity-50" /> */}
+
+        {/* Animated circles */}
+        <div className="absolute w-32 h-32 bg-blue-200 rounded-full blur-3xl opacity-30 animate-pulse" style={{ top: '20%', left: '15%' }} />
+        <div className="absolute w-24 h-24 bg-purple-200 rounded-full blur-2xl opacity-30 animate-pulse" style={{ top: '50%', right: '20%', animationDelay: '1s' }} />
+
+        {/* Main illustration */}
+        <div className="relative flex items-center justify-center gap-8">
+          {/* Left person */}
+          <div className="flex flex-col items-center" style={{ animation: 'slideInLeft 0.8s ease-out' }}>
+            <div className="w-16 h-16 bg-gradient-to-br from-[#31363F] to-[#424242] rounded-full flex items-center justify-center shadow-lg">
+              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
             </div>
-            <span className="text-xs font-medium text-gray-600">{step.label}</span>
+            <div className="mt-2 w-12 h-3 bg-zinc-300 rounded-full" />
           </div>
-        ))}
+
+          {/* Exchange arrows */}
+          <div className="relative" style={{ animation: 'scaleIn 0.6s ease-out 0.3s backwards' }}>
+            <div className="flex flex-col gap-2">
+              <ArrowLeftRight className="w-12 h-12 text-zinc-500 animate-pulse" />
+              <div className="flex gap-1 justify-center">
+                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <div className="w-2 h-2 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Right person */}
+          <div className="flex flex-col items-center" style={{ animation: 'slideInRight 0.8s ease-out' }}>
+            <div className="w-16 h-16 bg-gradient-to-br from-[#31363F] to-[#424242] rounded-full flex items-center justify-center shadow-lg">
+              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            <div className="mt-2 w-12 h-3 bg-zinc-300 rounded-full" />
+          </div>
+        </div>
       </div>
+
+      {/* Workflow Steps */}
+      <div className="relative">
+        <div className="absolute top-6 left-0 right-0 h-0.5 bg-gradient-to-r from-amber-200 via-amber300 to-green-400" />
+        <div className="relative flex justify-between">
+          {steps.map((step, i) => (
+            <div
+              key={i}
+              className="flex flex-col items-center gap-2 group"
+              style={{ animation: `fadeInUp 0.6s ease-out ${i * 150}ms forwards`, opacity: 0 }}
+            >
+              <div className={`w-12 h-12 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300 ${step.color}`}>
+                <step.icon className="w-5 h-5" />
+              </div>
+              <span className="text-xs font-medium text-gray-600">{step.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </div>
   );
 };
@@ -1615,7 +1930,7 @@ const ChatPreview = () => {
       ].map((chat, i) => (
         messages.includes(i) && (
           <div key={i} className={`flex ${chat.align === 'right' ? 'justify-end' : 'justify-start'}`}>
-            <div 
+            <div
               className={`max-w-[75%] px-4 py-2.5 rounded-2xl ${chat.align === 'right' ? 'rounded-tr-sm' : 'rounded-tl-sm'} ${chat.color} text-xs font-medium shadow-sm`}
               style={{ animation: 'slideIn 0.4s ease-out' }}
             >
@@ -1635,38 +1950,48 @@ const ChatPreview = () => {
 // Rating Display
 const RatingDisplay = () => {
   const ratings = [
-    { label: 'Teaching Quality', value: 4.8, max: 5 },
-    { label: 'Communication', value: 4.9, max: 5 },
+    { label: 'Teaching Quality', value: 4.6, max: 5 },
+    { label: 'Communication', value: 4.6, max: 5 },
     { label: 'Punctuality', value: 4.7, max: 5 },
-    { label: 'Overall Experience', value: 4.9, max: 5 }
+    { label: 'Overall Experience', value: 4.6, max: 5 }
   ];
 
   return (
     <div className="mt-6 space-y-4">
       <div className="flex items-center justify-center gap-1 mb-4">
-        {[...Array(5)].map((_, i) => (
-          <Star 
-            key={i} 
+        {[...Array(4)].map((_, i) => (
+          <Star
+            key={i}
             className="w-6 h-6 fill-yellow-400 text-yellow-400"
-            style={{ 
+            style={{
               animation: `starPop 0.5s ease-out ${i * 100}ms forwards`,
               opacity: 0,
               transform: 'scale(0)'
             }}
           />
         ))}
+        <div className="relative w-5 h-5">
+        {/* Full star background (grey) */}
+        <Star className="text-gray-300" />
+
+        {/* Half star overlay (color) */}
+        <Star
+          className="absolute top-0 left-0 fill-yellow-400 text-yellow-400"
+          style={{ clipPath: "inset(0 45% 0 0)" }}
+        />
+      </div>
       </div>
       <div className="text-center mb-4">
-        <div className="text-3xl font-bold text-gray-900">4.8</div>
+        <div className="text-3xl font-bold text-gray-900">4.6+</div>
         <div className="text-xs text-gray-500">Average Rating</div>
       </div>
       {ratings.map((rating, i) => (
         <div key={i} className="flex items-center gap-3">
           <span className="text-xs font-medium text-gray-600 w-24 text-right">{rating.label}</span>
           <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div 
+            <div
               className="h-full bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full transition-all duration-1000 ease-out"
-              style={{ 
+              style={{
                 width: `${(rating.value / rating.max) * 100}%`,
                 transitionDelay: `${i * 100}ms`
               }}
@@ -1680,7 +2005,7 @@ const RatingDisplay = () => {
 };
 
 const cardData = [
-  
+
   {
     id: 1,
     title: 'Advanced Skill Search',
@@ -1700,7 +2025,7 @@ const cardData = [
     title: 'Smart Matching (AI)',
     subtitle: 'AI POWERED',
     description: 'Intelligent algorithms connect you with perfect swap partners based on skills, availability, and learning goals.',
-    icon: Sparkles,
+    icon: BotMessageSquare,
     stats: '85% Match Accuracy',
     size: 'medium',
     color: 'from-violet-50 to-purple-50',
@@ -1757,7 +2082,7 @@ const cardData = [
     subtitle: 'TRUST',
     description: 'Multi-criteria ratings and verified reviews build community trust and credibility.',
     icon: Shield,
-    stats: '4.5/5.0 Average Rating',
+    stats: '4.6/5.0 Average Rating',
     size: 'small',
     color: 'from-indigo-50 to-blue-50',
     borderColor: 'border-indigo-200',
@@ -1771,17 +2096,22 @@ const BentoCard = ({ card, index }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
   const Component = card.component;
-  
+
   // Color palette: Violet (#8b5cf6), Cyan (#06b6d4), White/Gray
-  const primaryColor = '#8b5cf6'; // Violet
-  const secondaryColor = '#06b6d4'; // Cyan
-  
+  // const primaryColor = '#8b5cf6'; // Violet
+  // const secondaryColor = '#06b6d4'; // Cyan
+
+  // const primaryColor = '#929AAB';
+  const primaryColor = '#31363F';
+  const secondaryColor = '#424242';
+
+
   // Motion values for microinteractions
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), { stiffness: 300, damping: 30 });
   const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), { stiffness: 300, damping: 30 });
-  
+
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -1789,17 +2119,17 @@ const BentoCard = ({ card, index }) => {
     x.set((e.clientX - centerX) / (rect.width / 2));
     y.set((e.clientY - centerY) / (rect.height / 2));
   };
-  
+
   const handleMouseLeave = () => {
     setIsHovered(false);
     x.set(0);
     y.set(0);
   };
 
-  const handleClick = () => {
-    setClicked(true);
-    setTimeout(() => setClicked(false), 600);
-  };
+  // const handleClick = () => {
+  //   setClicked(true);
+  //   setTimeout(() => setClicked(false), 600);
+  // };
 
   // Alternate colors for cards
   const cardColor = index % 2 === 0 ? primaryColor : secondaryColor;
@@ -1810,23 +2140,23 @@ const BentoCard = ({ card, index }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
+      // onClick={handleClick}
       initial={{ opacity: 0, y: 30, scale: 0.9 }}
-      animate={{ 
-        opacity: 1, 
-        y: 0, 
+      animate={{
+        opacity: 1,
+        y: 0,
         scale: 1,
       }}
-      transition={{ 
-        duration: 0.6, 
+      transition={{
+        duration: 0.6,
         delay: index * 0.08,
         ease: [0.34, 1.56, 0.64, 1]
       }}
-      whileHover={{ 
-        scale: 1.03,
+      whileHover={{
+        scale: 1.0,
         transition: { duration: 0.3, type: 'spring', stiffness: 400 }
       }}
-      whileTap={{ 
+      whileTap={{
         scale: 0.98,
         transition: { duration: 0.1 }
       }}
@@ -1841,23 +2171,23 @@ const BentoCard = ({ card, index }) => {
         rotateY: isHovered ? rotateY : 0,
         transformStyle: 'preserve-3d',
         borderColor: isHovered ? cardColor : '#e5e7eb',
-        boxShadow: isHovered 
+        boxShadow: isHovered
           ? `0 20px 40px -12px ${cardColor}40, 0 0 0 1px ${cardColor}20`
           : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
       }}
     >
       {/* Animated gradient overlay */}
-      <motion.div 
+      <motion.div
         className="absolute inset-0 opacity-0"
         style={{
-          background: isPrimary 
+          background: isPrimary
             ? `linear-gradient(135deg, ${primaryColor}15 0%, transparent 50%, ${secondaryColor}10 100%)`
             : `linear-gradient(135deg, ${secondaryColor}15 0%, transparent 50%, ${primaryColor}10 100%)`
         }}
         animate={{ opacity: isHovered ? 1 : 0 }}
         transition={{ duration: 0.4 }}
       />
-      
+
       {/* Shimmer effect */}
       <motion.div
         className="absolute inset-0"
@@ -1916,37 +2246,37 @@ const BentoCard = ({ card, index }) => {
 
       <div className="relative p-6 h-full flex flex-col z-10">
         {/* Header */}
-        <motion.div 
+        <motion.div
           className="flex items-start justify-between mb-4"
           animate={{ y: isHovered ? -3 : 0 }}
           transition={{ duration: 0.3, type: 'spring' }}
         >
           <div className="flex items-center gap-3">
-            <motion.div 
+            <motion.div
               className="p-2.5 rounded-xl backdrop-blur-sm border-2 shadow-sm relative overflow-hidden"
               style={{
                 background: `${cardColor}15`,
                 borderColor: cardColor,
               }}
-              animate={{ 
+              animate={{
                 scale: isHovered ? 1.15 : 1,
                 rotate: isHovered ? [0, -5, 5, 0] : 0,
               }}
-              transition={{ 
+              transition={{
                 type: 'spring',
                 stiffness: 400,
                 damping: 17,
                 rotate: { duration: 0.5, repeat: isHovered ? Infinity : 0, repeatDelay: 1 }
               }}
-              whileHover={{ 
+              whileHover={{
                 boxShadow: `0 0 20px ${cardColor}40`
               }}
             >
               <motion.div
-                animate={{ 
+                animate={{
                   scale: [1, 1.1, 1],
                 }}
-                transition={{ 
+                transition={{
                   duration: 2,
                   repeat: Infinity,
                   ease: 'easeInOut'
@@ -1956,24 +2286,24 @@ const BentoCard = ({ card, index }) => {
               </motion.div>
             </motion.div>
             <div>
-              <motion.div 
+              <motion.div
                 className="text-[10px] font-bold tracking-wider mb-0.5 uppercase"
                 style={{ color: cardColor }}
-                animate={{ 
+                animate={{
                   opacity: isHovered ? [1, 0.7, 1] : 1,
                 }}
                 transition={{ duration: 1.5, repeat: isHovered ? Infinity : 0 }}
               >
                 {card.subtitle}
               </motion.div>
-              <motion.h3 
+              <motion.h3
                 className="text-sm font-bold leading-tight"
                 style={{ color: '#1f2937' }}
-                animate={{ 
+                animate={{
                   scale: isHovered ? 1.03 : 1,
                   x: isHovered ? [0, 2, 0] : 0
                 }}
-                transition={{ 
+                transition={{
                   duration: 0.3,
                   x: { duration: 0.5, repeat: isHovered ? Infinity : 0, repeatDelay: 1 }
                 }}
@@ -1985,10 +2315,10 @@ const BentoCard = ({ card, index }) => {
         </motion.div>
 
         {/* Description */}
-        <motion.p 
+        <motion.p
           className="text-xs leading-relaxed mb-auto"
           style={{ color: '#6b7280' }}
-          animate={{ 
+          animate={{
             opacity: isHovered ? 0.9 : 1,
             y: isHovered ? 2 : 0
           }}
@@ -1998,18 +2328,18 @@ const BentoCard = ({ card, index }) => {
         </motion.p>
 
         {/* Stats Badge */}
-        <motion.div 
+        <motion.div
           className="flex items-center gap-2 mt-4 mb-4"
           animate={{ y: isHovered ? 3 : 0 }}
           transition={{ duration: 0.3, type: 'spring' }}
         >
-          <motion.div 
+          <motion.div
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-sm border-2 shadow-sm"
             style={{
               background: `${cardColor}10`,
               borderColor: `${cardColor}30`,
             }}
-            whileHover={{ 
+            whileHover={{
               scale: 1.08,
               boxShadow: `0 4px 12px ${cardColor}30`
             }}
@@ -2026,8 +2356,8 @@ const BentoCard = ({ card, index }) => {
         </motion.div>
 
         {/* Dynamic Component */}
-        <motion.div 
-          animate={{ 
+        <motion.div
+          animate={{
             scale: isHovered ? 1.03 : 1,
             y: isHovered ? -2 : 0
           }}
@@ -2038,22 +2368,22 @@ const BentoCard = ({ card, index }) => {
       </div>
 
       {/* Corner glow decoration */}
-      <motion.div 
+      <motion.div
         className="absolute top-0 right-0 w-40 h-40 rounded-full blur-3xl"
-        style={{ 
+        style={{
           transform: 'translate(30%, -30%)',
           background: cardColor,
         }}
-        animate={{ 
+        animate={{
           opacity: isHovered ? [0.3, 0.5, 0.3] : 0,
           scale: isHovered ? [1, 1.3, 1] : 1,
         }}
-        transition={{ 
+        transition={{
           duration: 2,
           repeat: isHovered ? Infinity : 0
         }}
       />
-      
+
       {/* Animated border */}
       <motion.div
         className="absolute inset-0 rounded-2xl pointer-events-none"
@@ -2086,7 +2416,7 @@ export default function TelnexBentoGrid({
   // Parse children text to extract title and subtitle
   const text = typeof children === 'string' ? children : (children?.props?.children || '');
   const fullText = typeof text === 'string' ? text : '';
-  
+
   // Split text: "Revolutionizing Peer Learning Telnex Platform" is title, rest is subtitle
   const titleEndIndex = fullText.indexOf('Barter skills');
   const title = titleEndIndex > 0 ? fullText.substring(0, titleEndIndex).trim() : 'Features';
@@ -2146,14 +2476,14 @@ export default function TelnexBentoGrid({
               {title}
             </span>
           </h1>
-          
+
           <p className="text-xl md:text-2xl mb-4 text-muted-foreground max-w-3xl mx-auto">
             {subtitle}
           </p>
         </div>
 
         {/* Bento Grid */}
-        <motion.div 
+        <motion.div
           className="max-w-7xl mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -2169,3 +2499,7 @@ export default function TelnexBentoGrid({
     </>
   );
 }
+
+
+// GROQQ --------------------
+
