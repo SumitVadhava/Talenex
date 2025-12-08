@@ -119,7 +119,7 @@ export default function PricingSection() {
 
               <CardFooter>
                 <Button
-                  className={`w-full ${plan.highlighted ? 'bg-white text-black hover:bg-gray-100' : 'bg-black text-white hover:bg-gray-800'}`}
+                  className={`w-full ${plan.highlighted ? 'bg-white text-black hover:bg-gray-100 cursor-pointer' : 'bg-black text-white hover:bg-gray-800 cursor-pointer'}`}
                 >
                   Get started →
                 </Button>

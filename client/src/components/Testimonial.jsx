@@ -234,15 +234,15 @@ const testimonials3 = [
 
 export default function TestimonialSection() {
     return (
-        <div className="min-h-screen py-20 px-4">
+        <div className="min-h-screen py-10 px-4">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <div className="text-center mb-16">
+                <div className="text-center mb-18">
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
                         “A platform that truly changes the way you learn.”
                     </h1>
 
-                    <p className="text-gray-600 max-w-2xl mx-auto mb-6 text-lg">
+                    <p className="text-gray-600 max-w-2xl mx-auto mb-8 text-lg">
                         Talenex helps people discover, teach, and exchange skills effortlessly through
                         intelligent matching and a trusted community-driven experience. Users love how
                         simple, fast, and meaningful every connection feels.
@@ -250,7 +250,7 @@ export default function TestimonialSection() {
 
                     {/* Brand + Color Dots */}
                     <div className="flex items-center justify-center gap-3">
-                        <span className="font-bold text-2xl tracking-tight">Talenex Community</span>
+                        <span className="font-bold text-2xl tracking-tight mb-2">Talenex Community</span>
 
                         <div className="flex gap-1.5">
                             <div className="w-2.5 h-2.5 rounded-full bg-orange-500" />

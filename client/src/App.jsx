@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { SignOutButton } from "@clerk/clerk-react";
 import UserProfilePage from "./components/UserProfilePage";
+import ScrollButtons from "./components/ScrollBtn";
 
 function App() {
   const location = useLocation();
@@ -30,6 +31,8 @@ function App() {
 
         <Route path="/" element={<Homepage />} />
       </Routes>
+      
+      {location.pathname == "/sign-in" || location.pathname == "/sign-up" || location.pathname == "/sign-up/verify-email-address" || location.pathname == "/sign-in /verify-email-address" ? <></> :  <ScrollButtons /> }
     </div>
     
   );

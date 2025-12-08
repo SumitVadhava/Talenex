@@ -25,7 +25,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
 
         {/* Logo */}
-        <div >
+        <div onClick={() => navigate('/')} className="cursor-pointer">
           <img src={Logo} className="h-8 w-auto" alt="" />
         </div>
 

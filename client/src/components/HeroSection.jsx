@@ -5,7 +5,7 @@ import { HeartHandshake, UserRoundCheck, Sparkles,Shapes, AudioWaveformIcon as W
 import { AnimatedShinyText } from "./ui/animated-shiny-text"
 import { cn } from "@/lib/utils"
 import { AnimatedGradientText } from "./ui/animated-gradient-text"
-import rough from "roughjs/bundled/rough.esm";
+// import rough from "roughjs/bundled/rough.esm";
 import { useNavigate } from "react-router-dom"
 const FloatingParticle = () => {
     const y = useMotionValue(0)
@@ -73,7 +73,7 @@ export default function HeroSection() {
                                 WebkitClipPath: "padding-box",
                             }}
                         />
-                        <div className="relative z-10 flex items-center justify-center gap-2">
+                        <div className="relative cursor-pointer z-10 flex items-center justify-center gap-2">
                             🎉
                             <AnimatedGradientText className="text-sm font-medium">
                                 Welcome to Talenex..
