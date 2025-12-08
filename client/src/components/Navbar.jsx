@@ -18,7 +18,7 @@ import { Terminal } from 'lucide-react';
 
 export default function Navbar() {
   return (
-    <nav className="border rounded-3xl bg-white/60 backdrop-blur-xl">
+    <nav className="border rounded-3xl bg-white/60 backdrop-blur-md sticky top-5 z-50 max-w-7xl mx-auto">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
 
         {/* Logo */}
