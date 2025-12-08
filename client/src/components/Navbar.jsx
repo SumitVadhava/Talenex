@@ -38,19 +38,19 @@ export default function Navbar() {
 
               <NavigationMenuItem>
                 <NavigationMenuLink href="/about" className="text-md font-semibold">
-                  About
+                  Features
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
                 <NavigationMenuLink href="/services" className="text-md font-semibold">
-                  Services
+                  Workflow
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
                 <NavigationMenuLink href="/contact" className="text-md font-semibold">
-                  Contact
+                  Testimonials
                 </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>

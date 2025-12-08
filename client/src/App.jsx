@@ -2,7 +2,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import { Button } from "./components/ui/button";
 import { DotPattern } from "./components/ui/dot-pattern";
-import { cn } from "./lib/utils";
+// import { cn } from "./lib/utils";
 
 function App() {
   return (
