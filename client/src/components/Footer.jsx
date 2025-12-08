@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Instagram, Twitter, Linkedin } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXTwitter } from "@fortawesome/free-brands-svg-icons";
+
 
 const Footer = () => {
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
 
-    useEffect(() => {
-        setIsVisible(true);
-    }, []);
+    // useEffect(() => {
+    //     setIsVisible(true);
+    // }, []);
 
     const footerLinks = {
         product: [
@@ -28,7 +31,7 @@ const Footer = () => {
     };
 
     return (
-        <div className="relative min-h-screen bg-white flex flex-col items-center justify-center p-8">
+        <div className="relative min-h-screen bg-transparent flex flex-col items-center justify-center p-8">
             {/* Large Background Text */}
             <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center overflow-hidden pointer-events-none z-0">
                 <h1
@@ -122,7 +125,7 @@ const Footer = () => {
                                 className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
                                 aria-label="Twitter"
                             >
-                                <Twitter size={20} />
+                                <FontAwesomeIcon icon={faXTwitter} />
                             </a>
                             <a
                                 href="#"
@@ -141,20 +144,12 @@ const Footer = () => {
                         }`}
                 >
                     <p className="text-sm text-gray-500 text-center md:text-left">
-                        © 2024 Talenex. All rights reserved.
+                        © 2026 Talenex. All rights reserved.
                     </p>
                 </div>
             </footer>
 
-            {/* Demo Controls */}
-            <div className="fixed bottom-8 right-8 z-20">
-                <button
-                    onClick={() => setIsVisible(!isVisible)}
-                    className="px-6 py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-800 transition-all duration-200 shadow-lg"
-                >
-                    {isVisible ? 'Fade Out' : 'Fade In'}
-                </button>
-            </div>
+            
         </div>
     );
 };

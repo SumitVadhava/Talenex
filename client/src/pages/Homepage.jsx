@@ -4,6 +4,10 @@ import { GridPattern } from "@/components/ui/grid-pattern"
 import FeaturesSection from "@/components/FeaturesSection"
 import TestimonialMarquee from "@/components/TestimonialMarquee"
 import MagicBento from '@/components/MagicBento'
+import Footer from '@/components/Footer'
+import TestimonialSection from '@/components/Testimonial'
+import PricingSection from '@/components/Pricing'
+import ProductTimeline from '@/components/Workflow'
 
 const Homepage = () => {
   return (
@@ -25,8 +29,10 @@ const Homepage = () => {
           particleCount={12}
           glowColor="132, 0, 255"
         />
-        {/* <FeaturesSection />
-        <TestimonialMarquee /> */}
+        <ProductTimeline />
+        <PricingSection />
+        <TestimonialSection />
+        <Footer />
       </div>
     </div>
   )

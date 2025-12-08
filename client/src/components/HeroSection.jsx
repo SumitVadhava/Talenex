@@ -6,6 +6,7 @@ import { AnimatedShinyText } from "./ui/animated-shiny-text"
 import { cn } from "@/lib/utils"
 import { AnimatedGradientText } from "./ui/animated-gradient-text"
 import rough from "roughjs/bundled/rough.esm";
+import { useNavigate } from "react-router-dom"
 const FloatingParticle = () => {
     const y = useMotionValue(0)
     const ySpring = useSpring(y, { stiffness: 100, damping: 10 })
@@ -36,6 +37,8 @@ export default function HeroSection() {
         target: containerRef,
         offset: ["start start", "end start"],
     })
+
+    const navigate = useNavigate();
 
     const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
     const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
@@ -108,12 +111,12 @@ export default function HeroSection() {
                             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="relative z-10">
                                 <Button
                                     size="lg"
-                                    className="text-lg px-8 py-6 rounded-full relative overflow-hidden group shadow-lg"
+                                    className="text-lg px-8 py-6 rounded-full relative overflow-hidden group shadow-lg cursor-pointer"
                                     onMouseEnter={() => setIsHovered(true)}
                                     onMouseLeave={() => setIsHovered(false)}
+                                    onClick={() => navigate("/sign-in")}
                                     asChild
                                 >
-                                    <a href="https://drqnnel.beatstars.com" target="_blank" rel="noopener noreferrer">
                                         <span className="relative z-10 flex items-center gap-2">
                                             Get Started
                                             <motion.span
@@ -123,7 +126,6 @@ export default function HeroSection() {
                                                 →
                                             </motion.span>
                                         </span>
-                                    </a>
                                 </Button>
                             </motion.div>
                         </div>

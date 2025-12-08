@@ -15,8 +15,11 @@ import {
 import { Menu } from "lucide-react";
 import Logo from "../assets/logo.png";
 import { Terminal } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
+  const navigate = useNavigate();
+
   return (
     <nav className="border rounded-3xl bg-white/60 backdrop-blur-md sticky top-5 z-50 max-w-7xl mx-auto">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
@@ -59,7 +62,7 @@ export default function Navbar() {
 
         {/* CTA button for desktop */}
         <div className="hidden md:block">
-          <Button className="rounded-xl" size="lg"> <Terminal /> Get Started</Button>
+          <Button className="rounded-xl cursor-pointer" size="lg" onClick={() => navigate("/sign-in")}> <Terminal /> Get Started</Button>
         </div>
 
         {/* Mobile Menu */}

@@ -29,7 +29,7 @@ const Marquee = ({ children, reverse = false, pauseOnHover = true, speed = 40 })
     );
 };
 
-const TestimonialCard = ({ name, handle, avatar, rating, title, content, platform, verified }) => {
+const TestimonialCard = ({ name, handle, avatar, title, content, verified }) => {
     const StarIcon = () => (
         <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
     );
@@ -64,18 +64,7 @@ const TestimonialCard = ({ name, handle, avatar, rating, title, content, platfor
                             ))}
                         </div>
 
-                        {platform === 'twitter' && (
-                            <div className="w-8 h-8 rounded-sm bg-gradient-to-br from-slate-800 to-black flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                                </svg>
-                            </div>
-                        )}
-                        {platform === 'g2' && (
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white font-bold text-xs shadow-lg group-hover:scale-110 transition-transform duration-300">
-                                G2
-                            </div>
-                        )}
+                        
                     </div>
 
                     {verified && (
