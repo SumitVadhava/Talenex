@@ -2411,6 +2411,7 @@ export default function TelnexBentoGrid({
   spotlightRadius = 300,
   particleCount = 12,
   glowColor = "132, 0, 255",
+  workflowRef,
   children
 }) {
   // Parse children text to extract title and subtitle
@@ -2496,6 +2497,7 @@ export default function TelnexBentoGrid({
           </div>
         </motion.div>
       </div>
+      <div ref={workflowRef}></div>
     </>
   );
 }

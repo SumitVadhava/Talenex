@@ -17,15 +17,19 @@ import Logo from "../assets/logo.png";
 import { Terminal } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 
-export default function Navbar() {
+export default function Navbar({ featureRef, workflowRef, testimonialsRef }) {
   const navigate = useNavigate();
+
+  const scrollToSection = (ref) => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <nav className="border rounded-3xl bg-white/60 backdrop-blur-md sticky top-5 z-50 max-w-7xl mx-auto">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
 
         {/* Logo */}
-        <div onClick={() => navigate('/')} className="cursor-pointer">
+        <div onClick={() => navigate("/")} className="cursor-pointer">
           <img src={Logo} className="h-8 w-auto" alt="" />
         </div>
 
@@ -34,25 +38,25 @@ export default function Navbar() {
           <NavigationMenu>
             <NavigationMenuList className="gap-8">
               <NavigationMenuItem>
-                <NavigationMenuLink href="/" className="text-md font-semibold">
+                <NavigationMenuLink href="/" className="text-md font-semibold cursor-pointer">
                   Home
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuLink href="/about" className="text-md font-semibold">
+                <NavigationMenuLink className="text-md font-semibold cursor-pointer" onClick={(e) => scrollToSection(featureRef)}>
                   Features
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuLink href="/services" className="text-md font-semibold">
+                <NavigationMenuLink className="text-md font-semibold cursor-pointer" onClick={(e) => scrollToSection(workflowRef)}>
                   Workflow
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuLink href="/contact" className="text-md font-semibold">
+                <NavigationMenuLink className="text-md font-semibold cursor-pointer" onClick={(e) => scrollToSection(testimonialsRef)}>
                   Testimonials
                 </NavigationMenuLink>
               </NavigationMenuItem>

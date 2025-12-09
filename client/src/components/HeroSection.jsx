@@ -31,7 +31,7 @@ const FloatingParticle = () => {
     )
 }
 
-export default function HeroSection() {
+export default function HeroSection({ featureRef }) {
     const containerRef = useRef(null)
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -73,7 +73,7 @@ export default function HeroSection() {
                                 WebkitClipPath: "padding-box",
                             }}
                         />
-                        <div className="relative cursor-pointer z-10 flex items-center justify-center gap-2">
+                        <div className="relative z-10 flex items-center justify-center gap-2 cursor-default">
                             🎉
                             <AnimatedGradientText className="text-sm font-medium">
                                 Welcome to Talenex..
@@ -131,7 +131,7 @@ export default function HeroSection() {
                         </div>
                     </motion.div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto" ref={featureRef}>
                         {stats.map((stat, index) => (
                             <motion.div
                                 key={stat.label}

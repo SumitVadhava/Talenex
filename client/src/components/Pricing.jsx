@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, Zap, Crown } from 'lucide-react';
 
-export default function PricingSection() {
+export default function PricingSection({ testimonialsRef }) {
   const [currency, setCurrency] = useState('USD');
 
   const plans = [
@@ -128,6 +128,7 @@ export default function PricingSection() {
           ))}
         </div>
       </div>
+      <div ref={testimonialsRef}></div>
     </div>
   );
 }

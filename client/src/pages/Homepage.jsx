@@ -9,14 +9,14 @@ import TestimonialSection from '@/components/Testimonial'
 import PricingSection from '@/components/Pricing'
 import ProductTimeline from '@/components/Workflow'
 
-const Homepage = () => {
+const Homepage = ({ featureRef, workflowRef, testimonialsRef }) => {
   return (
     <div className='flex flex-col items-center justify-center relative'>
       <div className="fixed inset-0 z-0 w-full h-full overflow-hidden pointer-events-none">
         <GridPattern strokeDasharray={"4 5"} width={50} height={50} className="stroke-zinc-500 opacity-20" />
       </div>
       <div className="relative z-20">
-        <HeroSection />
+        <HeroSection featureRef={featureRef} />
         <MagicBento
           textAutoHide={true}
           enableStars={true}
@@ -28,9 +28,10 @@ const Homepage = () => {
           spotlightRadius={300}
           particleCount={12}
           glowColor="132, 0, 255"
+          workflowRef={workflowRef}
         />
         <ProductTimeline />
-        <PricingSection />
+        <PricingSection testimonialsRef={testimonialsRef} />
         <TestimonialSection />
         <Footer />
       </div>
