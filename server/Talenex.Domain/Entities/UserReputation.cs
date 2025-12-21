@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Talenex.Domain.Entities
 {
-    public class UserReputation
+    public class UserReputation : IEntity
     {
         public Guid Id { get; set; }
 
@@ -16,8 +16,8 @@ namespace Talenex.Domain.Entities
 
         public User User { get; set; }
         public decimal AverageRating { get; set; }
-        public int TotalReviews { get; set; }
-        public int TrustScore { get; set; }
+        public int TotalReviews { get; set; } = 0;
+        public int TrustScore { get; set; } 
         public string BadgesJson { get; set; }
 
         //public int StreakCount { get; set; }

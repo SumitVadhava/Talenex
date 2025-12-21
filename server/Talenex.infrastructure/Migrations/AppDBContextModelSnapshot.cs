@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Talenex.Application.Data;
+using Talenex.infrastructure.Data;
 
 #nullable disable
 
-namespace Talenex.Infrastructure.Migrations
+namespace Talenex.infrastructure.Migrations
 {
     [DbContext(typeof(AppDBContext))]
     partial class AppDBContextModelSnapshot : ModelSnapshot
@@ -17,36 +17,46 @@ namespace Talenex.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "8.0.22")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Telenex.Domain.Entities.User", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ClerkUserId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("LastLogindAt")
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastLoginAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClerkUserId")
+                        .IsUnique();
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -54,7 +64,7 @@ namespace Talenex.Infrastructure.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("Telenex.Domain.Entities.UserAvailability", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.UserAvailability", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -66,7 +76,7 @@ namespace Talenex.Infrastructure.Migrations
                     b.Property<bool>("AvailableWeekendsJson")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PreferredSessionDuration")
+                    b.Property<int?>("PreferredSessionDuration")
                         .HasColumnType("int");
 
                     b.Property<string>("PreferredSessionMode")
@@ -84,7 +94,7 @@ namespace Talenex.Infrastructure.Migrations
                     b.ToTable("UserAvailabilities", (string)null);
                 });
 
-            modelBuilder.Entity("Telenex.Domain.Entities.UserNotificationPreferences", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.UserNotificationPreferences", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -110,7 +120,7 @@ namespace Talenex.Infrastructure.Migrations
                     b.ToTable("UserNotificationPreferences", (string)null);
                 });
 
-            modelBuilder.Entity("Telenex.Domain.Entities.UserPrivacy", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.UserPrivacy", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -140,7 +150,7 @@ namespace Talenex.Infrastructure.Migrations
                     b.ToTable("UserPrivacy", (string)null);
                 });
 
-            modelBuilder.Entity("Telenex.Domain.Entities.UserProfile", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.UserProfile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -185,7 +195,7 @@ namespace Talenex.Infrastructure.Migrations
                     b.ToTable("UserProfiles", (string)null);
                 });
 
-            modelBuilder.Entity("Telenex.Domain.Entities.UserReputation", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.UserReputation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -215,7 +225,7 @@ namespace Talenex.Infrastructure.Migrations
                     b.ToTable("UserReputation", (string)null);
                 });
 
-            modelBuilder.Entity("Telnex.Domain.Entities.UserSkills", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.UserSkills", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -238,73 +248,73 @@ namespace Talenex.Infrastructure.Migrations
                     b.ToTable("UserSkills", (string)null);
                 });
 
-            modelBuilder.Entity("Telenex.Domain.Entities.UserAvailability", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.UserAvailability", b =>
                 {
-                    b.HasOne("Telenex.Domain.Entities.User", "User")
+                    b.HasOne("Talenex.Domain.Entities.User", "User")
                         .WithOne("UserAvailability")
-                        .HasForeignKey("Telenex.Domain.Entities.UserAvailability", "UserId")
+                        .HasForeignKey("Talenex.Domain.Entities.UserAvailability", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Telenex.Domain.Entities.UserNotificationPreferences", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.UserNotificationPreferences", b =>
                 {
-                    b.HasOne("Telenex.Domain.Entities.User", "User")
+                    b.HasOne("Talenex.Domain.Entities.User", "User")
                         .WithOne("UserNotifications")
-                        .HasForeignKey("Telenex.Domain.Entities.UserNotificationPreferences", "UserId")
+                        .HasForeignKey("Talenex.Domain.Entities.UserNotificationPreferences", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Telenex.Domain.Entities.UserPrivacy", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.UserPrivacy", b =>
                 {
-                    b.HasOne("Telenex.Domain.Entities.User", "User")
+                    b.HasOne("Talenex.Domain.Entities.User", "User")
                         .WithOne("UserPrivacy")
-                        .HasForeignKey("Telenex.Domain.Entities.UserPrivacy", "UserId")
+                        .HasForeignKey("Talenex.Domain.Entities.UserPrivacy", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Telenex.Domain.Entities.UserProfile", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.UserProfile", b =>
                 {
-                    b.HasOne("Telenex.Domain.Entities.User", "User")
+                    b.HasOne("Talenex.Domain.Entities.User", "User")
                         .WithOne("UserProfile")
-                        .HasForeignKey("Telenex.Domain.Entities.UserProfile", "UserId")
+                        .HasForeignKey("Talenex.Domain.Entities.UserProfile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Telenex.Domain.Entities.UserReputation", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.UserReputation", b =>
                 {
-                    b.HasOne("Telenex.Domain.Entities.User", "User")
+                    b.HasOne("Talenex.Domain.Entities.User", "User")
                         .WithOne("UserReputation")
-                        .HasForeignKey("Telenex.Domain.Entities.UserReputation", "UserId")
+                        .HasForeignKey("Talenex.Domain.Entities.UserReputation", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Telnex.Domain.Entities.UserSkills", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.UserSkills", b =>
                 {
-                    b.HasOne("Telenex.Domain.Entities.User", "User")
+                    b.HasOne("Talenex.Domain.Entities.User", "User")
                         .WithOne("UserSkills")
-                        .HasForeignKey("Telnex.Domain.Entities.UserSkills", "UserId")
+                        .HasForeignKey("Talenex.Domain.Entities.UserSkills", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Telenex.Domain.Entities.User", b =>
+            modelBuilder.Entity("Talenex.Domain.Entities.User", b =>
                 {
                     b.Navigation("UserAvailability")
                         .IsRequired();

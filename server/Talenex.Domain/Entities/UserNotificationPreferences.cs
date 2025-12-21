@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Talenex.Domain.Entities
 {
-    public class UserNotificationPreferences
+    public class UserNotificationPreferences : IEntity
     {
         public Guid Id { get; set; }
 

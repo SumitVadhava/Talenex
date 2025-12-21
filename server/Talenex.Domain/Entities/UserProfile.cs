@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Talenex.Domain.Entities
 {
-    public class UserProfile
+    public class UserProfile : IEntity
     {
         public Guid Id { get; set; }
 

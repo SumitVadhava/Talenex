@@ -8,19 +8,21 @@ using Talenex.Domain.Entities;
 
 namespace Talenex.Domain.Entities
 {
-    public class User
+    public class User : IEntity
     {
         public Guid Id { get; set; }
 
         //Authentication
         [Required]
-        public string Email { get; set; } = null!;
-        public bool EmailConfirmed { get; set; }
+        public string ClerkUserId { get; set; } = null!;
 
-        [Required]
-        public string PasswordHash { get; set; } = null!;
+        public string Email { get; set; } = null!;
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? ImageUrl { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime? LastLogindAt { get; set; }
+        public DateTime? LastLoginAt { get; set; }
 
         //Profile
         public UserProfile UserProfile { get; set; }

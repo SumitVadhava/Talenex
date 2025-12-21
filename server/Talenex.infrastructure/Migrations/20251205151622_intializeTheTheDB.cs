@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Telenex.Infrastructure.Migrations
+namespace Telenex.infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class intializeTheTheDB : Migration

@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Talenex.Application.Data;
+using Talenex.infrastructure.Data;
 
 #nullable disable
 
-namespace Talenex.Infrastructure.Migrations
+namespace Talenex.infrastructure.Migrations
 {
     [DbContext(typeof(AppDBContext))]
     [Migration("20251205151622_intializeTheTheDB")]

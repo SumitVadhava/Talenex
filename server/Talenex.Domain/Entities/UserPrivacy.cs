@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Talenex.Domain.Entities
 {
-    public class UserPrivacy
+    public class UserPrivacy : IEntity
     {
         public Guid Id { get; set; }
 

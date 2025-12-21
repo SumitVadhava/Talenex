@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Talenex.Domain\Talenex.Domain.csproj" />
+
   </ItemGroup>
 
 </Project>

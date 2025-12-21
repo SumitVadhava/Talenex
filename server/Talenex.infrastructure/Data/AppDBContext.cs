@@ -5,13 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Talenex.Domain.Entities;
-using Talenex.Domain.Entities;
 
-namespace Talenex.Application.Data
+namespace Talenex.infrastructure.Data
 {
     public class AppDBContext : DbContext
     {
-        public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) { }
+        public AppDBContext(DbContextOptions<AppDBContext> options) : base(options) {
+            
+        
+        }
 
         public DbSet<User> User { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
@@ -30,10 +32,63 @@ namespace Talenex.Application.Data
             modelBuilder.Entity<User>(u =>
             {
                 u.ToTable("Users");
-                u.HasKey(u => u.Id);
-                u.Property(u => u.Email).HasMaxLength(100).IsRequired();
-                u.HasIndex(u => u.Email).IsUnique();
-                u.Property(u => u.PasswordHash).IsRequired();
+
+                // Primary Key
+                u.HasKey(x => x.Id);
+
+                // Clerk User ID
+                u.Property(x => x.ClerkUserId)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                u.HasIndex(x => x.ClerkUserId)
+                    .IsUnique();
+
+                // Email
+                u.Property(x => x.Email)
+                    .HasMaxLength(150)
+                    .IsRequired();
+
+                u.HasIndex(x => x.Email)
+                    .IsUnique();
+
+
+                // Timestamps
+                u.Property(x => x.CreatedAt)
+                    .IsRequired();
+
+                u.Property(x => x.LastLoginAt);
+
+                // 1:1 Navigation Mappings
+                u.HasOne(x => x.UserProfile)
+                    .WithOne(p => p.User)
+                    .HasForeignKey<UserProfile>(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                u.HasOne(x => x.UserAvailability)
+                    .WithOne(p => p.User)
+                    .HasForeignKey<UserAvailability>(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                u.HasOne(x => x.UserPrivacy)
+                    .WithOne(p => p.User)
+                    .HasForeignKey<UserPrivacy>(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                u.HasOne(x => x.UserReputation)
+                    .WithOne(p => p.User)
+                    .HasForeignKey<UserReputation>(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                u.HasOne(x => x.UserSkills)
+                    .WithOne(p => p.User)
+                    .HasForeignKey<UserSkills>(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                u.HasOne(x => x.UserNotifications)
+                    .WithOne(p => p.User)
+                    .HasForeignKey<UserNotificationPreferences>(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<UserProfile>(u =>

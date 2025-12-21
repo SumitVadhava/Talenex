@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Talenex.Application.Data;
+using Talenex.infrastructure.Data;
 
 public static class ServiceRegistration
 {

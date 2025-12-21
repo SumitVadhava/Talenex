@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Talenex.Domain.Entities
 {
-    public class UserAvailability
+    public class UserAvailability : IEntity
     {
         public Guid Id { get; set; }
 
@@ -25,10 +25,10 @@ namespace Talenex.Domain.Entities
         [Required]
         public bool AvailableWeekendsJson { get; set; }
         
-        public int PreferredSessionDuration { get; set; }
-        
+        public int ? PreferredSessionDuration { get; set; }
+
         //public int MaxSwapsPerMonth { get; set; }
-        public string PreferredSessionMode { get; set; }
+        public string PreferredSessionMode { get; set; } = "online";
     }
 
 }
