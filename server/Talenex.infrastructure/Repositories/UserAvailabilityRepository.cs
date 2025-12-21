@@ -8,9 +8,9 @@ using Talenex.infrastructure.Data;
 
 namespace Talenex.infrastructure.Repositories
 {
-    public class UserNotificationPreferencesRepository  : Repository<UserNotificationPreferences>
+    public class UserAvailabilityRepository  : Repository<UserAvailability>
     {
-         public UserNotificationPreferencesRepository(AppDBContext db) : base(db) { }
+         public UserAvailabilityRepository(AppDBContext db) : base(db) { }
 
         
     }
