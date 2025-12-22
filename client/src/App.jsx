@@ -2,16 +2,19 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import { Button } from "./components/ui/button";
 import { DotPattern } from "./components/ui/dot-pattern";
-import Homepage from "./pages/Homepage";
+import LandingPage from "./pages/LandingPage";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { SignOutButton } from "@clerk/clerk-react";
-import { useSignIn } from "@clerk/clerk-react";
+// import { useSignIn } from "@clerk/clerk-react";
 // import { GoogleOneTap } from "@clerk/clerk-react";
 import UserProfilePage from "./components/UserProfilePage";
 import ScrollButtons from "./components/ScrollBtn";
 import { useRef } from "react";
+import Homepage from "./pages/Homepage";
+import OnBoarding from "./pages/OnBoarding";
+import OnboardingGuard from "./components/OnboardingGuard";
 // import VerifyEmailPage from "./components/VerifyEmailPage";
 
 function App() {
@@ -19,11 +22,27 @@ function App() {
   const featureRef = useRef(null);
   const workflowRef = useRef(null);
   const testimonialsRef = useRef(null);
-  const { signIn } = useSignIn();
+  // const { signIn } = useSignIn();
+
+  const hideNavbarRoutes = [
+    "/sign-in",
+    "/sign-up",
+    "/sign-in/verify-email-address",
+    "/sign-up/verify-email-address",
+    "/onboarding"
+  ];
+
+  const hideNavbar = hideNavbarRoutes.includes(location.pathname);
 
   return (
     <div className="min-h-screen">
-      {location.pathname == "/sign-in" || location.pathname == "/sign-up" || location.pathname == "/sign-up/verify-email-address" || location.pathname == "/sign-in /verify-email-address" ? <></> : <Navbar featureRef={featureRef} workflowRef={workflowRef} testimonialsRef={testimonialsRef} />}
+      {!hideNavbar && (
+        <Navbar
+          featureRef={featureRef}
+          workflowRef={workflowRef}
+          testimonialsRef={testimonialsRef}
+        />
+      )}
       {/* <Navbar /> */}
       <Routes>
         {/* Sign up */}
@@ -48,14 +67,29 @@ function App() {
         {/* Sign out */}
         <Route path="/sign-out" element={<SignOutButton />} />
 
-        <Route path="/" element={<Homepage featureRef={featureRef} workflowRef={workflowRef} testimonialsRef={testimonialsRef} />} />
+        <Route path="/onboarding" element={<OnBoarding />} />
+        <Route
+          path="/"
+          element={
+            <LandingPage
+              featureRef={featureRef}
+              workflowRef={workflowRef}
+              testimonialsRef={testimonialsRef}
+            />
+          }
+        />
+
+        <Route path="/home" element={
+          <OnboardingGuard >
+            <Homepage />
+          </OnboardingGuard>
+        } />
       </Routes>
 
-      
-
-      {location.pathname == "/sign-in" || location.pathname == "/sign-up" || location.pathname == "/sign-up/verify-email-address" || location.pathname == "/sign-in /verify-email-address" ? <></> : <ScrollButtons />}
+      {!hideNavbar && (
+        <ScrollButtons />
+      )}
     </div>
-
   );
 }
 

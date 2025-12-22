@@ -5,12 +5,11 @@
     "\\server\\Talenex.API",
     "\\server\\Talenex.API\\Controllers",
     "\\server\\Talenex.API\\Properties",
-    "\\server\\Talenex.Domain",
     "\\server\\Talenex.Domain\\Entities",
     "\\server\\Talenex.infrastructure",
     "\\server\\Talenex.infrastructure\\Data",
     "\\server\\Talenex.infrastructure\\Migrations"
   ],
-  "SelectedNode": "\\server\\Talenex.infrastructure\\Migrations\\20251205151622_intializeTheTheDB.cs",
+  "SelectedNode": "\\server\\Talenex.infrastructure\\Talenex.infrastructure.csproj",
   "PreviewInSolutionExplorer": false
 }
