@@ -16,9 +16,9 @@ namespace Talenex.Domain.Entities
 
         public User User { get; set; }
         public decimal AverageRating { get; set; }
-        public int TotalReviews { get; set; } = 0;
-        public int TrustScore { get; set; } 
-        public string BadgesJson { get; set; }
+        public int  TotalReviews { get; set; } = 0;
+        public int ? TrustScore { get; set; } 
+        public string ? BadgesJson { get; set; }
 
         //public int StreakCount { get; set; }
         //public int ReputationPoints { get; set; }
