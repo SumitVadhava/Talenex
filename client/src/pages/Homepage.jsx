@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 // import { MOCK_SKILLS, CATEGORIES } from './constants';
 import SkillCard from '../components/SkillCard';
 import Filters from '../components/Filters';
@@ -14,6 +14,8 @@ import {
   Filter
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useAuth } from '@clerk/clerk-react';
+import axios from 'axios';
 
 const CATEGORIES = [
   { id: 'all', name: 'All Skills', icon: 'LayoutGrid' },
@@ -178,8 +180,10 @@ const MOCK_SKILLS = [
 
 const Homepage = () => {
   // --- State ---
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const { getToken } = useAuth();
+
   
   const [filters, setFilters] = useState({
     category: 'all',
@@ -253,6 +257,35 @@ const Homepage = () => {
     if(page >= 1 && page <= totalPages) setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    const alreadySent = sessionStorage.getItem("token");
+
+    if(alreadySent) return;
+
+    const fetchAndSendToken = async () => {
+      try {
+        const token = await getToken();
+
+        await axios.post(
+          "https://localhost:5296/api/auth/register",
+          {}, // body
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          }
+        )
+
+        sessionStorage.setItem("token", "true");
+      }
+      catch (error) {
+        console.error("Error sending token:", error);
+      }
+    }
+
+    fetchAndSendToken();
+  }, [getToken]);
 
   return (
     <div className="min-h-screen font-sans mt-5">

@@ -4,7 +4,7 @@ import { Star, MessageCircle, Globe, MapPin } from 'lucide-react';
 
 const SkillCard = ({ skill }) => {
   return (
-    <Card className="group flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 hover:-translate-y-1 border-slate-200 hover:border-primary-200 bg-white overflow-hidden">
+    <Card className="group flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 hover:-translate-y-1 hover:-translate-x-1 border-slate-200 hover:border-primary-200 bg-white overflow-hidden">
       
       {/* User Header */}
       <div className="p-4 flex justify-between items-start border-b border-slate-50 bg-slate-50/30">

@@ -5,8 +5,9 @@ import Step3WantedSkills from "@/components/Step3WantedSkills";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Stepper = ({ steps, currentStep }) => {
   return (
@@ -92,6 +93,7 @@ export default function OnBoarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 3;
   const { user } = useUser();
+  const { getToken } = useAuth();
   const navigate = useNavigate();
 
   const steps = [
@@ -166,6 +168,19 @@ export default function OnBoarding() {
           socials: formData.socials,
         },
       });
+
+      const token = await getToken();
+      console.log(token);
+      
+
+      // const response = await axios.get(
+      //   "URL",
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   }
+      // );
 
       navigate("/home");
     } catch (error) {
