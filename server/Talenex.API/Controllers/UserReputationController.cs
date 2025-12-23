@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Xml;
 using Talenex.Application.DTOs;
 using Talenex.Application.IRepository;
-using Talenex.Application.Services;
+using Talenex.infrastructure.Services;
 using Talenex.Domain.Entities;
 
 namespace Talenex.API.Controllers

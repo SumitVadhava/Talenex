@@ -12,7 +12,7 @@ namespace Talenex.Application.IRepository
         Task<IEnumerable<T>> GetAllAsync();
         Task<T?> GetByIdAsync(Guid id);
         Task<T> AddAsync(T entity);
-        Task<T> DeleteAsync(Guid id);
+        Task<T?> DeleteAsync(Guid id);
 
         Task<T> UpdateAsync(T entity);
     }

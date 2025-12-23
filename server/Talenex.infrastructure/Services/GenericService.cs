@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Talenex.Application.IRepository;
 using Talenex.Domain.Entities;
 
-namespace Talenex.Application.Services
+namespace Talenex.infrastructure.Services
 {
     public class GenericService<T> : IService<T>
         where T : class, IEntity

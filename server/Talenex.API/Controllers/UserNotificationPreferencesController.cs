@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Talenex.Application.Services;
+using Talenex.infrastructure.Services;
 using Talenex.Domain.Entities;
 using Talenex.Application.IRepository;
 using Talenex.Application.DTOs;
