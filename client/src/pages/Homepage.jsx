@@ -268,7 +268,7 @@ const Homepage = () => {
         const token = await getToken();
 
         await axios.post(
-          "https://localhost:5296/api/auth/register",
+          "https://localhost:5296/api/auth/",
           {}, // body
           {
             headers: {

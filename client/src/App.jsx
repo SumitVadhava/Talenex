@@ -27,6 +27,8 @@ function App() {
   const hideNavbarRoutes = [
     "/sign-in",
     "/sign-up",
+    "/sign-in/sso-callback",
+    "/sign-up/sso-callback",
     "/sign-in/verify-email-address",
     "/sign-up/verify-email-address",
     "/onboarding"
