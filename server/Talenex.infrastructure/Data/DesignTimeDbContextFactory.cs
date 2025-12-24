@@ -10,7 +10,7 @@ namespace Talenex.infrastructure.Data
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDBContext>();
 
-            optionsBuilder.UseSqlServer("Server=SUMITVADHAVA\\SQLEXPRESS;Database=TalenexDB;Trusted_Connection=True;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer("Server=MEETPARMAR\\SQLEXPRESS;Database=TalenexDB;Trusted_Connection=True;TrustServerCertificate=True");
 
             return new AppDBContext(optionsBuilder.Options);
         }

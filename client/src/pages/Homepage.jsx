@@ -274,7 +274,7 @@ const Homepage = () => {
         console.log("Fetched token:", token);
 
         await axios.post(
-          "http://localhost:5296/api/auth/",
+          "https://localhost:5296/api/auth/",
           {}, // body
           {
             headers: {
