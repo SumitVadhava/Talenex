@@ -1,14 +1,14 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 // import { MOCK_SKILLS, CATEGORIES } from './constants';
 import SkillCard from '../components/SkillCard';
 import Filters from '../components/Filters';
 import { Button, Input, Badge } from '../components/ui/Common';
-import { 
-  Bell, 
-  Menu, 
-  Search, 
-  ChevronDown, 
-  ChevronLeft, 
+import {
+  Bell,
+  Menu,
+  Search,
+  ChevronDown,
+  ChevronLeft,
   ChevronRight,
   Sparkles,
   Filter
@@ -184,7 +184,9 @@ const Homepage = () => {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const { getToken } = useAuth();
 
-  
+  const tokenSentRef = useRef(false);
+
+
   const [filters, setFilters] = useState({
     category: 'all',
     search: '',
@@ -211,8 +213,8 @@ const Homepage = () => {
       // Search Filter (Offers OR Seeking)
       if (filters.search) {
         const q = filters.search.toLowerCase();
-        const matches = 
-          skill.offerTitle.toLowerCase().includes(q) || 
+        const matches =
+          skill.offerTitle.toLowerCase().includes(q) ||
           // skill.offerDescription.toLowerCase().includes(q) ||
           skill.seekingTitle.toLowerCase().includes(q);
         if (!matches) return false;
@@ -254,18 +256,22 @@ const Homepage = () => {
   );
 
   const handlePageChange = (page) => {
-    if(page >= 1 && page <= totalPages) setCurrentPage(page);
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {
-    const alreadySent = sessionStorage.getItem("token");
+    // const alreadySent = sessionStorage.getItem("token");
+    if (tokenSentRef.current) return;
 
-    if(alreadySent) return;
+    tokenSentRef.current = true;
+
 
     const fetchAndSendToken = async () => {
       try {
-        const token = await getToken();
+        const token = await getToken({ template: "customJWT" });
+
+        console.log("Fetched token:", token);
 
         await axios.post(
           "https://localhost:5296/api/auth/",
@@ -277,7 +283,7 @@ const Homepage = () => {
           }
         )
 
-        sessionStorage.setItem("token", "true");
+        // sessionStorage.setItem("token", "true");
       }
       catch (error) {
         console.error("Error sending token:", error);
@@ -292,12 +298,12 @@ const Homepage = () => {
 
       {/* --- Main Content --- */}
       <main className="w-full max-w-7xl mx-auto px-4 py-8">
-        
+
         {/* Hero / Categories */}
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Find your skill mates</h1>
           <p className="text-slate-500 mb-6">Exchange knowledge with experts worldwide.</p>
-          
+
           <div className="flex items-center gap-3 overflow-x-auto pb-4 hide-scrollbar">
             {CATEGORIES.map((cat) => (
               <button
@@ -306,11 +312,10 @@ const Homepage = () => {
                   setFilters({ ...filters, category: cat.id });
                   setCurrentPage(1);
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all cursor-pointer ${
-                  filters.category === cat.id 
-                    ? 'bg-slate-900 text-white shadow-md' 
-                    : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50'
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all cursor-pointer ${filters.category === cat.id
+                  ? 'bg-slate-900 text-white shadow-md'
+                  : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                  }`}
               >
                 {cat.name}
               </button>
@@ -319,18 +324,18 @@ const Homepage = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          
+
           {/* --- Sidebar (Filters) --- */}
           <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white p-6 shadow-2xl transform transition-transform duration-300 ease-in-out lg:static lg:w-64 lg:p-0 lg:shadow-none lg:bg-transparent lg:translate-x-0 ${mobileFilterOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-             <div className="flex items-center justify-between mb-6 lg:hidden">
-               <span className="font-bold text-lg">Filters</span>
-               <Button variant="ghost" size="sm" onClick={() => setMobileFilterOpen(false)}>Close</Button>
-             </div>
-             <div className="lg:sticky lg:top-24">
-                <Filters filters={filters} setFilters={setFilters} />
-             </div>
+            <div className="flex items-center justify-between mb-6 lg:hidden">
+              <span className="font-bold text-lg">Filters</span>
+              <Button variant="ghost" size="sm" onClick={() => setMobileFilterOpen(false)}>Close</Button>
+            </div>
+            <div className="lg:sticky lg:top-24">
+              <Filters filters={filters} setFilters={setFilters} />
+            </div>
           </aside>
-          
+
           {/* Mobile Filter Toggle Overlay */}
           {mobileFilterOpen && (
             <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setMobileFilterOpen(false)}></div>
@@ -339,40 +344,40 @@ const Homepage = () => {
 
           {/* --- Grid Section --- */}
           <div className="flex-1">
-            
+
             {/* Toolbar (Search + Sort + Mobile Filter Trigger) */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-               
-               <div className="flex items-center gap-2 w-full sm:w-auto">
-                 <Button variant="outline" className="lg:hidden" onClick={() => setMobileFilterOpen(true)}>
-                    <Filter className="w-4 h-4 mr-2" /> Filters
-                 </Button>
-                 <div className="relative w-full sm:w-80">
-                   <Input 
-                     placeholder="Search python, design..." 
-                     icon={<Search className="w-4 h-4"/>} 
-                     value={filters.search}
-                     onChange={(e) => setFilters({...filters, search: e.target.value})}
-                     className="bg-slate-50 border-transparent focus:bg-white"
-                   />
-                 </div>
-               </div>
 
-               <div className="flex items-center gap-2 self-end sm:self-auto">
-                 <span className="text-sm text-slate-500 hidden sm:inline">Sort by:</span>
-                 <div className="relative group min-w-[175px]">
-                   <Select value={sortBy} onValueChange={setSortBy}>
-                     <SelectTrigger className="w-full bg-transparent pl-3 pr-8 py-2 text-sm font-medium text-slate-900 border-none shadow-none focus:ring-0">
-                       <SelectValue placeholder="Sort by..." />
-                     </SelectTrigger>
-                     <SelectContent className="z-50">
-                       <SelectItem value="newest">Newest First</SelectItem>
-                       <SelectItem value="rating">Highest Rated</SelectItem>
-                       <SelectItem value="popular">Most Popular</SelectItem>
-                     </SelectContent>
-                   </Select>
-                 </div>
-               </div>
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <Button variant="outline" className="lg:hidden" onClick={() => setMobileFilterOpen(true)}>
+                  <Filter className="w-4 h-4 mr-2" /> Filters
+                </Button>
+                <div className="relative w-full sm:w-80">
+                  <Input
+                    placeholder="Search python, design..."
+                    icon={<Search className="w-4 h-4" />}
+                    value={filters.search}
+                    onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                    className="bg-slate-50 border-transparent focus:bg-white"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 self-end sm:self-auto">
+                <span className="text-sm text-slate-500 hidden sm:inline">Sort by:</span>
+                <div className="relative group min-w-[175px]">
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-full bg-transparent pl-3 pr-8 py-2 text-sm font-medium text-slate-900 border-none shadow-none focus:ring-0">
+                      <SelectValue placeholder="Sort by..." />
+                    </SelectTrigger>
+                    <SelectContent className="z-50">
+                      <SelectItem value="newest">Newest First</SelectItem>
+                      <SelectItem value="rating">Highest Rated</SelectItem>
+                      <SelectItem value="popular">Most Popular</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
             </div>
 
             {/* Results Grid */}
@@ -384,64 +389,63 @@ const Homepage = () => {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
-                 <div className="bg-slate-100 p-4 rounded-full mb-4">
-                   <Search className="w-8 h-8 text-slate-400" />
-                 </div>
-                 <h3 className="text-lg font-medium text-slate-900">No skills found</h3>
-                 <p className="text-slate-500 max-w-xs mx-auto mt-2">Try adjusting your filters or search for something else.</p>
-                 <Button 
-                   variant="outline" 
-                   className="mt-6"
-                   onClick={() => setFilters({ category: 'All', search: '', onlyOnline: false, level: [], minRating: 0 })}
-                 >
-                   Clear all filters
-                 </Button>
+                <div className="bg-slate-100 p-4 rounded-full mb-4">
+                  <Search className="w-8 h-8 text-slate-400" />
+                </div>
+                <h3 className="text-lg font-medium text-slate-900">No skills found</h3>
+                <p className="text-slate-500 max-w-xs mx-auto mt-2">Try adjusting your filters or search for something else.</p>
+                <Button
+                  variant="outline"
+                  className="mt-6"
+                  onClick={() => setFilters({ category: 'All', search: '', onlyOnline: false, level: [], minRating: 0 })}
+                >
+                  Clear all filters
+                </Button>
               </div>
             )}
 
             {/* Pagination */}
             {currentItems.length > 0 && (
               <div className="mt-10 flex items-center justify-between border-t border-slate-200 pt-6">
-                 <span className="text-sm text-slate-500">
-                    Showing <span className="font-medium text-slate-900">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-medium text-slate-900">{Math.min(currentPage * itemsPerPage, sortedData.length)}</span> of {sortedData.length} results
-                 </span>
-                 
-                 <div className="flex items-center gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      disabled={currentPage === 1}
-                      onClick={() => handlePageChange(currentPage - 1)}
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </Button>
-                    
-                    {Array.from({ length: totalPages }).map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`w-8 h-8 rounded-md text-sm font-medium transition-colors ${
-                          currentPage === i + 1
-                            ? 'bg-primary-600 text-white'
-                            : 'text-slate-600 hover:bg-slate-100'
-                        }`}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
+                <span className="text-sm text-slate-500">
+                  Showing <span className="font-medium text-slate-900">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-medium text-slate-900">{Math.min(currentPage * itemsPerPage, sortedData.length)}</span> of {sortedData.length} results
+                </span>
 
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      disabled={currentPage === totalPages}
-                      onClick={() => handlePageChange(currentPage + 1)}
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </Button>
+
+                  {Array.from({ length: totalPages }).map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handlePageChange(i + 1)}
+                      className={`w-8 h-8 rounded-md text-sm font-medium transition-colors ${currentPage === i + 1
+                        ? 'bg-primary-600 text-white'
+                        : 'text-slate-600 hover:bg-slate-100'
+                        }`}
                     >
-                      <ChevronRight className="w-4 h-4" />
-                    </Button>
-                 </div>
+                      {i + 1}
+                    </button>
+                  ))}
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={currentPage === totalPages}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             )}
-            
+
           </div>
         </div>
       </main>

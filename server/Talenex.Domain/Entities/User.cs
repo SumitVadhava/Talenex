@@ -14,7 +14,7 @@ namespace Talenex.Domain.Entities
 
         //Authentication
         [Required]
-        public string ClerkUserId { get; set; } = null!;
+        public String ClerkUserId { get; set; }
 
         public string Email { get; set; } = null!;
         public string? FirstName { get; set; }
@@ -23,6 +23,8 @@ namespace Talenex.Domain.Entities
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? LastLoginAt { get; set; }
+
+        public bool onBoarding {  get; set; }
 
         //Profile
         public UserProfile UserProfile { get; set; }

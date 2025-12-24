@@ -8,11 +8,11 @@ namespace Talenex.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserPrivacyController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly IService<UserPrivacy> _service;
+        private readonly IService<User> _service;
 
-        public UserPrivacyController (IService<UserPrivacy> service)
+        public UserController(IService<User> service)
         {
             _service = service;
         }
@@ -28,34 +28,18 @@ namespace Talenex.API.Controllers
             return user == null ? NotFound() : Ok(user);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateUserPrivacyDto dto)
-        {
-            var entity = new UserPrivacy
-            {
-                UserId = dto.UserId,
-                IsProfilePublic = dto.IsProfilePublic,
-                ShowLocation = dto.ShowLocation,
-                ShowSkills = dto.ShowSkills,
-                AllowMessagesFrom = dto.AllowMessagesFrom ?? "everyone"
-
-            };
-
-            var created = await _service.CreateAsync(entity);
-            return Ok(created);
-        }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, UpdateUserPrivacyDto dto)
+        public async Task<IActionResult> Update(Guid id, UpdateUserDto dto)
         {
             var existing = await _service.GetByIdAsync(id);
             if (existing == null)
                 return NotFound();
 
-            existing.IsProfilePublic = dto.IsProfilePublic;
-            existing.ShowLocation = dto.ShowLocation;
-            existing.ShowSkills = dto.ShowSkills;
-            existing.AllowMessagesFrom = dto.AllowMessagesFrom ?? existing.AllowMessagesFrom;
+            existing.Email = dto.Email;
+            existing.FirstName = dto.FirstName;
+            existing.LastName = dto.LastName;
+            existing.ImageUrl = dto.ImageUrl;
 
             return Ok(await _service.UpdateAsync(existing));
         }
