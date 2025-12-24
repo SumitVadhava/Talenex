@@ -21,7 +21,7 @@ namespace Talenex.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("Register")]
+        [HttpPost]
         public async Task<IActionResult> RegisterUser()
         {
             //Console.WriteLine("Called auth");
