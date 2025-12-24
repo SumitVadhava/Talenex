@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Talenex.Application.Services;
+using Talenex.infrastructure.Services;
 using Talenex.Domain.Entities;
 using Talenex.Application.IRepository;
 using Talenex.Application.DTOs;
@@ -36,6 +36,7 @@ namespace Talenex.API.Controllers
                 UserId = dto.UserId,
                 FullName = dto.FullName,
                 Username = dto.Username,
+                Bio = dto.Bio,
                 ProfilePhotoUrl = dto.ProfilePhotoUrl,
                 Location = dto.Location,
                 Latitude = dto.Latitude,
@@ -56,6 +57,7 @@ namespace Talenex.API.Controllers
 
             existing.FullName = dto.FullName;
             existing.Username = dto.Username;
+            existing.Bio = dto.Bio;
             existing.ProfilePhotoUrl = dto.ProfilePhotoUrl;
             existing.Location = dto.Location;
             existing.Latitude = dto.Latitude;
