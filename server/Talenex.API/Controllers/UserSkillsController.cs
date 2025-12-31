@@ -3,6 +3,7 @@ using Talenex.infrastructure.Services;
 using Talenex.Domain.Entities;
 using Talenex.Application.IRepository;
 using Talenex.Application.DTOs;
+using FluentValidation;
 
 namespace Talenex.API.Controllers
 {
@@ -11,10 +12,15 @@ namespace Talenex.API.Controllers
     public class UserSkillsController : ControllerBase
     {
         private readonly IService<UserSkills> _service;
+        private readonly IValidator<CreateUserSkillsDto> _createValidator;
+        private readonly IValidator<UpdateUserSkillsDto> _updateValidator;
 
-        public UserSkillsController(IService<UserSkills> service)
+        public UserSkillsController(IService<UserSkills> service, IValidator<CreateUserSkillsDto> createValidator, IValidator<UpdateUserSkillsDto> updateValidator)
         {
             _service = service;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
+
         }
 
         [HttpGet]
@@ -31,6 +37,16 @@ namespace Talenex.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserSkillsDto dto)
         {
+            var result = await _createValidator.ValidateAsync(dto);
+            if (!result.IsValid)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = result.Errors.Select(e => e.ErrorMessage)
+                });
+            }
+
             var entity = new UserSkills
             {
                 UserId = dto.UserId,
@@ -49,6 +65,16 @@ namespace Talenex.API.Controllers
             var existing = await _service.GetByIdAsync(id);
             if (existing == null)
                 return NotFound();
+
+            var result = await _updateValidator.ValidateAsync(dto);
+            if (!result.IsValid)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = result.Errors.Select(e => e.ErrorMessage)
+                });
+            }
 
             if (dto.SkillsOffered != null)
                 existing.SkillsOffered = dto.SkillsOffered;

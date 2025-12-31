@@ -8,13 +8,10 @@ using Talenex.Application.DTOs;
 
 namespace Talenex.Application.Validators
 {
-    internal class CreateUserSkillsValidator : AbstractValidator<CreateUserSkillsDto>
+    internal class UpdateUserSkillsValidator : AbstractValidator<UpdateUserSkillsDto>
     {
-        public CreateUserSkillsValidator() {
-            RuleFor(x => x.UserId)
-               .NotEmpty()
-               .WithMessage("UserId is required.");
-
+        public UpdateUserSkillsValidator()
+        {
             RuleFor(x => x.SkillsOffered)
                 .MaximumLength(500)
                 .When(x => !string.IsNullOrWhiteSpace(x.SkillsOffered))
@@ -23,7 +20,7 @@ namespace Talenex.Application.Validators
             RuleFor(x => x.SkillsWanted)
                 .MaximumLength(500)
                 .When(x => !string.IsNullOrWhiteSpace(x.SkillsWanted))
-                .WithMessage("SkillsWanted cannot exceed 500 characters.");
+                .WithMessage("SkillsWanted cannot exceed 500 chara cters.");
 
             RuleFor(x => x)
                 .Must(x =>

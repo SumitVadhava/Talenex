@@ -5,6 +5,7 @@ using Talenex.Application.DTOs;
 using Talenex.Application.IRepository;
 using Talenex.infrastructure.Services;
 using Talenex.Domain.Entities;
+using FluentValidation;
 
 namespace Talenex.API.Controllers
 {
@@ -13,10 +14,15 @@ namespace Talenex.API.Controllers
     public class UserReputationController : ControllerBase
     {
         private readonly IService<UserReputation> _service;
+        private readonly IValidator<CreateUserReputationDto> _createValidator;
+        private readonly IValidator<UpdateUserReputationDto> _updateValidator;
 
-        public UserReputationController(IService<UserReputation> service)
+
+        public UserReputationController(IService<UserReputation> service, IValidator<CreateUserReputationDto> createValidator, IValidator<UpdateUserReputationDto> updateValidator)
         {
             _service = service;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -33,6 +39,15 @@ namespace Talenex.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserReputationDto dto)
         {
+            var result = await _createValidator.ValidateAsync(dto);
+            if (!result.IsValid)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = result.Errors.Select(e => e.ErrorMessage)
+                });
+            }
             var entity = new UserReputation
             {
                 UserId = dto.UserId,
@@ -55,6 +70,16 @@ namespace Talenex.API.Controllers
             var existing = await _service.GetByIdAsync(id);
             if (existing == null)
                 return NotFound();
+
+            var result = await _updateValidator.ValidateAsync(dto);
+            if (!result.IsValid)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = result.Errors.Select(e => e.ErrorMessage)
+                });
+            }
 
             existing.AverageRating = dto.AverageRating;
 
