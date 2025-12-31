@@ -9,13 +9,13 @@ namespace Talenex.Application.DTOs
 {
     public class CreateUserAvailabilityDto
     {
-        [Required]
+        //[Required]
         public Guid UserId { get; set; }
 
-        [Required]
+        //[Required]
         public bool AvailableOnWeekdays { get; set; }
 
-        [Required]
+        //[Required]
         public bool AvailableOnWeekends { get; set; }
 
         public int? PreferredSessionDuration { get; set; }
