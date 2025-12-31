@@ -6,7 +6,7 @@ import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 
-const MAX_BIO_LENGTH = 250;
+const MAX_BIO_LENGTH = 500;
 
 export default function Step1BasicInfo({ formData, updateFormData, onNext }) {
   const fileInputRef = useRef(null);

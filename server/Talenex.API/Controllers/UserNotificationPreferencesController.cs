@@ -3,6 +3,7 @@ using Talenex.infrastructure.Services;
 using Talenex.Domain.Entities;
 using Talenex.Application.IRepository;
 using Talenex.Application.DTOs;
+using FluentValidation;
 
 namespace Talenex.API.Controllers
 {
@@ -11,10 +12,15 @@ namespace Talenex.API.Controllers
     public class UserNotificationPreferencesController : ControllerBase
     {
         private readonly IService<UserNotificationPreferences> _service;
+        private readonly IValidator<CreateUserNotificationPreferencesDto> _createValidator;
+        private readonly IValidator<UpdateUserNotificationPreferencesDto> _updateValidator;
 
-        public UserNotificationPreferencesController(IService<UserNotificationPreferences> service)
+        public UserNotificationPreferencesController(IService<UserNotificationPreferences> service, IValidator<CreateUserNotificationPreferencesDto> createValidator, IValidator<UpdateUserNotificationPreferencesDto> updateValidator)
         {
             _service = service;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
+
         }
 
         [HttpGet]
@@ -31,6 +37,17 @@ namespace Talenex.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserNotificationPreferencesDto dto)
         {
+            var result = await _createValidator.ValidateAsync(dto);
+
+            if (!result.IsValid)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = result.Errors.Select(e => e.ErrorMessage)
+                });
+            }
+
             var entity = new UserNotificationPreferences
             {
                 UserId = dto.UserId,
@@ -49,6 +66,16 @@ namespace Talenex.API.Controllers
             var existing = await _service.GetByIdAsync(id);
             if (existing == null)
                 return NotFound();
+
+            var result = await _updateValidator.ValidateAsync(dto);
+            if (!result.IsValid)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = result.Errors.Select(e => e.ErrorMessage)
+                });
+            }
 
             existing.NotifyOnMessage = dto.NotifyOnMessage;
             existing.NotifyOnSwapRequest = dto.NotifyOnSwapRequest;
