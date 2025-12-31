@@ -12,14 +12,14 @@ namespace Talenex.API.Controllers
     public class UserProfileController : ControllerBase
     {
         private readonly IService<UserProfile> _service;
-        private readonly IValidator<CreateUserProfileDto> _createvalidator;
-        private readonly IValidator<UpdateUserProfileDto> _updatevalidator;
+        private readonly IValidator<CreateUserProfileDto> _createValidator;
+        private readonly IValidator<UpdateUserProfileDto> _updateValidator;
 
-        public UserProfileController(IService<UserProfile> service,IValidator<CreateUserProfileDto> createvalidator, IValidator<UpdateUserProfileDto> updatevalidator)
+        public UserProfileController(IService<UserProfile> service,IValidator<CreateUserProfileDto> createValidator, IValidator<UpdateUserProfileDto> updateValidator)
         {
             _service = service;
-            _createvalidator = createvalidator;
-            _updatevalidator = updatevalidator;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -36,6 +36,18 @@ namespace Talenex.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserProfileDto dto)
         {
+
+            var result = await _createValidator.ValidateAsync(dto);
+
+            if (!result.IsValid)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = result.Errors.Select(e => e.ErrorMessage)
+                });
+            }
+
             var entity = new UserProfile
             {
                 UserId = dto.UserId,
@@ -49,16 +61,6 @@ namespace Talenex.API.Controllers
 
             };
 
-            var result = await _createvalidator.ValidateAsync(dto);
-
-            if (!result.IsValid)
-            {
-                return BadRequest(new
-                {
-                    success = false,
-                    errors = result.Errors.Select(e => e.ErrorMessage)
-                });
-            }
 
             var created = await _service.CreateAsync(entity);
             return Ok(created);
@@ -71,16 +73,7 @@ namespace Talenex.API.Controllers
             if (existing == null)
                 return NotFound();
 
-            existing.FullName = dto.FullName;
-            existing.Username = dto.Username;
-            existing.Bio = dto.Bio;
-            existing.ProfilePhotoUrl = dto.ProfilePhotoUrl;
-            existing.Location = dto.Location;
-            existing.Latitude = dto.Latitude;
-            existing.Longitude = dto.Longitude;
-
-
-            var result = await _updatevalidator.ValidateAsync(dto);
+            var result = await _updateValidator.ValidateAsync(dto);
 
             if (!result.IsValid)
             {
@@ -90,6 +83,16 @@ namespace Talenex.API.Controllers
                     errors = result.Errors.Select(e => e.ErrorMessage)
                 });
             }
+
+            existing.FullName = dto.FullName;
+            existing.Username = dto.Username;
+            existing.Bio = dto.Bio;
+            existing.ProfilePhotoUrl = dto.ProfilePhotoUrl;
+            existing.Location = dto.Location;
+            existing.Latitude = dto.Latitude;
+            existing.Longitude = dto.Longitude;
+
+            
 
             return Ok(await _service.UpdateAsync(existing));
         }

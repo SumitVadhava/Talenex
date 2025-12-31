@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Talenex.infrastructure.Services;
-using Talenex.Domain.Entities;
-using Talenex.Application.IRepository;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Talenex.Application.DTOs;
+using Talenex.Application.IRepository;
+using Talenex.Domain.Entities;
+using Talenex.infrastructure.Services;
 
 namespace Talenex.API.Controllers
 {
@@ -11,6 +12,8 @@ namespace Talenex.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IService<User> _service;
+        private readonly IValidator<UpdateUserDto> _updateValidator;
+
 
         public UserController(IService<User> service)
         {
@@ -35,6 +38,17 @@ namespace Talenex.API.Controllers
             var existing = await _service.GetByIdAsync(id);
             if (existing == null)
                 return NotFound();
+
+            var result = await _updateValidator.ValidateAsync(dto);
+
+            if (!result.IsValid)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = result.Errors.Select(e => e.ErrorMessage)
+                });
+            }
 
             existing.Email = dto.Email;
             existing.FirstName = dto.FirstName;
