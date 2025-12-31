@@ -9,7 +9,7 @@ namespace Talenex.Application.DTOs
 {
     public class CreateUserPrivacyDto
     {
-        [Required]
+        //[Required]
         public Guid UserId { get; set; }
 
         public bool IsProfilePublic { get; set; } = true;

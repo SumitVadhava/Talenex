@@ -9,13 +9,13 @@ namespace Talenex.Application.DTOs
 {
     public  class CreateUserProfileDto
     {
-        [Required]
+        //[Required]
         public Guid UserId { get; set; }
 
-        [Required]
+        //[Required]
         public string FullName { get; set; }
 
-        [Required]
+        //[Required]
         public string Username { get; set; }
 
         public string Bio { get; set; }

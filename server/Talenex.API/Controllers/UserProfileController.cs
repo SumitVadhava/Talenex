@@ -3,6 +3,7 @@ using Talenex.infrastructure.Services;
 using Talenex.Domain.Entities;
 using Talenex.Application.IRepository;
 using Talenex.Application.DTOs;
+using FluentValidation;
 
 namespace Talenex.API.Controllers
 {
@@ -11,10 +12,14 @@ namespace Talenex.API.Controllers
     public class UserProfileController : ControllerBase
     {
         private readonly IService<UserProfile> _service;
+        private readonly IValidator<CreateUserProfileDto> _createValidator;
+        private readonly IValidator<UpdateUserProfileDto> _updateValidator;
 
-        public UserProfileController(IService<UserProfile> service)
+        public UserProfileController(IService<UserProfile> service,IValidator<CreateUserProfileDto> createValidator, IValidator<UpdateUserProfileDto> updateValidator)
         {
             _service = service;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -31,6 +36,18 @@ namespace Talenex.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserProfileDto dto)
         {
+
+            var result = await _createValidator.ValidateAsync(dto);
+
+            if (!result.IsValid)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = result.Errors.Select(e => e.ErrorMessage)
+                });
+            }
+
             var entity = new UserProfile
             {
                 UserId = dto.UserId,
@@ -44,6 +61,7 @@ namespace Talenex.API.Controllers
 
             };
 
+
             var created = await _service.CreateAsync(entity);
             return Ok(created);
         }
@@ -55,6 +73,17 @@ namespace Talenex.API.Controllers
             if (existing == null)
                 return NotFound();
 
+            var result = await _updateValidator.ValidateAsync(dto);
+
+            if (!result.IsValid)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    errors = result.Errors.Select(e => e.ErrorMessage)
+                });
+            }
+
             existing.FullName = dto.FullName;
             existing.Username = dto.Username;
             existing.Bio = dto.Bio;
@@ -62,6 +91,8 @@ namespace Talenex.API.Controllers
             existing.Location = dto.Location;
             existing.Latitude = dto.Latitude;
             existing.Longitude = dto.Longitude;
+
+            
 
             return Ok(await _service.UpdateAsync(existing));
         }

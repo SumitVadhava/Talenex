@@ -73,6 +73,7 @@
 //app.Run();
 
 
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -80,6 +81,7 @@ using Talenex.Application.IRepository;
 using Talenex.infrastructure.Data;
 using Talenex.infrastructure.Repositories;
 using Talenex.infrastructure.Services;
+using Talenex.Application.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -111,6 +113,8 @@ builder.Services
 
 builder.Services.AddAuthorization();
 builder.Services.AddHttpClient();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserProfileValidator>();
+
 
 // ==========================
 // Database
