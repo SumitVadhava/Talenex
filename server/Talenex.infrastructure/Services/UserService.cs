@@ -8,7 +8,7 @@ using Talenex.Domain.Entities;
 
 namespace Talenex.infrastructure.Services
 {
-    public class UserService : GenericService<User>
+    public class UserService : GenericService<User>, IUserService<User>
     {
         private readonly IUserRepository _userRepository;
         public UserService(IUserRepository repository) : base(repository)
@@ -17,7 +17,7 @@ namespace Talenex.infrastructure.Services
             
         }
 
-        public async Task<User?> GetByClerkId(string clerkUserId)
+        public async Task<User?> GetByClerkIdAsync(string clerkUserId)
         {
             return await _userRepository.GetByClerkIdAsync(clerkUserId); 
         }

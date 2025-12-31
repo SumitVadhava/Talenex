@@ -12,12 +12,15 @@ namespace Talenex.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IService<User> _service;
+        private readonly IUserService<User> _userService;
+
         private readonly IValidator<UpdateUserDto> _updateValidator;
 
 
-        public UserController(IService<User> service)
+        public UserController(IService<User> service,IUserService<User> userService)
         {
             _service = service;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -28,6 +31,13 @@ namespace Talenex.API.Controllers
         public async Task<IActionResult> Get(Guid id)
         {
             var user = await _service.GetByIdAsync(id);
+            return user == null ? NotFound() : Ok(user);
+        }
+
+        [HttpGet("{clerkId}")]
+        public async Task<IActionResult> GetByClerk(String clerkId)
+        {
+            var user = await _userService.GetByClerkIdAsync(clerkId);
             return user == null ? NotFound() : Ok(user);
         }
 

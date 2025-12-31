@@ -169,6 +169,25 @@ export default function OnBoarding() {
         },
       });
 
+      // creating user and its skills 
+      const createUserProfile = async () => {
+        const user = await axios.get("")
+
+        await axios.post(
+          "https://localhost:5296/api/UserProfile/",
+          {
+            "userId": ,
+            "fullName": "string",
+            "username": "string",
+            "bio": "string",
+            "profilePhotoUrl": "string",
+            "location": "string",
+            "latitude": 0,
+            "longitude": 0
+          }
+        )
+      }
+
       const token = await getToken();
       console.log(token);
       
