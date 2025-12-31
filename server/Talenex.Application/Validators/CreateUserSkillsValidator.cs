@@ -8,7 +8,7 @@ using Talenex.Application.DTOs;
 
 namespace Talenex.Application.Validators
 {
-    internal class CreateUserSkillsValidator : AbstractValidator<CreateUserSkillsDto>
+    public class CreateUserSkillsValidator : AbstractValidator<CreateUserSkillsDto>
     {
         public CreateUserSkillsValidator() {
             RuleFor(x => x.UserId)

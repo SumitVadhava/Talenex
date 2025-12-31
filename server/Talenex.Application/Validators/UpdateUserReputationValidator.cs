@@ -8,7 +8,7 @@ using Talenex.Application.DTOs;
 
 namespace Talenex.Application.Validators
 {
-    internal class UpdateUserReputationValidator : AbstractValidator<UpdateUserReputationDto>
+    public class UpdateUserReputationValidator : AbstractValidator<UpdateUserReputationDto>
     {
         public UpdateUserReputationValidator() {
             RuleFor(x => x.AverageRating)

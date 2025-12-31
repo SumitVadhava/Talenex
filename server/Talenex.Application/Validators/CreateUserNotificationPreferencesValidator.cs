@@ -8,7 +8,7 @@ using Talenex.Application.DTOs;
 
 namespace Talenex.Application.Validators
 {
-    internal class CreateUserNotificationPreferencesValidator : AbstractValidator<CreateUserNotificationPreferencesDto>
+    public class CreateUserNotificationPreferencesValidator : AbstractValidator<CreateUserNotificationPreferencesDto>
     {
         public CreateUserNotificationPreferencesValidator()
         {

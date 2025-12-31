@@ -8,7 +8,7 @@ using Talenex.Application.DTOs;
 
 namespace Talenex.Application.Validators
 {
-    internal class UpdateUserSkillsValidator : AbstractValidator<UpdateUserSkillsDto>
+    public class UpdateUserSkillsValidator : AbstractValidator<UpdateUserSkillsDto>
     {
         public UpdateUserSkillsValidator()
         {

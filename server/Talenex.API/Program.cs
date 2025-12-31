@@ -82,6 +82,7 @@ using Talenex.infrastructure.Data;
 using Talenex.infrastructure.Repositories;
 using Talenex.infrastructure.Services;
 using Talenex.Application.Validators;
+using Talenex.Application.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -113,7 +114,31 @@ builder.Services
 
 builder.Services.AddAuthorization();
 builder.Services.AddHttpClient();
+
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserProfileValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserProfileValidator>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserAvailabilityValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserAvailabilityValidator>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserPrivacyValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserPrivacyValidator>();
+
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserReputationValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserReputationValidator>();
+
+
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserValidator>();
+
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserSkillsValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserSkillsValidator>();
+
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserNotificationPreferencesValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserNotificationPreferencesValidator>();
+
 
 
 // ==========================

@@ -3,10 +3,10 @@ using Talenex.Application.DTOs;
 
 namespace Talenex.Application.Validators
 {
-    public class CreateUserPrivacyDtoValidator
+    public class CreateUserPrivacyValidator
         : AbstractValidator<CreateUserPrivacyDto>
     {
-        public CreateUserPrivacyDtoValidator()
+        public CreateUserPrivacyValidator()
         {  
             RuleFor(x => x.UserId)
                 .NotEmpty()
