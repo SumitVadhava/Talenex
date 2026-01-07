@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
+// import axios from "axios";
+ 
 const Stepper = ({ steps, currentStep }) => {
   return (
     <div className="w-full flex items-center justify-between relative mb-8">
@@ -170,23 +170,23 @@ export default function OnBoarding() {
       });
 
       // creating user and its skills 
-      const createUserProfile = async () => {
-        const user = await axios.get("")
+      // const createUserProfile = async () => {
+      //   const user = await axios.get("")
 
-        await axios.post(
-          "https://localhost:5296/api/UserProfile/",
-          {
-            "userId": ,
-            "fullName": "string",
-            "username": "string",
-            "bio": "string",
-            "profilePhotoUrl": "string",
-            "location": "string",
-            "latitude": 0,
-            "longitude": 0
-          }
-        )
-      }
+      //   await axios.post(
+      //     "https://localhost:5296/api/UserProfile/",
+      //     {
+      //       "userId": ,
+      //       "fullName": "string",
+      //       "username": "string",
+      //       "bio": "string",96+
+      //       "profilePhotoUrl": "string",
+      //       "location": "string",
+      //       "latitude": 0,
+      //       "longitude": 0
+      //     }
+      //   )
+      // }
 
       const token = await getToken();
       console.log(token);
