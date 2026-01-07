@@ -3,7 +3,7 @@ using Talenex.Application.DTOs;
 
 namespace Talenex.Application.Validators
 {
-    public class UpdateUserAvailabilityValidator: AbstractValidator<CreateUserAvailabilityDto>
+    public class UpdateUserAvailabilityValidator: AbstractValidator<UpdateUserAvailabilityDto>
     {
         public UpdateUserAvailabilityValidator()
         {

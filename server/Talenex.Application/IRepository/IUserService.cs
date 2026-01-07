@@ -7,7 +7,7 @@ using Talenex.Domain.Entities;
 
 namespace Talenex.Application.IRepository
 {
-    public interface IUserService<T> : IService<User> where T : class, IEntity
+    public interface IUserService : IService<User>
     {
         Task<User?> GetByClerkIdAsync(string clerkUserId);
         Task<User?> RegisterOrLoginUser(

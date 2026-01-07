@@ -7,11 +7,12 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Talenex.Application.DTOs;
+using Talenex.Application.IRepository;
 
 
 namespace Talenex.infrastructure.Services
 {
-    public class ClerkService
+    public class ClerkService : IClerkService
     {
         private readonly HttpClient _httpClient;
         private readonly string _secretKey;

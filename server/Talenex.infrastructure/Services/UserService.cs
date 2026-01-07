@@ -8,7 +8,7 @@ using Talenex.Domain.Entities;
 
 namespace Talenex.infrastructure.Services
 {
-    public class UserService : GenericService<User>, IUserService<User>
+    public class UserService : GenericService<User>, IUserService
     {
         private readonly IUserRepository _userRepository;
         public UserService(IUserRepository repository) : base(repository)

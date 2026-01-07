@@ -12,6 +12,11 @@ namespace Talenex.Application.Validators
                 .NotNull().WithMessage("UserId Field is required")
                 .NotEmpty().WithMessage("UserId cannot be empty");
 
+            RuleFor(x => x.FullName)
+                .Cascade(CascadeMode.Stop)
+                .NotNull().WithMessage("Full Name is required")
+                .NotEmpty().WithMessage("Full Name cannort be emoty");
+
             RuleFor(x => x.Username)
                 .Cascade(CascadeMode.Stop)
                 .NotNull().WithMessage("UserName Field is required")

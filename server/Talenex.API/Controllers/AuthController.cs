@@ -1,26 +1,28 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Talenex.Domain.Entities;
-using Talenex.infrastructure.Services;
+using Talenex.Application.IRepository;
 
 namespace Talenex.API.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Clerk")]
     [Route("api/auth")]
     public class AuthController : Controller
     {
-        private readonly ClerkService _clerkService;
-        private readonly UserService _userService;
+        private readonly IClerkService _clerkService;
+        private readonly IUserService _userService;
 
-        public AuthController(ClerkService clerkService, UserService userService)
+        private readonly IJwtTokenService _jwtTokenService;
+
+        public AuthController(IClerkService clerkService, IUserService userService, IJwtTokenService jwtTokenService)
         {
             _clerkService = clerkService;
             _userService = userService;
+            _jwtTokenService = jwtTokenService;
         }
 
-        [Authorize]
+        // [Authorize]
         [HttpPost]
         public async Task<IActionResult> RegisterUser()
         {
@@ -53,7 +55,7 @@ namespace Talenex.API.Controllers
                 .UtcDateTime
                 .AddHours(5)
                 .AddMinutes(30);
-                
+
 
             var lastLoginAt = clerkUser.Last_Sign_In_At != null
                 ? DateTimeOffset.FromUnixTimeMilliseconds(
@@ -62,7 +64,7 @@ namespace Talenex.API.Controllers
 
             Console.WriteLine(clerkUserId, email, firstName, lastName, imageUrl, createdAt, lastLoginAt);
 
-            await _userService.RegisterOrLoginUser(
+            var user = await _userService.RegisterOrLoginUser(
                 clerkUserId,
                 email,
                 firstName,
@@ -72,7 +74,14 @@ namespace Talenex.API.Controllers
                 lastLoginAt
             );
 
-            return Ok("User authorized...");
+            if (user == null)
+                return Unauthorized();
+            
+            var token = _jwtTokenService.GenerateToken(user.Id.ToString());
+
+            Console.WriteLine($"Generated JWT Token: {token}");
+
+            return Ok(new { token, Message = "User registered/logged in successfully" });
         }
 
 

@@ -3,7 +3,7 @@ using Talenex.Application.DTOs;
 
 namespace Talenex.Application.Validators
 {
-    public class UpdateUserProfileValidator : AbstractValidator<CreateUserProfileDto>
+    public class UpdateUserProfileValidator : AbstractValidator<UpdateUserProfileDto>
     {
         public UpdateUserProfileValidator()
         {

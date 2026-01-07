@@ -8,13 +8,13 @@ using Talenex.Application.DTOs;
 
 namespace Talenex.Application.Validators
 {
-    public class UpdateUserNotificationPreferencesValidator : AbstractValidator<CreateUserNotificationPreferencesDto>
+    public class UpdateUserNotificationPreferencesValidator : AbstractValidator<UpdateUserNotificationPreferencesDto>
     {
         public UpdateUserNotificationPreferencesValidator()
         {
-            RuleFor(x => x.UserId)
-                .NotEmpty()
-                .WithMessage("UserId is required.");
+            //RuleFor(x => x.UserId)
+            //    .NotEmpty()
+            //    .WithMessage("UserId is required.");
             RuleFor(x => x)
                 .Must(x =>
                     x.NotifyOnMessage ||

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Talenex.Application.DTOs
 {
-    public class UpdateUserAvailabilityDto
+    public class UpdateUserAvailabilityDto : AbstractValidator<UpdateUserAvailabilityDto>
     {
 
         [Required]

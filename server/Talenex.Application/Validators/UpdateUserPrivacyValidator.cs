@@ -4,7 +4,7 @@ using Talenex.Application.DTOs;
 namespace Talenex.Application.Validators
 {
     public class UpdateUserPrivacyValidator
-        : AbstractValidator<CreateUserPrivacyDto>
+        : AbstractValidator<UpdateUserPrivacyDto>
     {
         public UpdateUserPrivacyValidator()
         {

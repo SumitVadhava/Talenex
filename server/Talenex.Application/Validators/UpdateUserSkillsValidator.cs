@@ -20,7 +20,7 @@ namespace Talenex.Application.Validators
             RuleFor(x => x.SkillsWanted)
                 .MaximumLength(500)
                 .When(x => !string.IsNullOrWhiteSpace(x.SkillsWanted))
-                .WithMessage("SkillsWanted cannot exceed 500 chara cters.");
+                .WithMessage("SkillsWanted cannot exceed 500 characters.");
 
             RuleFor(x => x)
                 .Must(x =>
