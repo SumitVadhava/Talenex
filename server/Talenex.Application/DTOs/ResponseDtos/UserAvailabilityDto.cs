@@ -1,20 +1,21 @@
-﻿using FluentValidation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Talenex.Application.DTOs
+namespace Talenex.Application.DTOs.ResponseDtos
 {
-    public class UpdateUserAvailabilityDto : AbstractValidator<UpdateUserAvailabilityDto>
+    public class UserAvailabilityDto
     {
+        //[Required]
+        public Guid UserId { get; set; }
 
-        [Required]
+        //[Required]
         public bool AvailableOnWeekdays { get; set; }
 
-        [Required]
+        //[Required]
         public bool AvailableOnWeekends { get; set; }
 
         public int? PreferredSessionDuration { get; set; }

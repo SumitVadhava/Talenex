@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Talenex.Domain.Entities;
 
-namespace Talenex.Application.DTOs
+namespace Talenex.Application.DTOs.CreateDtos
 {
     public class CreateUserReputationDto
     {

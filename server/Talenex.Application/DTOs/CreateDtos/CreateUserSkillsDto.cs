@@ -4,16 +4,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Talenex.Domain.ValueObjects;
 
-namespace Talenex.Application.DTOs
+namespace Talenex.Application.DTOs.CreateDtos
 {
     public class CreateUserSkillsDto
     {
         [Required]
         public Guid UserId { get; set; }
 
-        public string? SkillsOffered { get; set; }
+        public List<SkillOfferedObj> ? SkillsOffered { get; set; }
 
-        public string? SkillsWanted { get; set; }
+        public List<SkillWantsObj> ? SkillsWanted { get; set; }
     }
 }

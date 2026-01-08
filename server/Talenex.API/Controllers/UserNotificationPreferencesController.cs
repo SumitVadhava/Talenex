@@ -2,8 +2,9 @@
 using Talenex.infrastructure.Services;
 using Talenex.Domain.Entities;
 using Talenex.Application.IRepository;
-using Talenex.Application.DTOs;
 using FluentValidation;
+using Talenex.Application.DTOs.CreateDtos;
+using Talenex.Application.DTOs.UpdateDtos;
 
 namespace Talenex.API.Controllers
 {

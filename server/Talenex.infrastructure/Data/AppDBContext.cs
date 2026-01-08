@@ -1,10 +1,12 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Talenex.Domain.Entities;
+using Talenex.Domain.ValueObjects;
 
 namespace Talenex.infrastructure.Data
 {
@@ -103,9 +105,29 @@ namespace Talenex.infrastructure.Data
             modelBuilder.Entity<UserSkills>(u =>
             {
                 u.ToTable("UserSkills");
-                u.HasKey(u => u.Id);
-                u.Property(u => u.UserId).IsRequired();
+
+                u.HasKey(x => x.Id);
+
+                u.Property(x => x.UserId)
+                 .IsRequired();
+
+                // SkillsOffered → JSON
+                u.Property(x => x.SkillsOffered)
+                 .HasColumnType("nvarchar(max)")
+                 .HasConversion(
+                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                     v => JsonSerializer.Deserialize<List<SkillOfferedObj>>(v, (JsonSerializerOptions)null)!
+                 );
+
+                // SkillsWanted → JSON
+                u.Property(x => x.SkillsWanted)
+                 .HasColumnType("nvarchar(max)")
+                 .HasConversion(
+                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                     v => JsonSerializer.Deserialize<List<SkillWantsObj>>(v, (JsonSerializerOptions)null)!
+                 );
             });
+
 
             modelBuilder.Entity<UserPrivacy>(u =>
             {

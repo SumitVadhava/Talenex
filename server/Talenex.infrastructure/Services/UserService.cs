@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Talenex.Application.Common.Enums;
 using Talenex.Application.IRepository;
 using Talenex.Domain.Entities;
 
@@ -20,6 +21,11 @@ namespace Talenex.infrastructure.Services
         public async Task<User?> GetByClerkIdAsync(string clerkUserId)
         {
             return await _userRepository.GetByClerkIdAsync(clerkUserId); 
+        }
+
+        public async Task<User?> GetUserAsync(Guid Id, List<UserInclude> includes)
+        {
+           return await _userRepository.GetUserAsync(Id,includes);
         }
 
         public async Task<User?> RegisterOrLoginUser(

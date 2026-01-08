@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="ValueObjects\SkillOfferedObj.cs" />
+  </ItemGroup>
+
 </Project>

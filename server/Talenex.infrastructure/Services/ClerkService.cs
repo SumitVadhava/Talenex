@@ -6,7 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Talenex.Application.DTOs;
+using Talenex.Application.DTOs.ResponseDtos;
 using Talenex.Application.IRepository;
 
 

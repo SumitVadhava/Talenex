@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Talenex.Application.DTOs;
+using Talenex.Application.DTOs.CreateDtos;
 
 namespace Talenex.Application.Validators
 {

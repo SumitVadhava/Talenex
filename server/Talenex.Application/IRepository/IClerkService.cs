@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Talenex.Application.DTOs;
+using Talenex.Application.DTOs.ResponseDtos;
 
 namespace Talenex.Application.IRepository
 {

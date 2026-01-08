@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Talenex.Domain.Entities;
+using Talenex.Domain.ValueObjects;
 
 namespace Talenex.Domain.Entities
 {
@@ -13,8 +14,8 @@ namespace Talenex.Domain.Entities
 
         public User User { get; set; }
 
-        public string ? SkillsOffered { get; set; }  
+        public List<SkillOfferedObj> SkillsOffered { get; set; } = new();
 
-        public string ? SkillsWanted { get; set; }
+        public List<SkillWantsObj> SkillsWanted { get; set; } = new();
     }
 }
