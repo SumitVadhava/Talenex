@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Xml;
-using Talenex.Application.DTOs;
 using Talenex.Application.IRepository;
 using Talenex.infrastructure.Services;
 using Talenex.Domain.Entities;
 using FluentValidation;
+using Talenex.Application.DTOs.CreateDtos;
+using Talenex.Application.DTOs.UpdateDtos;
 
 namespace Talenex.API.Controllers
 {

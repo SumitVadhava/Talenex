@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Talenex.Application.DTOs
+namespace Talenex.Application.DTOs.CreateDtos
 {
     public class CreateUserPrivacyDto
     {

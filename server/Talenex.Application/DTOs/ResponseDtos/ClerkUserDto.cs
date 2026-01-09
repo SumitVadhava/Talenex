@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Talenex.Application.DTOs
+namespace Talenex.Application.DTOs.ResponseDtos
 {
     public class ClerkUserDto
     {

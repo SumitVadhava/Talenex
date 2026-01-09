@@ -9,7 +9,7 @@ import Signup from "./pages/Signup";
 import { SignOutButton } from "@clerk/clerk-react";
 // import { useSignIn } from "@clerk/clerk-react";
 // import { GoogleOneTap } from "@clerk/clerk-react";
-import UserProfilePage from "./pages/UserProfilePage";
+import UserProfilePage from "./components/UserProfilePage";
 import ScrollButtons from "./components/ScrollBtn";
 import { useRef } from "react";
 import Homepage from "./pages/Homepage";

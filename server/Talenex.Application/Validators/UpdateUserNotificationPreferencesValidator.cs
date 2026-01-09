@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Talenex.Application.DTOs;
+using Talenex.Application.DTOs.UpdateDtos;
 
 namespace Talenex.Application.Validators
 {

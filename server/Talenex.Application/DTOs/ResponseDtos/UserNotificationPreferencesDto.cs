@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Talenex.Application.DTOs
+namespace Talenex.Application.DTOs.ResponseDtos
 {
-    public class UpdateUserNotificationPreferencesDto
+    public class UserNotificationPreferencesDto
     {
+        public Guid UserId { get; set; }
         public bool NotifyOnMessage { get; set; }
         public bool NotifyOnSwapRequest { get; set; }
         public bool NotifyOnRatingReceived { get; set; }

@@ -8,8 +8,7 @@ import { Check } from "lucide-react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import api from "@/api/axios";
-
+ 
 const Stepper = ({ steps, currentStep }) => {
   return (
     <div className="w-full flex items-center justify-between relative mb-8">
@@ -121,32 +120,6 @@ export default function OnBoarding() {
     if (user?.unsafeMetadata?.onboardingCompleted) {
       navigate("/home");
     }
-
-    const fetchAndSendToken = async () => {
-      try {
-        const token = await getToken({ template: "customJWT" });
-
-        console.log("Fetched token:", token);
-
-        var response = await api.post(
-          "/auth",
-          {}, // body
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        // localStorage.setItem("token", response.token);
-
-        sessionStorage.setItem("token", response.token);
-      } catch (error) {
-        console.error("Error sending token:", error);
-      }
-    };
-
-    fetchAndSendToken();
   }, [user]);
 
   // JS version (no TypeScript types)
@@ -176,7 +149,7 @@ export default function OnBoarding() {
   const handleFinishOnboarding = async () => {
     if (!user) return;
 
-    // console.log(user);
+    console.log(user)
 
     try {
       await user.update({
@@ -249,9 +222,28 @@ export default function OnBoarding() {
           }
         )
       };
+      // creating user and its skills 
+      // const createUserProfile = async () => {
+      //   const user = await axios.get("")
 
-      // const token = await getToken();
-      // console.log(token);
+      //   await axios.post(
+      //     "https://localhost:5296/api/UserProfile/",
+      //     {
+      //       "userId": ,
+      //       "fullName": "string",
+      //       "username": "string",
+      //       "bio": "string",96+
+      //       "profilePhotoUrl": "string",
+      //       "location": "string",
+      //       "latitude": 0,
+      //       "longitude": 0
+      //     }
+      //   )
+      // }
+
+      const token = await getToken();
+      console.log(token);
+      
 
       // const response = await axios.get(
       //   "URL",
@@ -267,6 +259,7 @@ export default function OnBoarding() {
       console.error("Onboarding failed:", error);
     }
   };
+
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-8 bg-zinc-50 font-sans text-zinc-900">
