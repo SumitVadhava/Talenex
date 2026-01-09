@@ -140,7 +140,7 @@ export default function Step1BasicInfo({ formData, updateFormData, onNext }) {
             console.log(formData);
           }}
           disabled={!isFormValid}
-          className="w-full md:w-auto px-8 py-3 h-12 text-base shadow-indigo-200"
+          className="w-full md:w-auto px-8 py-3 h-12 text-base shadow-indigo-200 cursor-pointer"
         >
           Next: Add Your Skills
           <ArrowRight className="ml-2 w-4 h-4" />

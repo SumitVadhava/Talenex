@@ -51,8 +51,8 @@ const MOCK_SKILLS = [
       id: "u1",
       name: "Alice Freeman",
       avatar: "https://picsum.photos/100/100?random=1",
-      rating: 4.9,
-      reviewCount: 124,
+      rating: 4.9, // dummy
+      reviewCount: 124, // dummy
     },
     offerTitle: "Advanced UI/UX Design Mentorship",
     offerCategory: "Design",
@@ -122,7 +122,7 @@ const MOCK_SKILLS = [
       id: "u5",
       name: "Elena Rodriguez",
       avatar: "https://picsum.photos/100/100?random=5",
-      rating: 4.8,
+      rating: 4.8, 
       reviewCount: 56,
     },
     offerTitle: "Native Spanish Conversation",

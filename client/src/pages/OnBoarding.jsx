@@ -27,13 +27,13 @@ const Stepper = ({ steps, currentStep }) => {
                   backgroundColor: isCompleted
                     ? "#36B943" // Yellow-200
                     : isActive
-                    ? "hsl(var(--primary))" // Purple/Indigo
-                    : "hsl(var(--muted))", // Gray
+                      ? "hsl(var(--primary))" // Purple/Indigo
+                      : "hsl(var(--muted))", // Gray
                   color: isCompleted
                     ? "#36B943" // Yellow-800
                     : isActive
-                    ? "#ffffff" // White
-                    : "hsl(var(--muted-foreground))",
+                      ? "#ffffff" // White
+                      : "hsl(var(--muted-foreground))",
                   scale: isActive ? 1.05 : 1,
                 }}
                 transition={{
@@ -108,21 +108,13 @@ export default function OnBoarding() {
     username: "",
     location: "",
     bio: "",
-    avatarUrl: user?.imageUrl,
+    profilePhotoUrl: user?.imageUrl,
 
     // Step 2 (Offered Skills)
     offeredSkills: [],
 
     // Step 3 (Wanted Skills)
     wantedSkills: [],
-
-    // Socials
-    socials: {
-      website: "",
-      github: "",
-      linkedin: "",
-      twitter: "",
-    },
   });
 
   useEffect(() => {
@@ -166,10 +158,25 @@ export default function OnBoarding() {
     setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
+  const uploadToCloudinary = async (file) => {
+    if (!file) return null;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "Certificates");
+
+    const res = await axios.post(
+      "https://api.cloudinary.com/v1_1/dpwes05hc/raw/upload",
+      formData,
+    )
+
+    return res.data.secure_url;
+  }
+
   const handleFinishOnboarding = async () => {
     if (!user) return;
 
-    console.log(user);
+    // console.log(user);
 
     try {
       await user.update({
@@ -196,22 +203,51 @@ export default function OnBoarding() {
         },
       });
 
+
+      const processSkills = async (skills) => {
+        const result = [];
+
+        for (const skill of skills) {
+          let fileUrl = null;
+
+          if (skill.file) {
+            fileUrl = await uploadToCloudinary(skill.file);
+          }
+
+          result.push({
+            ...skill,
+            file: fileUrl,
+          });
+        }
+
+        return result;
+      };
+
+
+      const processedOfferedSkills = await processSkills(formData.offeredSkills);
+      console.log(formData);
+      console.log(processedOfferedSkills);
+
+
       // creating user and its skills
       const createUserProfile = async () => {
-        
-        // await axios.post(
-        //   "/UserProfile/",
-        //   {
-        //     "userId": "",
-        //     "fullName": "string",
-        //     "username": "string",
-        //     "bio": "string",
-        //     "profilePhotoUrl": "string",
-        //     "location": "string",
-        //     "latitude": 0,
-        //     "longitude": 0
-        //   }
-        // )
+        // const processedOfferedSkills = await processSkills(formData.offeredSkills);
+
+        await axios.post(
+          "/UserProfile/",
+          {
+            "userId": "",
+            "fullName": user.fullName,
+            "username": formData.username,
+            "bio": formData.bio,
+            "profilePhotoUrl": formData.profilePhotoUrl,
+            "location": formData.location,
+            "offeredSkills": formData.offeredSkills,
+            "wantedSkills": formData.wantedSkills,
+            "latitude": 0,
+            "longitude": 0
+          }
+        )
       };
 
       // const token = await getToken();
