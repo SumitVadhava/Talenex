@@ -273,7 +273,7 @@ const Homepage = () => {
 
         console.log("Fetched token:", token);
 
-        await axios.post(
+        var response = await axios.post(
           "http://localhost:5296/api/auth/",
           {}, // body
           {
@@ -283,7 +283,7 @@ const Homepage = () => {
           }
         )
 
-        // sessionStorage.setItem("token", "true");
+        sessionStorage.setItem("token", response.data.token);
       }
       catch (error) {
         console.error("Error sending token:", error);
