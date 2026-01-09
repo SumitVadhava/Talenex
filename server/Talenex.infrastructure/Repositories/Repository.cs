@@ -16,14 +16,6 @@ namespace Talenex.infrastructure.Repositories
             _db = db;
             _table = _db.Set<T>();
         }
-        public async Task<T> UpdateAsync(T entity)
-        {
-            _table.Attach(entity);
-            _db.Entry(entity).State = EntityState.Modified;
-
-            await _db.SaveChangesAsync();
-            return entity;
-        }
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
@@ -41,7 +33,14 @@ namespace Talenex.infrastructure.Repositories
             await _db.SaveChangesAsync();
             return entity;
         }
+        public async Task<T> UpdateAsync(T entity)
+        {
+            _table.Attach(entity);
+            _db.Entry(entity).State = EntityState.Modified;
 
+            await _db.SaveChangesAsync();
+            return entity;
+        }
         public async Task<T?> DeleteAsync(Guid id)
         {
             var entity = await _table.FindAsync(id);
