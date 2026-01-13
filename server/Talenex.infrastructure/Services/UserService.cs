@@ -23,6 +23,11 @@ namespace Talenex.infrastructure.Services
             return await _userRepository.GetByClerkIdAsync(clerkUserId); 
         }
 
+        public async Task<List<User>> GetAllUserAsync(List<UserInclude> includes)
+        {
+            return await _userRepository.GetAllUserAsync(includes);
+        }
+
         public async Task<User?> GetUserAsync(Guid Id, List<UserInclude> includes)
         {
            return await _userRepository.GetUserAsync(Id,includes);

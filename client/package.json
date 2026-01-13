@@ -36,6 +36,7 @@
     "gsap": "^3.13.0",
     "lucide-react": "^0.555.0",
     "motion": "^12.23.26",
+    "qs": "^6.14.1",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-rough-notation": "^1.0.8",

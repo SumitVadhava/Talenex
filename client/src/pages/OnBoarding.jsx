@@ -8,7 +8,8 @@ import { Check } from "lucide-react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
- 
+import api from "@/api/axios";
+
 const Stepper = ({ steps, currentStep }) => {
   return (
     <div className="w-full flex items-center justify-between relative mb-8">
@@ -117,6 +118,32 @@ export default function OnBoarding() {
   });
 
   useEffect(() => {
+
+    const fetchAndSendToken = async () => {
+      try {
+        const token = await getToken({ template: "customJWT" });
+
+        console.log("Fetched token:", token);
+
+        var response = await axios.post(
+          "http://localhost:5296/api/auth/",
+          {}, // body
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          }
+        )
+
+        localStorage.setItem("token", response.data.token);
+      }
+      catch (error) {
+        console.error("Error sending token:", error);
+      }
+    }
+
+    fetchAndSendToken();
+
     if (user?.unsafeMetadata?.onboardingCompleted) {
       navigate("/home");
     }
@@ -189,7 +216,7 @@ export default function OnBoarding() {
 
           result.push({
             ...skill,
-            file: fileUrl,
+            certificateURL: fileUrl,
           });
         }
 
@@ -206,44 +233,56 @@ export default function OnBoarding() {
       const createUserProfile = async () => {
         // const processedOfferedSkills = await processSkills(formData.offeredSkills);
 
-        await axios.post(
-          "/UserProfile/",
-          {
-            "userId": "",
+        const onboardingPayload = {
+          "profile": {
             "fullName": user.fullName,
             "username": formData.username,
             "bio": formData.bio,
             "profilePhotoUrl": formData.profilePhotoUrl,
             "location": formData.location,
-            "offeredSkills": formData.offeredSkills,
-            "wantedSkills": formData.wantedSkills,
             "latitude": 0,
             "longitude": 0
+          },
+          "skills": {
+            "skillsOffered": processedOfferedSkills.map(skill => ({
+              title: skill.title,
+              category: skill.category,
+              level: skill.level,
+              description: skill.description || "",
+              certificateURL: skill.certificateURL || ""
+            })),
+            "skillsWanted": formData.wantedSkills.map(skill => ({
+              name: skill.name,
+              level: skill.level
+            }))
           }
-        )
-      };
-      // creating user and its skills 
-      // const createUserProfile = async () => {
-      //   const user = await axios.get("")
+        };
 
-      //   await axios.post(
-      //     "https://localhost:5296/api/UserProfile/",
-      //     {
-      //       "userId": ,
-      //       "fullName": "string",
-      //       "username": "string",
-      //       "bio": "string",96+
-      //       "profilePhotoUrl": "string",
-      //       "location": "string",
-      //       "latitude": 0,
-      //       "longitude": 0
-      //     }
-      //   )
-      // }
+        console.log("onboarding payload", onboardingPayload);
+
+
+        try {
+          await axios.post(
+            "http://localhost:5296/api/onboarding",
+            onboardingPayload,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+              },
+            }
+          )
+        }
+        catch (error) {
+          console.error("Error creating user profile:", error);
+        }
+      };
+
+      await createUserProfile();
 
       const token = await getToken();
       console.log(token);
-      
+
 
       // const response = await axios.get(
       //   "URL",

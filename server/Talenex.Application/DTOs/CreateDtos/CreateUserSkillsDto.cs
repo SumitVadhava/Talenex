@@ -10,8 +10,7 @@ namespace Talenex.Application.DTOs.CreateDtos
 {
     public class CreateUserSkillsDto
     {
-        [Required]
-        public Guid UserId { get; set; }
+        public Guid  UserId { get; set; }
 
         public List<SkillOfferedObj> ? SkillsOffered { get; set; }
 

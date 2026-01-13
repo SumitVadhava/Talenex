@@ -70,7 +70,7 @@
 //   return (
 //     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
 //       <div className="max-w-5xl mx-auto space-y-6">
-        
+
 //         {/* --- Header Section --- */}
 //         <Card className="border-none shadow-sm">
 //           <CardContent className="p-6 md:p-8">
@@ -94,7 +94,7 @@
 //                       <span>San Francisco, CA</span>
 //                     </div>
 //                   </div>
-                  
+
 //                   {/* Action Buttons */}
 //                   <div className="flex gap-3 mt-2 md:mt-0">
 //                     <Button variant="outline" className="gap-2">
@@ -120,7 +120,7 @@
 //         </Card>
 
 //         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          
+
 //           {/* --- Left Column: Stats --- */}
 //           <div className="md:col-span-4 space-y-6">
 //             <Card className="shadow-sm h-full">
@@ -194,7 +194,7 @@
 
 //         {/* --- Bottom Sections --- */}
 //         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
+
 //           {/* Achievements */}
 //           <Card className="shadow-sm">
 //             <CardHeader>
@@ -273,16 +273,16 @@
 
 
 import React, { useState } from 'react';
-import { 
-  Star, 
-  MapPin, 
-  MessageCircle, 
-  ArrowLeftRight, 
-  Calendar, 
-  CheckCircle2, 
-  Medal, 
-  GraduationCap, 
-  ShieldCheck, 
+import {
+  Star,
+  MapPin,
+  MessageCircle,
+  ArrowLeftRight,
+  Calendar,
+  CheckCircle2,
+  Medal,
+  GraduationCap,
+  ShieldCheck,
   Handshake,
   Share2,
   ChevronDown,
@@ -293,9 +293,20 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { useLocation } from 'react-router-dom';
 
 const UserProfilePage = () => {
   const [showAllSkills, setShowAllSkills] = useState(false);
+  const { state } = useLocation();
+  const userData = state?.userData;
+
+  if (!userData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>User data not found</p>
+      </div>
+    );
+  }
 
   const skillsOffered = [
     { name: "Graphic Design", count: 12 },
@@ -314,22 +325,22 @@ const UserProfilePage = () => {
   return (
     <div className="min-h-screen bg-gray-50/50 p-4 md:p-8 font-sans">
       <div className="max-w-5xl mx-auto space-y-6">
-        
+
         {/* Header Section */}
         <Card className="border-none shadow-md overflow-hidden bg-white group">
           {/* Creative Modern Background: Dot Pattern */}
           <div className="h-32 bg-slate-50 relative overflow-hidden">
-             <div className="absolute inset-0 opacity-[0.4] bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px]"></div>
-             <Button 
-                variant="ghost" 
-                size="icon" 
-                className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 hover:bg-white/80 backdrop-blur-sm transition-all"
-                title="Share Profile"
-             >
-               <Share2 className="w-4 h-4" />
-             </Button>
+            <div className="absolute inset-0 opacity-[0.4] bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 hover:bg-white/80 backdrop-blur-sm transition-all"
+              title="Share Profile"
+            >
+              <Share2 className="w-4 h-4" />
+            </Button>
           </div>
-          
+
           <div className="px-6 md:px-8 pb-6 md:pb-8">
             <div className="flex flex-col md:flex-row items-start md:items-end -mt-12 mb-4 gap-6">
               <div className="relative">
@@ -340,17 +351,17 @@ const UserProfilePage = () => {
                 {/* Subtle status indicator integrated into border */}
                 <div className="absolute bottom-2 right-2 h-4 w-4 bg-green-500 border-2 border-white rounded-full shadow-sm" title="Online"></div>
               </div>
-              
+
               <div className="flex-1 space-y-1 mt-2 md:mt-0 text-center md:text-left">
                 <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
                   <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Alex Chen</h1>
                 </div>
-                
+
                 <div className="flex items-center justify-center md:justify-start text-slate-500 gap-1 text-sm font-medium">
                   <MapPin className="w-4 h-4" />
                   <span>San Francisco, CA</span>
                 </div>
-                
+
                 <div className="flex items-center justify-center md:justify-start gap-2 pt-1">
                   <div className="flex items-center bg-amber-50 text-amber-700 border border-amber-100 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide hover:bg-amber-100 transition-colors">
                     <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500 mr-1.5" />
@@ -374,7 +385,7 @@ const UserProfilePage = () => {
         </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
+
           {/* Left Column: Stats */}
           <div className="space-y-6">
             <Card className="shadow-sm border-slate-200 overflow-hidden">
@@ -413,22 +424,22 @@ const UserProfilePage = () => {
                     <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Skills Offered</h4>
                     <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">{skillsOffered.length} Total</span>
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-2 animate-in fade-in duration-500">
                     {displayedSkills.map((skill, i) => (
-                      <Badge 
-                        key={skill.name} 
-                        variant="secondary" 
+                      <Badge
+                        key={skill.name}
+                        variant="secondary"
                         className="rounded-md px-3 py-1.5 text-sm font-medium bg-slate-100 text-slate-700 border border-transparent hover:border-slate-300 hover:bg-white transition-all cursor-default shadow-sm"
                       >
                         {skill.name} <span className="ml-1.5 text-slate-400 font-light text-xs">| {skill.count}</span>
                       </Badge>
                     ))}
-                    
+
                     {/* Interactive Expand Button */}
                     {!showAllSkills && hiddenCount > 0 && (
-                      <Badge 
-                        variant="outline" 
+                      <Badge
+                        variant="outline"
                         className="rounded-md px-3 py-1.5 text-sm border-dashed border-slate-300 text-slate-500 hover:text-purple-600 hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-all group"
                         onClick={() => setShowAllSkills(true)}
                       >
@@ -436,10 +447,10 @@ const UserProfilePage = () => {
                         <ChevronDown className="w-3 h-3 ml-1 group-hover:translate-y-0.5 transition-transform" />
                       </Badge>
                     )}
-                    
+
                     {showAllSkills && (
-                      <Badge 
-                        variant="outline" 
+                      <Badge
+                        variant="outline"
                         className="rounded-md px-3 py-1.5 text-sm border-dashed border-slate-300 text-slate-500 hover:text-slate-800 hover:bg-slate-50 cursor-pointer transition-all"
                         onClick={() => setShowAllSkills(false)}
                       >
@@ -453,16 +464,16 @@ const UserProfilePage = () => {
                 <Separator className="bg-slate-100" />
 
                 <div>
-                   <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-4">
                     <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Skills Wanted</h4>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {[
                       "Creative Writing", "Digital Marketing", "Public Speaking"
                     ].map((skill, i) => (
-                      <Badge 
-                        key={i} 
-                        variant="secondary" 
+                      <Badge
+                        key={i}
+                        variant="secondary"
                         className="rounded-md px-3 py-1.5 text-sm font-medium bg-purple-50 text-purple-700 border border-transparent hover:border-purple-200 hover:bg-white hover:shadow-sm transition-all cursor-default"
                       >
                         {skill}
@@ -480,7 +491,7 @@ const UserProfilePage = () => {
 
         {/* Bottom Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
+
           {/* Achievements */}
           <Card className="shadow-sm border-slate-200">
             <CardHeader className="border-b border-slate-50">
@@ -535,15 +546,15 @@ const UserProfilePage = () => {
             </CardHeader>
             <CardContent className="space-y-4 pt-4">
               {[
-                { 
-                  name: "Sarah M.", 
-                  avatar: "https://picsum.photos/100/100?random=2", 
+                {
+                  name: "Sarah M.",
+                  avatar: "https://picsum.photos/100/100?random=2",
                   text: "Alex is an amazing designer! He helped me revamp my entire portfolio layout.",
                   date: "2 days ago"
                 },
-                { 
-                  name: "David K.", 
-                  avatar: "https://picsum.photos/100/100?random=3", 
+                {
+                  name: "David K.",
+                  avatar: "https://picsum.photos/100/100?random=3",
                   text: "Great experience swapping photography tips for web dev basics. Very patient.",
                   date: "1 week ago"
                 }

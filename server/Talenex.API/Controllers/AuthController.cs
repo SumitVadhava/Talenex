@@ -76,7 +76,20 @@ namespace Talenex.API.Controllers
 
             if (user == null)
                 return Unauthorized();
-            
+
+            Console.WriteLine("------------------------");
+            Console.WriteLine(user.Id); 
+            Console.WriteLine(user.ClerkUserId);
+            Console.WriteLine(user.Email);
+            Console.WriteLine(user.FirstName);
+            Console.WriteLine(user.LastName);
+            Console.WriteLine(user.ImageUrl);
+            Console.WriteLine(user.CreatedAt);
+            Console.WriteLine(user.LastLoginAt);
+            Console.WriteLine("------------------------");
+
+
+
             var token = _jwtTokenService.GenerateToken(user.Id.ToString());
 
             Console.WriteLine($"Generated JWT Token: {token}");

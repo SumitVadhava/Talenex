@@ -15,6 +15,46 @@ namespace Talenex.infrastructure.Repositories
         {
             return await _table.FirstOrDefaultAsync(u => u.ClerkUserId == clerkUserId);
         }
+
+        public async Task<List<User>> GetAllUserAsync(List<UserInclude> include)
+        {
+            IQueryable<User> query = _table.AsQueryable();
+
+            foreach (var inc in include)
+            {
+                switch (inc)
+                {
+                    case UserInclude.Profile:
+                        query = query.Include(u => u.UserProfile);
+                        break;
+
+                    case UserInclude.Skills:
+                        query = query.Include(u => u.UserSkills);
+                        break;
+
+                    case UserInclude.Availability:
+                        query = query.Include(u => u.UserAvailability);
+                        break;
+
+                    case UserInclude.Privacy:
+                        query = query.Include(u => u.UserPrivacy);
+                        break;
+
+                    case UserInclude.Reputation:
+                        query = query.Include(u => u.UserReputation);
+                        break;
+
+                    case UserInclude.Notifications:
+                        query = query.Include(u => u.UserNotifications);
+                        break;
+                }
+            }
+
+            return await query.ToListAsync();
+        }
+
+
+
         public async Task<User?> GetUserAsync(Guid userId, List<UserInclude> include)
         {
             IQueryable<User> query = _table.AsQueryable();

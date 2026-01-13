@@ -17,7 +17,7 @@ namespace Talenex.Application.DTOs.UpdateDtos
 
         public string Bio { get; set; }
 
-        public string ProfilePhotoUrl { get; set; }
+        public string? ProfilePhotoUrl { get; set; }
 
         public string Location { get; set; }
         public decimal? Latitude { get; set; }

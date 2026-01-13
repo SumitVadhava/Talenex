@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using Talenex.Application.Common.Enums;
 using Talenex.Application.DTOs.CreateDtos;
 using Talenex.Application.DTOs.ResponseDtos;
@@ -14,6 +16,7 @@ namespace Talenex.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "TalenexJwt")]
     public class UserController : ControllerBase
     {
         private readonly IService<User> _service;
@@ -47,9 +50,109 @@ namespace Talenex.API.Controllers
             return user == null ? NotFound() : Ok(user);
         }
 
-        [HttpGet("{id}/Details")]
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAllUsers([FromQuery] string[] include)
+        {
+            var includes = include
+                .Select(i => Enum.TryParse<UserInclude>(i, true, out var parsed)
+                    ? parsed
+                    : (UserInclude?)null)
+                .Where(i => i.HasValue)
+                .Select(i => i.Value)
+                .ToList();
+
+            var users = await _userService.GetAllUserAsync(includes);
+
+            if (users == null || !users.Any())
+                return Ok(new List<UserDataDto>());
+
+            var response = users.Select(user =>
+            {
+                var dto = new UserDataDto
+                {
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    ImageUrl = user.ImageUrl,
+                    CreatedAt = user.CreatedAt
+                };
+
+                foreach (var inc in includes)
+                {
+                    switch (inc)
+                    {
+                        case UserInclude.Profile:
+                            dto.Profile = user.UserProfile == null ? null : new UserProfileDto
+                            {
+                                FullName = user.UserProfile.FullName,
+                                Username = user.UserProfile.Username,
+                                Bio = user.UserProfile.Bio,
+                                ProfilePhotoUrl = user.UserProfile.ProfilePhotoUrl,
+                                Location = user.UserProfile.Location,
+                                Latitude = user.UserProfile.Latitude,
+                                Longitude = user.UserProfile.Longitude,
+                            };
+                            break;
+
+                        case UserInclude.Skills:
+                            dto.Skills = user.UserSkills == null ? null : new UserSkillsDto
+                            {
+                                SkillsOffered = user.UserSkills.SkillsOffered,
+                                SkillsWanted = user.UserSkills.SkillsWanted
+                            };
+                            break;
+
+                        case UserInclude.Availability:
+                            dto.Availability = user.UserAvailability == null ? null : new UserAvailabilityDto
+                            {
+                                AvailableOnWeekdays = user.UserAvailability.AvailableOnWeekdays,
+                                AvailableOnWeekends = user.UserAvailability.AvailableOnWeekends,
+                                PreferredSessionDuration = user.UserAvailability.PreferredSessionDuration,
+                                PreferredSessionMode = user.UserAvailability.PreferredSessionMode,
+                            };
+                            break;
+
+                        case UserInclude.Privacy:
+                            dto.Privacy = user.UserPrivacy == null ? null : new UserPrivacyDto
+                            {
+                                IsProfilePublic = user.UserPrivacy.IsProfilePublic,
+                                ShowLocation = user.UserPrivacy.ShowLocation,
+                                ShowSkills = user.UserPrivacy.ShowSkills,
+                                AllowMessagesFrom = user.UserPrivacy.AllowMessagesFrom,
+                            };
+                            break;
+
+                        case UserInclude.Reputation:
+                            dto.Reputation = user.UserReputation == null ? null : new UserReputationDto
+                            {
+                                AverageRating = user.UserReputation.AverageRating,
+                                TotalReviews = user.UserReputation.TotalReviews,
+                                TrustScore = user.UserReputation.TrustScore,
+                                BadgesJson = string.IsNullOrEmpty(user.UserReputation.BadgesJson)
+                                    ? null
+                                    : System.Text.Json.JsonSerializer.Deserialize<List<string>>(user.UserReputation.BadgesJson),
+                            };
+                            break;
+
+                        case UserInclude.Notifications:
+                            dto.Notifications = user.UserNotifications == null ? null : new UserNotificationPreferencesDto
+                            {
+                                NotifyOnMessage = user.UserNotifications.NotifyOnMessage,
+                                NotifyOnRatingReceived = user.UserNotifications.NotifyOnRatingReceived,
+                                NotifyOnSwapRequest = user.UserNotifications.NotifyOnSwapRequest,
+                            };
+                            break;
+                    }
+                }
+
+                return dto;
+            });
+
+            return Ok(response);
+        }
+
+        [HttpGet("Details")]
         public async Task<IActionResult> GetUser(
-           Guid id,
            [FromQuery] string[] include)
         {
             var includes = include
@@ -60,7 +163,16 @@ namespace Talenex.API.Controllers
                 .Select(i => i.Value)
                 .ToList();
 
-            var user = await _userService.GetUserAsync(id, includes);
+            var userIdClaim = User.FindFirst("sub") ?? User.FindFirst(ClaimTypes.NameIdentifier);
+
+
+            if (userIdClaim == null)
+                return Unauthorized("UserId not found in token");
+
+            var userId = Guid.Parse(userIdClaim.Value);
+
+
+            var user = await _userService.GetUserAsync(userId, includes);
 
             if (user == null)
                 return NotFound("User not found");

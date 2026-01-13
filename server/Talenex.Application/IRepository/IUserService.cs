@@ -12,6 +12,8 @@ namespace Talenex.Application.IRepository
     {
         Task<User?> GetByClerkIdAsync(string clerkUserId);
 
+        Task<List<User>> GetAllUserAsync(List<UserInclude> includes);
+
         Task<User?> GetUserAsync(Guid Id, List<UserInclude> includes);
         Task<User?> RegisterOrLoginUser(
             string clerkUserId,

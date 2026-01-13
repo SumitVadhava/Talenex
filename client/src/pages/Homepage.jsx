@@ -16,6 +16,7 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@clerk/clerk-react';
 import axios from 'axios';
+import qs from "qs";
 
 const CATEGORIES = [
   { id: 'all', name: 'All Skills', icon: 'LayoutGrid' },
@@ -113,7 +114,7 @@ const MOCK_SKILLS = [
       id: "u5",
       name: "Elena Rodriguez",
       avatar: "https://picsum.photos/100/100?random=5",
-      rating: 4.8, 
+      rating: 4.8,
       reviewCount: 56,
     },
     offerTitle: 'Native Spanish Conversation',
@@ -183,6 +184,7 @@ const Homepage = () => {
   // const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const { getToken } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
 
   const tokenSentRef = useRef(false);
 
@@ -198,10 +200,11 @@ const Homepage = () => {
   const [sortBy, setSortBy] = useState('newest');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const [skills, setSkills] = useState([]);
 
   // --- Filtering Logic ---
   const filteredData = useMemo(() => {
-    return MOCK_SKILLS.filter(skill => {
+    return skills.filter(skill => {
       // Category Filter
       if (filters.category !== 'all') {
         const canonicalName = CATEGORY_NAME_MAP[filters.category] || 'All Skills';
@@ -211,14 +214,22 @@ const Homepage = () => {
       }
 
       // Search Filter (Offers OR Seeking)
+      // Search Filter (Offered Skills OR Wanted Skills)
       if (filters.search) {
         const q = filters.search.toLowerCase();
-        const matches =
-          skill.offerTitle.toLowerCase().includes(q) ||
-          // skill.offerDescription.toLowerCase().includes(q) ||
-          skill.seekingTitle.toLowerCase().includes(q);
-        if (!matches) return false;
+
+        const offerMatch = skill.offeredSkills?.some(s =>
+          s.title?.toLowerCase().includes(q) ||
+          s.category?.toLowerCase().includes(q)
+        );
+
+        const seekMatch = skill.seekingSkills?.some(s =>
+          s?.toLowerCase().includes(q)
+        );
+
+        if (!offerMatch && !seekMatch) return false;
       }
+
 
       // Online Filter
       if (filters.onlyOnline && !skill.isOnline) return false;
@@ -231,7 +242,7 @@ const Homepage = () => {
 
       return true;
     });
-  }, [filters]);
+  }, [filters, skills]);
 
   // --- Sorting Logic ---
   const sortedData = useMemo(() => {
@@ -260,6 +271,90 @@ const Homepage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // const mapUsersApiToSkillsList = (users) => {
+  //   if (!Array.isArray(users)) return [];
+
+  //   return users.flatMap((user) => {
+  //     // ❌ Skip users without skills or offered skills
+  //     if (!user.skills?.skillsOffered?.length) return [];
+
+  //     return user.skills.skillsOffered.map((offeredSkill, index) => ({
+  //       id: `${user.profile?.userId ?? user.email}-${index}`,
+
+  //       user: {
+  //         id: user.profile?.userId ?? user.email,
+  //         name:
+  //           user.profile?.fullName ??
+  //           `${user.firstName} ${user.lastName}`,
+  //         avatar:
+  //           user.profile?.profilePhotoUrl ??
+  //           user.imageUrl ??
+  //           "",
+  //         rating: user.reputation?.rating ?? 0,
+  //         reviewCount: user.reputation?.reviewCount ?? 0,
+  //       },
+
+  //       offerTitle: offeredSkill.title,
+  //       offerCategory: offeredSkill.category,
+  //       offerDescription:
+  //         offeredSkill.description || "No description provided",
+
+  //       seekingTitle:
+  //         user.skills.skillsWanted?.length > 0
+  //           ? `Looking for ${user.skills.skillsWanted
+  //             .map((s) => s.name)
+  //             .join(", ")}`
+  //           : "Open to skill exchange",
+
+  //       isOnline: true,
+  //       level: offeredSkill.level,
+  //       postedAt: user.createdAt,
+  //     }));
+  //   });
+  // };
+
+  const mapUsersApiToSkillsList = (users) => {
+    if (!Array.isArray(users)) return [];
+
+    return users
+      .filter(user => user.skills?.skillsOffered?.length > 0)
+      .map((user) => ({
+        id: user.profile?.userId ?? user.email,
+
+        user: {
+          id: user.profile?.userId ?? user.email,
+          name:
+            user.profile?.fullName ??
+            `${user.firstName} ${user.lastName}`,
+          avatar:
+            user.profile?.profilePhotoUrl ??
+            user.imageUrl ??
+            "",
+          rating: user.reputation?.rating ?? 0,
+          reviewCount: user.reputation?.reviewCount ?? 0,
+        },
+
+        // 🔥 ALL OFFERED SKILLS
+        offeredSkills: user.skills.skillsOffered.map(skill => ({
+          title: skill.title,
+          category: skill.category,
+          level: skill.level,
+          description: skill.description,
+          certificateURL: skill.certificateURL,
+        })),
+
+        // 🔥 ALL WANTED SKILLS
+        seekingSkills:
+          user.skills.skillsWanted?.map(s => s.name) ?? [],
+
+        isOnline: true,
+        postedAt: user.createdAt,
+      }));
+  };
+
+
+
+
   useEffect(() => {
     // const alreadySent = sessionStorage.getItem("token");
     if (tokenSentRef.current) return;
@@ -267,7 +362,7 @@ const Homepage = () => {
     tokenSentRef.current = true;
 
 
-    const fetchAndSendToken = async () => {
+    const init = async () => {
       try {
         const token = await getToken({ template: "customJWT" });
 
@@ -283,15 +378,72 @@ const Homepage = () => {
           }
         )
 
-        sessionStorage.setItem("token", response.data.token);
+        localStorage.setItem("token", response.data.token);
+
+        await getSkills();
       }
       catch (error) {
         console.error("Error sending token:", error);
       }
     }
 
-    fetchAndSendToken();
+    const getSkills = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.log("No token found.");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+
+        const response = await axios.get(
+          "http://localhost:5296/api/User/All",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            params: {
+              include: ["Profile", "Skills"],
+            },
+            paramsSerializer: (params) =>
+              qs.stringify(params, { arrayFormat: "repeat" }),
+          }
+        );
+
+        console.log("response", response.data);
+
+        const skillsList = mapUsersApiToSkillsList(response.data);
+        console.log(skillsList);
+
+        setSkills(skillsList);
+      }
+      catch (error) {
+        console.error("Error fetching skills:", error);
+      }
+      finally {
+        setIsLoading(false);
+      }
+    };
+
+
+    // getSkills();
+    // console.log(skills);
+    // fetchAndSendToken();
+    init();
   }, [getToken]);
+
+  const LoadingBar = () => (
+    <div className="w-full mt-10">
+      <div className="h-1 w-full bg-slate-200 rounded overflow-hidden">
+        <div className="h-full w-1/2 bg-slate-900 animate-pulse rounded"></div>
+      </div>
+      <p className="text-sm text-slate-500 text-center mt-3">
+        Loading skills from community...
+      </p>
+    </div>
+  );
 
   return (
     <div className="min-h-screen font-sans mt-5">
@@ -381,7 +533,9 @@ const Homepage = () => {
             </div>
 
             {/* Results Grid */}
-            {currentItems.length > 0 ? (
+            {isLoading ? (
+              <LoadingBar />
+            ) : currentItems.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-fade-in">
                 {currentItems.map((skill) => (
                   <SkillCard key={skill.id} skill={skill} />

@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@clerk/clerk-react": "^5.58.0"
+    "@clerk/clerk-react": "^5.58.0",
+    "qs": "^6.14.1"
   }
 }

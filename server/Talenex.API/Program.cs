@@ -235,6 +235,7 @@
 
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -252,6 +253,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Controllers
 // ==========================
 builder.Services.AddControllers();
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
 
 // ==========================
 // Authentication (ONCE)
@@ -261,6 +267,8 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 });
+
+
 
 // ==========================
 // Clerk JWT (External Provider)
@@ -287,6 +295,7 @@ builder.Services.AddAuthentication()
 builder.Services.AddAuthentication()
     .AddJwtBearer("TalenexJwt", options =>
     {
+        options.MapInboundClaims = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
