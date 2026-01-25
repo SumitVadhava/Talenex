@@ -35,6 +35,7 @@ export const Header = ({
             alt={user.name} 
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
+          <h1>{user.avatarUrl}</h1>
         </div>
         <div className="absolute bottom-1 right-1 h-5 w-5 bg-green-500 border-4 border-white rounded-full" title="Online" />
       </div>

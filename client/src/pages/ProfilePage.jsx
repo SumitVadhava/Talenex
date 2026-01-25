@@ -284,7 +284,10 @@ const ProfilePage = () => {
           paramsSerializer: (params) =>
             qs.stringify(params, { arrayFormat: "repeat" }),
         });
-        const mapped = mapApiUserToMockUser(response.data);
+        console.log(response.data);
+        console.log("Fetched user data:", response.data[7]);
+
+        const mapped = mapApiUserToMockUser(response.data[7]);
         setUser(mapped);
         setEditedUser(mapped);
       } catch (error) {
@@ -298,71 +301,73 @@ const ProfilePage = () => {
 
   const mapApiUserToMockUser = (api) => {
     return {
-      id: api.profile.userId,
+      id: api.profile?.userId || api.id,
 
-      name: api.profile.fullName,
-      handle: api.email,
-      location: api.profile.location,
-      avatarUrl: api.profile.profilePhotoUrl,
-      bio: api.profile.bio,
+      name: api.profile?.fullName || "",
+      handle: api.email || "",
+      location: api.profile?.location || "",
+      avatarUrl: api.profile?.profilePhotoUrl || "",
+      bio: api.profile?.bio || "",
 
       stats: {
-        swapsCompleted: 0, // not provided by API
-        responseRate: 0, // not provided by API
-        memberSince: new Date(api.createdAt).toLocaleDateString("en-US", {
-          month: "long",
-          year: "numeric",
-        }),
+        swapsCompleted: 0,
+        responseRate: 0,
+        memberSince: api.createdAt
+          ? new Date(api.createdAt).toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric",
+          })
+          : "",
         rating: api.reputation?.averageRating || 0,
       },
 
-      // Skills Offered (title already exists)
-      skillsOffered: api.skills.skillsOffered.map((skill, index) => ({
-        id: index.toString(),
-        name: skill.title,
-        level: skill.level,
-        category: skill.category,
-        description: skill.description,
-        certificateURL: skill.certificateURL,
-      })),
+      skillsOffered:
+        api.skills?.skillsOffered?.map((skill, index) => ({
+          id: index.toString(),
+          name: skill.title,
+          level: skill.level,
+          category: skill.category,
+        })) || [],
 
-      // Skills Wanted (name -> title, NO category)
-      skillsWanted: api.skills.skillsWanted.map((skill, index) => ({
-        id: index.toString(),
-        name: skill.name,
-        level: skill.level,
-      })),
+      skillsWanted:
+        api.skills?.skillsWanted?.map((skill, index) => ({
+          id: index.toString(),
+          name: skill.name,
+          level: skill.level,
+        })) || [],
 
-      achievements: [], // API doesn't provide
+      achievements: [],
 
       preferences: {
         availability: {
-          weekdays: api.availability.availableOnWeekdays,
-          weekends: api.availability.availableOnWeekends,
-          duration: api.availability.preferredSessionDuration.toString(),
-          mode: api.availability.preferredSessionMode,
+          weekdays: api.availability?.availableOnWeekdays ?? false,
+          weekends: api.availability?.availableOnWeekends ?? false,
+          duration:
+            api.availability?.preferredSessionDuration?.toString() || "30",
+          mode: api.availability?.preferredSessionMode || "online",
         },
 
         notifications: {
-          message: api.notifications.notifyOnMessage,
-          swapRequest: api.notifications.notifyOnSwapRequest,
-          rating: api.notifications.notifyOnRatingReceived,
+          message: api.notifications?.notifyOnMessage ?? true,
+          swapRequest: api.notifications?.notifyOnSwapRequest ?? true,
+          rating: api.notifications?.notifyOnRatingReceived ?? true,
         },
 
         privacy: {
-          publicProfile: api.privacy.isProfilePublic,
-          showLocation: api.privacy.showLocation,
-          showSkills: api.privacy.showSkills,
+          publicProfile: api.privacy?.isProfilePublic ?? true,
+          showLocation: api.privacy?.showLocation ?? true,
+          showSkills: api.privacy?.showSkills ?? true,
         },
 
         settings: {
-          email: api.email,
-          language: "en", // default
-          twoFactor: false, // default
+          email: api.email || "",
+          language: "en",
+          twoFactor: false,
         },
       },
     };
   };
+
 
   // Simulate PATCH request for specific sections
   const patchUser = async (section, data) => {
