@@ -298,15 +298,15 @@ import { useLocation } from 'react-router-dom';
 const UserProfilePage = () => {
   const [showAllSkills, setShowAllSkills] = useState(false);
   const { state } = useLocation();
-  const userData = state?.userData;
+  // const userData = state?.userData;
 
-  if (!userData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>User data not found</p>
-      </div>
-    );
-  }
+  // if (!userData) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <p>User data not found</p>
+  //     </div>
+  //   );
+  // }
 
   const skillsOffered = [
     { name: "Graphic Design", count: 12 },

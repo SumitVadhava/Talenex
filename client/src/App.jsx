@@ -9,12 +9,12 @@ import Signup from "./pages/Signup";
 import { SignOutButton } from "@clerk/clerk-react";
 // import { useSignIn } from "@clerk/clerk-react";
 // import { GoogleOneTap } from "@clerk/clerk-react";
-import UserProfilePage from "./pages/UserProfilePage";
 import ScrollButtons from "./components/ScrollBtn";
 import { useRef } from "react";
 import Homepage from "./pages/Homepage";
 import OnBoarding from "./pages/OnBoarding";
 import OnboardingGuard from "./components/OnboardingGuard";
+import ProfilePage from "./pages/ProfilePage";
 // import VerifyEmailPage from "./components/VerifyEmailPage";
 
 function App() {
@@ -64,7 +64,7 @@ function App() {
         {/* <Route path="/verify-email" element={<VerifyEmailPage />} /> */}
 
         {/* User Account */}
-        <Route path="/user-profile" element={<UserProfilePage />} />
+        <Route path="/user-profile" element={<ProfilePage />} />
 
         {/* Sign out */}
         <Route path="/sign-out" element={<SignOutButton />} />
