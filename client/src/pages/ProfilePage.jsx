@@ -252,6 +252,8 @@ import { PrivacyTab } from "../components/PrivacyTab";
 import { SettingsTab } from "../components/SettingsTab";
 import { Textarea } from "../components/ui/Primitives";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
+import qs from "qs";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("general");
@@ -264,13 +266,103 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       // Simulate network delay
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      setUser(MOCK_USER);
-      setEditedUser(MOCK_USER);
-      setLoading(false);
+      try {
+        const response = await axios.get("http://localhost:5296/api/User/All", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          params: {
+            include: [
+              "Profile",
+              "Skills",
+              "Availability",
+              "Privacy",
+              "Reputation",
+              "Notifications",
+            ],
+          },
+          paramsSerializer: (params) =>
+            qs.stringify(params, { arrayFormat: "repeat" }),
+        });
+        const mapped = mapApiUserToMockUser(response.data);
+        setUser(mapped);
+        setEditedUser(mapped);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
+
+  const mapApiUserToMockUser = (api) => {
+    return {
+      id: api.profile.userId,
+
+      name: api.profile.fullName,
+      handle: api.email,
+      location: api.profile.location,
+      avatarUrl: api.profile.profilePhotoUrl,
+      bio: api.profile.bio,
+
+      stats: {
+        swapsCompleted: 0, // not provided by API
+        responseRate: 0, // not provided by API
+        memberSince: new Date(api.createdAt).toLocaleDateString("en-US", {
+          month: "long",
+          year: "numeric",
+        }),
+        rating: api.reputation?.averageRating || 0,
+      },
+
+      // Skills Offered (title already exists)
+      skillsOffered: api.skills.skillsOffered.map((skill, index) => ({
+        id: index.toString(),
+        name: skill.title,
+        level: skill.level,
+        category: skill.category,
+        description: skill.description,
+        certificateURL: skill.certificateURL,
+      })),
+
+      // Skills Wanted (name -> title, NO category)
+      skillsWanted: api.skills.skillsWanted.map((skill, index) => ({
+        id: index.toString(),
+        name: skill.name,
+        level: skill.level,
+      })),
+
+      achievements: [], // API doesn't provide
+
+      preferences: {
+        availability: {
+          weekdays: api.availability.availableOnWeekdays,
+          weekends: api.availability.availableOnWeekends,
+          duration: api.availability.preferredSessionDuration.toString(),
+          mode: api.availability.preferredSessionMode,
+        },
+
+        notifications: {
+          message: api.notifications.notifyOnMessage,
+          swapRequest: api.notifications.notifyOnSwapRequest,
+          rating: api.notifications.notifyOnRatingReceived,
+        },
+
+        privacy: {
+          publicProfile: api.privacy.isProfilePublic,
+          showLocation: api.privacy.showLocation,
+          showSkills: api.privacy.showSkills,
+        },
+
+        settings: {
+          email: api.email,
+          language: "en", // default
+          twoFactor: false, // default
+        },
+      },
+    };
+  };
 
   // Simulate PATCH request for specific sections
   const patchUser = async (section, data) => {
