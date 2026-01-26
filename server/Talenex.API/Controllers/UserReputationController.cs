@@ -1,17 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Xml;
-using Talenex.Application.IRepository;
-using Talenex.infrastructure.Services;
-using Talenex.Domain.Entities;
-using FluentValidation;
 using Talenex.Application.DTOs.CreateDtos;
 using Talenex.Application.DTOs.UpdateDtos;
+using Talenex.Application.IRepository;
+using Talenex.Domain.Entities;
+using Talenex.infrastructure.Services;
 
 namespace Talenex.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "TalenexJwt")]
     public class UserReputationController : ControllerBase
     {
         private readonly IService<UserReputation> _service;

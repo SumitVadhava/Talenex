@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Talenex.infrastructure.Services;
-using Talenex.Domain.Entities;
-using Talenex.Application.IRepository;
-using FluentValidation;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Talenex.Application.DTOs.CreateDtos;
 using Talenex.Application.DTOs.UpdateDtos;
+using Talenex.Application.IRepository;
+using Talenex.Domain.Entities;
+using Talenex.infrastructure.Services;
 
 namespace Talenex.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "TalenexJwt")]
     public class UserProfileController : ControllerBase
     {
         private readonly IService<UserProfile> _service;
