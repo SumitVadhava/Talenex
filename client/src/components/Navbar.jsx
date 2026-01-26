@@ -14,6 +14,7 @@ import { Terminal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import { useUser, UserButton, SignedIn, SignedOut } from "@clerk/clerk-react";
+import UserDropdown from "./UserDropDown";
 
 export default function Navbar({ featureRef, workflowRef, testimonialsRef }) {
   const navigate = useNavigate();
@@ -105,15 +106,7 @@ export default function Navbar({ featureRef, workflowRef, testimonialsRef }) {
 
           {/* Logged IN */}
           <SignedIn>
-            <UserButton
-              afterSignOutUrl="/"
-              appearance={{
-                elements: {
-                  avatarBox: "w-14 h-14 min-w-[45px] min-h-[45px]",
-                  avatarImage: "w-full h-full object-cover",
-                },
-              }}
-            />
+            <UserDropdown  />
           </SignedIn>
         </div>
 

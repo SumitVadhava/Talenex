@@ -45,6 +45,7 @@ function App() {
           featureRef={featureRef}
           workflowRef={workflowRef}
           testimonialsRef={testimonialsRef}
+          
         />
       )}
       {/* <Navbar /> */}
