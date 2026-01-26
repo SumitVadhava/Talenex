@@ -19,9 +19,14 @@ export default function Step1BasicInfo({ formData, updateFormData, onNext }) {
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
+
     if (file) {
-      const url = URL.createObjectURL(file);
-      updateFormData({ avatarUrl: url });
+      const preview = URL.createObjectURL(file);
+
+      updateFormData({
+        profilePhotoFile: file, // real file
+        profilePhotoUrl: preview, // preview only
+      });
     }
   };
 
@@ -51,9 +56,9 @@ export default function Step1BasicInfo({ formData, updateFormData, onNext }) {
             ${!formData.avatarUrl ? "bg-zinc-100" : ""}
           `}
         >
-          {formData.avatarUrl ? (
+          {formData.profilePhotoUrl ? (
             <img
-              src={formData.avatarUrl}
+              src={formData.profilePhotoUrl}
               alt="Profile"
               className="h-full w-full object-cover"
             />
@@ -74,7 +79,7 @@ export default function Step1BasicInfo({ formData, updateFormData, onNext }) {
           onClick={triggerFileUpload}
           className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
         >
-          {formData.avatarUrl ? "Change Photo" : "Upload a Photo"}
+          {formData.profilePhotoUrl  ? "Change Photo" : "Upload a Photo"}
         </button>
       </div>
 

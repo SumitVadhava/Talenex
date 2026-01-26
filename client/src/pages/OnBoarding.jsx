@@ -43,7 +43,7 @@ const Stepper = ({ steps, currentStep }) => {
                   damping: 25,
                 }}
                 className={cn(
-                  "flex items-center justify-center w-8 h-8 rounded-full border p-5 font-semibold text-sm  transition-shadow duration-300"
+                  "flex items-center justify-center w-8 h-8 rounded-full border p-5 font-semibold text-sm  transition-shadow duration-300",
                   //  isActive ? "ring-2 ring-primary ring-offset-2 shadow-[0_0_15px_rgba(124,58,237,0.3)]" : ""
                 )}
               >
@@ -65,7 +65,7 @@ const Stepper = ({ steps, currentStep }) => {
                   "ml-3 text-sm font-medium transition-colors duration-300 hidden sm:block",
                   isActive || isCompleted
                     ? "text-foreground"
-                    : "text-muted-foreground"
+                    : "text-muted-foreground",
                 )}
               ></span>
             </div>
@@ -108,7 +108,8 @@ export default function OnBoarding() {
     username: "",
     location: "",
     bio: "",
-    profilePhotoUrl: user?.imageUrl,
+    profilePhotoUrl: "",
+    profilePhotoFile: null,
 
     // Step 2 (Offered Skills)
     offeredSkills: [],
@@ -118,7 +119,15 @@ export default function OnBoarding() {
   });
 
   useEffect(() => {
+    if (user?.imageUrl) {
+      setFormData((prev) => ({
+        ...prev,
+        profilePhotoUrl: user.imageUrl,
+      }));
+    }
+  }, [user?.imageUrl]);
 
+  useEffect(() => {
     const fetchAndSendToken = async () => {
       try {
         const token = await getToken({ template: "customJWT" });
@@ -131,16 +140,15 @@ export default function OnBoarding() {
           {
             headers: {
               Authorization: `Bearer ${token}`,
-            }
-          }
-        )
+            },
+          },
+        );
 
         localStorage.setItem("token", response.data.token);
-      }
-      catch (error) {
+      } catch (error) {
         console.error("Error sending token:", error);
       }
-    }
+    };
 
     fetchAndSendToken();
 
@@ -168,16 +176,38 @@ export default function OnBoarding() {
     const res = await axios.post(
       "https://api.cloudinary.com/v1_1/dpwes05hc/raw/upload",
       formData,
-    )
+    );
 
     return res.data.secure_url;
-  }
+  };
+
+  const uploadProfilePhoto = async (file) => {
+    if (!file) return null;
+
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("upload_preset", "Certificates");
+
+    const res = await axios.post(
+      "https://api.cloudinary.com/v1_1/dpwes05hc/image/upload",
+      fd,
+    );
+
+    return res.data.secure_url;
+  };
 
   const handleFinishOnboarding = async () => {
     if (!user) return;
 
-    console.log(user)
+    let cloudProfilePhoto = formData.profilePhotoUrl;
 
+    if (formData.profilePhotoFile) {
+      cloudProfilePhoto = await uploadProfilePhoto(formData.profilePhotoFile);
+      user.imageUrl = cloudProfilePhoto;
+      formData.profilePhotoUrl = cloudProfilePhoto;
+    }
+
+    console.log(user);
     try {
       await user.update({
         unsafeMetadata: {
@@ -194,7 +224,7 @@ export default function OnBoarding() {
             username: formData.username,
             location: formData.location,
             bio: formData.bio,
-            avatarUrl: formData.avatarUrl,
+            avatarUrl: formData.profilePhotoUrl,
           },
 
           offeredSkills: formData.offeredSkills,
@@ -202,7 +232,6 @@ export default function OnBoarding() {
           socials: formData.socials,
         },
       });
-
 
       const processSkills = async (skills) => {
         const result = [];
@@ -223,43 +252,42 @@ export default function OnBoarding() {
         return result;
       };
 
-
-      const processedOfferedSkills = await processSkills(formData.offeredSkills);
+      const processedOfferedSkills = await processSkills(
+        formData.offeredSkills,
+      );
       console.log(formData);
       console.log(processedOfferedSkills);
-
 
       // creating user and its skills
       const createUserProfile = async () => {
         // const processedOfferedSkills = await processSkills(formData.offeredSkills);
 
         const onboardingPayload = {
-          "profile": {
-            "fullName": user.fullName,
-            "username": formData.username,
-            "bio": formData.bio,
-            "profilePhotoUrl": formData.profilePhotoUrl,
-            "location": formData.location,
-            "latitude": 0,
-            "longitude": 0
+          profile: {
+            fullName: user.fullName,
+            username: formData.username,
+            bio: formData.bio,
+            profilePhotoUrl: formData.profilePhotoUrl,
+            location: formData.location,
+            latitude: 0,
+            longitude: 0,
           },
-          "skills": {
-            "skillsOffered": processedOfferedSkills.map(skill => ({
+          skills: {
+            skillsOffered: processedOfferedSkills.map((skill) => ({
               title: skill.title,
               category: skill.category,
               level: skill.level,
               description: skill.description || "",
-              certificateURL: skill.certificateURL || ""
+              certificateURL: skill.certificateURL || "",
             })),
-            "skillsWanted": formData.wantedSkills.map(skill => ({
+            skillsWanted: formData.wantedSkills.map((skill) => ({
               name: skill.name,
-              level: skill.level
-            }))
-          }
+              level: skill.level,
+            })),
+          },
         };
 
         console.log("onboarding payload", onboardingPayload);
-
 
         try {
           await axios.post(
@@ -270,10 +298,9 @@ export default function OnBoarding() {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
                 "Content-Type": "application/json",
               },
-            }
-          )
-        }
-        catch (error) {
+            },
+          );
+        } catch (error) {
           console.error("Error creating user profile:", error);
         }
       };
@@ -282,7 +309,6 @@ export default function OnBoarding() {
 
       const token = await getToken();
       console.log(token);
-
 
       // const response = await axios.get(
       //   "URL",
@@ -298,7 +324,6 @@ export default function OnBoarding() {
       console.error("Onboarding failed:", error);
     }
   };
-
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-8 bg-zinc-50 font-sans text-zinc-900">

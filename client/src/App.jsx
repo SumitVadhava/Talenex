@@ -15,6 +15,8 @@ import Homepage from "./pages/Homepage";
 import OnBoarding from "./pages/OnBoarding";
 import OnboardingGuard from "./components/OnboardingGuard";
 import ProfilePage from "./pages/ProfilePage";
+import UserProfilePage from "./pages/UserProfilePage";
+import SwapRequestForm from "./components/SwapRequestForm";
 // import VerifyEmailPage from "./components/VerifyEmailPage";
 
 function App() {
@@ -60,15 +62,14 @@ function App() {
         <Route path="/sign-in/reset-password" element={<Login />} />
         <Route path="/sign-in/factor-one" element={<Login />} />
 
-        {/* Verification */}
-        {/* <Route path="/verify-email" element={<VerifyEmailPage />} /> */}
-
         {/* User Account */}
         <Route path="/user-profile" element={<ProfilePage />} />
+        <Route path="/user-details" element={<UserProfilePage />} />
 
         {/* Sign out */}
         <Route path="/sign-out" element={<SignOutButton />} />
 
+        <Route path="/swap-request" element={<SwapRequestForm />} />
         <Route path="/onboarding" element={<OnBoarding />} />
         <Route
           path="/"

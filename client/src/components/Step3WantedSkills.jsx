@@ -9,7 +9,7 @@ export default function Step3WantedSkills({
   formData,
   updateFormData,
   onBack,
-  onFinish
+  onFinish,
 }) {
   const [skillName, setSkillName] = useState("");
   const [skillLevel, setSkillLevel] = useState("Beginner");
@@ -25,7 +25,7 @@ export default function Step3WantedSkills({
       // Update existing skill
       updateFormData({
         wantedSkills: formData.wantedSkills.map((s) =>
-          s.id === editingId ? { ...s, name: skillName, level: skillLevel } : s
+          s.id === editingId ? { ...s, name: skillName, level: skillLevel } : s,
         ),
       });
       setIsEditing(false);
@@ -138,32 +138,34 @@ export default function Step3WantedSkills({
         {formData.wantedSkills.map((skill) => (
           <div
             key={skill.id}
-            className="bg-white p-4 rounded-xl border border-zinc-200 shadow-sm flex items-center justify-between group hover:border-indigo-200 transition-colors"
+            className="group bg-white p-5 rounded-2xl border shadow-sm hover:shadow-md border-indigo-200 transition-all duration-300"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-zinc-100 flex items-center justify-center text-zinc-500">
-                <BookOpen className="w-5 h-5" />
+            <div className="flex items-start justify-between">
+              <div className="flex gap-4">
+                <div className="flex items-center gap-3">
+                  <h3 className="font-semibold text-zinc-900 tracking-tight">
+                    {skill.name}
+                  </h3>
+                  <span className="w-1 h-1 rounded-full bg-zinc-300" />
+                  <span>{skill.level}</span>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-zinc-900">{skill.name}</h3>
-                <p className="text-sm text-zinc-500">
-                  Desired Level: {skill.level}
-                </p>
+
+              {/* Action Buttons - subtle and clean */}
+              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                <button
+                  onClick={() => handleEditSkill(skill)}
+                  className="p-2 text-zinc-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
+                >
+                  <Pencil className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleDeleteSkill(skill.id)}
+                  className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
               </div>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => handleEditSkill(skill)}
-                className="text-sm font-medium text-zinc-500 hover:text-indigo-600 px-3 py-1 rounded transition-colors"
-              >
-                <Pencil className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => handleDeleteSkill(skill.id)}
-                className="text-sm font-medium text-zinc-500 hover:text-red-500 px-3 py-1 rounded transition-colors"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
             </div>
           </div>
         ))}

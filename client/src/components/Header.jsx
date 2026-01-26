@@ -26,7 +26,7 @@ export const Header = ({
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col md:flex-row gap-6 items-start md:items-center pb-8 border-b border-border mb-8"
+      className="bg-white flex flex-col md:flex-row gap-6 items-start md:items-center pb-8 border-b border-border mb-8"
     >
       <div className="relative group">
         <div className="h-24 w-24 md:h-28 md:w-28 rounded-full overflow-hidden ring-4 ring-background shadow-lg bg-secondary">
