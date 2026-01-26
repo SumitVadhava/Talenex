@@ -60,7 +60,7 @@ namespace Talenex.API.Controllers
                 PreferredSessionMode = dto.PreferredSessionMode ?? "online",
 
             };
-  
+
 
             var created = await _service.CreateAsync(entity);
             return Ok(created);
@@ -74,7 +74,6 @@ namespace Talenex.API.Controllers
                 return NotFound();
 
             var result = await _updateValidator.ValidateAsync(dto);
-
             if (!result.IsValid)
             {
                 return BadRequest(new
@@ -88,8 +87,6 @@ namespace Talenex.API.Controllers
             existing.AvailableOnWeekends = dto.AvailableOnWeekends;
             existing.PreferredSessionDuration = dto.PreferredSessionDuration;
             existing.PreferredSessionMode = dto.PreferredSessionMode ?? existing.PreferredSessionMode;
-
-           
 
             return Ok(await _service.UpdateAsync(existing));
         }

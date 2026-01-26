@@ -16,7 +16,7 @@ namespace Talenex.Application.Validators
             RuleFor(x => x.PreferredSessionDuration)
                 .GreaterThan(0)
                 .LessThanOrEqualTo(480)
-                .When(x => x.PreferredSessionDuration.HasValue)
+                .When(x => x.PreferredSessionDuration > 0)
                 .WithMessage("PreferredSessionDuration must be between 1 and 480 minutes");
 
             RuleFor(x => x.PreferredSessionMode)

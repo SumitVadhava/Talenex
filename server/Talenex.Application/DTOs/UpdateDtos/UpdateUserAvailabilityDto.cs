@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Talenex.Application.DTOs.UpdateDtos
 {
-    public class UpdateUserAvailabilityDto : AbstractValidator<UpdateUserAvailabilityDto>
+    public class UpdateUserAvailabilityDto
     {
 
         [Required]
@@ -17,7 +17,8 @@ namespace Talenex.Application.DTOs.UpdateDtos
         [Required]
         public bool AvailableOnWeekends { get; set; }
 
-        public int? PreferredSessionDuration { get; set; }
+
+        public int PreferredSessionDuration { get; set; }
 
         public string PreferredSessionMode { get; set; } = "online";
     }
