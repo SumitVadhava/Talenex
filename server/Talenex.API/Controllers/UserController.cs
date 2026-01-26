@@ -70,6 +70,7 @@ namespace Talenex.API.Controllers
             {
                 var dto = new UserDataDto
                 {
+                    UserId = user.Id,
                     Email = user.Email,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
@@ -84,6 +85,7 @@ namespace Talenex.API.Controllers
                         case UserInclude.Profile:
                             dto.Profile = user.UserProfile == null ? null : new UserProfileDto
                             {
+                                UserId = user.Id,
                                 FullName = user.UserProfile.FullName,
                                 Username = user.UserProfile.Username,
                                 Bio = user.UserProfile.Bio,
@@ -97,6 +99,7 @@ namespace Talenex.API.Controllers
                         case UserInclude.Skills:
                             dto.Skills = user.UserSkills == null ? null : new UserSkillsDto
                             {
+                                UserId = user.Id,
                                 SkillsOffered = user.UserSkills.SkillsOffered,
                                 SkillsWanted = user.UserSkills.SkillsWanted
                             };
@@ -105,6 +108,7 @@ namespace Talenex.API.Controllers
                         case UserInclude.Availability:
                             dto.Availability = user.UserAvailability == null ? null : new UserAvailabilityDto
                             {
+                                UserId = user.Id,
                                 AvailableOnWeekdays = user.UserAvailability.AvailableOnWeekdays,
                                 AvailableOnWeekends = user.UserAvailability.AvailableOnWeekends,
                                 PreferredSessionDuration = user.UserAvailability.PreferredSessionDuration,
@@ -115,6 +119,7 @@ namespace Talenex.API.Controllers
                         case UserInclude.Privacy:
                             dto.Privacy = user.UserPrivacy == null ? null : new UserPrivacyDto
                             {
+                                UserId = user.Id,
                                 IsProfilePublic = user.UserPrivacy.IsProfilePublic,
                                 ShowLocation = user.UserPrivacy.ShowLocation,
                                 ShowSkills = user.UserPrivacy.ShowSkills,
@@ -125,6 +130,7 @@ namespace Talenex.API.Controllers
                         case UserInclude.Reputation:
                             dto.Reputation = user.UserReputation == null ? null : new UserReputationDto
                             {
+                                UserId = user.Id,
                                 AverageRating = user.UserReputation.AverageRating,
                                 TotalReviews = user.UserReputation.TotalReviews,
                                 TrustScore = user.UserReputation.TrustScore,
@@ -137,6 +143,7 @@ namespace Talenex.API.Controllers
                         case UserInclude.Notifications:
                             dto.Notifications = user.UserNotifications == null ? null : new UserNotificationPreferencesDto
                             {
+                                UserId = user.Id,
                                 NotifyOnMessage = user.UserNotifications.NotifyOnMessage,
                                 NotifyOnRatingReceived = user.UserNotifications.NotifyOnRatingReceived,
                                 NotifyOnSwapRequest = user.UserNotifications.NotifyOnSwapRequest,
@@ -179,6 +186,7 @@ namespace Talenex.API.Controllers
 
             var response = new UserDataDto
             {
+                UserId = user.Id,
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
@@ -193,6 +201,7 @@ namespace Talenex.API.Controllers
                     case UserInclude.Profile:
                         response.Profile = user.UserProfile == null ? null : new UserProfileDto
                         {
+                            UserId = user.Id,
                             FullName = user.UserProfile.FullName,
                             Username = user.UserProfile.Username,
                             Bio = user.UserProfile.Bio,
@@ -207,6 +216,7 @@ namespace Talenex.API.Controllers
                     case UserInclude.Skills:
                         response.Skills = user.UserSkills == null ? null : new UserSkillsDto
                         {
+                            UserId = user.Id,
                             SkillsOffered = user.UserSkills.SkillsOffered,
                             SkillsWanted = user.UserSkills.SkillsWanted
                         };
@@ -215,6 +225,7 @@ namespace Talenex.API.Controllers
                     case UserInclude.Availability:
                         response.Availability = user.UserAvailability == null ? null : new UserAvailabilityDto
                         {
+                            UserId = user.Id,
                             AvailableOnWeekdays = user.UserAvailability.AvailableOnWeekdays,
                             AvailableOnWeekends = user.UserAvailability.AvailableOnWeekends,
                             PreferredSessionDuration = user.UserAvailability.PreferredSessionDuration,
@@ -225,6 +236,7 @@ namespace Talenex.API.Controllers
                     case UserInclude.Privacy:
                         response.Privacy = user.UserPrivacy == null ? null : new UserPrivacyDto
                         {
+                            UserId = user.Id,
                             IsProfilePublic = user.UserPrivacy.IsProfilePublic,
                             ShowLocation = user.UserPrivacy.ShowLocation,
                             ShowSkills = user.UserPrivacy.ShowSkills,
@@ -235,6 +247,7 @@ namespace Talenex.API.Controllers
                     case UserInclude.Reputation:
                         response.Reputation = user.UserReputation == null ? null : new UserReputationDto
                         {
+                            UserId = user.Id,
                             AverageRating = user.UserReputation.AverageRating,
                             TotalReviews = user.UserReputation.TotalReviews,
                             TrustScore = user.UserReputation.TrustScore,
@@ -247,6 +260,7 @@ namespace Talenex.API.Controllers
                     case UserInclude.Notifications:
                         response.Notifications = user.UserNotifications == null ? null : new UserNotificationPreferencesDto
                         {
+                            UserId = user.Id,
                             NotifyOnMessage = user.UserNotifications.NotifyOnMessage,
                             NotifyOnRatingReceived = user.UserNotifications.NotifyOnRatingReceived,
                             NotifyOnSwapRequest = user.UserNotifications.NotifyOnSwapRequest,
