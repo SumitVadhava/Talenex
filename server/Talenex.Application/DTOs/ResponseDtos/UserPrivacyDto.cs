@@ -10,7 +10,7 @@ namespace Talenex.Application.DTOs.ResponseDtos
     public class UserPrivacyDto
     {
         //[Required]
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
 
         public bool IsProfilePublic { get; set; } = true;
         public bool ShowLocation { get; set; } = true;

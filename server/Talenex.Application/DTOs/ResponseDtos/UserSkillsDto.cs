@@ -11,7 +11,7 @@ namespace Talenex.Application.DTOs.ResponseDtos
     public class UserSkillsDto
     {
         [Required]
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
 
         public List<SkillOfferedObj> ? SkillsOffered { get; set; }
 

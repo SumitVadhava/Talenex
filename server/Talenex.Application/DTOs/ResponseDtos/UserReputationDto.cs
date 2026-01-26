@@ -10,7 +10,7 @@ namespace Talenex.Application.DTOs.ResponseDtos
 {
     public class UserReputationDto
     {
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
 
         public decimal AverageRating { get; set; } = 0;
         public int TotalReviews { get; set; } = 0;

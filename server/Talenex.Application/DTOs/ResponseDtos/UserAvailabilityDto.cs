@@ -10,7 +10,7 @@ namespace Talenex.Application.DTOs.ResponseDtos
     public class UserAvailabilityDto
     {
         //[Required]
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
 
         //[Required]
         public bool AvailableOnWeekdays { get; set; }
