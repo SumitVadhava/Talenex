@@ -76,7 +76,10 @@ export default function UserDropdown() {
 
                         <button
                             onClick={() => {
-                                signOut(() => navigate("/sign-in"));
+                                signOut(() => {
+                                    localStorage.clear("token");
+                                    navigate('/');
+                                });
                             }}
                             className="w-full flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
                         >

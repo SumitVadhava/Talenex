@@ -14,6 +14,7 @@ import { useRef } from "react";
 import Homepage from "./pages/Homepage";
 import OnBoarding from "./pages/OnBoarding";
 import OnboardingGuard from "./components/OnboardingGuard";
+import ProtectedRoute from "./components/ProtectedRoute";
 import ProfilePage from "./pages/ProfilePage";
 import UserProfilePage from "./pages/UserProfilePage";
 import SwapRequestForm from "./components/SwapRequestForm";
@@ -63,14 +64,35 @@ function App() {
         <Route path="/sign-in/reset-password" element={<Login />} />
         <Route path="/sign-in/factor-one" element={<Login />} />
 
-        {/* User Account */}
-        <Route path="/user-profile" element={<ProfilePage />} />
-        <Route path="/user-details" element={<UserProfilePage />} />
+        {/* User Account - Protected Routes */}
+        <Route 
+          path="/user-profile" 
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/user-details" 
+          element={
+            <ProtectedRoute>
+              <UserProfilePage />
+            </ProtectedRoute>
+          } 
+        />
 
         {/* Sign out */}
         <Route path="/sign-out" element={<SignOutButton />} />
 
-        <Route path="/swap-request" element={<SwapRequestForm />} />
+        <Route 
+          path="/swap-request" 
+          element={
+            <ProtectedRoute requireOnboarding={true}>
+              <SwapRequestForm />
+            </ProtectedRoute>
+          } 
+        />
         <Route path="/onboarding" element={<OnBoarding />} />
         <Route
           path="/"
@@ -83,11 +105,14 @@ function App() {
           }
         />
 
-        <Route path="/home" element={
-          <OnboardingGuard >
-            <Homepage />
-          </OnboardingGuard>
-        } />
+        <Route 
+          path="/home" 
+          element={
+            <ProtectedRoute requireOnboarding={true}>
+              <Homepage />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
 
       {!hideNavbar && (
