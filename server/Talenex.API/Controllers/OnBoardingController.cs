@@ -31,6 +31,7 @@ namespace Talenex.API.Controllers
 
             Console.WriteLine("-------------------------------");
             Console.WriteLine($"Received Onboarding DTO for UserId: {userId}");
+
             foreach (var claim in User.Claims)
             {
                 Console.WriteLine($"CLAIM => {claim.Type} = {claim.Value}");

@@ -18,6 +18,12 @@ namespace Talenex.infrastructure.Services
         private readonly AppDBContext _dbContext;
         private readonly IRepository<UserProfile> _profileRepository;
         private readonly IRepository<UserSkills> _skillRepository;
+        private readonly IRepository<UserAvailability> _availabilityRepository;
+        private readonly IRepository<UserNotificationPreferences> _notificationRepository;
+        private readonly IRepository<UserPrivacy> _privacyRepository;
+        private readonly IRepository<UserReputation> _reputionRepository;
+
+
 
         public OnboardingService(AppDBContext dbContext,
             IRepository<UserProfile> profileRepository,
@@ -27,37 +33,6 @@ namespace Talenex.infrastructure.Services
             _profileRepository = profileRepository;
             _skillRepository = skillRepository;
         }
-
-        // public async Task CompleteOnboardingAsync(Guid userId, OnBoardingDto dto)
-        // {
-        //     var exists = await _profileRepository.GetByIdAsync(userId);
-        //     if (exists != null)
-        //         throw new Exception("Onboarding already completed");
-
-        //     var profile = new UserProfile
-        //     {
-        //         UserId = userId,
-        //         FullName = dto.Profile.FullName,
-        //         Username = dto.Profile.Username,
-        //         Bio = dto.Profile.Bio,
-        //         ProfilePhotoUrl = dto.Profile.ProfilePhotoUrl,
-        //         Location = dto.Profile.Location,
-        //         Latitude = dto.Profile.Latitude,
-        //         Longitude = dto.Profile.Longitude,
-        //     };
-
-        //     await _profileRepository.AddAsync(profile);
-
-        //     var Skills = new UserSkills
-        //     {
-        //         UserId = userId,
-        //         SkillsOffered = dto.Skills.SkillsOffered,
-        //         SkillsWanted = dto.Skills.SkillsWanted
-        //     };
-
-        //     await _skillRepository.AddAsync(Skills);
-
-        // }
 
         public async Task CompleteOnboardingAsync(Guid userId, OnBoardingDto dto)
         {
@@ -98,9 +73,56 @@ namespace Talenex.infrastructure.Services
             };
 
             await _skillRepository.AddAsync(userSkills);
+
+
+            var userAvailability = new UserAvailability
+            {
+                UserId = userId,
+                AvailableOnWeekdays = true,
+                AvailableOnWeekends = true,
+                PreferredSessionDuration = 0,
+                PreferredSessionMode = "Online"
+            };
+
+            await _availabilityRepository.AddAsync(userAvailability);
+
+
+          
+            var userNotificationPreferences = new UserNotificationPreferences
+            {
+                  UserId = userId,
+                  NotifyOnMessage = true,
+                  NotifyOnSwapRequest = true,
+                  NotifyOnRatingReceived = true
+            };
+
+            await _notificationRepository.AddAsync(userNotificationPreferences);
+
+
+            var userPrivacy = new UserPrivacy
+            {
+                UserId = userId,
+                IsProfilePublic = true,
+                ShowLocation = true,
+                ShowSkills = true,
+                AllowMessagesFrom = "everyone"
+            };
+
+            await _privacyRepository.AddAsync(userPrivacy);
+
+
+            var userReputation = new UserReputation
+            {
+                UserId = userId,
+                AverageRating = 0,
+                TotalReviews = 0,
+                TrustScore = 0,
+                BadgesJson = new List<string>().ToString()
+            };
+
+            await _reputionRepository.AddAsync(userReputation);
+
         }
 
     }
-
-
 }
