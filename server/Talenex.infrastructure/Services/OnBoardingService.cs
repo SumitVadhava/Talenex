@@ -21,13 +21,15 @@ namespace Talenex.infrastructure.Services
         private readonly IRepository<UserAvailability> _availabilityRepository;
         private readonly IRepository<UserNotificationPreferences> _notificationRepository;
         private readonly IRepository<UserPrivacy> _privacyRepository;
-        private readonly IRepository<UserReputation> _reputionRepository;
-
-
+        private readonly IRepository<UserReputation> _reputationRepository;
 
         public OnboardingService(AppDBContext dbContext,
             IRepository<UserProfile> profileRepository,
-            IRepository<UserSkills> skillRepository)
+            IRepository<UserSkills> skillRepository,
+            IRepository<UserAvailability> availabilityRepository,
+            IRepository<UserNotificationPreferences> notificationRepository,
+            IRepository<UserPrivacy> privacyRepository,
+            IRepository<UserReputation> reputationRepository)
         {
             _dbContext = dbContext;
             _profileRepository = profileRepository;
@@ -120,7 +122,7 @@ namespace Talenex.infrastructure.Services
                 BadgesJson = new List<string>().ToString()
             };
 
-            await _reputionRepository.AddAsync(userReputation);
+            await _reputationRepository.AddAsync(userReputation);
 
         }
 
