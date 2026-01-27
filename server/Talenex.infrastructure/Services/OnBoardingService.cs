@@ -34,6 +34,11 @@ namespace Talenex.infrastructure.Services
             _dbContext = dbContext;
             _profileRepository = profileRepository;
             _skillRepository = skillRepository;
+            _availabilityRepository = availabilityRepository;
+            _notificationRepository = notificationRepository;
+            _privacyRepository = privacyRepository;
+            _reputationRepository = reputationRepository;
+
         }
 
         public async Task CompleteOnboardingAsync(Guid userId, OnBoardingDto dto)
