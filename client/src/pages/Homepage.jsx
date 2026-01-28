@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import qs from "qs";
 import Loader from "@/components/Loader";
@@ -195,6 +195,7 @@ const Homepage = () => {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const { getToken } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useUser();
 
   const tokenSentRef = useRef(false);
 
@@ -214,6 +215,10 @@ const Homepage = () => {
   // --- Filtering Logic ---
   const filteredData = useMemo(() => {
     return skills.filter((skill) => {
+      const currentUserEmail = user?.primaryEmailAddress?.emailAddress;
+      if (skill.user.email === currentUserEmail) return false;
+
+
       // Category Filter
       if (filters.category !== "all") {
         const canonicalName =
@@ -340,10 +345,10 @@ const Homepage = () => {
     return users
       .filter((user) => user.skills?.skillsOffered?.length > 0)
       .map((user) => ({
-        id: user.profile?.userId ?? user.email,
-
+        id: user.email ?? user.profile?.userId,
         user: {
-          id: user.profile?.userId ?? user.email,
+          id: user.email ?? user.profile?.userId,
+          email: user.email,
           name: user.profile?.fullName ?? `${user.firstName} ${user.lastName}`,
           avatar: user.profile?.profilePhotoUrl ?? user.imageUrl ?? "",
           location: user.profile?.location ?? "",
@@ -366,9 +371,9 @@ const Homepage = () => {
         isOnline: true,
         postedAt: user.createdAt
           ? new Date(user.createdAt).toLocaleDateString("en-US", {
-              month: "long",
-              year: "numeric",
-            })
+            month: "long",
+            year: "numeric",
+          })
           : "",
       }));
   };
@@ -469,11 +474,10 @@ const Homepage = () => {
                   setFilters({ ...filters, category: cat.id });
                   setCurrentPage(1);
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all cursor-pointer ${
-                  filters.category === cat.id
-                    ? "bg-slate-900 text-white shadow-md"
-                    : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all cursor-pointer ${filters.category === cat.id
+                  ? "bg-slate-900 text-white shadow-md"
+                  : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                  }`}
               >
                 {cat.name}
               </button>
@@ -621,11 +625,10 @@ const Homepage = () => {
                     <button
                       key={i}
                       onClick={() => handlePageChange(i + 1)}
-                      className={`w-8 h-8 rounded-md text-sm font-medium transition-colors ${
-                        currentPage === i + 1
-                          ? "bg-primary-600 text-white"
-                          : "text-slate-600 hover:bg-slate-100"
-                      }`}
+                      className={`w-8 h-8 rounded-md text-sm font-medium transition-colors ${currentPage === i + 1
+                        ? "bg-primary-600 text-white"
+                        : "text-slate-600 hover:bg-slate-100"
+                        }`}
                     >
                       {i + 1}
                     </button>
