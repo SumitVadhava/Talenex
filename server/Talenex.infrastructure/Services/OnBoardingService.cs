@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Talenex.Application.DTOs.CreateDtos;
@@ -87,7 +88,7 @@ namespace Talenex.infrastructure.Services
                 UserId = userId,
                 AvailableOnWeekdays = true,
                 AvailableOnWeekends = true,
-                PreferredSessionDuration = 0,
+                PreferredSessionDuration = 30,
                 PreferredSessionMode = "Online"
             };
 
@@ -124,7 +125,7 @@ namespace Talenex.infrastructure.Services
                 AverageRating = 0,
                 TotalReviews = 0,
                 TrustScore = 0,
-                BadgesJson = new List<string>().ToString()
+                BadgesJson = JsonSerializer.Serialize(new List<string>())
             };
 
             await _reputationRepository.AddAsync(userReputation);
