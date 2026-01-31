@@ -417,7 +417,9 @@
 
 // 3rd attempt
 
+using Application.IRepository;
 using FluentValidation;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -528,6 +530,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IClerkService, ClerkService>();
+builder.Services.AddScoped<IZegoTokenService, ZegoTokenService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+
 
 // ==========================
 // CORS
