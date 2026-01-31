@@ -13,6 +13,7 @@ import Step6ReviewAndConfirm from "./swap-steps/step-6-review-confirm";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import qs from "qs";
+import { Avatar } from '@/components/ui/avatar';
 
 export default function SwapRequestForm({ onClose }) {
   const [currentStep, setCurrentStep] = useState(1);
@@ -80,9 +81,49 @@ export default function SwapRequestForm({ onClose }) {
     scrollToTop();
   };
 
-  const handleSubmit = (stepData) => {
+  const handleSubmit = async (stepData) => {
     const finalData = { ...formData, ...stepData };
-    console.log("Swap Request Submitted:", finalData);
+
+    const date = finalData?.selectedDates?.[0]?.date;
+    const time = finalData?.selectedDates?.[0]?.time;
+
+    const scheduleDateTime =
+      date && time
+        ? date + "T" + time + ":00"
+        : null;
+
+    const requestPayload = {
+      PartnerImageUrl: finalData?.partnerData?.user?.avatar ?? null,
+      PartnerEmail: finalData?.partnerData?.user?.email ?? null,
+      YourImageUrl: finalData?.userData?.profile?.profilePhotoUrl ?? null,
+      YourSkill: finalData?.skillToOffer ?? null,
+      PartnerSkill: finalData?.skillToLearn ?? null,
+      ScheduleDateTime: scheduleDateTime,
+      Format: "Video Call",
+      DurationMinutes: Number(finalData?.duration) || null,
+      PersonalMessage: finalData?.message ?? null,
+      YourName:
+        (finalData?.userData?.firstName ?? "") +
+        (finalData?.userData?.lastName
+          ? " " + finalData.userData.lastName
+          : "")
+    };
+    try {
+      const response = await axios.post(
+        "http://localhost:5296/api/swap-request/send",
+        requestPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      console.log("Swap request result:", response.data);
+    }
+    catch (error) {
+      console.error("Error submitting swap request:", error);
+    }
+    console.log("Final Swap Request Data:", requestPayload);
     alert("Swap request submitted successfully!");
   };
 
@@ -169,13 +210,12 @@ export default function SwapRequestForm({ onClose }) {
                 <div className="flex flex-col items-center justify-center">
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold
-                    ${
-                      currentStep > step.number
+                    ${currentStep > step.number
                         ? "bg-green-500 text-white"
                         : currentStep === step.number
                           ? "border-2 border-gray-400 text-black"
                           : "bg-gray-200 text-gray-500"
-                    }
+                      }
                   `}
                   >
                     {currentStep > step.number ? (
@@ -185,11 +225,10 @@ export default function SwapRequestForm({ onClose }) {
                     )}
                   </div>
                   <span
-                    className={`text-xs mt-2 text-center font-medium ${
-                      currentStep >= step.number
-                        ? "text-gray-900"
-                        : "text-gray-400"
-                    }`}
+                    className={`text-xs mt-2 text-center font-medium ${currentStep >= step.number
+                      ? "text-gray-900"
+                      : "text-gray-400"
+                      }`}
                   >
                     {step.title}
                   </span>

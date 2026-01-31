@@ -551,7 +551,7 @@ const Homepage = () => {
                       <SelectItem value="newest">Newest First</SelectItem>
                       <SelectItem value="oldest">Oldest First</SelectItem>
                       <SelectItem value="rating">Highest Rated</SelectItem>
-                      <SelectItem value="popular">Most Popular</SelectItem>
+                      {/*<SelectItem value="popular">Most Popular</SelectItem>*/}
                     </SelectContent>
                   </Select>
                 </div>

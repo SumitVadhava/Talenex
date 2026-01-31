@@ -10,7 +10,7 @@ import { SignOutButton } from "@clerk/clerk-react";
 // import { useSignIn } from "@clerk/clerk-react";
 // import { GoogleOneTap } from "@clerk/clerk-react";
 import ScrollButtons from "./components/ScrollBtn";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Homepage from "./pages/Homepage";
 import OnBoarding from "./pages/OnBoarding";
 import OnboardingGuard from "./components/OnboardingGuard";
@@ -18,6 +18,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ProfilePage from "./pages/ProfilePage";
 import UserProfilePage from "./pages/UserProfilePage";
 import SwapRequestForm from "./components/SwapRequestForm";
+import { Video } from "lucide-react";
+import VideoCall from "./components/VideoCall";
+import Step1BasicInfo from "./components/Step1BasicInfo";
 // import VerifyEmailPage from "./components/VerifyEmailPage";
 
 function App() {
@@ -34,10 +37,15 @@ function App() {
     "/sign-up/sso-callback",
     "/sign-in/verify-email-address",
     "/sign-up/verify-email-address",
+    "/sign-in/factor-one",
     "/onboarding"
   ];
 
-  const hideNavbar = hideNavbarRoutes.includes(location.pathname);
+  const [hideNavbar, setHideNavbar] = useState(hideNavbarRoutes.includes(location.pathname));
+  
+  useEffect(() => {
+  setHideNavbar(hideNavbarRoutes.includes(location.pathname));
+}, [location.pathname]); 
 
   return (
     <div className="min-h-screen">
@@ -55,7 +63,9 @@ function App() {
         <Route path="/sign-up" element={<Signup />} />
         <Route path="/sign-up/sso-callback" element={<Signup />} />
         <Route path="/sign-up/verify-email-address" element={<Signup />} />
+        <Route path="/sign-up/continue" element={<Signup />} />
 
+      
         {/* Sign in */}
         <Route path="/sign-in" element={<Login />} />
         <Route path="/sign-in/sso-callback" element={<Login />} />
@@ -63,6 +73,7 @@ function App() {
         <Route path="/sign-in/forget-password" element={<Login />} />
         <Route path="/sign-in/reset-password" element={<Login />} />
         <Route path="/sign-in/factor-one" element={<Login />} />
+        <Route path="/sign-in/factor-two" element={<Login />} />
 
         {/* User Account - Protected Routes */}
         <Route 
@@ -93,7 +104,12 @@ function App() {
             </ProtectedRoute>
           } 
         />
-        <Route path="/onboarding" element={<OnBoarding />} />
+
+        <Route path="/onboarding" element={
+            <ProtectedRoute>
+              <OnBoarding />
+            </ProtectedRoute>} 
+        />
         <Route
           path="/"
           element={
@@ -113,7 +129,17 @@ function App() {
             </ProtectedRoute>
           } 
         />
+
+          <Route 
+          path="/join/:roomId" 
+          element={
+            <ProtectedRoute requireOnboarding={true}>
+              <VideoCall  setHideNavbar={setHideNavbar}/>
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
+
 
       {!hideNavbar && (
         <ScrollButtons />

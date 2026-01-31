@@ -1,7 +1,8 @@
 import React from "react";
 import { Badge, Button, Card } from "./ui/Common";
-import { Star, MessageCircle, Globe, MapPin } from "lucide-react";
+import { Star, MessageCircle, Globe, MapPin, ArrowBigRight, Info, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Arrow } from "@radix-ui/react-select";
 
 const SkillCard = ({ skill }) => {
   const navigate = useNavigate();
@@ -13,6 +14,9 @@ const SkillCard = ({ skill }) => {
   };
 
   return (
+    // why in card level on click not working?
+    // give me changes 
+
     <Card className="group flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 hover:-translate-y-1 hover:-translate-x-1 border-slate-200 hover:border-primary-200 bg-white overflow-hidden">
       {/* User Header */}
       <div className="p-4 flex justify-between items-start border-b border-slate-50 bg-slate-50/30">
@@ -106,9 +110,8 @@ const SkillCard = ({ skill }) => {
           <div className="bg-slate-50 rounded-lg p-3 border border-slate-100 group-hover:border-primary-100 group-hover:bg-primary-50/20 transition-colors">
             <p className="text-sm font-medium text-slate-700 line-clamp-2">
               {skill.seekingSkills.length > 0
-                ? `${skill.seekingSkills.slice(0, 3).join(", ")}${
-                    skill.seekingSkills.length > 3 ? " ..." : ""
-                  }`
+                ? `${skill.seekingSkills.slice(0, 3).join(", ")}${skill.seekingSkills.length > 3 ? " ..." : ""
+                }`
                 : "Open to skill exchange"}
             </p>
           </div>
@@ -127,11 +130,14 @@ const SkillCard = ({ skill }) => {
 
         <Button
           size="sm"
-          onClick={handleSwapClick}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleSwapClick();
+          }}
           className="cursor-pointer shadow-sm bg-slate-900 hover:bg-slate-800 text-white transition-all duration-300 w-auto px-5 group-hover:shadow-md hover:-translate-y-0.5"
         >
-          <span className="mr-2">Swap</span>
-          <MessageCircle className="w-3.5 h-3.5" />
+          <span className="mr-2">View</span>
+          <ChevronRight className="w-4 h-4" />
         </Button>
       </div>
     </Card>

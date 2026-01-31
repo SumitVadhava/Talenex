@@ -12,6 +12,10 @@ import {
   X,
   File,
   Award,
+  Building2,
+  Shapes,
+  Terminal, 
+  Briefcase
 } from "lucide-react";
 // import { Input, Label, Select, Textarea, Button } from './ui';
 import { Label } from "./ui/label";
@@ -51,10 +55,13 @@ export default function Step2Skills({
 
   const categories = [
     { value: "development", label: "Development" },
+    { value : "Programming Language", label: "Programming Language" },
     { value: "design", label: "Design" },
     { value: "music", label: "Music" },
     { value: "language", label: "Language" },
     { value: "business", label: "Business" },
+    { value: "Other", label: "Other" },
+
   ];
 
   const levels = ["Beginner", "Intermediate", "Advanced", "Expert"];
@@ -126,12 +133,18 @@ export default function Step2Skills({
     switch (cat) {
       case "development":
         return <Code className="w-5 h-5" />;
+      case "business":
+        return <Briefcase className="w-5 h-5" />;
       case "design":
         return <PenTool className="w-5 h-5" />;
       case "music":
         return <Music className="w-5 h-5" />;
       case "language":
         return <Globe className="w-5 h-5" />;
+      case "Programming Language":
+        return <Terminal className="w-5 h-5" />;
+      case "Other":
+        return <Shapes className="w-5 h-5" />;
       default:
         return <Code className="w-5 h-5" />;
     }

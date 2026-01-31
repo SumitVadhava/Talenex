@@ -2,38 +2,49 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Settings, LogOut, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useUser, SignOutButton, useClerk } from "@clerk/clerk-react";
+import axios from 'axios';
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 export default function UserDropdown() {
     const { user, isLoaded, isSignedIn } = useUser();
     const { signOut } = useClerk();
+    const { userData } = useContext(UserContext);
 
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
-    
     const dropdownRef = useRef(null);
 
+
     useEffect(() => {
-        function handleClickOutside(event) {
+        if (!isLoaded || !isSignedIn) return;
+
+        console.log("user from Clerk:", user.unsafeMetadata);
+
+        const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setIsOpen(false);
             }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+        };
 
-      if (!isLoaded || !isSignedIn) return null;
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isLoaded, isSignedIn]);
+
 
     return (
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen((prev) => !prev)}
-                className="flex items-center gap-3 px-4 py-2"
+                className="flex items-center gap-3 px-4 py-1"
             >
                 <img
-                    src={user?.imageUrl || "https://api.dicebear.com/7.x/avataaars/svg?seed=Sumit"}
+                    src={user?.unsafeMetadata?.profile?.avatarUrl || userData?.profilePhotoUrl || user?.imageUrl || "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg"}
                     alt="Profile"
-                    className="w-12 h-12 rounded-full"
+                    className="w-14 h-13 rounded-full"
                 />
             </button>
 
@@ -44,16 +55,16 @@ export default function UserDropdown() {
                     <div className="px-4 py-6 border-b border-slate-100">
                         <div className="flex items-center gap-3">
                             <img
-                                src={user?.imageUrl || "https://api.dicebear.com/7.x/avataaars/svg?seed=Sumit"}
+                                src={user?.unsafeMetadata?.profile?.avatarUrl || userData?.profilePhotoUrl || user?.imageUrl || "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg"}
                                 alt="Profile"
                                 className="w-12 h-12 rounded-full ring-2 ring-slate-100"
                             />
                             <div className="flex-1 min-w-0">
                                 <div className="text-lg font-semibold text-slate-900 truncate">
-                                    {user?.fullName}
+                                    {user?.unsafeMetadata?.fullName || userData?.fullName || user?.fullName || "Guest"}
                                 </div>
                                 <div className="text-sm text-slate-500 truncate">
-                                    {user.primaryEmailAddress?.emailAddress}
+                                    {userData?.email || user?.primaryEmailAddress?.emailAddress}
                                 </div>
                             </div>
                         </div>

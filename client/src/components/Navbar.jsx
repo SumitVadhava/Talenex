@@ -15,9 +15,12 @@ import { useNavigate } from "react-router-dom";
 
 import { useUser, UserButton, SignedIn, SignedOut } from "@clerk/clerk-react";
 import UserDropdown from "./UserDropDown";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Navbar({ featureRef, workflowRef, testimonialsRef }) {
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
   const { isLoaded, isSignedIn } = useUser();
 
   const scrollToSection = (ref) => {
@@ -46,7 +49,9 @@ export default function Navbar({ featureRef, workflowRef, testimonialsRef }) {
     user: [
       { label: "Explore", href: "/home" },
       { label: "My Swaps", href: "/swaps" },
-      { label: "Messages", href: "/messages" }
+      { label: "Messages", href: "/messages" },
+      { label: "Connect", href: "/join/room_1" }
+
     ]
   };
 
@@ -106,7 +111,7 @@ export default function Navbar({ featureRef, workflowRef, testimonialsRef }) {
 
           {/* Logged IN */}
           <SignedIn>
-            <UserDropdown  />
+            <UserDropdown/>
           </SignedIn>
         </div>
 

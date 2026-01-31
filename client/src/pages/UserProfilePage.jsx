@@ -624,8 +624,8 @@ const UserProfilePage = () => {
                   </CardTitle>
                   <span className="text-sm font-medium text-slate-500 flex items-center bg-slate-100 px-2 py-0.5 rounded-full">
                     <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500 mr-1" />
-                    4.8 (15)
-                  </span>
+                      0.0
+                    </span>
                 </div>
                 <div className="relative">
                   <select className="appearance-none bg-slate-50 hover:bg-slate-100 transition-colors border-none rounded-md py-1.5 pl-3 pr-8 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-purple-500/20 cursor-pointer">

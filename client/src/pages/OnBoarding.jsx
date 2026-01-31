@@ -10,6 +10,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import api from "@/api/axios";
 
+import { useContext } from "react";
+import { UserContext } from "./../context/UserContext";
+import { full } from "@cloudinary/url-gen/qualifiers/fontHinting";
+
 const Stepper = ({ steps, currentStep }) => {
   return (
     <div className="w-full flex items-center justify-between relative mb-8">
@@ -96,6 +100,8 @@ export default function OnBoarding() {
   const { user } = useUser();
   const { getToken } = useAuth();
   const navigate = useNavigate();
+  const { setUserData } = useContext(UserContext);
+
 
   const steps = [
     { id: 1, label: "Basic Info" },
@@ -224,7 +230,7 @@ export default function OnBoarding() {
             username: formData.username,
             location: formData.location,
             bio: formData.bio,
-            avatarUrl: formData.profilePhotoUrl,
+            avatarUrl: formData.profilePhotoUrl ?? user.imageUrl,
           },
 
           offeredSkills: formData.offeredSkills,
@@ -299,7 +305,18 @@ export default function OnBoarding() {
                 "Content-Type": "application/json",
               },
             },
+
+            setUserData({
+              fullName: user.fullName,
+              email: user.primaryEmailAddress?.emailAddress,
+              profilePhotoUrl: formData.profilePhotoUrl,
+            })
           );
+          const existingMetadata = user.unsafeMetadata || {};
+
+          console.log(existingMetadata);
+          
+
         } catch (error) {
           console.error("Error creating user profile:", error);
         }

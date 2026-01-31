@@ -23,9 +23,11 @@ import { Textarea } from "../components/ui/Primitives";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import qs from "qs";
+import { useUser } from "@clerk/clerk-react";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("general");
+  const { user: clerkUser } = useUser();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -109,9 +111,9 @@ const ProfilePage = () => {
         responseRate: 0,
         memberSince: api.createdAt
           ? new Date(api.createdAt).toLocaleDateString("en-US", {
-              month: "long",
-              year: "numeric",
-            })
+            month: "long",
+            year: "numeric",
+          })
           : "",
         rating: api.reputation?.averageRating || 0,
       },
@@ -310,18 +312,19 @@ const ProfilePage = () => {
       fullName: editedUser.name || "",
       username: user.username,
       bio: editedUser.bio || "",
-      profilePhotoUrl: user.avatarUrl,
+      profilePhotoUrl: editedUser.avatarUrl,
       location: editedUser.location || "",
       latitude: user.latitude,
       longitude: user.longitude,
     };
-    
+
     console.log("profile payload", payload);
 
     if (!id) {
       console.log(`No ID found for section: profile`);
       return;
     }
+
     await axios.put(
       `http://localhost:5296/api/UserProfile/${id}`,
       payload,
@@ -331,6 +334,18 @@ const ProfilePage = () => {
         },
       },
     );
+    const existingMetadata = clerkUser.unsafeMetadata || {};
+
+    await clerkUser.update({
+      unsafeMetadata: {
+        ...existingMetadata,// ✅ keeps ALL existing keys
+        fullName: editedUser.name, 
+        profile: {
+          ...(existingMetadata.profile || {}), // ✅ keeps profile.bio, username, etc.
+          avatarUrl: editedUser.avatarUrl       // ✅ only updates avatar
+        }
+      }
+    });
   };
 
   const handleEditToggle = () => {

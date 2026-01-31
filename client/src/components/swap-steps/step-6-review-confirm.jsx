@@ -6,7 +6,7 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 export default function Step6ReviewRequest({ data, onNext, onBack,userData,partnerData }) {
   
   const handleConfirm = () => {
-    onNext(data);
+    onNext({data, userData,partnerData});
   };
 
   const formatDateForDisplay = (dateStr) => {
