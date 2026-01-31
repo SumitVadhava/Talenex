@@ -11,7 +11,6 @@ namespace Talenex.infrastructure.Repositories
     public class UserAvailabilityRepository  : Repository<UserAvailability>
     {
          public UserAvailabilityRepository(AppDBContext db) : base(db) { }
-
         
     }
 }
