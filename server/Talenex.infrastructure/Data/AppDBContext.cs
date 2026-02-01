@@ -29,6 +29,8 @@ namespace Talenex.infrastructure.Data
 
         public DbSet<UserReputation> UserReputations { get; set; }
 
+        public DbSet<UserSwapRequest> UserSwapRequests { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(u =>
@@ -156,6 +158,30 @@ namespace Talenex.infrastructure.Data
                 u.HasKey(u => u.Id);
                 u.Property(u => u.UserId).IsRequired();
             });
+
+            modelBuilder.Entity<UserSwapRequest>(sr =>
+            {
+                sr.ToTable("UserSwapRequests");
+                sr.HasKey(x => x.Id);
+
+                sr.Property(x => x.RequesterId).IsRequired();
+                sr.Property(x => x.ReceiverId).IsRequired();
+                sr.Property(x => x.SkillToOffer).HasMaxLength(100).IsRequired();
+                sr.Property(x => x.SkillToLearn).HasMaxLength(100).IsRequired();
+                sr.Property(x => x.Status).HasMaxLength(50).IsRequired();
+
+                sr.HasOne(x => x.Requester)
+                    .WithMany()
+                    .HasForeignKey(x => x.RequesterId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                sr.HasOne(x => x.Receiver)
+                    .WithMany()
+                    .HasForeignKey(x => x.ReceiverId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+               
 
             base.OnModelCreating(modelBuilder);
         }

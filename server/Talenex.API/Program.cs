@@ -509,6 +509,10 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateUserSkillsValidator>(
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserSkillsValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserNotificationPreferencesValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserNotificationPreferencesValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateSwapRequestValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateSwapRequestValidator>();
+
+
 
 // ==========================
 // Database
@@ -528,6 +532,10 @@ builder.Services.AddScoped(typeof(IService<>), typeof(GenericService<>));
 builder.Services.AddScoped<IOnboardingService, OnboardingService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddScoped<IUserSwapRequestRepository, UserSwapRequestRepository>();
+builder.Services.AddScoped<IUserSwapRequestService, UserSwapRequestService>();
+
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IClerkService, ClerkService>();
 builder.Services.AddScoped<IZegoTokenService, ZegoTokenService>();
