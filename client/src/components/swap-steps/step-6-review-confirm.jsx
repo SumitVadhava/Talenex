@@ -1,9 +1,10 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Calendar, Video, Clock, ArrowLeftRight } from "lucide-react";
+import { Calendar, Video, Clock, ArrowLeftRight, Loader2 } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 
-export default function Step6ReviewRequest({ data, onNext, onBack,userData,partnerData }) {
+
+export default function Step6ReviewRequest({ data, onNext, onBack,userData,partnerData,isLoading = false  }) {
   
   const handleConfirm = () => {
     onNext({data, userData,partnerData});
@@ -153,8 +154,16 @@ export default function Step6ReviewRequest({ data, onNext, onBack,userData,partn
         <Button
           onClick={handleConfirm}
           className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+          disabled={isLoading}
         >
-          Confirm & Send Request
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Processing Request...
+            </>
+          ) : (
+            "Confirm & Send Request"
+          )}
         </Button>
       </div>
     </div>

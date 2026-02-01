@@ -345,9 +345,9 @@ const Homepage = () => {
     return users
       .filter((user) => user.skills?.skillsOffered?.length > 0)
       .map((user) => ({
-        id: user.email ?? user.profile?.userId,
+        id: user?.userId ?? user.email,
         user: {
-          id: user.email ?? user.profile?.userId,
+          id: user.profile?.id ?? user.email,
           email: user.email,
           name: user.profile?.fullName ?? `${user.firstName} ${user.lastName}`,
           avatar: user.profile?.profilePhotoUrl ?? user.imageUrl ?? "",

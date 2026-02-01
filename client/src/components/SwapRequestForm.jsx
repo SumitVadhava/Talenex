@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card } from "@/components/ui/card";
 import { Check, X } from "lucide-react";
+import {notification } from 'antd';
 
 import Step1SelectSkillToOffer from "./swap-steps/step-1-select-skill-offer";
 import Step2SelectSkillToLearn from "./swap-steps/step-2-select-skill-learn";
@@ -10,13 +11,15 @@ import Step3ProposeDateAndTime from "./swap-steps/step-3-propose-date-time";
 import Step4ChooseDuration from "./swap-steps/step-4-choose-duration";
 import Step5OptionalMessage from "./swap-steps/step-5-optional-message";
 import Step6ReviewAndConfirm from "./swap-steps/step-6-review-confirm";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import qs from "qs";
 import { Avatar } from '@/components/ui/avatar';
 
 export default function SwapRequestForm({ onClose }) {
+  const navigate = useNavigate(); 
   const [currentStep, setCurrentStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false)
   const { state } = useLocation();
   const [formData, setFormData] = useState({});
   const topReference = useRef(null);
@@ -82,6 +85,7 @@ export default function SwapRequestForm({ onClose }) {
   };
 
   const handleSubmit = async (stepData) => {
+    setIsLoading(true);
     const finalData = { ...formData, ...stepData };
 
     const date = finalData?.selectedDates?.[0]?.date;
@@ -92,7 +96,7 @@ export default function SwapRequestForm({ onClose }) {
         ? date + "T" + time + ":00"
         : null;
 
-    const requestPayload = {
+    const emailrequestPayload = {
       PartnerImageUrl: finalData?.partnerData?.user?.avatar ?? null,
       PartnerEmail: finalData?.partnerData?.user?.email ?? null,
       YourImageUrl: finalData?.userData?.profile?.profilePhotoUrl ?? null,
@@ -108,9 +112,30 @@ export default function SwapRequestForm({ onClose }) {
           ? " " + finalData.userData.lastName
           : "")
     };
+
+
+    const requestPayload = {
+      requesterId: data.profile?.id ?? null,
+      receiverId: finalData?.partnerData?.user?.id ?? null,
+      skillToOffer: finalData?.skillToOffer ?? null,
+      skillToLearn: finalData?.skillToLearn ?? null,
+      proposedTime: scheduleDateTime,
+      durationMinutes: Number(finalData?.duration) || null,
+      message: finalData?.message ?? null,
+    };
+
+    console.log("User Data :",data);
+    console.log("userData2:", userData);
+
+    
+    console.log("Final Data :",finalData);
+
+    console.log("Request Payload :",requestPayload);
+    
+
     try {
-      const response = await axios.post(
-        "http://localhost:5296/api/swap-request/send",
+      const reqResult = await axios.post(
+        "http://localhost:5296/api/swap-request/",
         requestPayload,
         {
           headers: {
@@ -118,13 +143,40 @@ export default function SwapRequestForm({ onClose }) {
           },
         },
       );
+
+      console.log("Swap request created:", reqResult.data);
+      
+      const response = await axios.post(
+        "http://localhost:5296/api/swap-request/send",
+        emailrequestPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      navigate("/my-swaps");
+
       console.log("Swap request result:", response.data);
     }
     catch (error) {
+        notification.error({
+          message: 'Somthing Went Wrong!',
+          description: 'Your swap request has not sent!',
+          placement: 'topRight',
+        });
       console.error("Error submitting swap request:", error);
     }
+    finally {
+      setIsLoading(false);
+      notification.success({
+        message: 'Request Sended Successfully',
+        placement: 'topRight',
+      });
+    }
     console.log("Final Swap Request Data:", requestPayload);
-    alert("Swap request submitted successfully!");
+    
   };
 
   const scrollToTop = () => {
@@ -186,6 +238,7 @@ export default function SwapRequestForm({ onClose }) {
             onBack={handleBack}
             userData={data}
             partnerData={userData}
+            isLoading={isLoading}
           />
         );
       default:
