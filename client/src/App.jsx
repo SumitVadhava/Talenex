@@ -21,6 +21,7 @@ import SwapRequestForm from "./components/SwapRequestForm";
 import { Video } from "lucide-react";
 import VideoCall from "./components/VideoCall";
 import Step1BasicInfo from "./components/Step1BasicInfo";
+import MySwapsPage from "./pages/MySwapsPage";
 // import VerifyEmailPage from "./components/VerifyEmailPage";
 
 function App() {
@@ -42,22 +43,25 @@ function App() {
   ];
 
   const [hideNavbar, setHideNavbar] = useState(hideNavbarRoutes.includes(location.pathname));
-  
+
   useEffect(() => {
-  setHideNavbar(hideNavbarRoutes.includes(location.pathname));
-}, [location.pathname]); 
+    setHideNavbar(hideNavbarRoutes.includes(location.pathname));
+  }, [location.pathname]);
 
   return (
+
     <div className="min-h-screen">
       {!hideNavbar && (
         <Navbar
           featureRef={featureRef}
           workflowRef={workflowRef}
           testimonialsRef={testimonialsRef}
-          
+
         />
       )}
+
       {/* <Navbar /> */}
+
       <Routes>
         {/* Sign up */}
         <Route path="/sign-up" element={<Signup />} />
@@ -65,7 +69,7 @@ function App() {
         <Route path="/sign-up/verify-email-address" element={<Signup />} />
         <Route path="/sign-up/continue" element={<Signup />} />
 
-      
+
         {/* Sign in */}
         <Route path="/sign-in" element={<Login />} />
         <Route path="/sign-in/sso-callback" element={<Login />} />
@@ -76,40 +80,42 @@ function App() {
         <Route path="/sign-in/factor-two" element={<Login />} />
 
         {/* User Account - Protected Routes */}
-        <Route 
-          path="/user-profile" 
+        <Route
+          path="/user-profile"
           element={
             <ProtectedRoute>
               <ProfilePage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/user-details" 
+
+        <Route
+          path="/user-details"
           element={
             <ProtectedRoute>
               <UserProfilePage />
             </ProtectedRoute>
-          } 
+          }
         />
 
         {/* Sign out */}
         <Route path="/sign-out" element={<SignOutButton />} />
 
-        <Route 
-          path="/swap-request" 
+        <Route
+          path="/swap-request"
           element={
             <ProtectedRoute requireOnboarding={true}>
               <SwapRequestForm />
             </ProtectedRoute>
-          } 
+          }
         />
 
         <Route path="/onboarding" element={
-            <ProtectedRoute>
-              <OnBoarding />
-            </ProtectedRoute>} 
+          <ProtectedRoute>
+            <OnBoarding />
+          </ProtectedRoute>}
         />
+
         <Route
           path="/"
           element={
@@ -121,22 +127,31 @@ function App() {
           }
         />
 
-        <Route 
-          path="/home" 
+        <Route
+          path="/home"
           element={
             <ProtectedRoute requireOnboarding={true}>
               <Homepage />
             </ProtectedRoute>
-          } 
+          }
         />
 
-          <Route 
-          path="/join/:roomId" 
+        <Route
+          path="/my-swaps"
           element={
             <ProtectedRoute requireOnboarding={true}>
-              <VideoCall  setHideNavbar={setHideNavbar}/>
+              <MySwapsPage />
             </ProtectedRoute>
-          } 
+          }
+        />
+
+        <Route
+          path="/join/:roomId"
+          element={
+            <ProtectedRoute requireOnboarding={true}>
+              <VideoCall setHideNavbar={setHideNavbar} />
+            </ProtectedRoute>
+          }
         />
       </Routes>
 

@@ -48,7 +48,7 @@ export default function Navbar({ featureRef, workflowRef, testimonialsRef }) {
     ],
     user: [
       { label: "Explore", href: "/home" },
-      { label: "My Swaps", href: "/swaps" },
+      { label: "My Swaps", href: "/my-swaps" },
       { label: "Messages", href: "/messages" },
       { label: "Connect", href: "/join/room_1" }
 
