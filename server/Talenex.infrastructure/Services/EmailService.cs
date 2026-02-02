@@ -197,10 +197,16 @@ namespace Infrastructure.Services
             using var smtp = new SmtpClient();
             try
             {
+                var port = int.Parse(_configuration["Email:SmtpPort"]);
+                // Port 465 uses implicit SSL, Port 587 uses STARTTLS
+                var socketOptions = port == 465 
+                    ? SecureSocketOptions.SslOnConnect 
+                    : SecureSocketOptions.StartTls;
+
                 await smtp.ConnectAsync(
                     _configuration["Email:SmtpHost"],
-                    int.Parse(_configuration["Email:SmtpPort"]),
-                    SecureSocketOptions.StartTls
+                    port,
+                    socketOptions
                 );
 
                 await smtp.AuthenticateAsync(_configuration["Email:Username"], _configuration["Email:Password"]);
