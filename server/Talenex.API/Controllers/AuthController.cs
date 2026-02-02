@@ -94,7 +94,7 @@ namespace Talenex.API.Controllers
 
             Console.WriteLine($"Generated JWT Token: {token}");
 
-            return Ok(new { token, Message = "User registered/logged in successfully" });
+            return Ok(new { token, userId = user.Id, Message = "User registered/logged in successfully" });
         }
 
 

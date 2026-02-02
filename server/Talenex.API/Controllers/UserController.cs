@@ -58,7 +58,8 @@ namespace Talenex.API.Controllers
                     ? parsed
                     : (UserInclude?)null)
                 .Where(i => i.HasValue)
-                .Select(i => i.Value)
+                //.Select(i => i.Value)
+                .Select(i => i!.Value)
                 .ToList();
 
             var users = await _userService.GetAllUserAsync(includes);
@@ -89,7 +90,7 @@ namespace Talenex.API.Controllers
                                 FullName = user.UserProfile.FullName,
                                 Username = user.UserProfile.Username,
                                 Bio = user.UserProfile.Bio,
-                                ProfilePhotoUrl = user.UserProfile.ProfilePhotoUrl,
+                                ProfilePhotoUrl = user.UserProfile.ProfilePhotoUrl ?? string.Empty,
                                 Location = user.UserProfile.Location,
                                 Latitude = user.UserProfile.Latitude,
                                 Longitude = user.UserProfile.Longitude,
@@ -167,7 +168,8 @@ namespace Talenex.API.Controllers
                     ? parsed
                     : (UserInclude?)null)
                 .Where(i => i.HasValue)
-                .Select(i => i.Value)
+                //.Select(i => i.Value)
+                .Select(i => i!.Value)
                 .ToList();
 
             var userIdClaim = User.FindFirst("sub") ?? User.FindFirst(ClaimTypes.NameIdentifier);
@@ -205,7 +207,7 @@ namespace Talenex.API.Controllers
                             FullName = user.UserProfile.FullName,
                             Username = user.UserProfile.Username,
                             Bio = user.UserProfile.Bio,
-                            ProfilePhotoUrl = user.UserProfile.ProfilePhotoUrl,
+                            ProfilePhotoUrl = user.UserProfile.ProfilePhotoUrl ?? string.Empty,
                             Location = user.UserProfile.Location,
                             Latitude = user.UserProfile.Latitude,
                             Longitude = user.UserProfile.Longitude,
@@ -281,7 +283,8 @@ namespace Talenex.API.Controllers
                     ? parsed
                     : (UserInclude?)null)
                 .Where(i => i.HasValue)
-                .Select(i => i.Value)
+                //.Select(i => i.Value)
+                .Select(i => i!.Value)
                 .ToList();
 
 
@@ -311,7 +314,7 @@ namespace Talenex.API.Controllers
                             FullName = user.UserProfile.FullName,
                             Username = user.UserProfile.Username,
                             Bio = user.UserProfile.Bio,
-                            ProfilePhotoUrl = user.UserProfile.ProfilePhotoUrl,
+                            ProfilePhotoUrl = user.UserProfile.ProfilePhotoUrl ?? string.Empty,
                             Location = user.UserProfile.Location,
                             Latitude = user.UserProfile.Latitude,
                             Longitude = user.UserProfile.Longitude,
