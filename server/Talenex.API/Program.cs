@@ -155,9 +155,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("FrontendPolicy", policy =>
     {
         policy
-            .AllowAnyOrigin()
+            .WithOrigins("https://talenex.vercel.app", "http://localhost:5173", "http://localhost:3000")
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .AllowCredentials(); // Required for SignalR
     });
 });
 

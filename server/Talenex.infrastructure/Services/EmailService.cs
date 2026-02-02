@@ -186,36 +186,65 @@ namespace Infrastructure.Services
             if (string.IsNullOrWhiteSpace(dto.PartnerEmail))
                 throw new Exception("Partner email is required");
 
+            // CLEAN CREDENTIALS: Remove any accidental quotes or spaces added in Render UI
+            var username = _configuration["Email:Username"]?.Trim(' ', '"');
+            var password = _configuration["Email:Password"]?.Trim(' ', '"');
+            var host = _configuration["Email:SmtpHost"];
+            var fromEmail = _configuration["Email:From"] ?? username;
+
+            Console.WriteLine($"[EmailService] Preparing to send email to {dto.PartnerEmail} from {fromEmail}");
+
             var email = new MimeMessage();
-            email.From.Add(new MailboxAddress("Talenex", _configuration["Email:From"]));
+            email.From.Add(new MailboxAddress("Talenex", fromEmail));
             email.To.Add(MailboxAddress.Parse(dto.PartnerEmail.Trim()));
             email.Subject = "New Skill Swap Request";
 
             var bodyBuilder = new BodyBuilder { HtmlBody = BuildEmailBody(dto) };
             email.Body = bodyBuilder.ToMessageBody();
 
-            using var smtp = new SmtpClient();
-            try
-            {
-                var port = int.Parse(_configuration["Email:SmtpPort"]);
-                // Port 465 uses implicit SSL, Port 587 uses STARTTLS
-                var socketOptions = port == 465 
-                    ? SecureSocketOptions.SslOnConnect 
-                    : SecureSocketOptions.StartTls;
+            // AUTO-FALLBACK: Try Port 587 (TLS) first, then Port 465 (SSL)
+            var portsToTry = new[] { 587, 465 };
+            var exceptions = new List<Exception>();
 
-                await smtp.ConnectAsync(
-                    _configuration["Email:SmtpHost"],
-                    port,
-                    socketOptions
-                );
-
-                await smtp.AuthenticateAsync(_configuration["Email:Username"], _configuration["Email:Password"]);
-                await smtp.SendAsync(email);
-            }
-            finally
+            foreach (var port in portsToTry)
             {
-                await smtp.DisconnectAsync(true);
+                using var smtp = new SmtpClient();
+                try
+                {
+                    Console.WriteLine($"[EmailService] Attempting connection on {host}:{port}...");
+                    
+                    // Bypass certificate issues in some container environments
+                    smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+
+                    // Port 465 uses SslOnConnect, Port 587 uses StartTls
+                    var socketOptions = port == 465 
+                        ? SecureSocketOptions.SslOnConnect 
+                        : SecureSocketOptions.StartTls;
+
+                    // Set a 10s timeout to fail fast if port is blocked
+                    await smtp.ConnectAsync(host, port, socketOptions).WaitAsync(TimeSpan.FromSeconds(10));
+                    
+                    Console.WriteLine($"[EmailService] Connected. Authenticating as {username}...");
+                    await smtp.AuthenticateAsync(username, password);
+                    
+                    Console.WriteLine($"[EmailService] Authenticated. Sending email...");
+                    await smtp.SendAsync(email);
+                    
+                    await smtp.DisconnectAsync(true);
+                    
+                    Console.WriteLine($"[EmailService] Email sent successfully via Port {port}!");
+                    return; // ✅ Success!
+                }
+                catch (Exception ex)
+                {
+                    var msg = $"[EmailService] Failed on Port {port}: {ex.Message}";
+                    Console.WriteLine(msg);
+                    exceptions.Add(new Exception(msg));
+                }
             }
+
+            // ❌ If we got here, both failed
+            throw new AggregateException("All email delivery attempts failed. Check Render logs for the full error trace.", exceptions);
         }
 
         // ==============================
