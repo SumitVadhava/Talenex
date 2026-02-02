@@ -135,33 +135,33 @@ public class UserSwapRequestController : ControllerBase
         {
             await _hubContext.Clients.Group(receiverProfile.UserId.ToString()).SendAsync("ReceiveSwapUpdate");
 
-            // SAFE EMAIL SENDING
-            try
-            {
-                var requesterProfile = await _db.UserProfiles.Include(u => u.User).FirstOrDefaultAsync(u => u.Id == dto.RequesterId);
-                if (requesterProfile != null)
-                {
-                    var emailDto = new SwapRequestEmailDto
-                    {
-                        PartnerEmail = receiverProfile.User.Email,
-                        PartnerImageUrl = receiverProfile.ProfilePhotoUrl,
-                        YourName = requesterProfile.FullName,
-                        YourImageUrl = requesterProfile.ProfilePhotoUrl,
-                        YourSkill = dto.SkillToOffer,
-                        PartnerSkill = dto.SkillToLearn,
-                        ScheduleDateTime = dto.ProposedTime,
-                        DurationMinutes = dto.DurationMinutes,
-                        PersonalMessage = dto.Message,
-                        Format = "Video Call"
-                    };
+            // // SAFE EMAIL SENDING
+            // try
+            // {
+            //     var requesterProfile = await _db.UserProfiles.Include(u => u.User).FirstOrDefaultAsync(u => u.Id == dto.RequesterId);
+            //     if (requesterProfile != null)
+            //     {
+            //         var emailDto = new SwapRequestEmailDto
+            //         {
+            //             PartnerEmail = receiverProfile.User.Email,
+            //             PartnerImageUrl = receiverProfile.ProfilePhotoUrl,
+            //             YourName = requesterProfile.FullName,
+            //             YourImageUrl = requesterProfile.ProfilePhotoUrl,
+            //             YourSkill = dto.SkillToOffer,
+            //             PartnerSkill = dto.SkillToLearn,
+            //             ScheduleDateTime = dto.ProposedTime,
+            //             DurationMinutes = dto.DurationMinutes,
+            //             PersonalMessage = dto.Message,
+            //             Format = "Video Call"
+            //         };
 
-                    await _emailService.SendSwapRequestEmailAsync(emailDto);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[SwapRequestController] Email failed but request succeeded: {ex.Message}");
-            }
+            //         await _emailService.SendSwapRequestEmailAsync(emailDto);
+            //     }
+            // }
+            // catch (Exception ex)
+            // {
+            //     Console.WriteLine($"[SwapRequestController] Email failed but request succeeded: {ex.Message}");
+            // }
         }
 
         return Ok(created);
