@@ -1,14 +1,14 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5296/api", // change to your API URL
+  baseURL: import.meta.env.VITE_API_URL || "https://talenex-server.onrender.com/api",
 });
 
 // REQUEST INTERCEPTOR
 api.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem("token");
-    if (token) {
+    const token = localStorage.getItem("token");
+    if (token && !config.headers.Authorization) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;

@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import axios from "axios";
+import api from "../api/axios";
 import qs from "qs";
 import Loader from "@/components/Loader";
 
@@ -390,8 +390,8 @@ const Homepage = () => {
 
         console.log("Fetched token:", token);
 
-        var response = await axios.post(
-          "http://localhost:5296/api/auth/",
+        var response = await api.post(
+          "/auth/",
           {}, // body
           {
             headers: {
@@ -421,10 +421,7 @@ const Homepage = () => {
       try {
         setIsLoading(true);
 
-        const response = await axios.get("http://localhost:5296/api/User/All", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+        const response = await api.get("/User/All", {
           params: {
             include: ["Profile", "Skills", "Reputation"],
           },

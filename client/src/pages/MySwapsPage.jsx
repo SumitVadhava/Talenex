@@ -411,7 +411,7 @@ const App = () => {
             if (!userId) return;
 
             const connection = new HubConnectionBuilder()
-                .withUrl("http://localhost:5296/swaphub", {
+                .withUrl(import.meta.env.VITE_HUB_URL || "https://talenex-server.onrender.com/swaphub", {
                     accessTokenFactory: () => localStorage.getItem('token')
                 })
                 .withAutomaticReconnect()

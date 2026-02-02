@@ -64,7 +64,7 @@
 //             </>
 //           )}
 //         </div>
-        
+
 //         <div className="flex flex-wrap gap-4 text-sm text-muted-foreground items-center">
 //           <div className="flex items-center gap-1.5 w-full sm:w-auto">
 //             <MapPin size={16} className="shrink-0" />
@@ -81,15 +81,15 @@
 //           </div>
 //           {!isEditing && (
 //            <>
-            //   <div className="flex items-center gap-1.5 hover:text-primary transition-colors cursor-pointer">
-            //     <Mail size={16} />
-            //     <span>Contact</span>
-            //   </div>
-            //   <div className="flex items-center gap-1.5 hover:text-primary transition-colors cursor-pointer">
-            //     <LinkIcon size={16} />
-            //     <span>Portfolio</span>
-            //   </div>
-            // </> 
+//   <div className="flex items-center gap-1.5 hover:text-primary transition-colors cursor-pointer">
+//     <Mail size={16} />
+//     <span>Contact</span>
+//   </div>
+//   <div className="flex items-center gap-1.5 hover:text-primary transition-colors cursor-pointer">
+//     <LinkIcon size={16} />
+//     <span>Portfolio</span>
+//   </div>
+// </> 
 //           )}
 //         </div>
 //       </div>
@@ -120,7 +120,7 @@
 //             </button>
 //           )
 //         )}
-        
+
 //         {!isEditing && (
 //           <button 
 //             onClick={handleShare}
@@ -174,11 +174,11 @@ export const Header = ({
     formData.append("file", file);
     formData.append("upload_preset", "Certificates");
 
-   const res = await axios.post(
+    const res = await axios.post(
       "https://api.cloudinary.com/v1_1/dpwes05hc/image/upload",
       formData,
     );
-    
+
 
     return res.data;
   };
@@ -203,14 +203,9 @@ export const Header = ({
       onUserChange?.("avatarUrl", imageUrl);
 
       // 3️⃣ Update backend DB
-      // await axios.put(
-      //   "http://localhost:5296/api/user/avatar",
-      //   { avatarUrl: imageUrl },
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-      //     },
-      //   }
+      // await api.put(
+      //   "/user/avatar",
+      //   { avatarUrl: imageUrl }
       // );
     } catch (error) {
       console.error("Avatar upload failed:", error);
@@ -229,9 +224,8 @@ export const Header = ({
     >
       {/* Avatar */}
       <div
-        className={`relative group ${
-          isEditing ? "cursor-pointer" : "cursor-default"
-        }`}
+        className={`relative group ${isEditing ? "cursor-pointer" : "cursor-default"
+          }`}
         onClick={() => {
           if (isEditing) {
             fileInputRef.current.click();
@@ -242,9 +236,8 @@ export const Header = ({
           <img
             src={user.avatarUrl}
             alt={user.name}
-            className={`h-full w-full object-cover transition-transform duration-500 ${
-              isEditing ? "group-hover:scale-110" : ""
-            }`}
+            className={`h-full w-full object-cover transition-transform duration-500 ${isEditing ? "group-hover:scale-110" : ""
+              }`}
           />
         </div>
 

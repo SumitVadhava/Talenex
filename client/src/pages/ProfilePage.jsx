@@ -21,7 +21,7 @@ import { PrivacyTab } from "../components/PrivacyTab";
 import { SettingsTab } from "../components/SettingsTab";
 import { Textarea } from "../components/ui/Primitives";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
+import api from "../api/axios";
 import qs from "qs";
 import { useUser } from "@clerk/clerk-react";
 
@@ -53,12 +53,9 @@ const ProfilePage = () => {
   const fetchData = async () => {
     // Simulate network delay
     try {
-      const response = await axios.get(
-        "http://localhost:5296/api/User/Details",
+      const response = await api.get(
+        "/User/Details",
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
           params: {
             include: [
               "Profile",
@@ -204,14 +201,9 @@ const ProfilePage = () => {
 
     console.log(payload);
     try {
-      await axios.put(
-        `http://localhost:5296/api/${mappingSection[section]}/${id}`,
+      await api.put(
+        `/${mappingSection[section]}/${id}`,
         payload,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
       );
     } catch (error) {
       console.error(`Error updating ${section}:`, error);
@@ -285,8 +277,8 @@ const ProfilePage = () => {
       console.log(`No ID found for section: skills`);
       return;
     }
-    await axios.put(
-      `http://localhost:5296/api/UserSkills/${id}`,
+    await api.put(
+      `/UserSkills/${id}`,
       {
         skillsOffered: editedUser.skillsOffered.map((s) => ({
           title: s.name,
@@ -297,11 +289,6 @@ const ProfilePage = () => {
           name: s.name,
           level: s.level,
         })),
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
       },
     );
   };
@@ -325,21 +312,16 @@ const ProfilePage = () => {
       return;
     }
 
-    await axios.put(
-      `http://localhost:5296/api/UserProfile/${id}`,
+    await api.put(
+      `/UserProfile/${id}`,
       payload,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      },
     );
     const existingMetadata = clerkUser.unsafeMetadata || {};
 
     await clerkUser.update({
       unsafeMetadata: {
         ...existingMetadata,// ✅ keeps ALL existing keys
-        fullName: editedUser.name, 
+        fullName: editedUser.name,
         profile: {
           ...(existingMetadata.profile || {}), // ✅ keeps profile.bio, username, etc.
           avatarUrl: editedUser.avatarUrl       // ✅ only updates avatar

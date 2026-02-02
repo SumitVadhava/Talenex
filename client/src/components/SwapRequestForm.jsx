@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card } from "@/components/ui/card";
 import { Check, X } from "lucide-react";
-import {notification } from 'antd';
+import { notification } from 'antd';
 
 import Step1SelectSkillToOffer from "./swap-steps/step-1-select-skill-offer";
 import Step2SelectSkillToLearn from "./swap-steps/step-2-select-skill-learn";
@@ -12,12 +12,12 @@ import Step4ChooseDuration from "./swap-steps/step-4-choose-duration";
 import Step5OptionalMessage from "./swap-steps/step-5-optional-message";
 import Step6ReviewAndConfirm from "./swap-steps/step-6-review-confirm";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "@/api/axios";
 import qs from "qs";
 import { Avatar } from '@/components/ui/avatar';
 
 export default function SwapRequestForm({ onClose }) {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false)
   const { state } = useLocation();
@@ -35,12 +35,9 @@ export default function SwapRequestForm({ onClose }) {
 
   const getSkills = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:5296/api/User/Details",
+      const response = await api.get(
+        "/User/Details",
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
           params: {
             include: ["Skills", "Profile"],
           },
@@ -124,36 +121,26 @@ export default function SwapRequestForm({ onClose }) {
       message: finalData?.message ?? null,
     };
 
-    console.log("User Data :",data);
+    console.log("User Data :", data);
     console.log("userData2:", userData);
 
-    
-    console.log("Final Data :",finalData);
 
-    console.log("Request Payload :",requestPayload);
-    
+    console.log("Final Data :", finalData);
+
+    console.log("Request Payload :", requestPayload);
+
 
     try {
-      const reqResult = await axios.post(
-        "http://localhost:5296/api/swap-request/",
+      const reqResult = await api.post(
+        "/swap-request/",
         requestPayload,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
       );
 
       console.log("Swap request created:", reqResult.data);
-      
-      const response = await axios.post(
-        "http://localhost:5296/api/swap-request/send",
+
+      const response = await api.post(
+        "/swap-request/send",
         emailrequestPayload,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
       );
 
       navigate("/my-swaps");
@@ -161,11 +148,11 @@ export default function SwapRequestForm({ onClose }) {
       console.log("Swap request result:", response.data);
     }
     catch (error) {
-        notification.error({
-          message: 'Somthing Went Wrong!',
-          description: 'Your swap request has not sent!',
-          placement: 'topRight',
-        });
+      notification.error({
+        message: 'Somthing Went Wrong!',
+        description: 'Your swap request has not sent!',
+        placement: 'topRight',
+      });
       console.error("Error submitting swap request:", error);
     }
     finally {
@@ -176,7 +163,7 @@ export default function SwapRequestForm({ onClose }) {
       });
     }
     console.log("Final Swap Request Data:", requestPayload);
-    
+
   };
 
   const scrollToTop = () => {

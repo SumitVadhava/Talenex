@@ -24,8 +24,8 @@ const GoogleOneTapLogin = () => {
       //   picture: userToSave.picture,
       // });
 
-      // axios  
-      //     .post("http://localhost:7100/api/Google_login", userToSave)
+      // api  
+      //     .post("/Google_login", userToSave)
       //     .then((response) => {
       //         login(response.data.user, response.data.token);
       //     })

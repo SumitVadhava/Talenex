@@ -140,8 +140,8 @@ export default function OnBoarding() {
 
         console.log("Fetched token:", token);
 
-        var response = await axios.post(
-          "http://localhost:5296/api/auth/",
+        var response = await api.post(
+          "/auth/",
           {}, // body
           {
             headers: {
@@ -152,7 +152,7 @@ export default function OnBoarding() {
 
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("userId", response.data.userId);
-        
+
       } catch (error) {
         console.error("Error sending token:", error);
       }
@@ -298,12 +298,11 @@ export default function OnBoarding() {
         console.log("onboarding payload", onboardingPayload);
 
         try {
-          await axios.post(
-            "http://localhost:5296/api/onboarding",
+          await api.post(
+            "/onboarding",
             onboardingPayload,
             {
               headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
                 "Content-Type": "application/json",
               },
             },
@@ -317,7 +316,7 @@ export default function OnBoarding() {
           const existingMetadata = user.unsafeMetadata || {};
 
           console.log(existingMetadata);
-          
+
 
         } catch (error) {
           console.error("Error creating user profile:", error);
