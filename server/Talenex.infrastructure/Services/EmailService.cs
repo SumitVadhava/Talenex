@@ -347,7 +347,7 @@ namespace Infrastructure.Services
             <!-- CTA -->
             <tr>
             <td align=""center"" style=""padding-top:28px;"">
-            <a href=""https://talenex.com/u/swap-request""
+            <a href=""https://talenex.vercel.app/my-swaps""
             style=""display:inline-block;background:#2563eb;color:#ffffff;
             padding:14px 26px;border-radius:8px;text-decoration:none;
             font-weight:600;font-size:15px;"">

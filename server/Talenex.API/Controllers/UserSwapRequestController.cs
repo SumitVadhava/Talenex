@@ -251,9 +251,9 @@ public class UserSwapRequestController : ControllerBase
         await _service.UpdateAsync(swapRequest);
 
         // Notify both parties
-            var requesterProfile = await _db.UserProfiles.FindAsync(swapRequest.RequesterId);
+        var requesterProfile = await _db.UserProfiles.FindAsync(swapRequest.RequesterId);
         var receiverProfile = await _db.UserProfiles.FindAsync(swapRequest.ReceiverId);
-        
+
         if (requesterProfile != null)
             await _hubContext.Clients.Group(requesterProfile.UserId.ToString()).SendAsync("ReceiveSwapUpdate");
 
