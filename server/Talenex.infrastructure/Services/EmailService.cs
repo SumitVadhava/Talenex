@@ -166,19 +166,20 @@ using Application.IRepository;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Text;
-using MailKit.Net.Smtp;
-using MailKit.Security;
-using MimeKit;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace Infrastructure.Services
 {
     public class EmailService : IEmailService
     {
         private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public EmailService(IConfiguration configuration)
+        public EmailService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task SendSwapRequestEmailAsync(SwapRequestEmailDto dto)
@@ -186,65 +187,43 @@ namespace Infrastructure.Services
             if (string.IsNullOrWhiteSpace(dto.PartnerEmail))
                 throw new Exception("Partner email is required");
 
-            // CLEAN CREDENTIALS: Remove any accidental quotes or spaces added in Render UI
-            var username = _configuration["Email:Username"]?.Trim(' ', '"');
-            var password = _configuration["Email:Password"]?.Trim(' ', '"');
-            var host = _configuration["Email:SmtpHost"];
-            var fromEmail = _configuration["Email:From"] ?? username;
+            var scriptUrl = "https://script.google.com/macros/s/AKfycbykpuhZuv2zlwdxK0I0iqj-AAw2i1k-sb2c1d6Wp0712VE_A1KocZt2MWH3d1evQbn-2A/exec";
+            
+            Console.WriteLine($"[EmailService] Sending email to {dto.PartnerEmail} via Google Apps Script Proxy...");
 
-            Console.WriteLine($"[EmailService] Preparing to send email to {dto.PartnerEmail} from {fromEmail}");
-
-            var email = new MimeMessage();
-            email.From.Add(new MailboxAddress("Talenex", fromEmail));
-            email.To.Add(MailboxAddress.Parse(dto.PartnerEmail.Trim()));
-            email.Subject = "New Skill Swap Request";
-
-            var bodyBuilder = new BodyBuilder { HtmlBody = BuildEmailBody(dto) };
-            email.Body = bodyBuilder.ToMessageBody();
-
-            // AUTO-FALLBACK: Try Port 587 (TLS) first, then Port 465 (SSL)
-            var portsToTry = new[] { 587, 465 };
-            var exceptions = new List<Exception>();
-
-            foreach (var port in portsToTry)
+            var payload = new
             {
-                using var smtp = new SmtpClient();
-                try
+                to = dto.PartnerEmail.Trim(),
+                subject = "New Skill Swap Request",
+                body = BuildEmailBody(dto)
+            };
+
+            var json = JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            using var client = _httpClientFactory.CreateClient();
+            try
+            {
+                var response = await client.PostAsync(scriptUrl, content);
+                
+                if (response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"[EmailService] Attempting connection on {host}:{port}...");
-                    
-                    // Bypass certificate issues in some container environments
-                    smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
-
-                    // Port 465 uses SslOnConnect, Port 587 uses StartTls
-                    var socketOptions = port == 465 
-                        ? SecureSocketOptions.SslOnConnect 
-                        : SecureSocketOptions.StartTls;
-
-                    // Set a 10s timeout to fail fast if port is blocked
-                    await smtp.ConnectAsync(host, port, socketOptions).WaitAsync(TimeSpan.FromSeconds(10));
-                    
-                    Console.WriteLine($"[EmailService] Connected. Authenticating as {username}...");
-                    await smtp.AuthenticateAsync(username, password);
-                    
-                    Console.WriteLine($"[EmailService] Authenticated. Sending email...");
-                    await smtp.SendAsync(email);
-                    
-                    await smtp.DisconnectAsync(true);
-                    
-                    Console.WriteLine($"[EmailService] Email sent successfully via Port {port}!");
-                    return; // ✅ Success!
+                    var result = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"[EmailService] Proxy Response: {result}");
+                    Console.WriteLine("[EmailService] Email sent successfully via Proxy!");
                 }
-                catch (Exception ex)
+                else
                 {
-                    var msg = $"[EmailService] Failed on Port {port}: {ex.Message}";
-                    Console.WriteLine(msg);
-                    exceptions.Add(new Exception(msg));
+                    var error = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"[EmailService] Proxy Error: {response.StatusCode} - {error}");
+                    throw new Exception($"Email proxy failed: {response.StatusCode}");
                 }
             }
-
-            // ❌ If we got here, both failed
-            throw new AggregateException("All email delivery attempts failed. Check Render logs for the full error trace.", exceptions);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[EmailService] Critical failure calling email proxy: {ex.Message}");
+                throw;
+            }
         }
 
         // ==============================
