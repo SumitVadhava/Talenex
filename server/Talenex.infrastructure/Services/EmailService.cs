@@ -167,6 +167,7 @@ using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Text;
 using System.Net.Http;
+using Microsoft.Extensions.Http;
 using System.Text.Json;
 
 namespace Infrastructure.Services
