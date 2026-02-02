@@ -165,8 +165,10 @@ using Application.DTOs;
 using Application.IRepository;
 using Microsoft.Extensions.Configuration;
 using System.Net;
-using System.Net.Mail;
 using System.Text;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
 
 namespace Infrastructure.Services
 {
@@ -184,28 +186,30 @@ namespace Infrastructure.Services
             if (string.IsNullOrWhiteSpace(dto.PartnerEmail))
                 throw new Exception("Partner email is required");
 
-            var smtpClient = new SmtpClient
+            var email = new MimeMessage();
+            email.From.Add(new MailboxAddress("Talenex", _configuration["Email:From"]));
+            email.To.Add(MailboxAddress.Parse(dto.PartnerEmail.Trim()));
+            email.Subject = "New Skill Swap Request";
+
+            var bodyBuilder = new BodyBuilder { HtmlBody = BuildEmailBody(dto) };
+            email.Body = bodyBuilder.ToMessageBody();
+
+            using var smtp = new SmtpClient();
+            try
             {
-                Host = _configuration["Email:SmtpHost"],
-                Port = int.Parse(_configuration["Email:SmtpPort"]),
-                EnableSsl = true,
-                Credentials = new NetworkCredential(
-                    _configuration["Email:Username"],
-                    _configuration["Email:Password"]
-                )
-            };
+                await smtp.ConnectAsync(
+                    _configuration["Email:SmtpHost"],
+                    int.Parse(_configuration["Email:SmtpPort"]),
+                    SecureSocketOptions.StartTls
+                );
 
-            var mail = new MailMessage
+                await smtp.AuthenticateAsync(_configuration["Email:Username"], _configuration["Email:Password"]);
+                await smtp.SendAsync(email);
+            }
+            finally
             {
-                From = new MailAddress(_configuration["Email:From"], "Talenex"),
-                Subject = "New Skill Swap Request",
-                Body = BuildEmailBody(dto),
-                IsBodyHtml = true
-            };
-
-            mail.To.Add(dto.PartnerEmail.Trim());
-
-            await smtpClient.SendMailAsync(mail);
+                await smtp.DisconnectAsync(true);
+            }
         }
 
         // ==============================
