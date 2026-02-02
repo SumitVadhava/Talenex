@@ -154,15 +154,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("FrontendPolicy", policy =>
     {
         policy
-            .WithOrigins(
-                "http://localhost:5173",
-                "http://localhost:3000",
-                "http://localhost:5174",
-                "http://localhost:3001"
-            )
+            .AllowAnyOrigin()
             .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials();
+            .AllowAnyHeader();
     });
 });
 
@@ -209,11 +203,13 @@ var app = builder.Build();
 // ==========================
 // HTTP Pipeline
 // ==========================
-if (app.Environment.IsDevelopment())
+// Enable Swagger for ALL environments to make it easier to test on Render
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Talenex API V1");
+    c.RoutePrefix = "swagger"; // Swagger UI will be at /swagger
+});
 
 app.UseHttpsRedirection();
 
@@ -224,6 +220,8 @@ app.UseCors("FrontendPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapGet("/", () => Results.Ok(new { Message = "Talenex API is Running", Status = "Healthy", Version = "1.0" }));
 
 app.MapControllers();
 app.MapHub<SwapHub>("/swaphub");
