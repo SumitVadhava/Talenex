@@ -131,36 +131,31 @@ export default function SwapRequestForm({ onClose }) {
 
 
     try {
-      const reqResult = await api.post(
+      const response = await api.post(
         "/swap-request/",
         requestPayload,
       );
 
-      console.log("Swap request created:", reqResult.data);
+      console.log("Swap request created:", response.data);
 
-      const response = await api.post(
-        "/swap-request/send",
-        emailrequestPayload,
-      );
+      notification.success({
+        message: 'Request Sent Successfully',
+        description: 'Your swap request has been submitted.',
+        placement: 'topRight',
+      });
 
       navigate("/my-swaps");
-
-      console.log("Swap request result:", response.data);
     }
     catch (error) {
       notification.error({
-        message: 'Somthing Went Wrong!',
-        description: 'Your swap request has not sent!',
+        message: 'Something Went Wrong!',
+        description: 'Failed to submit your swap request. Please try again.',
         placement: 'topRight',
       });
       console.error("Error submitting swap request:", error);
     }
     finally {
       setIsLoading(false);
-      notification.success({
-        message: 'Request Sended Successfully',
-        placement: 'topRight',
-      });
     }
     console.log("Final Swap Request Data:", requestPayload);
 
