@@ -22,6 +22,7 @@ import { Video } from "lucide-react";
 import VideoCall from "./components/VideoCall";
 import Step1BasicInfo from "./components/Step1BasicInfo";
 import MySwapsPage from "./pages/MySwapsPage";
+import ChatComingSoon from "./pages/ChatComingSoon";
 // import VerifyEmailPage from "./components/VerifyEmailPage";
 
 function App() {
@@ -106,6 +107,15 @@ function App() {
           element={
             <ProtectedRoute requireOnboarding={true}>
               <SwapRequestForm />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/messages"
+          element={
+            <ProtectedRoute requireOnboarding={true}>
+              <ChatComingSoon />
             </ProtectedRoute>
           }
         />
