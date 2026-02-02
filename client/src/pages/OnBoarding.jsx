@@ -151,6 +151,8 @@ export default function OnBoarding() {
         );
 
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data.userId);
+        
       } catch (error) {
         console.error("Error sending token:", error);
       }

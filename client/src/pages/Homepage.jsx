@@ -401,6 +401,8 @@ const Homepage = () => {
         );
 
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data.userId);
+
 
         await getSkills();
       } catch (error) {
