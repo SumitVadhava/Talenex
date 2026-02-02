@@ -132,11 +132,17 @@ export default function SwapRequestForm({ onClose }) {
 
     try {
       const response = await api.post(
-        "/swap-request/",
+        "/swap-request",
         requestPayload,
       );
 
+      const emailResponse = await api.post(
+        "/swap-request/send",
+        emailrequestPayload,
+      );
+
       console.log("Swap request created:", response.data);
+      console.log("Email request sent:", emailResponse.data);
 
       notification.success({
         message: 'Request Sent Successfully',
@@ -159,7 +165,7 @@ export default function SwapRequestForm({ onClose }) {
     }
     console.log("Final Swap Request Data:", requestPayload);
 
-  };
+  }
 
   const scrollToTop = () => {
     topReference.current?.scrollIntoView({
