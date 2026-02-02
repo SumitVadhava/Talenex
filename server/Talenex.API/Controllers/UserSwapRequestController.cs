@@ -105,67 +105,101 @@ public class UserSwapRequestController : ControllerBase
 
 
     [HttpPost]
+    // public async Task<IActionResult> CreateSwapRequest(CreateSwapRequestDto dto)
+    // {
+    //      var validationResult = await _createValidator.ValidateAsync(dto);
+    //        if (!validationResult.IsValid)
+    //        {
+    //            return BadRequest(validationResult.Errors);
+    //        }
+
+    //        var swapRequest = new UserSwapRequest
+    //        {
+    //            RequesterId = dto.RequesterId,
+    //            ReceiverId = dto.ReceiverId,
+    //            SkillToOffer = dto.SkillToOffer,
+    //            SkillToLearn = dto.SkillToLearn,
+    //            ProposedTime = dto.ProposedTime,
+    //            DurationMinutes = dto.DurationMinutes,
+    //            Message = dto.Message,
+    //            Status = "Pending",
+    //            CreatedAt = DateTime.UtcNow,
+
+    //        };
+
+    //        var created = await _service.CreateAsync(swapRequest);
+
+    //     // Notify Receiver via SignalR
+    //     var receiverProfile = await _db.UserProfiles.Include(u => u.User).FirstOrDefaultAsync(u => u.Id == dto.ReceiverId);
+    //     if (receiverProfile != null)
+    //     {
+    //         await _hubContext.Clients.Group(receiverProfile.UserId.ToString()).SendAsync("ReceiveSwapUpdate");
+
+    //         // // SAFE EMAIL SENDING
+    //         // try
+    //         // {
+    //         //     var requesterProfile = await _db.UserProfiles.Include(u => u.User).FirstOrDefaultAsync(u => u.Id == dto.RequesterId);
+    //         //     if (requesterProfile != null)
+    //         //     {
+    //         //         var emailDto = new SwapRequestEmailDto
+    //         //         {
+    //         //             PartnerEmail = receiverProfile.User.Email,
+    //         //             PartnerImageUrl = receiverProfile.ProfilePhotoUrl,
+    //         //             YourName = requesterProfile.FullName,
+    //         //             YourImageUrl = requesterProfile.ProfilePhotoUrl,
+    //         //             YourSkill = dto.SkillToOffer,
+    //         //             PartnerSkill = dto.SkillToLearn,
+    //         //             ScheduleDateTime = dto.ProposedTime,
+    //         //             DurationMinutes = dto.DurationMinutes,
+    //         //             PersonalMessage = dto.Message,
+    //         //             Format = "Video Call"
+    //         //         };
+
+    //         //         await _emailService.SendSwapRequestEmailAsync(emailDto);
+    //         //     }
+    //         // }
+    //         // catch (Exception ex)
+    //         // {
+    //         //     Console.WriteLine($"[SwapRequestController] Email failed but request succeeded: {ex.Message}");
+    //         // }
+    //     }
+
+    //     return Ok(created);
+    // }
+
     public async Task<IActionResult> CreateSwapRequest(CreateSwapRequestDto dto)
+{
+    var validationResult = await _createValidator.ValidateAsync(dto);
+    if (!validationResult.IsValid)
     {
-        var validationResult = await _createValidator.ValidateAsync(dto);
-        if (!validationResult.IsValid)
-        {
-            return BadRequest(validationResult.Errors);
-        }
-
-        var swapRequest = new UserSwapRequest
-        {
-            RequesterId = dto.RequesterId,
-            ReceiverId = dto.ReceiverId,
-            SkillToOffer = dto.SkillToOffer,
-            SkillToLearn = dto.SkillToLearn,
-            ProposedTime = dto.ProposedTime,
-            DurationMinutes = dto.DurationMinutes,
-            Message = dto.Message,
-            Status = "Pending",
-            CreatedAt = DateTime.UtcNow,
-
-        };
-
-        var created = await _service.CreateAsync(swapRequest);
-
-        // Notify Receiver via SignalR
-        var receiverProfile = await _db.UserProfiles.Include(u => u.User).FirstOrDefaultAsync(u => u.Id == dto.ReceiverId);
-        if (receiverProfile != null)
-        {
-            await _hubContext.Clients.Group(receiverProfile.UserId.ToString()).SendAsync("ReceiveSwapUpdate");
-
-            // // SAFE EMAIL SENDING
-            // try
-            // {
-            //     var requesterProfile = await _db.UserProfiles.Include(u => u.User).FirstOrDefaultAsync(u => u.Id == dto.RequesterId);
-            //     if (requesterProfile != null)
-            //     {
-            //         var emailDto = new SwapRequestEmailDto
-            //         {
-            //             PartnerEmail = receiverProfile.User.Email,
-            //             PartnerImageUrl = receiverProfile.ProfilePhotoUrl,
-            //             YourName = requesterProfile.FullName,
-            //             YourImageUrl = requesterProfile.ProfilePhotoUrl,
-            //             YourSkill = dto.SkillToOffer,
-            //             PartnerSkill = dto.SkillToLearn,
-            //             ScheduleDateTime = dto.ProposedTime,
-            //             DurationMinutes = dto.DurationMinutes,
-            //             PersonalMessage = dto.Message,
-            //             Format = "Video Call"
-            //         };
-
-            //         await _emailService.SendSwapRequestEmailAsync(emailDto);
-            //     }
-            // }
-            // catch (Exception ex)
-            // {
-            //     Console.WriteLine($"[SwapRequestController] Email failed but request succeeded: {ex.Message}");
-            // }
-        }
-
-        return Ok(created);
+        return BadRequest(validationResult.Errors);
     }
+
+    var swapRequest = new UserSwapRequest
+    {
+        RequesterId = dto.RequesterId,
+        ReceiverId = dto.ReceiverId,
+        SkillToOffer = dto.SkillToOffer,
+        SkillToLearn = dto.SkillToLearn,
+        ProposedTime = dto.ProposedTime,
+        DurationMinutes = dto.DurationMinutes,
+        Message = dto.Message,
+        Status = "Pending",
+        CreatedAt = DateTime.UtcNow,
+
+    };
+
+    var created = await _service.CreateAsync(swapRequest);
+
+    // Notify Receiver
+    var receiverProfile = await _db.UserProfiles.FindAsync(dto.ReceiverId);
+    if (receiverProfile != null)
+    {
+        await _hubContext.Clients.Group(receiverProfile.UserId.ToString()).SendAsync("ReceiveSwapUpdate");
+    }
+
+    return Ok(created);
+}
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSwapRequest(Guid id)
@@ -217,9 +251,9 @@ public class UserSwapRequestController : ControllerBase
         await _service.UpdateAsync(swapRequest);
 
         // Notify both parties
-        var requesterProfile = await _db.UserProfiles.FindAsync(swapRequest.RequesterId);
+            var requesterProfile = await _db.UserProfiles.FindAsync(swapRequest.RequesterId);
         var receiverProfile = await _db.UserProfiles.FindAsync(swapRequest.ReceiverId);
-
+        
         if (requesterProfile != null)
             await _hubContext.Clients.Group(requesterProfile.UserId.ToString()).SendAsync("ReceiveSwapUpdate");
 
