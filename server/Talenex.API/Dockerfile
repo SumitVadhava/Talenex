@@ -1,15 +1,17 @@
-# ========= BUILD STAGE =========
+# ===== BUILD STAGE =====
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# copy everything from this folder (Talenex.API)
+# copy everything under server/
 COPY . .
 
-# restore & publish the API project
-RUN dotnet restore Talenex.API.csproj
-RUN dotnet publish Talenex.API.csproj -c Release -o /out
+# restore solution
+RUN dotnet restore Talenex.sln
 
-# ========= RUNTIME STAGE =========
+# publish API (solution references included)
+RUN dotnet publish Talenex.API/Talenex.API.csproj -c Release -o /out
+
+# ===== RUNTIME STAGE =====
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
