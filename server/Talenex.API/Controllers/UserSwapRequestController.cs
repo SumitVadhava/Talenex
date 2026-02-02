@@ -335,11 +335,44 @@ public class UserSwapRequestController : ControllerBase
 
         var created = await _service.CreateAsync(swapRequest);
 
-        // Notify Receiver
-        var receiverProfile = await _db.UserProfiles.FindAsync(dto.ReceiverId);
+        // Notify Receiver via SignalR
+        var receiverProfile = await _db.UserProfiles.Include(u => u.User).FirstOrDefaultAsync(u => u.Id == dto.ReceiverId);
         if (receiverProfile != null)
         {
             await _hubContext.Clients.Group(receiverProfile.UserId.ToString()).SendAsync("ReceiveSwapUpdate");
+
+            // SAFE EMAIL SENDING: 
+            // We fetch the requester's info and try to send an email.
+            // If it fails, we log it but STILL return Ok(created) so the app doesn't crash.
+            try
+            {
+                var requesterProfile = await _db.UserProfiles.Include(u => u.User).FirstOrDefaultAsync(u => u.Id == dto.RequesterId);
+                if (requesterProfile != null)
+                {
+                    var emailDto = new SwapRequestEmailDto
+                    {
+                        PartnerEmail = receiverProfile.User.Email,
+                        PartnerImageUrl = receiverProfile.ProfilePhotoUrl,
+                        YourName = requesterProfile.FullName,
+                        YourImageUrl = requesterProfile.ProfilePhotoUrl,
+                        YourSkill = dto.SkillToOffer,
+                        PartnerSkill = dto.SkillToLearn,
+                        ScheduleDateTime = dto.ProposedTime,
+                        DurationMinutes = dto.DurationMinutes,
+                        PersonalMessage = dto.Message,
+                        Format = "Video Call"
+                    };
+
+                    // Fire and forget or await but catch? 
+                    // Awaiting with catch is better for reliability since we aren't using a queue yet.
+                    await _emailService.SendSwapRequestEmailAsync(emailDto);
+                }
+            }
+            catch (Exception ex)
+            {
+                // LOG THE ERROR: Do not crash the whole request if the email fails.
+                Console.WriteLine($"[SwapRequestController] Email failed but request succeeded: {ex.Message}");
+            }
         }
 
         return Ok(created);
