@@ -11,6 +11,10 @@ using Talenex.Application.DTOs.ResponseDtos;
 using Talenex.Application.DTOs.UpdateDtos;
 using Talenex.Application.IRepository;
 using Talenex.Domain.Entities;
+using Microsoft.AspNetCore.SignalR;
+using Talenex.API.Hubs;
+using Talenex.infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 
 [ApiController]
@@ -22,7 +26,10 @@ public class UserSwapRequestController : ControllerBase
     private readonly IUserSwapRequestService _swapService;
     private readonly IValidator<CreateSwapRequestDto> _createValidator;
     private readonly IValidator<UpdateSwapRequestDto> _updateValidator;
+
     private readonly IEmailService _emailService;
+    private readonly IHubContext<SwapHub> _hubContext;
+    private readonly AppDBContext _db;
 
     public UserSwapRequestController(
 
@@ -30,15 +37,19 @@ public class UserSwapRequestController : ControllerBase
         IUserSwapRequestService swapService,
         IValidator<CreateSwapRequestDto> createValidator,
         IValidator<UpdateSwapRequestDto> updateValidator,
-        IEmailService emailService
-
+        IEmailService emailService,
+        IHubContext<SwapHub> hubContext,
+        AppDBContext db
     )
     {
         _service = service;
         _swapService = swapService;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
+
         _emailService = emailService;
+        _hubContext = hubContext;
+        _db = db;
     }
 
     [HttpGet]
@@ -118,6 +129,41 @@ public class UserSwapRequestController : ControllerBase
 
         var created = await _service.CreateAsync(swapRequest);
 
+        // Notify Receiver via SignalR
+        var receiverProfile = await _db.UserProfiles.Include(u => u.User).FirstOrDefaultAsync(u => u.Id == dto.ReceiverId);
+        if (receiverProfile != null)
+        {
+            await _hubContext.Clients.Group(receiverProfile.UserId.ToString()).SendAsync("ReceiveSwapUpdate");
+
+            // SAFE EMAIL SENDING
+            try
+            {
+                var requesterProfile = await _db.UserProfiles.Include(u => u.User).FirstOrDefaultAsync(u => u.Id == dto.RequesterId);
+                if (requesterProfile != null)
+                {
+                    var emailDto = new SwapRequestEmailDto
+                    {
+                        PartnerEmail = receiverProfile.User.Email,
+                        PartnerImageUrl = receiverProfile.ProfilePhotoUrl,
+                        YourName = requesterProfile.FullName,
+                        YourImageUrl = requesterProfile.ProfilePhotoUrl,
+                        YourSkill = dto.SkillToOffer,
+                        PartnerSkill = dto.SkillToLearn,
+                        ScheduleDateTime = dto.ProposedTime,
+                        DurationMinutes = dto.DurationMinutes,
+                        PersonalMessage = dto.Message,
+                        Format = "Video Call"
+                    };
+
+                    await _emailService.SendSwapRequestEmailAsync(emailDto);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[SwapRequestController] Email failed but request succeeded: {ex.Message}");
+            }
+        }
+
         return Ok(created);
     }
 
@@ -169,6 +215,17 @@ public class UserSwapRequestController : ControllerBase
         }
 
         await _service.UpdateAsync(swapRequest);
+
+        // Notify both parties
+        var requesterProfile = await _db.UserProfiles.FindAsync(swapRequest.RequesterId);
+        var receiverProfile = await _db.UserProfiles.FindAsync(swapRequest.ReceiverId);
+
+        if (requesterProfile != null)
+            await _hubContext.Clients.Group(requesterProfile.UserId.ToString()).SendAsync("ReceiveSwapUpdate");
+
+        if (receiverProfile != null)
+            await _hubContext.Clients.Group(receiverProfile.UserId.ToString()).SendAsync("ReceiveSwapUpdate");
+
         return Ok(new { message = "Swap request updated successfully." });
     }
 
