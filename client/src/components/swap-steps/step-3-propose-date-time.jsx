@@ -10,7 +10,7 @@ export default function Step3ProposeDateAndTime({
 }) {
   const today = new Date();
   const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-  
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(todayStr);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -39,8 +39,8 @@ export default function Step3ProposeDateAndTime({
 
   const isPastMonth = (date) => {
     const today = new Date();
-    return date.getFullYear() < today.getFullYear() || 
-           (date.getFullYear() === today.getFullYear() && date.getMonth() < today.getMonth());
+    return date.getFullYear() < today.getFullYear() ||
+      (date.getFullYear() === today.getFullYear() && date.getMonth() < today.getMonth());
   };
 
   const isPastDate = (dateStr) => {
@@ -151,15 +151,14 @@ export default function Step3ProposeDateAndTime({
           key={day}
           onClick={() => !isPast && setSelectedDate(dateStr)}
           disabled={isPast}
-          className={`aspect-square flex items-center justify-center rounded-full text-sm font-medium transition-colors ${
-            isPast
+          className={`aspect-square flex items-center justify-center rounded-full text-sm font-medium transition-colors ${isPast
               ? 'text-gray-300 cursor-not-allowed'
               : isToday
-              ? 'bg-blue-600 text-white'
-              : isSelected
-              ? 'border-2 border-blue-600 text-blue-600'
-              : 'text-gray-700 hover:bg-gray-100'
-          }`}
+                ? 'bg-blue-600 text-white'
+                : isSelected
+                  ? 'border-2 border-blue-600 text-blue-600'
+                  : 'text-gray-700 hover:bg-gray-100'
+            }`}
         >
           {day}
         </button>
@@ -170,31 +169,31 @@ export default function Step3ProposeDateAndTime({
   };
 
   return (
-    <div className="p-8">
-      <h2 className="text-3xl font-bold mb-3">Propose Session Date & Time</h2>
-      <p className="text-gray-600 mb-8">
+    <div className="p-4 sm:p-6 md:p-8">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3">Propose Session Date & Time</h2>
+      <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
         Select potential times for your swap. You can add as many options as you'd like.
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
         {/* Calendar */}
         <div>
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-6">
-              <button 
-                onClick={handlePrevMonth} 
-                className={`p-2 rounded ${isPastMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1)) ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+          <div className="mb-4 sm:mb-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <button
+                onClick={handlePrevMonth}
+                className={`p-1.5 sm:p-2 rounded ${isPastMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1)) ? 'opacity-30 cursor-not-allowed' : 'hover:bg-gray-100'}`}
                 disabled={isPastMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
-              <h3 className="text-lg font-semibold">{monthName}</h3>
-              <button onClick={handleNextMonth} className="p-2 hover:bg-gray-100 rounded">
-                <ChevronRight className="w-5 h-5" />
+              <h3 className="text-base sm:text-lg font-semibold">{monthName}</h3>
+              <button onClick={handleNextMonth} className="p-1.5 sm:p-2 hover:bg-gray-100 rounded">
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
 
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-1 sm:gap-2">
               {renderCalendarDays()}
             </div>
           </div>
@@ -204,44 +203,42 @@ export default function Step3ProposeDateAndTime({
         <div>
           {selectedDate && (
             <>
-              <p className="text-lg font-semibold mb-4">
+              <p className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
                 Choose a Time for {formatDateForDisplay(selectedDate)}
               </p>
-              <p className="text-sm text-gray-600 mb-4">All times are in your local time</p>
-              <div className="grid grid-cols-2 gap-3 mb-4">
+              <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">All times are in your local time</p>
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
                 {timeSlots.map((time) => (
                   <button
                     key={time}
                     onClick={() => handleTimeSelect(time)}
-                    className={`py-3 px-4 rounded-lg font-medium text-sm transition-colors ${
-                      selectedTime === time
+                    className={`py-2 sm:py-3 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-colors ${selectedTime === time
                         ? 'bg-blue-600 text-white'
                         : 'border-2 border-gray-200 text-gray-700 hover:border-gray-300'
-                    }`}
+                      }`}
                   >
                     {time}
                   </button>
                 ))}
                 <button
                   onClick={() => handleTimeSelect('custom')}
-                  className={`py-3 px-4 rounded-lg font-medium text-sm transition-colors ${
-                    showCustomTimeInput
+                  className={`py-2 sm:py-3 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-colors ${showCustomTimeInput
                       ? 'bg-blue-600 text-white'
                       : 'border-2 border-gray-200 text-gray-700 hover:border-gray-300'
-                  }`}
+                    }`}
                 >
                   Custom
                 </button>
               </div>
 
               {showCustomTimeInput && (
-                <div className="mb-4 space-y-3">
-                  <p className="text-sm font-medium text-gray-700">Enter Custom Time</p>
+                <div className="mb-3 sm:mb-4 space-y-2 sm:space-y-3">
+                  <p className="text-xs sm:text-sm font-medium text-gray-700">Enter Custom Time</p>
                   <div className="flex gap-2 items-center">
                     <select
                       value={customHour}
                       onChange={(e) => setCustomHour(e.target.value)}
-                      className="flex-1 p-3 border-2 border-gray-200 rounded-lg font-medium text-sm focus:border-blue-500 focus:outline-none"
+                      className="flex-1 p-2 sm:p-3 border-2 border-gray-200 rounded-lg font-medium text-xs sm:text-sm focus:border-blue-500 focus:outline-none"
                     >
                       <option value="">Hour</option>
                       {[...Array(12)].map((_, i) => {
@@ -253,11 +250,11 @@ export default function Step3ProposeDateAndTime({
                         );
                       })}
                     </select>
-                    <span className="text-2xl font-bold text-gray-400">:</span>
+                    <span className="text-xl sm:text-2xl font-bold text-gray-400">:</span>
                     <select
                       value={customMinute}
                       onChange={(e) => setCustomMinute(e.target.value)}
-                      className="flex-1 p-3 border-2 border-gray-200 rounded-lg font-medium text-sm focus:border-blue-500 focus:outline-none"
+                      className="flex-1 p-2 sm:p-3 border-2 border-gray-200 rounded-lg font-medium text-xs sm:text-sm focus:border-blue-500 focus:outline-none"
                     >
                       <option value="">Min</option>
                       {['00', '15', '30', '45'].map((min) => (
@@ -269,7 +266,7 @@ export default function Step3ProposeDateAndTime({
                     <select
                       value={customPeriod}
                       onChange={(e) => setCustomPeriod(e.target.value)}
-                      className="flex-1 p-3 border-2 border-gray-200 rounded-lg font-medium text-sm focus:border-blue-500 focus:outline-none"
+                      className="flex-1 p-2 sm:p-3 border-2 border-gray-200 rounded-lg font-medium text-xs sm:text-sm focus:border-blue-500 focus:outline-none"
                     >
                       <option value="AM">AM</option>
                       <option value="PM">PM</option>
@@ -278,7 +275,7 @@ export default function Step3ProposeDateAndTime({
                   <Button
                     onClick={handleCustomTimeSubmit}
                     disabled={!customHour || !customMinute}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base"
                   >
                     Add This Time Slot
                   </Button>
@@ -288,7 +285,7 @@ export default function Step3ProposeDateAndTime({
               {!showCustomTimeInput && selectedTime && (
                 <Button
                   onClick={handleAddTimeSlot}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base"
                 >
                   Add This Time Slot
                 </Button>
@@ -300,22 +297,22 @@ export default function Step3ProposeDateAndTime({
 
       {/* Proposed Times */}
       {proposedSlots.length > 0 && (
-        <div className="mb-8 p-4 bg-gray-50 rounded-lg">
-          <p className="font-semibold mb-4">Your Proposed Times ({proposedSlots.length})</p>
+        <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-gray-50 rounded-lg">
+          <p className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">Your Proposed Times ({proposedSlots.length})</p>
           <div className="space-y-2">
             {proposedSlots.map((slot, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between bg-white p-3 rounded-lg border border-gray-200"
+                className="flex items-center justify-between bg-white p-2 sm:p-3 rounded-lg border border-gray-200"
               >
-                <span className="text-gray-700">
+                <span className="text-xs sm:text-sm text-gray-700 flex-1 min-w-0 pr-2">
                   {formatDateForDisplay(slot.date)} - {slot.time}
                 </span>
                 <button
                   onClick={() => handleRemoveSlot(index)}
-                  className="p-1 hover:bg-gray-100 rounded transition-colors"
+                  className="p-1 hover:bg-gray-100 rounded transition-colors flex-shrink-0"
                 >
-                  <X className="w-5 h-5 text-gray-400" />
+                  <X className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                 </button>
               </div>
             ))}
@@ -324,14 +321,14 @@ export default function Step3ProposeDateAndTime({
       )}
 
       {/* Buttons */}
-      <div className="flex gap-3 justify-between">
-        <Button variant="outline" onClick={onBack} className="px-8">
+      <div className="flex flex-col sm:flex-row gap-3 justify-between">
+        <Button variant="outline" onClick={onBack} className="w-full sm:w-auto px-6 sm:px-8">
           Back
         </Button>
         <Button
           onClick={handleNext}
           disabled={proposedSlots.length === 0}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8"
         >
           Next
         </Button>

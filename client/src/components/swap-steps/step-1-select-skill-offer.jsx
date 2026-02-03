@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 const mockSkills = [
@@ -55,49 +55,47 @@ export default function Step1SelectSkillToOffer({ data, onNext, onClose, userDat
   };
 
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-6 md:p-8">
       {/* Title */}
-      <h2 className="text-3xl font-bold mb-2">Select a Skill to Offer</h2>
-      <p className="text-gray-600 mb-8">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-2">Select a Skill to Offer</h2>
+      <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
         Choose which one of your skills you'd like to trade.
       </p>
 
       {/* Search */}
-      <div className="relative mb-6">
-        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+      <div className="relative mb-4 sm:mb-6">
+        <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
         <Input
           placeholder="Search your skills..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="pl-12 py-3 border-gray-200"
+          className="pl-10 sm:pl-12 py-2 sm:py-3 border-gray-200 text-sm sm:text-base"
         />
       </div>
 
       {/* Skills List */}
-      <div className="space-y-3 mb-8">
+      <div className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
         {filteredSkills?.map((skill) => (
           <button
             key={skill.id}
             onClick={() => handleSelect(skill.title)}
-            className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
-              selected === skill.title
+            className={`w-full p-3 sm:p-4 rounded-lg border-2 text-left transition-all ${selected === skill.title
                 ? "border-blue-600 bg-blue-50"
                 : "border-gray-200 bg-white hover:border-gray-300"
-            }`}
+              }`}
           >
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900">{skill.title}</h3>
-                <p className="text-sm text-gray-600">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">{skill.title}</h3>
+                <p className="text-xs sm:text-sm text-gray-600 line-clamp-2">
                   {skill.description != null ? skill.description : "No description available"}
                 </p>
               </div>
               <div
-                className={`w-6 h-6 rounded-full border-2 flex-shrink-0 ml-4 ${
-                  selected === skill.title
+                className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex-shrink-0 ml-2 sm:ml-4 ${selected === skill.title
                     ? "border-blue-600 bg-blue-600"
                     : "border-gray-300"
-                }`}
+                  }`}
               >
                 {selected === skill.title && (
                   <svg
@@ -119,17 +117,17 @@ export default function Step1SelectSkillToOffer({ data, onNext, onClose, userDat
       </div>
 
       {/* Buttons */}
-      <div className="flex gap-3 justify-between">
+      <div className="flex flex-col sm:flex-row gap-3 justify-between">
         {/*<Button variant="outline" onClick={onClose} className="px-8">
           Cancel
         </Button>*/}
-        <Button variant="outline" onClick={() => navigate(-1)} className="px-8">
+        <Button variant="outline" onClick={() => navigate(-1)} className="w-full sm:w-auto px-6 sm:px-8">
           Cancel
         </Button>
         <Button
           onClick={handleNext}
           disabled={!selected}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8"
         >
           Next
         </Button>

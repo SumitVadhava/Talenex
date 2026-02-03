@@ -8,7 +8,7 @@
 
 //   const hasJoinedRef = useRef(false);   // join guard
 //   const zegoRef = useRef(null); 
-  
+
 //   const isFullscreenRef = useRef(false);
 
 // const toggleFullscreen = () => {
@@ -121,7 +121,7 @@
 //       )}
 //     </button>
 
-  
+
 //     {/* 🎥 Zego Video Container */}
 //     <div
 //       id="zego-container"
@@ -135,7 +135,7 @@
 // );
 // }  
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 
@@ -144,13 +144,13 @@ export default function VideoCall({ setHideNavbar }) {
 
   const zegoRef = useRef(null);
   const hasJoinedRef = useRef(false);
+  const [isJoined, setIsJoined] = useState(false);
 
-  // Request fullscreen safely
-  const requestFullscreen = () => {
-    const el = document.getElementById("zego-container");
-    if (el && !document.fullscreenElement) {
-      el.requestFullscreen().catch(() => {});
-    }
+  // Detect if device is mobile
+  const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    ) || window.innerWidth <= 768;
   };
 
   useEffect(() => {
@@ -171,10 +171,33 @@ export default function VideoCall({ setHideNavbar }) {
     const zp = ZegoUIKitPrebuilt.create(kitToken);
     zegoRef.current = zp;
 
+    // Mobile-optimized configuration
+    const isMobileDevice = isMobile();
+
     zp.joinRoom({
       container: document.getElementById("zego-container"),
       scenario: { mode: ZegoUIKitPrebuilt.VideoConference },
       showPreJoinView: true,
+      showRoomDetailsButton: true, // Hide on mobile to save space
+      showInviteButton: true,
+      showScreenSharingButton: true, // Screen sharing typically not needed on mobile
+      showTurnOffRemoteCameraButton: true,
+      showTurnOffRemoteMicrophoneButton: true,
+      showRemoveUserButton: true,
+      videoResolutionDefault: ZegoUIKitPrebuilt.VideoResolution_720P,
+      // Mobile-friendly layout settings
+      layout: isMobileDevice ? "Auto" : "Grid",
+      showLayoutButton: true, // Limit participants on mobile for performance
+      onJoinRoom: () => {
+        hasJoinedRef.current = true;
+        setIsJoined(true);
+        setHideNavbar(true);
+      },
+      onLeaveRoom: () => {
+        hasJoinedRef.current = false;
+        setIsJoined(false);
+        setHideNavbar(false);
+      },
       sharedLinks: [
         {
           name: "Copy Link",
@@ -183,62 +206,30 @@ export default function VideoCall({ setHideNavbar }) {
       ],
     });
 
-    const container = document.getElementById("zego-container");
-
-    // 👀 Observe Zego UI state changes
-    const observer = new MutationObserver(() => {
-      const preJoinExists = container.querySelector("input");
-
-      // ✅ JOIN DETECTED
-      if (!preJoinExists && !hasJoinedRef.current) {
-        hasJoinedRef.current = true;
-
-        setHideNavbar(true);   // hide nav
-        requestFullscreen();  // enter fullscreen
-      }
-
-      // ✅ LEAVE DETECTED (Return to Home Screen)
-      if (preJoinExists && hasJoinedRef.current) {
-        hasJoinedRef.current = false;
-
-        setHideNavbar(false); // show nav again
-
-        if (document.fullscreenElement) {
-          document.exitFullscreen().catch(() => {});
-        }
-      }
-    });
-
-    observer.observe(container, { childList: true, subtree: true });
-
     return () => {
-      observer.disconnect();
-
       zegoRef.current?.destroy();
       zegoRef.current = null;
 
       hasJoinedRef.current = false;
-      setHideNavbar(false);
-
-      if (document.fullscreenElement) {
-        document.exitFullscreen().catch(() => {});
-      }
     };
   }, [roomId, setHideNavbar]);
 
   return (
-      <div
-        id="zego-container"
-        style={{
-          top : 0,
-          left: 0,
-          position: "fixed",
-          width: "100vw",
-          height: "100vh",
-          overflow: "hidden",
-          marginTop: 0,
-          padding: 0,
-        }}
-      />
+    <div
+      id="zego-container"
+      style={{
+        position: isJoined ? "fixed" : "relative",
+        top: isJoined ? 0 : "auto",
+        left: isJoined ? 0 : "auto",
+        width: isJoined ? "100vw" : "100%",
+        height: isJoined ? "100vh" : "calc(100vh - 80px)",
+        zIndex: isJoined ? 999 : 1,
+        overflow: "hidden",
+        marginTop: 0,
+        padding: 0,
+        WebkitOverflowScrolling: "touch",
+        touchAction: "manipulation",
+      }}
+    />
   );
 }

@@ -235,22 +235,22 @@ export default function SwapRequestForm({ onClose }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 mt-4">
+    <div className="min-h-screen flex items-center justify-center p-2 sm:p-4 mt-4">
       <Card className="w-full max-w-3xl shadow-lg bg-white">
-        <div className="px-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Create a Swap Request</h1>
-            <p className="text-gray-600">
+        <div className="px-4 sm:px-6 md:px-8">
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2">Create a Swap Request</h1>
+            <p className="text-sm sm:text-base text-gray-600">
               Complete all steps to submit your request
             </p>
           </div>
 
-          <div className="flex items-center mb-3">
+          <div className="flex items-center mb-3 overflow-x-auto pb-2">
             {steps.map((step, index) => (
               <React.Fragment key={step.number}>
-                <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-col items-center justify-center flex-shrink-0">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold
+                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-semibold text-sm sm:text-base
                     ${currentStep > step.number
                         ? "bg-green-500 text-white"
                         : currentStep === step.number
@@ -260,23 +260,24 @@ export default function SwapRequestForm({ onClose }) {
                   `}
                   >
                     {currentStep > step.number ? (
-                      <Check className="w-5 h-5" />
+                      <Check className="w-4 h-4 sm:w-5 sm:h-5" />
                     ) : (
                       step.number
                     )}
                   </div>
                   <span
-                    className={`text-xs mt-2 text-center font-medium ${currentStep >= step.number
+                    className={`text-[10px] sm:text-xs mt-1 sm:mt-2 text-center font-medium whitespace-nowrap ${currentStep >= step.number
                       ? "text-gray-900"
                       : "text-gray-400"
                       }`}
                   >
-                    {step.title}
+                    <span className="hidden sm:inline">{step.title}</span>
+                    <span className="sm:hidden">{step.title.split(' ')[0]}</span>
                   </span>
                 </div>
 
                 {index < steps.length - 1 && (
-                  <div className="-mt-[15px] flex-1 mx-4">
+                  <div className="-mt-[15px] flex-1 mx-2 sm:mx-4 min-w-[20px]">
                     <div className="h-[2.3px] bg-gray-200 w-full" />
                   </div>
                 )}
