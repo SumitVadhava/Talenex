@@ -39,25 +39,25 @@ export default function UserDropdown() {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen((prev) => !prev)}
-                className="flex items-center gap-3 px-4 py-1"
+                className="flex items-center gap-3 px-4"
             >
                 <img
                     src={user?.unsafeMetadata?.profile?.avatarUrl || userData?.profilePhotoUrl || user?.imageUrl || "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg"}
                     alt="Profile"
-                    className="w-14 h-13 rounded-full"
+                    className="w-12 h-12 rounded-full"
                 />
             </button>
 
             {/* Dropdown Menu */}
             {isOpen && (
-                <div className="absolute top-full mt-2 w-80 bg-white border border-slate-200 rounded-lg shadow-lg overflow-hidden z-50">
+                <div className="absolute top-full right-0 mt-2 w-80 bg-white border border-slate-200 rounded-lg shadow-lg overflow-hidden z-50 origin-top-right">
                     {/* User Info Section */}
                     <div className="px-4 py-6 border-b border-slate-100">
                         <div className="flex items-center gap-3">
                             <img
                                 src={user?.unsafeMetadata?.profile?.avatarUrl || userData?.profilePhotoUrl || user?.imageUrl || "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg"}
                                 alt="Profile"
-                                className="w-12 h-12 rounded-full ring-2 ring-slate-100"
+                                className="w-13 h-13 rounded-full ring-2 ring-slate-100"
                             />
                             <div className="flex-1 min-w-0">
                                 <div className="text-lg font-semibold text-slate-900 truncate">

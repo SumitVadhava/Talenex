@@ -11,15 +11,16 @@ import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import Logo from "/logo.png";
 import { Terminal } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { useUser, UserButton, SignedIn, SignedOut } from "@clerk/clerk-react";
 import UserDropdown from "./UserDropDown";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export default function Navbar({ heroRef,featureRef, workflowRef, testimonialsRef }) {
+export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsRef }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [userData, setUserData] = useState(null);
   const { isLoaded, isSignedIn } = useUser();
 
@@ -29,7 +30,8 @@ export default function Navbar({ heroRef,featureRef, workflowRef, testimonialsRe
 
   const navLinks = {
     default: [
-      { label: "Home", 
+      {
+        label: "Home",
         action: (ref) => ref.current?.scrollIntoView({ behavior: "smooth" }),
         ref: heroRef,
       },
@@ -70,26 +72,30 @@ export default function Navbar({ heroRef,featureRef, workflowRef, testimonialsRe
         <div className="hidden md:flex">
           <NavigationMenu>
             <NavigationMenuList className="gap-8">
-              {(isSignedIn ? navLinks["user"] : navLinks["default"]).map((link) => (
-                <NavigationMenuItem key={link.label}>
-                  <NavigationMenuLink
-                    className="text-md font-semibold cursor-pointer"
-                    href={link.href}
-                    onClick={(e) => {
-                      // Use href for route navigation, action+ref for in-page scroll
-                      if (link.href) {
-                        e.preventDefault();
-                        navigate(link.href);
-                      } else if (link.action && link.ref) {
-                        e.preventDefault();
-                        link.action(link.ref);
-                      }
-                    }}
-                  >
-                    {link.label}
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              ))}
+              {(isSignedIn ? navLinks["user"] : navLinks["default"]).map((link) => {
+                const isActive = link.href && location.pathname === link.href;
+                return (
+                  <NavigationMenuItem key={link.label}>
+                    <NavigationMenuLink
+                      className={`text-md font-semibold cursor-pointer px-3 py-2 rounded-lg transition-colors ${isActive ? 'bg-slate-50' : 'hover:bg-slate-25'
+                        }`}
+                      href={link.href}
+                      onClick={(e) => {
+                        // Use href for route navigation, action+ref for in-page scroll
+                        if (link.href) {
+                          e.preventDefault();
+                          navigate(link.href);
+                        } else if (link.action && link.ref) {
+                          e.preventDefault();
+                          link.action(link.ref);
+                        }
+                      }}
+                    >
+                      {link.label}
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                );
+              })}
             </NavigationMenuList>
           </NavigationMenu>
         </div>
@@ -114,7 +120,7 @@ export default function Navbar({ heroRef,featureRef, workflowRef, testimonialsRe
 
           {/* Logged IN */}
           <SignedIn>
-            <UserDropdown/>
+            <UserDropdown />
           </SignedIn>
         </div>
 
@@ -129,21 +135,25 @@ export default function Navbar({ heroRef,featureRef, workflowRef, testimonialsRe
 
             <SheetContent side="right" className="w-64">
               <div className="mt-10 flex flex-col gap-4">
-                {(isSignedIn ? navLinks["user"] : navLinks["default"]).map((link) => (
-                  <button
-                    key={link.label}
-                    className="text-left text-lg cursor-pointer"
-                    onClick={() => {
-                      if (link.href) {
-                        navigate(link.href);
-                      } else if (link.action && link.ref) {
-                        link.action(link.ref);
-                      }
-                    }}
-                  >
-                    {link.label}
-                  </button>
-                ))}
+                {(isSignedIn ? navLinks["user"] : navLinks["default"]).map((link) => {
+                  const isActive = link.href && location.pathname === link.href;
+                  return (
+                    <button
+                      key={link.label}
+                      className={`text-left text-lg cursor-pointer px-3 py-2 rounded-lg transition-colors ${isActive ? 'bg-slate-100 font-semibold' : 'hover:bg-slate-50'
+                        }`}
+                      onClick={() => {
+                        if (link.href) {
+                          navigate(link.href);
+                        } else if (link.action && link.ref) {
+                          link.action(link.ref);
+                        }
+                      }}
+                    >
+                      {link.label}
+                    </button>
+                  );
+                })}
 
                 <Button
                   className="mt-4"

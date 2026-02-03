@@ -24,6 +24,7 @@ import { useAuth, useUser } from "@clerk/clerk-react";
 import api from "../api/axios";
 import qs from "qs";
 import Loader from "@/components/Loader";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const CATEGORIES = [
   { id: "all", name: "All Skills", icon: "LayoutGrid" },
@@ -448,9 +449,41 @@ const Homepage = () => {
     init();
   }, [getToken]);
 
-  const LoadingBar = () => {
-    return <Loader />
-  };
+  const SkeletonCard = () => (
+    <div className="flex flex-col gap-4 border border-slate-200 rounded-xl p-6 bg-white shadow-sm h-full">
+      {/* Header */}
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-3">
+          <Skeleton className="w-12 h-12 rounded-full bg-slate-200" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-32 bg-slate-200" />
+            <Skeleton className="h-3 w-24 bg-slate-200" />
+          </div>
+        </div>
+        <Skeleton className="h-6 w-16 px-2 rounded-full bg-slate-200" />
+      </div>
+
+      {/* Offer/Seek Section */}
+      <div className="space-y-4">
+        <div>
+          <Skeleton className="h-3 w-32 mb-2 bg-slate-200" />
+          <Skeleton className="h-5 w-48 mb-2 bg-slate-200" />
+          <Skeleton className="h-4 w-full bg-slate-200" />
+          <Skeleton className="h-4 w-3/4 mt-1 bg-slate-200" />
+        </div>
+        <div className="pt-4 border-t border-slate-100">
+          <Skeleton className="h-3 w-32 mb-2 bg-slate-200" />
+          <Skeleton className="h-5 w-48 bg-slate-200" />
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="mt-auto pt-4 flex items-center justify-between">
+        <Skeleton className="h-4 w-24 bg-slate-200" />
+        <Skeleton className="h-9 w-28 rounded-lg bg-slate-200" />
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen font-sans mt-5">
@@ -462,7 +495,7 @@ const Homepage = () => {
             Find your skill mates
           </h1>
           <p className="text-slate-500 mb-6">
-            Exchange knowledge with experts worldwide.
+            Give a skill. Gain a skill. Grow together.
           </p>
 
           <div className="flex items-center gap-3 overflow-x-auto pb-4 hide-scrollbar">
@@ -559,7 +592,11 @@ const Homepage = () => {
 
             {/* Results Grid */}
             {isLoading ? (
-              <LoadingBar />
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-pulse">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <SkeletonCard key={index} />
+                ))}
+              </div>
             ) : currentItems.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-fade-in">
                 {currentItems.map((skill) => (
