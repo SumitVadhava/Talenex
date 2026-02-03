@@ -9,6 +9,7 @@ import { GridPattern } from "@/components/ui/grid-pattern";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faLinkedin, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import api from './../api/axios';
 
 export default function ContactPage() {
     const navigate = useNavigate();
@@ -35,21 +36,35 @@ export default function ContactPage() {
         setIsSubmitting(true);
         setSubmitStatus(null);
 
-        // Simulate form submission
-        setTimeout(() => {
-            setIsSubmitting(false);
-            setSubmitStatus('success');
-            setFormData({
-                name: '',
-                email: '',
-                subject: '',
-                message: ''
+        try {
+            const response = await api.post("/contact-us/send", {
+                name: formData.name,
+                email: formData.email,
+                subject: formData.subject,
+                message: formData.message,
             });
 
-            // Reset success message after 5 seconds
+            if (response.status === 200 || response.status === 201) {
+                setSubmitStatus("success");
+                setFormData({
+                    name: "",
+                    email: "",
+                    subject: "",
+                    message: "",
+                });
+            }
+        } catch (error) {
+            console.error("Contact form error:", error);
+            console.log("error");
+            
+            setSubmitStatus("error");
+        } finally {
+            setIsSubmitting(false);
+
             setTimeout(() => setSubmitStatus(null), 5000);
-        }, 1500);
+        }
     };
+
 
     return (
         <div className="relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -233,6 +248,12 @@ export default function ContactPage() {
                                             <p className="text-sm text-green-800 font-medium">
                                                 ✓ Message sent successfully! We'll get back to you soon.
                                             </p>
+                                        </div>
+                                    )}
+
+                                    {submitStatus === "error" && (
+                                        <div className="p-3 bg-red-100 text-red-800 rounded">
+                                            ❌ Failed to send message. Try again later.
                                         </div>
                                     )}
 
