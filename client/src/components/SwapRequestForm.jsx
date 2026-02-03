@@ -235,7 +235,7 @@ export default function SwapRequestForm({ onClose }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 mt-4">
+    <div className="min-h-screen flex items-center justify-center p-4 mt-4">
       <Card className="w-full max-w-3xl shadow-lg bg-white">
         <div className="px-8">
           <div className="mb-8">

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import {useNavigate } from "react-router-dom";
 
 
 const mockSkills = [
@@ -35,6 +36,7 @@ const mockSkills = [
 export default function Step1SelectSkillToOffer({ data, onNext, onClose, userData }) {
   const [selected, setSelected] = useState(data?.skillToOffer || null);
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   const filteredSkills = userData.skills?.skillsOffered?.filter(
     (skill) =>
@@ -118,7 +120,10 @@ export default function Step1SelectSkillToOffer({ data, onNext, onClose, userDat
 
       {/* Buttons */}
       <div className="flex gap-3 justify-between">
-        <Button variant="outline" onClick={onClose} className="px-8">
+        {/*<Button variant="outline" onClick={onClose} className="px-8">
+          Cancel
+        </Button>*/}
+        <Button variant="outline" onClick={() => navigate(-1)} className="px-8">
           Cancel
         </Button>
         <Button

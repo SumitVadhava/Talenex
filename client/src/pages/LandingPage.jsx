@@ -11,14 +11,14 @@ import ProductTimeline from '@/components/Workflow'
 import { SignIn, useUser } from "@clerk/clerk-react";
 import { useNavigate } from 'react-router-dom'
 
-const LandingPage = ({ featureRef, workflowRef, testimonialsRef }) => {
+const LandingPage = ({ heroRef, featureRef, workflowRef, testimonialsRef }) => {
   const { isLoaded, isSignedIn } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!isLoaded) return;
+    if (!isLoaded) return;
 
-    if(isSignedIn)
+    if (isSignedIn)
       navigate('/home');
   });
 
@@ -28,7 +28,7 @@ const LandingPage = ({ featureRef, workflowRef, testimonialsRef }) => {
         <GridPattern strokeDasharray={"4 5"} width={50} height={50} className="stroke-zinc-500 opacity-20" />
       </div>
       <div className="relative z-20">
-        <HeroSection featureRef={featureRef} />
+        <HeroSection heroRef={heroRef} />
         <MagicBento
           textAutoHide={true}
           enableStars={true}
@@ -40,11 +40,11 @@ const LandingPage = ({ featureRef, workflowRef, testimonialsRef }) => {
           spotlightRadius={300}
           particleCount={12}
           glowColor="132, 0, 255"
-          workflowRef={workflowRef}
+          featureRef={featureRef}
         />
-        <ProductTimeline />
-        <PricingSection testimonialsRef={testimonialsRef} />
-        <TestimonialSection />
+        <ProductTimeline workflowRef={workflowRef} />
+        <PricingSection />
+        <TestimonialSection testimonialsRef={testimonialsRef} />
         <Footer />
       </div>
     </div>

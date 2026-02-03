@@ -64,7 +64,7 @@ const TestimonialCard = ({ name, handle, avatar, title, content, verified }) => 
                             ))}
                         </div>
 
-                        
+
                     </div>
 
                     {verified && (
@@ -232,9 +232,9 @@ const testimonials3 = [
 ];
 
 
-export default function TestimonialSection() {
+export default function TestimonialSection({ testimonialsRef }) {
     return (
-        <div className="min-h-screen py-10 px-4">
+        <div ref={testimonialsRef} className="min-h-screen py-10 px-4 scroll-mt-28">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-18">

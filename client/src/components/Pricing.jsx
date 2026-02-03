@@ -4,15 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, Zap, Crown } from 'lucide-react';
 
-export default function PricingSection({ testimonialsRef }) {
+export default function PricingSection() {
   const [currency, setCurrency] = useState('USD');
 
   const plans = [
     {
       icon: <Zap className="w-5 h-5" />,
       badge: "STARTER",
-      priceUSD: "19",
-      priceINR: "1,499",
+      priceUSD: "5",
+      priceINR: "450",
       title: "Perfect for new learners and casual skill exchangers looking to explore the platform.",
       features: [
         "Create Profile & Manage Skills",
@@ -27,8 +27,8 @@ export default function PricingSection({ testimonialsRef }) {
     {
       icon: <Crown className="w-5 h-5" />,
       badge: "PROFESSIONAL",
-      priceUSD: "49",
-      priceINR: "3,999",
+      priceUSD: "10",
+      priceINR: "900",
       title: "Ideal for serious learners, professionals, and active community members seeking advanced features.",
       features: [
         "Unlimited Skill Additions",
@@ -57,8 +57,8 @@ export default function PricingSection({ testimonialsRef }) {
             <button
               onClick={() => setCurrency('USD')}
               className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${currency === 'USD'
-                  ? 'bg-black text-white'
-                  : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-black text-white'
+                : 'text-gray-600 hover:text-gray-900'
                 }`}
             >
               USD ($)
@@ -66,8 +66,8 @@ export default function PricingSection({ testimonialsRef }) {
             <button
               onClick={() => setCurrency('INR')}
               className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${currency === 'INR'
-                  ? 'bg-black text-white'
-                  : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-black text-white'
+                : 'text-gray-600 hover:text-gray-900'
                 }`}
             >
               INR (₹)
@@ -128,7 +128,7 @@ export default function PricingSection({ testimonialsRef }) {
           ))}
         </div>
       </div>
-      <div ref={testimonialsRef}></div>
+
     </div>
   );
 }

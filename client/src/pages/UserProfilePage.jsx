@@ -387,13 +387,13 @@ const UserProfilePage = () => {
                 <Button
                   variant="outline"
                   onClick={()=>navigate("/messages")}
-                  className="flex-1 md:flex-none border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-all"
+                  className="flex-1 md:flex-none border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-all transform hover:-translate-y-1 cursor-pointer"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Message
                 </Button>
                 <Button 
-                className="flex-1 md:flex-none bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-200 hover:shadow-purple-300 transition-all transform hover:-translate-y-0.5"
+                className="flex-1 md:flex-none bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-200 hover:shadow-purple-300 transition-all transform hover:-translate-y-0.5 cursor-pointer"
                 onClick={() => navigate("/swap-request", {
                   state: {
                     userData: userData,

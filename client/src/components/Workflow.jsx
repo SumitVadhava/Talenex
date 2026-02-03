@@ -9,7 +9,7 @@ const userJourneyTimeline = [
         date: "Step 1",
         title: "User Onboarding & Registration",
         description:
-            "User signs up using email or phone with OTP verification. A secure JWT session begins, and the onboarding flow introduces the platform's purpose and features.",
+            "User signs up using email with OTP verification. A secure JWT session begins, and the onboarding flow introduces the platform's purpose and features.",
         icon: UserPlus,
     },
     {
@@ -17,7 +17,7 @@ const userJourneyTimeline = [
         date: "Step 2",
         title: "Profile Creation",
         description:
-            "User sets up name, username, location, bio, and profile photo. They configure session mode (online/in-person), availability, visibility settings, and privacy preferences.",
+            "User sets up name, location, bio, and profile photo. They configure session mode (online), availability, visibility settings, and privacy preferences.",
         icon: IdCard,
     },
     {
@@ -25,7 +25,7 @@ const userJourneyTimeline = [
         date: "Step 3",
         title: "Add Skills Offered & Skills Wanted",
         description:
-            "User adds skills they can teach and skills they want to learn. Each skill includes proficiency level, experience years, certifications, and portfolio links.",
+            "User adds skills they can teach and skills they want to learn. Each skill includes proficiency level, experience years, certifications",
         icon: Layers,
     },
     {
@@ -33,7 +33,7 @@ const userJourneyTimeline = [
         date: "Step 4",
         title: "Skill Discovery & Browsing",
         description:
-            "User explores trending skills, top-rated teachers, and recommended swap partners. They use filters such as category, proficiency, distance, availability, and session mode.",
+            "User explores trending skills, top-rated people's, and recommended swap partners. They use filters such as category, proficiency, availability, and session.",
         icon: Search,
     },
     {
@@ -41,15 +41,15 @@ const userJourneyTimeline = [
         date: "Step 5",
         title: "View Profile & Select Swap Partner",
         description:
-            "User opens detailed profiles, checks ratings, endorsements, skill match score, availability overlap, and mutual connections before initiating a swap.",
+            "User opens detailed profiles, checks ratings,complete swap score, availability overlap, and mutual connections before initiating a swap.",
         icon: UserSearch,
     },
     {
         id: 6,
         date: "Step 6",
-        title: "Initiate Swap Request (7-Step Flow)",
+        title: "Initiate Swap Request (6-Step Flow)",
         description:
-            "User selects skills to exchange, proposes session time, writes a short goal message, chooses online or in-person, and sends a formal swap request.",
+            "User selects skills to exchange, proposes session time, session duration , writes a short goal message, and sends a formal swap request. your swap partner notify with email",
         icon: Repeat,
     },
     {
@@ -57,7 +57,7 @@ const userJourneyTimeline = [
         date: "Step 7",
         title: "Swap Management & Sessions",
         description:
-            "Once accepted, users manage sessions through the dashboard — reschedule, send in-swap messages, share files, plan resources, and conduct online or in-person meetings.",
+            "Once accepted, users connect with each other — send messages, share files,conduct online meetings.",
         icon: CalendarCheck,
     },
     {
@@ -73,7 +73,7 @@ const userJourneyTimeline = [
         date: "Step 9",
         title: "Rate, Review & Endorse",
         description:
-            "After completing a swap, users submit multi-criteria ratings, written feedback, and skill endorsements which improve trust scores and visibility.",
+            "After completing a swap, users submit ratings, written feedback, and skill endorsements which improve trust scores and visibility.",
         icon: Stars,
     },
     {
@@ -81,21 +81,21 @@ const userJourneyTimeline = [
         date: "Step 10",
         title: "Gamification & Progress",
         description:
-            "Users earn achievement badges, level up reputation, build streaks, appear on leaderboards, and receive AI insights after 5+ swaps.",
+            "Users earn achievement badges, level up reputation, and receive AI insights after 5+ swaps.",
         icon: Award,
     },
 ];
 
 
-export default function ProductTimeline() {
+export default function ProductTimeline({ workflowRef }) {
     const [activeItem, setActiveItem] = useState(null);
 
     return (
-        <div className="min-h-screen bg-transparent py-24 px-4">
+        <div ref={workflowRef} className="min-h-screen bg-transparent py-24 px-4 scroll-mt-28">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-20">
-                    
+
 
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
                         Workflow

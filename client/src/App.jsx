@@ -30,6 +30,7 @@ function App() {
   const featureRef = useRef(null);
   const workflowRef = useRef(null);
   const testimonialsRef = useRef(null);
+  const heroRef = useRef(null);
   // const { signIn } = useSignIn();
 
   const hideNavbarRoutes = [
@@ -57,6 +58,7 @@ function App() {
           featureRef={featureRef}
           workflowRef={workflowRef}
           testimonialsRef={testimonialsRef}
+          heroRef={heroRef}
 
         />
       )}
@@ -133,6 +135,7 @@ function App() {
               featureRef={featureRef}
               workflowRef={workflowRef}
               testimonialsRef={testimonialsRef}
+              heroRef={heroRef}
             />
           }
         />

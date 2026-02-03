@@ -1971,15 +1971,15 @@ const RatingDisplay = () => {
           />
         ))}
         <div className="relative w-5 h-5">
-        {/* Full star background (grey) */}
-        <Star className="text-gray-300" />
+          {/* Full star background (grey) */}
+          <Star className="text-gray-300" />
 
-        {/* Half star overlay (color) */}
-        <Star
-          className="absolute top-0 left-0 fill-yellow-400 text-yellow-400"
-          style={{ clipPath: "inset(0 45% 0 0)" }}
-        />
-      </div>
+          {/* Half star overlay (color) */}
+          <Star
+            className="absolute top-0 left-0 fill-yellow-400 text-yellow-400"
+            style={{ clipPath: "inset(0 45% 0 0)" }}
+          />
+        </div>
       </div>
       <div className="text-center mb-4">
         <div className="text-3xl font-bold text-gray-900">4.6+</div>
@@ -2411,7 +2411,8 @@ export default function TelnexBentoGrid({
   spotlightRadius = 300,
   particleCount = 12,
   glowColor = "132, 0, 255",
-  workflowRef,
+
+  featureRef,
   children
 }) {
   // Parse children text to extract title and subtitle
@@ -2469,7 +2470,7 @@ export default function TelnexBentoGrid({
         }
       `}</style>
 
-      <div className="min-h-screen grid-bg p-4 md:p-8 lg:p-12">
+      <div ref={featureRef} className="min-h-screen grid-bg p-4 md:p-8 lg:p-12 scroll-mt-28">
         {/* Header */}
         <div className="max-w-6xl mx-auto mb-12 text-center">
           <h1 className="text-7xl md:text-8xl font-bold mb-6 tracking-tight relative">
@@ -2497,7 +2498,7 @@ export default function TelnexBentoGrid({
           </div>
         </motion.div>
       </div>
-      <div ref={workflowRef}></div>
+
     </>
   );
 }

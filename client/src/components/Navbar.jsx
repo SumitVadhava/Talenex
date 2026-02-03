@@ -9,7 +9,7 @@ import {
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 
 import { Menu } from "lucide-react";
-import Logo from "../assets/logo.png";
+import Logo from "/logo.png";
 import { Terminal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +18,7 @@ import UserDropdown from "./UserDropDown";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export default function Navbar({ featureRef, workflowRef, testimonialsRef }) {
+export default function Navbar({ heroRef,featureRef, workflowRef, testimonialsRef }) {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const { isLoaded, isSignedIn } = useUser();
@@ -29,7 +29,10 @@ export default function Navbar({ featureRef, workflowRef, testimonialsRef }) {
 
   const navLinks = {
     default: [
-      { label: "Home", href: "/" },
+      { label: "Home", 
+        action: (ref) => ref.current?.scrollIntoView({ behavior: "smooth" }),
+        ref: heroRef,
+      },
       {
         label: "Features",
         action: (ref) => ref.current?.scrollIntoView({ behavior: "smooth" }),

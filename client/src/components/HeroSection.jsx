@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { HeartHandshake, UserRoundCheck, Sparkles,Shapes, AudioWaveformIcon as Waveform, ArrowRightIcon, ChevronRight, Layers2 } from "lucide-react"
+import { HeartHandshake, UserRoundCheck, Sparkles, Shapes, AudioWaveformIcon as Waveform, ArrowRightIcon, ChevronRight, Layers2 } from "lucide-react"
 import { AnimatedShinyText } from "./ui/animated-shiny-text"
 import { cn } from "@/lib/utils"
 import { AnimatedGradientText } from "./ui/animated-gradient-text"
@@ -31,7 +31,7 @@ const FloatingParticle = () => {
     )
 }
 
-export default function HeroSection({ featureRef }) {
+export default function HeroSection({ heroRef }) {
     const containerRef = useRef(null)
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -53,7 +53,16 @@ export default function HeroSection({ featureRef }) {
     ]
 
     return (
-        <section ref={containerRef} className="relative overflow-hidden flex flex-col justify-center">
+        <section
+            ref={(el) => {
+                containerRef.current = el;
+                if (heroRef) {
+                    if (typeof heroRef === 'function') heroRef(el);
+                    else heroRef.current = el;
+                }
+            }}
+            className="relative overflow-hidden flex flex-col justify-center scroll-mt-28"
+        >
             {/* Particles can remain but should be subtle and adapt to theme */}
 
 
@@ -117,21 +126,21 @@ export default function HeroSection({ featureRef }) {
                                     onClick={() => navigate("/sign-in")}
                                     asChild
                                 >
-                                        <span className="relative z-10 flex items-center gap-2">
-                                            Get Started
-                                            <motion.span
-                                                animate={{ x: isHovered ? 5 : 0 }}
-                                                transition={{ duration: 0.2 }}
-                                            >
-                                                →
-                                            </motion.span>
-                                        </span>
+                                    <span className="relative z-10 flex items-center gap-2">
+                                        Get Started
+                                        <motion.span
+                                            animate={{ x: isHovered ? 5 : 0 }}
+                                            transition={{ duration: 0.2 }}
+                                        >
+                                            →
+                                        </motion.span>
+                                    </span>
                                 </Button>
                             </motion.div>
                         </div>
                     </motion.div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto" ref={featureRef}>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
                         {stats.map((stat, index) => (
                             <motion.div
                                 key={stat.label}
