@@ -63,7 +63,7 @@ const Filters = ({ filters, setFilters }) => {
       <div className="space-y-3">
         <label className="text-sm font-medium text-slate-700">Experience Level</label>
         <div className="flex flex-col gap-2">
-    {['Beginner', 'Intermediate', 'Expert'].map((lvl) => (
+    {['Beginner', 'Intermediate', 'Advanced', 'Expert'].map((lvl) => (
       <label
         key={lvl}
         htmlFor={lvl}
