@@ -285,19 +285,109 @@ import {
   Share2,
   ChevronDown,
   ChevronUp,
+  Check,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import api from "../api/axios";
+import qs from "qs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const UserProfilePage = () => {
   const [showAllSkills, setShowAllSkills] = useState(false);
-  const { state } = useLocation();
   const navigate = useNavigate();
-  const userData = state?.userData;
+
+  const { state } = useLocation();
+  const { id } = useParams();
+  const [isCopied, setIsCopied] = useState(false);
+
+  const [userData, setUserData] = useState(state?.userData || null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!userData && id) {
+      fetchUser();
+    }
+  }, []);
+
+
+  // Helper to map API response to component state structure
+  const mapApiUserToState = (apiUser) => {
+    return {
+      id: apiUser?.userId ?? apiUser.email,
+      user: {
+        id: apiUser.profile?.id ?? apiUser.email,
+        email: apiUser.email,
+        name: apiUser.profile?.fullName ?? `${apiUser.firstName} ${apiUser.lastName}`,
+        avatar: apiUser.profile?.profilePhotoUrl ?? apiUser.imageUrl ?? "",
+        location: apiUser.profile?.location ?? "",
+        rating: apiUser.reputation?.rating ?? 0,
+        reviewCount: apiUser.reputation?.reviewCount ?? 0,
+      },
+      offeredSkills: apiUser.skills?.skillsOffered?.map((skill) => ({
+        title: skill.title,
+        category: skill.category,
+        level: skill.level,
+        description: skill.description,
+        certificateURL: skill.certificateURL,
+      })) || [],
+      seekingSkills: apiUser.skills?.skillsWanted?.map((s) => s.name || s.title || s) ?? [],
+      isOnline: true,
+      postedAt: apiUser.createdAt
+        ? new Date(apiUser.createdAt).toLocaleDateString("en-US", {
+          month: "long",
+          year: "numeric",
+        })
+        : "",
+    };
+  };
+
+  const fetchUser = async () => {
+    try {
+      setLoading(true);
+
+      // Attempt to fetch user by ID
+      // Adjust endpoint if necessary based on actual backend route, e.g., /User/${id} or via query
+      const response = await api.get(`/User/Details/${id}`, {
+        params: {
+          include: ["Profile", "Skills", "Reputation"],
+        },
+        paramsSerializer: (params) =>
+          qs.stringify(params, { arrayFormat: "repeat" }),
+      });
+
+      // Assuming response.data is the user object. 
+      // If it's wrapped (e.g. response.data.user), adjust accordingly.
+      const mappedUser = mapApiUserToState(response.data);
+      setUserData(mappedUser);
+    } catch (err) {
+      console.error("Error fetching user details:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-muted-foreground animate-pulse">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!userData) {
     return (
@@ -307,23 +397,8 @@ const UserProfilePage = () => {
     );
   }
 
-  const skillsOffered = [
-    { name: "Graphic Design", count: 12 },
-    { name: "UI/UX Design", count: 8 },
-    { name: "Web Development", count: 7 },
-    { name: "Illustration", count: 5 },
-    { name: "Photography", count: 3 },
-    { name: "Video Editing", count: 4 },
-    { name: "Branding", count: 6 },
-    { name: "Motion Graphics", count: 2 },
-  ];
-
-  const displayedSkills = userData.offeredSkills;
+  const displayedSkills = userData.offeredSkills || [];
   const hiddenCount = displayedSkills.length - 5;
-
-  useEffect(() => {
-    console.log(userData);
-  });
 
   return (
     <div className="min-h-screen bg-gray-50/50 p-4 md:p-8 font-sans">
@@ -333,14 +408,32 @@ const UserProfilePage = () => {
           {/* Creative Modern Background: Dot Pattern */}
           <div className="h-32 bg-slate-50 relative overflow-hidden">
             <div className="absolute inset-0 opacity-[0.4] bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:16px_16px]"></div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 hover:bg-white/80 backdrop-blur-sm transition-all"
-              title="Share Profile"
-            >
-              <Share2 className="w-4 h-4" />
-            </Button>
+            <TooltipProvider>
+              <Tooltip open={isCopied}>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 hover:bg-white/80 backdrop-blur-sm transition-all cursor-pointer"
+                    onClick={() => {
+                      const url = `${window.location.origin}/user-details/${userData.id}`;
+                      navigator.clipboard.writeText(url);
+                      setIsCopied(true);
+                      setTimeout(() => setIsCopied(false), 2000);
+                    }}
+                  >
+                    {isCopied ? (
+                      <Check className="w-4 h-4 text-green-500 animate-in zoom-in spin-in-90 duration-300" />
+                    ) : (
+                      <Share2 className="w-4 h-4 transition-all duration-300 transform group-hover:scale-110" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{isCopied ? "Copied!" : "Share Profile"}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
           <div className="px-6 md:px-8 pb-6 md:pb-8">
@@ -386,19 +479,19 @@ const UserProfilePage = () => {
               <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
                 <Button
                   variant="outline"
-                  onClick={()=>navigate("/messages")}
+                  onClick={() => navigate("/messages")}
                   className="flex-1 md:flex-none border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-all transform hover:-translate-y-1 cursor-pointer"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Message
                 </Button>
-                <Button 
-                className="flex-1 md:flex-none bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-200 hover:shadow-purple-300 transition-all transform hover:-translate-y-0.5 cursor-pointer"
-                onClick={() => navigate("/swap-request", {
-                  state: {
-                    userData: userData,
-                  },
-                })}
+                <Button
+                  className="flex-1 md:flex-none bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-200 hover:shadow-purple-300 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                  onClick={() => navigate("/swap-request", {
+                    state: {
+                      userData: userData,
+                    },
+                  })}
                 >
                   <ArrowLeftRight className="w-4 h-4 mr-2" />
                   Request Swap
@@ -625,8 +718,8 @@ const UserProfilePage = () => {
                   </CardTitle>
                   <span className="text-sm font-medium text-slate-500 flex items-center bg-slate-100 px-2 py-0.5 rounded-full">
                     <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500 mr-1" />
-                      0.0
-                    </span>
+                    0.0
+                  </span>
                 </div>
                 <div className="relative">
                   <select className="appearance-none bg-slate-50 hover:bg-slate-100 transition-colors border-none rounded-md py-1.5 pl-3 pr-8 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-purple-500/20 cursor-pointer">

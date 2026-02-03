@@ -1066,6 +1066,8 @@ const Homepage = () => {
   const mapUsersApiToSkillsList = (users) => {
     if (!Array.isArray(users)) return [];
 
+    console.log("Mapping done");
+
     return users
       .filter((user) => user.skills?.skillsOffered?.length > 0)
       .map((user) => ({

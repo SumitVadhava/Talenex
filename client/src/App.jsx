@@ -102,6 +102,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/user-details/:id"
+          element={
+            <ProtectedRoute>
+              <UserProfilePage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Sign out */}
         <Route path="/sign-out" element={<SignOutButton />} />
