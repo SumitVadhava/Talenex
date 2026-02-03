@@ -19,13 +19,13 @@ using Talenex.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.WebHost.UseUrls("http://0.0.0.0:10000");
+builder.WebHost.UseUrls("http://0.0.0.0:10000");
 // ==========================
 // Controllers
 // ==========================
 builder.Services.AddControllers();
 
-//builder.WebHost.UseUrls("http://0.0.0.0:10000");
+builder.WebHost.UseUrls("http://0.0.0.0:10000");
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
