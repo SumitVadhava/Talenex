@@ -234,7 +234,7 @@ const testimonials3 = [
 
 export default function TestimonialSection({ testimonialsRef }) {
     return (
-        <div ref={testimonialsRef} className="min-h-screen py-10 px-4 scroll-mt-28">
+        <div id="testimonials" ref={testimonialsRef} className="min-h-screen py-10 px-4 scroll-mt-28">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-18">

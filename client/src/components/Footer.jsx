@@ -50,7 +50,7 @@
 //                     {/* Logo Column */}
 //                     <div className="md:col-span-1">
 //                         <div className="flex items-center gap-2 mb-4">
-                            
+
 //                             <img src='/logo.png' className='h-11' />
 //                         </div>
 //                     </div>
@@ -142,7 +142,7 @@
 //                 </div>
 //             </footer>
 
-            
+
 //         </div>
 //     );
 // };
@@ -156,25 +156,50 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faInstagram, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Footer = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const handleLinkClick = (e, href, sectionId) => {
+        e.preventDefault();
+
+        // If it's a route (starts with /), navigate to it
+        if (href && href.startsWith('/') && href !== '/') {
+            navigate(href);
+            return;
+        }
+
+        // If it's a section link (has sectionId)
+        if (sectionId) {
+            // If we're on the landing page, scroll to section
+            if (location.pathname === '/') {
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } else {
+                // If we're on another page, navigate to landing page with hash
+                navigate('/', { state: { scrollTo: sectionId } });
+            }
+        }
+    };
 
     const footerLinks = {
         product: [
-            { name: 'Features', href: '#' },
-            { name: 'Pricing', href: '#' },
-            { name: 'Calendar', href: '#' },
-            { name: 'Conferencing', href: '#' }
+            { name: 'Features', href: '#features', sectionId: 'features' },
+            { name: 'Pricing', href: '#pricing', sectionId: 'pricing' },
+            { name: 'Workflow', href: '#workflow', sectionId: 'workflow' },
+            { name: 'Testimonials', href: '#testimonials', sectionId: 'testimonials' }
         ],
         company: [
-            { name: 'Contact', href: '#' },
-            { name: 'FAQ', href: '#' },
-            { name: 'Blog', href: '#' },
-            { name: 'Pricing', href: '#' }
+            { name: 'Contact', href: '/contact' },
+            { name: 'FAQ', href: '/' },
         ],
         legal: [
-            { name: 'Terms', href: '#' },
-            { name: 'Privacy', href: '#' }
+            { name: 'Terms', href: '#terms', sectionId: 'terms' },
+            { name: 'Privacy', href: '#privacy', sectionId: 'privacy' }
         ]
     };
 
@@ -200,7 +225,8 @@ const Footer = () => {
                                 <li key={index}>
                                     <a
                                         href={link.href}
-                                        className="text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                                        onClick={(e) => handleLinkClick(e, link.href, link.sectionId)}
+                                        className="text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer"
                                     >
                                         {link.name}
                                     </a>
@@ -217,7 +243,8 @@ const Footer = () => {
                                 <li key={index}>
                                     <a
                                         href={link.href}
-                                        className="text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                                        onClick={(e) => handleLinkClick(e, link.href, link.sectionId)}
+                                        className="text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer"
                                     >
                                         {link.name}
                                     </a>
@@ -252,14 +279,14 @@ const Footer = () => {
                                 <FontAwesomeIcon icon={faInstagram} />
                             </a>
                             <a
-                                href="#"
+                                href="https://x.com/Talenex178172"
                                 className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
                                 aria-label="Twitter"
                             >
                                 <FontAwesomeIcon icon={faXTwitter} />
                             </a>
                             <a
-                                href="#"
+                                href="https://www.linkedin.com/in/talenex-community-3244a13aa/"
                                 className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
                                 aria-label="LinkedIn"
                             >

@@ -9,18 +9,35 @@ import TestimonialSection from '@/components/Testimonial'
 import PricingSection from '@/components/Pricing'
 import ProductTimeline from '@/components/Workflow'
 import { SignIn, useUser } from "@clerk/clerk-react";
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const LandingPage = ({ heroRef, featureRef, workflowRef, testimonialsRef }) => {
   const { isLoaded, isSignedIn } = useUser();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!isLoaded) return;
 
     if (isSignedIn)
       navigate('/home');
-  });
+  }, [isLoaded, isSignedIn, navigate]);
+
+  // Handle scrolling to section when navigating from another page
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      // Small delay to ensure the page has rendered
+      setTimeout(() => {
+        const element = document.getElementById(location.state.scrollTo);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+
+      // Clear the state to prevent scrolling on subsequent renders
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname]);
 
   return (
     <div className='flex flex-col items-center justify-center relative'>

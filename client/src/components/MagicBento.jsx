@@ -2470,7 +2470,7 @@ export default function TelnexBentoGrid({
         }
       `}</style>
 
-      <div ref={featureRef} className="min-h-screen grid-bg p-4 md:p-8 lg:p-12 scroll-mt-28">
+      <div id="features" ref={featureRef} className="min-h-screen grid-bg p-4 md:p-8 lg:p-12 scroll-mt-28">
         {/* Header */}
         <div className="max-w-6xl mx-auto mb-12 text-center">
           <h1 className="text-7xl md:text-8xl font-bold mb-6 tracking-tight relative">

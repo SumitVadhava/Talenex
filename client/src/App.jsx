@@ -23,6 +23,7 @@ import VideoCall from "./components/VideoCall";
 import Step1BasicInfo from "./components/Step1BasicInfo";
 import MySwapsPage from "./pages/MySwapsPage";
 import ChatComingSoon from "./pages/ChatComingSoon";
+import ContactPage from "./pages/ContactPage";
 // import VerifyEmailPage from "./components/VerifyEmailPage";
 
 function App() {
@@ -41,7 +42,8 @@ function App() {
     "/sign-in/verify-email-address",
     "/sign-up/verify-email-address",
     "/sign-in/factor-one",
-    "/onboarding"
+    "/onboarding",
+    "/contact"
   ];
 
   const [hideNavbar, setHideNavbar] = useState(hideNavbarRoutes.includes(location.pathname));
@@ -156,6 +158,11 @@ function App() {
               <MySwapsPage />
             </ProtectedRoute>
           }
+        />
+
+        <Route
+          path="/contact"
+          element={<ContactPage />}
         />
 
         <Route

@@ -39,7 +39,7 @@ const BentoCard = ({ children, className, colSpan = 1, rowSpan = 1, delay = 0 })
 
 export default function FeaturesSection() {
     return (
-        <section className="py-24 px-4 relative">
+        <section id="features" className="py-24 px-4 relative scroll-mt-28">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-muted-foreground mb-4">

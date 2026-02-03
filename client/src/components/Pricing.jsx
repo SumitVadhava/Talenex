@@ -46,7 +46,7 @@ export default function PricingSection() {
   ];
 
   return (
-    <div className="min-h-screen py-16 px-4">
+    <div id="pricing" className="min-h-screen py-16 px-4 scroll-mt-28">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <p className="text-sm font-semibold text-gray-500 tracking-wider mb-2">PRICING</p>

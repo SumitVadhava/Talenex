@@ -91,7 +91,7 @@ export default function ProductTimeline({ workflowRef }) {
     const [activeItem, setActiveItem] = useState(null);
 
     return (
-        <div ref={workflowRef} className="min-h-screen bg-transparent py-24 px-4 scroll-mt-28">
+        <div id="workflow" ref={workflowRef} className="min-h-screen bg-transparent py-24 px-4 scroll-mt-28">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-20">
