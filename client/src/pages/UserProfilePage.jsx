@@ -386,6 +386,7 @@ const UserProfilePage = () => {
               <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
                 <Button
                   variant="outline"
+                  onClick={()=>navigate("/messages")}
                   className="flex-1 md:flex-none border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-all"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
