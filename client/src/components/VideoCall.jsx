@@ -179,8 +179,8 @@ export default function VideoCall({ setHideNavbar }) {
       scenario: { mode: ZegoUIKitPrebuilt.VideoConference },
       showPreJoinView: true,
       showRoomDetailsButton: true, // Hide on mobile to save space
-      showInviteButton: true,
-      showScreenSharingButton: true, // Screen sharing typically not needed on mobile
+      showInviteButton: true, // Less critical on mobile screens
+      showScreenSharingButton: true, // Usually fails or is clunky on mobile browsers
       showTurnOffRemoteCameraButton: true,
       showTurnOffRemoteMicrophoneButton: true,
       showRemoveUserButton: true,
@@ -204,6 +204,10 @@ export default function VideoCall({ setHideNavbar }) {
           url: `${window.location.origin}/join/${roomId}`,
         },
       ],
+      // Fix for pre-join clipping on some mobile devices
+      preJoinViewConfig: {
+        showAvatarInPreJoinView: !isMobileDevice,
+      },
     });
 
     return () => {
@@ -211,22 +215,26 @@ export default function VideoCall({ setHideNavbar }) {
       zegoRef.current = null;
 
       hasJoinedRef.current = false;
+      setHideNavbar(false);
     };
   }, [roomId, setHideNavbar]);
 
   return (
     <div
       id="zego-container"
+      className="zego-responsive-container"
       style={{
         position: isJoined ? "fixed" : "relative",
         top: isJoined ? 0 : "auto",
         left: isJoined ? 0 : "auto",
-        width: isJoined ? "100vw" : "100%",
-        height: isJoined ? "100vh" : "calc(100vh - 80px)",
+        width: "100%",
+        maxWidth: "100vw",
+        height: isJoined ? "100dvh" : "calc(100svh - 100px)",
         zIndex: isJoined ? 999 : 1,
         overflow: "hidden",
-        marginTop: 0,
+        marginTop: isJoined ? "0" : "50px",
         padding: 0,
+        boxSizing: "border-box",
         WebkitOverflowScrolling: "touch",
         touchAction: "manipulation",
       }}

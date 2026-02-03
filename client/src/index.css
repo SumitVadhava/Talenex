@@ -139,3 +139,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Zego Responsive Overrides */
+#zego-container iframe {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.zego-responsive-container {
+  overflow-x: hidden !important;
+}
