@@ -284,6 +284,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { SwapStatus } from './../constants/swapStatus';
 import { SwapCard, Modal, SwapCardSkeleton, ReviewModal } from './../components/SwapReqSections';
 import { HubConnectionBuilder } from '@microsoft/signalr';
+import { useUser } from '@clerk/clerk-react';
 
 import api from '../api/axios';
 
@@ -360,6 +361,7 @@ const mapBackendToFrontend = (request) => {
 
     return {
         id: request.id,
+        partnerId: partner.userId || partner.id, // Store partner's userId for review submission
         partnerName: partner.fullName,
         partnerAvatar: partner.profilePhotoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(partner.fullName)}&background=random`,
         giveSkill: isRequester ? request.skillToOffer : request.skillToLearn,
@@ -376,6 +378,7 @@ const mapBackendToFrontend = (request) => {
 
 
 const App = () => {
+    const { user } = useUser(); // Get current user from Clerk
     const [activeTab, setActiveTab] = useState(SwapStatus.PENDING);
     const [swaps, setSwaps] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -537,14 +540,46 @@ const App = () => {
         setModalConfig(null);
     };
 
-    const handleReviewSubmit = (reviewData) => {
-        console.log("Review Submitted (Local):", {
-            swapId: selectedSwapForReview?.id,
-            partnerName: selectedSwapForReview?.partnerName,
-            ...reviewData
-        });
-        setReviewModalOpen(false);
-        setSelectedSwapForReview(null);
+    const handleReviewSubmit = async (reviewData) => {
+        try {
+            // Get current user info from Clerk
+            const token = localStorage.getItem('token');
+
+            // Get reviewer info from Clerk user object
+            const reviewerName = user?.fullName || `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'Anonymous User';
+            const reviewerAvatar = user?.imageUrl || '';
+
+            // Prepare the request body according to backend API spec
+            const requestBody = {
+                userId: selectedSwapForReview?.partnerId, // The partner's userId (person being reviewed)
+                reviewerAvatar: reviewerAvatar,
+                reviewerName: reviewerName,
+                rating: reviewData.rating,
+                reviewMsg: reviewData.review
+            };
+
+            console.log("Submitting Review to Backend:", requestBody);
+
+            // Call the backend API
+            const response = await api.post('/UserReviews/add', requestBody, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            console.log("Review submitted successfully:", response.data);
+
+            // Close modal and reset state
+            setReviewModalOpen(false);
+            setSelectedSwapForReview(null);
+
+            // Optionally show success message to user
+            // You can add a toast notification here if you have one
+        } catch (error) {
+            console.error("Error submitting review:", error);
+            // Optionally show error message to user
+            // You can add a toast notification here if you have one
+        }
     };
 
     const openReviewModal = (swap) => {

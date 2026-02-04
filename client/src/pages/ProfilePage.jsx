@@ -7,8 +7,11 @@ import {
   Zap,
   Star,
   Calendar,
+  ChevronDown,
+  ChevronUp,
+  Trophy,
 } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 // import { MOCK_USER } from './constants';
 import { Sidebar } from "../components/Sidebar";
 import { Header } from "../components/Header";
@@ -20,6 +23,10 @@ import { NotificationsTab } from "../components/NotificationsTab";
 import { PrivacyTab } from "../components/PrivacyTab";
 import { SettingsTab } from "../components/SettingsTab";
 import { Textarea } from "../components/ui/Primitives";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axios";
 import qs from "qs";
@@ -47,6 +54,10 @@ const ProfilePage = () => {
     privacy: "UserPrivacy",
   };
 
+  // Reviews state
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [reviewSortOption, setReviewSortOption] = useState("newest");
+
   // Simulate Database Fetch
   useEffect(() => {
     if (id) {
@@ -70,6 +81,7 @@ const ProfilePage = () => {
               "Privacy",
               "Reputation",
               "Notifications",
+              "Reviews",
             ],
           },
           paramsSerializer: (params) =>
@@ -110,7 +122,7 @@ const ProfilePage = () => {
       latitude: api.profile?.latitude,
 
       stats: {
-        swapsCompleted: 0,
+        swapsCompleted: api.reputation?.swapsCompleted || 0,
         responseRate: 0,
         memberSince: api.createdAt
           ? new Date(api.createdAt).toLocaleDateString("en-US", {
@@ -137,6 +149,21 @@ const ProfilePage = () => {
         })) || [],
 
       achievements: [],
+
+      reviews: Array.isArray(api.reviews) ? api.reviews.map((review) => ({
+        id: review.id,
+        reviewerAvatar: review.reviewerAvatar,
+        reviewerName: review.reviewerName,
+        rating: review.rating,
+        reviewMsg: review.reviewMsg,
+        createdAt: review.createdAt,
+      })) : [],
+
+      certificates: api.skills?.skillsOffered?.filter((s) => s.certificateURL).map((skill, index) => ({
+        id: index.toString(),
+        title: skill.title,
+        certificateURL: skill.certificateURL,
+      })) || [],
 
       preferences: {
         availability: {
@@ -378,6 +405,32 @@ const ProfilePage = () => {
     }
   };
 
+  // Sort and filter reviews
+  const sortedReviews = useMemo(() => {
+    if (!user?.reviews || user.reviews.length === 0) return [];
+
+    const reviews = [...user.reviews];
+
+    switch (reviewSortOption) {
+      case "newest":
+        return reviews.sort((a, b) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateB - dateA; // Most recent first
+        });
+      case "highest":
+        return reviews.sort((a, b) => b.rating - a.rating);
+      case "lowest":
+        return reviews.sort((a, b) => a.rating - b.rating);
+      default:
+        return reviews;
+    }
+  }, [user?.reviews, reviewSortOption]);
+
+  // Display only top 2 reviews by default
+  const displayedReviews = showAllReviews ? sortedReviews : sortedReviews.slice(0, 2);
+  const hasMoreReviews = sortedReviews.length > 2;
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50/50 flex items-center justify-center">
@@ -438,7 +491,181 @@ const ProfilePage = () => {
                 }
               />
 
-              <AchievementsSection achievements={user.achievements} />
+              {/* Achievements & Reviews side-by-side */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                <div className="space-y-6">
+                  <AchievementsSection
+                    achievements={user.achievements}
+                    swapsCompleted={user.stats.swapsCompleted}
+                  />
+                </div>
+                {/* Reviews & Ratings Section */}
+                <Card className="shadow-sm border-slate-200 gap-0">
+                  <CardHeader className="border-b border-slate-50">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <CardTitle className="text-lg font-bold text-slate-800">
+                          Reviews
+                        </CardTitle>
+                        <div className="flex items-center bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-full">
+                          <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500 mr-1.5" />
+                          <span className="text-sm font-bold text-amber-700">
+                            {user.stats?.rating?.toFixed(1) || "0.0"}
+                          </span>
+                          <span className="mx-1 text-amber-300">|</span>
+                          <span className="text-xs font-semibold text-amber-600">
+                            {sortedReviews.length || 0} reviews
+                          </span>
+                        </div>
+                      </div>
+                      <div className="relative">
+                        <select
+                          value={reviewSortOption}
+                          onChange={(e) => setReviewSortOption(e.target.value)}
+                          className="appearance-none bg-slate-50 hover:bg-slate-100 transition-colors border-none rounded-md py-1.5 pl-3 pr-8 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-purple-500/20 cursor-pointer"
+                        >
+                          <option value="newest">Sort: Newest</option>
+                          <option value="highest">Highest Rated</option>
+                          <option value="lowest">Lowest Rated</option>
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                          <ChevronDown className="h-3 w-3" />
+                        </div>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-0 p-0">
+                    {sortedReviews && sortedReviews.length > 0 ? (
+                      <>
+                        <div className={`divide-y divide-slate-100 ${showAllReviews ? 'max-h-[500px] overflow-y-auto' : ''}`}>
+                          {displayedReviews.map((review, i) => (
+                            <div
+                              key={review.id || i}
+                              className="group p-6 hover:bg-slate-50/50 transition-all duration-300"
+                            >
+                              <div className="flex gap-4">
+                                <Avatar className="h-12 w-12 border-2 border-white shadow-sm ring-1 ring-slate-100 shrink-0">
+                                  <AvatarImage src={review.reviewerAvatar} />
+                                  <AvatarFallback className="bg-slate-100 font-bold text-slate-400">
+                                    {review.reviewerName?.charAt(0)}
+                                  </AvatarFallback>
+                                </Avatar>
+
+                                <div className="flex-1 space-y-2">
+                                  <div className="flex justify-between items-center">
+                                    <div>
+                                      <h5 className="text-sm font-bold text-slate-900 group-hover:text-primary-700 transition-colors">
+                                        {review.reviewerName}
+                                      </h5>
+                                      <div className="flex text-amber-400 mt-0.5">
+                                        {[...Array(5)].map((_, j) => (
+                                          <Star key={j} className={`w-3 h-3 ${j < review.rating ? 'fill-current' : 'text-slate-200'}`} />
+                                        ))}
+                                      </div>
+                                    </div>
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-white px-2 py-1 rounded-md border border-slate-100 shadow-sm">
+                                      {review.createdAt && review.createdAt !== "0001-01-01T00:00:00"
+                                        ? new Date(review.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+                                        : "Recently"}
+                                    </span>
+                                  </div>
+
+                                  <p className="text-sm text-slate-600 leading-relaxed font-medium bg-slate-50/50 group-hover:bg-white p-3 rounded-lg border border-transparent group-hover:border-slate-100 transition-all">
+                                    "{review.reviewMsg}"
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Show More/Less Button */}
+                        {hasMoreReviews && (
+                          <div className="p-4 border-t border-slate-100 bg-slate-50/30">
+                            <Button
+                              variant="ghost"
+                              onClick={() => setShowAllReviews(!showAllReviews)}
+                              className="w-full text-purple-600 hover:text-purple-700 hover:bg-purple-50 font-semibold transition-all"
+                            >
+                              {showAllReviews ? (
+                                <>
+                                  <ChevronUp className="w-4 h-4 mr-2" />
+                                  Show Less Reviews
+                                </>
+                              ) : (
+                                <>
+                                  <ChevronDown className="w-4 h-4 mr-2" />
+                                  Show All {sortedReviews.length} Reviews
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div className="flex flex-col justify-center items-center py-16 px-6">
+                        <div className="h-16 w-16 bg-slate-50 rounded-full flex items-center justify-center mb-4 border border-slate-100">
+                          <Star className="h-8 w-8 text-slate-200" />
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-800">
+                          No Reviews Yet
+                        </h3>
+                        <p className="text-sm text-slate-500 text-center max-w-[200px] mt-2">
+                          You haven't received any feedback yet.
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Certificates Section (Full Width Below) */}
+              <Card className="shadow-sm border-slate-200 gap-0 w-full mt-6">
+                <CardHeader className="border-b border-slate-50">
+                  <CardTitle className="text-base font-bold text-slate-800">
+                    Certificates
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="h-full">
+                  {user.certificates && user.certificates.length > 0 ? (
+                    <div className="space-y-4 pt-4">
+                      {user.certificates.map((cert, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center gap-3 p-3 rounded-lg border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-colors"
+                        >
+                          <div className="h-12 w-12 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-slate-200">
+                            <img
+                              src={cert.certificateURL}
+                              alt={cert.title}
+                              className="h-full w-full object-cover select-none pointer-events-none"
+                            />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-medium text-slate-900 truncate">
+                              {cert.title}
+                            </p>
+                            <a
+                              href={cert.certificateURL}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-blue-600 hover:text-blue-700 hover:underline"
+                            >
+                              View Certificate
+                            </a>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex justify-center items-center h-full min-h-[100px]">
+                      <h1 className="text-xl font-semibold text-gray-300">
+                        No Certificates
+                      </h1>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           </motion.div>
         );

@@ -1079,8 +1079,8 @@ const Homepage = () => {
           name: user.profile?.fullName ?? `${user.firstName} ${user.lastName}`,
           avatar: user.profile?.profilePhotoUrl ?? user.imageUrl ?? "",
           location: user.profile?.location ?? "",
-          rating: user.reputation?.rating ?? 0,
-          reviewCount: user.reputation?.reviewCount ?? 0,
+          rating: user.reputation?.averageRating ?? 0,
+          reviewCount: user.reputation?.totalReviews ?? 0,
         },
 
         // 🔥 ALL OFFERED SKILLS
@@ -1387,7 +1387,7 @@ const Homepage = () => {
                     size="sm"
                     disabled={currentPage === 1}
                     onClick={() => handlePageChange(currentPage - 1)}
-                    
+
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </Button>

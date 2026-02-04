@@ -247,7 +247,7 @@ export const Header = ({
     >
       {/* Avatar */}
       <div
-        className={`relative group ${isEditing ? "cursor-pointer" : "cursor-default"
+        className={`relative group p-1 ml-4 mt-4 ${isEditing ? "cursor-pointer" : "cursor-default"
           }`}
         onClick={() => {
           if (isEditing) {

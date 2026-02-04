@@ -44,6 +44,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const UserProfilePage = () => {
   const [showAllSkills, setShowAllSkills] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [reviewSortOption, setReviewSortOption] = useState("newest");
   const navigate = useNavigate();
 
   const { state } = useLocation();
@@ -71,8 +73,8 @@ const UserProfilePage = () => {
         name: apiUser.profile?.fullName ?? `${apiUser.firstName} ${apiUser.lastName}`,
         avatar: apiUser.profile?.profilePhotoUrl ?? apiUser.imageUrl ?? "",
         location: apiUser.profile?.location ?? "",
-        rating: apiUser.reputation?.rating ?? 0,
-        reviewCount: apiUser.reputation?.reviewCount ?? 0,
+        rating: apiUser.reputation?.averageRating ?? 0,
+        reviewCount: apiUser.reputation?.totalReviews ?? 0,
         swapsCompleted: apiUser.reputation?.swapsCompleted ?? 0,
       },
       offeredSkills: apiUser.skills?.skillsOffered?.map((skill) => ({
@@ -90,7 +92,7 @@ const UserProfilePage = () => {
           year: "numeric",
         })
         : "",
-      reviews: Array.isArray(user.reviews) ? apiUser.reviews.map((review) => ({
+      reviews: Array.isArray(apiUser.reviews) ? apiUser.reviews.map((review) => ({
         id: review.id,
         reviewerAvatar: review.reviewerAvatar,
         reviewerName: review.reviewerName,
@@ -249,6 +251,32 @@ const UserProfilePage = () => {
 
   const displayedSkills = userData?.offeredSkills || [];
   const hiddenCount = displayedSkills.length - 5;
+
+  // Sort and filter reviews
+  const sortedReviews = useMemo(() => {
+    if (!userData?.reviews || userData.reviews.length === 0) return [];
+
+    const reviews = [...userData.reviews];
+
+    switch (reviewSortOption) {
+      case "newest":
+        return reviews.sort((a, b) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateB - dateA; // Most recent first
+        });
+      case "highest":
+        return reviews.sort((a, b) => b.rating - a.rating);
+      case "lowest":
+        return reviews.sort((a, b) => a.rating - b.rating);
+      default:
+        return reviews;
+    }
+  }, [userData?.reviews, reviewSortOption]);
+
+  // Display only top 2 reviews by default
+  const displayedReviews = showAllReviews ? sortedReviews : sortedReviews.slice(0, 2);
+  const hasMoreReviews = sortedReviews.length > 2;
 
   return (
     <div className="min-h-screen bg-gray-50/50 p-4 md:p-8 font-sans">
@@ -597,10 +625,14 @@ const UserProfilePage = () => {
                   </div>
                 </div>
                 <div className="relative">
-                  <select className="appearance-none bg-slate-50 hover:bg-slate-100 transition-colors border-none rounded-md py-1.5 pl-3 pr-8 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-purple-500/20 cursor-pointer">
-                    <option>Sort: Newest</option>
-                    <option>Highest Rated</option>
-                    <option>Lowest Rated</option>
+                  <select
+                    value={reviewSortOption}
+                    onChange={(e) => setReviewSortOption(e.target.value)}
+                    className="appearance-none bg-slate-50 hover:bg-slate-100 transition-colors border-none rounded-md py-1.5 pl-3 pr-8 text-xs font-semibold text-slate-600 focus:outline-none focus:ring-2 focus:ring-purple-500/20 cursor-pointer"
+                  >
+                    <option value="newest">Sort: Newest</option>
+                    <option value="highest">Highest Rated</option>
+                    <option value="lowest">Lowest Rated</option>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
                     <ChevronDown className="h-3 w-3" />
@@ -609,48 +641,73 @@ const UserProfilePage = () => {
               </div>
             </CardHeader>
             <CardContent className="space-y-0 p-0">
-              {userData.reviews && userData.reviews.length > 0 ? (
-                <div className="divide-y divide-slate-100">
-                  {userData.reviews.map((review, i) => (
-                    <div
-                      key={review.id || i}
-                      className="group p-6 hover:bg-slate-50/50 transition-all duration-300"
-                    >
-                      <div className="flex gap-4">
-                        <Avatar className="h-12 w-12 border-2 border-white shadow-sm ring-1 ring-slate-100 shrink-0">
-                          <AvatarImage src={review.reviewerAvatar} />
-                          <AvatarFallback className="bg-slate-100 font-bold text-slate-400">
-                            {review.reviewerName?.charAt(0)}
-                          </AvatarFallback>
-                        </Avatar>
+              {sortedReviews && sortedReviews.length > 0 ? (
+                <>
+                  <div className={`divide-y divide-slate-100 ${showAllReviews ? 'max-h-[500px] overflow-y-auto' : ''}`}>
+                    {displayedReviews.map((review, i) => (
+                      <div
+                        key={review.id || i}
+                        className="group p-6 hover:bg-slate-50/50 transition-all duration-300"
+                      >
+                        <div className="flex gap-4">
+                          <Avatar className="h-12 w-12 border-2 border-white shadow-sm ring-1 ring-slate-100 shrink-0">
+                            <AvatarImage src={review.reviewerAvatar} />
+                            <AvatarFallback className="bg-slate-100 font-bold text-slate-400">
+                              {review.reviewerName?.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
 
-                        <div className="flex-1 space-y-2">
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <h5 className="text-sm font-bold text-slate-900 group-hover:text-primary-700 transition-colors">
-                                {review.reviewerName}
-                              </h5>
-                              <div className="flex text-amber-400 mt-0.5">
-                                {[...Array(5)].map((_, j) => (
-                                  <Star key={j} className={`w-3 h-3 ${j < review.rating ? 'fill-current' : 'text-slate-200'}`} />
-                                ))}
+                          <div className="flex-1 space-y-2">
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <h5 className="text-sm font-bold text-slate-900 group-hover:text-primary-700 transition-colors">
+                                  {review.reviewerName}
+                                </h5>
+                                <div className="flex text-amber-400 mt-0.5">
+                                  {[...Array(5)].map((_, j) => (
+                                    <Star key={j} className={`w-3 h-3 ${j < review.rating ? 'fill-current' : 'text-slate-200'}`} />
+                                  ))}
+                                </div>
                               </div>
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-white px-2 py-1 rounded-md border border-slate-100 shadow-sm">
+                                {review.createdAt && review.createdAt !== "0001-01-01T00:00:00"
+                                  ? new Date(review.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+                                  : "Recently"}
+                              </span>
                             </div>
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-white px-2 py-1 rounded-md border border-slate-100 shadow-sm">
-                              {review.createdAt && review.createdAt !== "0001-01-01T00:00:00"
-                                ? new Date(review.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
-                                : "Recently"}
-                            </span>
-                          </div>
 
-                          <p className="text-sm text-slate-600 leading-relaxed font-medium bg-slate-50/50 group-hover:bg-white p-3 rounded-lg border border-transparent group-hover:border-slate-100 transition-all">
-                            "{review.reviewMsg}"
-                          </p>
+                            <p className="text-sm text-slate-600 leading-relaxed font-medium bg-slate-50/50 group-hover:bg-white p-3 rounded-lg border border-transparent group-hover:border-slate-100 transition-all">
+                              "{review.reviewMsg}"
+                            </p>
+                          </div>
                         </div>
                       </div>
+                    ))}
+                  </div>
+
+                  {/* Show More/Less Button */}
+                  {hasMoreReviews && (
+                    <div className="p-4 border-t border-slate-100 bg-slate-50/30">
+                      <Button
+                        variant="ghost"
+                        onClick={() => setShowAllReviews(!showAllReviews)}
+                        className="w-full text-purple-600 hover:text-purple-700 hover:bg-purple-50 font-semibold transition-all"
+                      >
+                        {showAllReviews ? (
+                          <>
+                            <ChevronUp className="w-4 h-4 mr-2" />
+                            Show Less Reviews
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="w-4 h-4 mr-2" />
+                            Show All {sortedReviews.length} Reviews
+                          </>
+                        )}
+                      </Button>
                     </div>
-                  ))}
-                </div>
+                  )}
+                </>
               ) : (
                 <div className="flex flex-col justify-center items-center py-16 px-6">
                   <div className="h-16 w-16 bg-slate-50 rounded-full flex items-center justify-center mb-4 border border-slate-100">
@@ -660,7 +717,7 @@ const UserProfilePage = () => {
                     No Reviews Yet
                   </h3>
                   <p className="text-sm text-slate-500 text-center max-w-[200px] mt-2">
-                    This user hasn't received any feedback from the community.
+                    This user hasn't received any feedback from the any user.
                   </p>
                 </div>
               )}
