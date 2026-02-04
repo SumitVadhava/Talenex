@@ -38,13 +38,14 @@ export default function UserDropdown() {
     return (
         <div className="relative" ref={dropdownRef}>
             <button
-                onClick={() => setIsOpen((prev) => !prev)}
+
                 className="flex items-center gap-3 px-4"
             >
                 <img
                     src={user?.unsafeMetadata?.profile?.avatarUrl || userData?.profilePhotoUrl || user?.imageUrl || "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg"}
                     alt="Profile"
-                    className="w-12 h-12 rounded-full"
+                    onClick={() => setIsOpen((prev) => !prev)}
+                    className="w-12 h-12 rounded-full cursor-pointer"
                 />
             </button>
 

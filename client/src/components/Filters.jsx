@@ -19,7 +19,7 @@ const Filters = ({ filters, setFilters }) => {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center gap-2 text-slate-900 font-semibold text-lg">
+      <div className="flex items-center gap-2 text-slate-900 font-semibold text-lg sm:hidden md:hidden lg:hidden">
         <SlidersHorizontal className="w-5 h-5" />
         <h2>Filters</h2>
       </div>

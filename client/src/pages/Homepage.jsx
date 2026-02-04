@@ -749,6 +749,7 @@ import {
   ChevronRight,
   Sparkles,
   Filter,
+  X,
 } from "lucide-react";
 import {
   Select,
@@ -1101,6 +1102,14 @@ const Homepage = () => {
             year: "numeric",
           })
           : "",
+        reviews: Array.isArray(user.reviews) ? user.reviews.map((review) => ({
+          id: review.id,
+          reviewerAvatar: review.reviewerAvatar,
+          reviewerName: review.reviewerName,
+          rating: review.rating,
+          reviewMsg: review.reviewMsg,
+          createdAt: review.createdAt,
+        })) : [],
       }));
   };
 
@@ -1149,7 +1158,7 @@ const Homepage = () => {
 
         const response = await api.get("/User/All", {
           params: {
-            include: ["Profile", "Skills", "Reputation"],
+            include: ["Profile", "Skills", "Reputation", "Reviews"],
           },
           paramsSerializer: (params) =>
             qs.stringify(params, { arrayFormat: "repeat" }),
@@ -1254,7 +1263,7 @@ const Homepage = () => {
                 size="sm"
                 onClick={() => setMobileFilterOpen(false)}
               >
-                Close
+                <X className="w-4 h-4" />
               </Button>
             </div>
             <div className="lg:sticky lg:top-24">
@@ -1378,6 +1387,7 @@ const Homepage = () => {
                     size="sm"
                     disabled={currentPage === 1}
                     onClick={() => handlePageChange(currentPage - 1)}
+                    
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </Button>
