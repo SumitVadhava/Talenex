@@ -74,7 +74,7 @@ export default function ContactPage() {
             </div>
 
             <div className="relative z-10 w-full max-w-6xl">
-                {/* Back to Home Button */}
+                
                 <Button
                     variant="ghost"
                     onClick={() => navigate('/')}
