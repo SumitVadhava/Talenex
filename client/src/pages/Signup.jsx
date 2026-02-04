@@ -7,15 +7,15 @@ export default function Signup() {
       appearance={{
           elements: {
             rootBox: {
-              maxHeight: "750px",
+              maxHeight: "800px",
             },
             card: {
-              maxHeight: "600px",
-              padding: "20px",
+              maxHeight: "800px",
+              padding: "25px",
               borderRadius: "16px",
             },
             formContainer: {
-              maxHeight: "550px",
+              maxHeight: "700px",
               overflowY: "auto",
             },
           },

@@ -164,11 +164,12 @@
 using Application.DTOs;
 using Application.IRepository;
 using Microsoft.Extensions.Configuration;
-using System.Net;
-using System.Text;
-using System.Net.Http;
 using Microsoft.Extensions.Http;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Text.Json;
+using Talenex.Application.DTOs.ResponseDtos;
 
 namespace Infrastructure.Services
 {
@@ -227,9 +228,6 @@ namespace Infrastructure.Services
             }
         }
 
-        // ==============================
-        // Helpers
-        // ==============================
 
         private string TruncateMessage(string message, int maxChars = 220)
         {
@@ -372,5 +370,209 @@ namespace Infrastructure.Services
             </body>
             </html>";
         }
+
+
+        public async Task SendContactEmailAsync(ContactEmailDto emaildto)
+        {
+            if (string.IsNullOrWhiteSpace(emaildto.Email))
+                throw new Exception("User email is required");
+
+            var scriptUrl = "https://script.google.com/macros/s/AKfycbykpuhZuv2zlwdxK0I0iqj-AAw2i1k-sb2c1d6Wp0712VE_A1KocZt2MWH3d1evQbn-2A/exec";
+
+
+            var payload = new
+            {
+                to = "talenexcommunity@gmail.com",
+                subject = "New User Inquiry ",
+                body = BuildContactEmailBody(emaildto)
+            };
+
+            var json = JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            using var client = _httpClientFactory.CreateClient();
+            try
+            {
+                var response = await client.PostAsync(scriptUrl, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"[EmailService] Proxy Response: {result}");
+                    Console.WriteLine("[EmailService] Email sent successfully via Proxy!");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"[EmailService] Proxy Error: {response.StatusCode} - {error}");
+                    throw new Exception($"Email proxy failed: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[EmailService] Critical failure calling email proxy: {ex.Message}");
+                throw;
+            }
+        }
+
+        private string BuildContactEmailBody(ContactEmailDto emaildto)
+        {
+            var Message = TruncateMessage(emaildto.Message);
+
+            return $@"
+<!DOCTYPE html>
+<html lang=""en"">
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>Business Inquiry - Contact Form Submission</title>
+    <style>
+        @media only screen and (max-width: 600px) {{
+            .content-wrapper {{ width: 100% !important; }}
+            .mobile-padding {{ padding: 20px !important; }}
+            .mobile-text {{ font-size: 14px !important; }}
+            .mobile-heading {{ font-size: 20px !important; }}
+            .mobile-stack {{ display: block !important; width: 100% !important; }}
+            .mobile-button {{ padding: 14px 24px !important; font-size: 14px !important; }}
+        }}
+    </style>
+</head>
+<body style=""margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5;"">
+    <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""100%"" style=""background-color: #f5f5f5;"">
+        <tr>
+            <td style=""padding: 30px 15px;"">
+                <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""600"" class=""content-wrapper"" style=""margin: 0 auto; background-color: #ffffff; max-width: 600px;"">
+                    
+                    <!-- Header -->
+                    <tr>
+                        <td style=""background-color: #000000; padding: 0;"">
+                            <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""100%"">
+                                <tr>
+                                    <td class=""mobile-padding"" style=""padding: 35px 40px;"">
+                                        <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""100%"">
+                                            <tr>
+                                                <td style=""vertical-align: middle;"">
+                                                    <h1 class=""mobile-heading"" style=""margin: 0; color: #ffffff; font-size: 26px; font-weight: 600; letter-spacing: -0.5px; line-height: 1.2;"">New Client Inquiry</h1>
+                                                </td>
+                                                <td style=""text-align: right; vertical-align: middle;"" class=""mobile-stack"">
+                                                    <p style=""margin: 0; color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 500;"">{emaildto.DateTime}</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Contact Details Section -->
+                    <tr>
+                        <td class=""mobile-padding"" style=""padding: 30px 40px 20px 40px;"">
+                            <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""100%"" style=""border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;"">
+                                <tr>
+                                    <td style=""background-color: #fafafa; padding: 18px 25px; border-bottom: 2px solid #3b82f6;"">
+                                        <p style=""margin: 0; color: #000000; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;"">Client Information</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style=""padding: 0;"">
+                                        <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""100%"">
+                                            <!-- Name Row -->
+                                            <tr>
+                                                <td class=""mobile-stack"" style=""padding: 18px 25px; border-bottom: 1px solid #f0f0f0; width: 35%; vertical-align: top;"">
+                                                    <p style=""margin: 0; color: #666666; font-size: 13px; font-weight: 600;"">Full Name</p>
+                                                </td>
+                                                <td class=""mobile-stack"" style=""padding: 18px 25px; border-bottom: 1px solid #f0f0f0; width: 65%;"">
+                                                    <p class=""mobile-text"" style=""margin: 0; color: #000000; font-size: 15px; font-weight: 600;"">{emaildto.Name}</p>
+                                                </td>
+                                            </tr>
+                                            <!-- Email Row -->
+                                            <tr>
+                                                <td class=""mobile-stack"" style=""padding: 18px 25px; border-bottom: 1px solid #f0f0f0; vertical-align: top;"">
+                                                    <p style=""margin: 0; color: #666666; font-size: 13px; font-weight: 600;"">Email Address</p>
+                                                </td>
+                                                <td class=""mobile-stack"" style=""padding: 18px 25px; border-bottom: 1px solid #f0f0f0;"">
+                                                    <p class=""mobile-text"" style=""margin: 0; color: #000000; font-size: 15px; font-weight: 500; word-break: break-all;"">
+                                                        <a href=""mailto:{emaildto.Email}"" style=""color: #3b82f6; text-decoration: none; font-weight: 600;"">{emaildto.Email}</a>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <!-- Subject Row -->
+                                            <tr>
+                                                <td class=""mobile-stack"" style=""padding: 18px 25px; vertical-align: top;"">
+                                                    <p style=""margin: 0; color: #666666; font-size: 13px; font-weight: 600;"">Subject</p>
+                                                </td>
+                                                <td class=""mobile-stack"" style=""padding: 18px 25px;"">
+                                                    <p class=""mobile-text"" style=""margin: 0; color: #000000; font-size: 15px; font-weight: 600;"">{emaildto.Subject}</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Message Section -->
+                    <tr>
+                        <td class=""mobile-padding"" style=""padding: 25px 40px;"">
+                            <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""100%"" style=""border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;"">
+                                <tr>
+                                    <td style=""background-color: #fafafa; padding: 18px 25px; border-bottom: 2px solid #000000;"">
+                                        <p style=""margin: 0; color: #000000; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;"">Message Details</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style=""padding: 25px; background-color: #ffffff;"">
+                                        <p class=""mobile-text"" style=""margin: 0; color: #333333; font-size: 15px; line-height: 1.7; white-space: pre-wrap;"">{Message}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Action Button -->
+                    <tr>
+                        <td class=""mobile-padding"" style=""padding: 10px 40px 35px 40px; text-align: center;"">
+                            <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" style=""margin: 0 auto;"">
+                                <tr>
+                                    <td style=""background-color: #000000; border-radius: 6px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);"">
+                                        <a href=""mailto:{emaildto.Email}"" class=""mobile-button"" style=""display: block; padding: 16px 45px; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; letter-spacing: 0.5px;"">
+                                            Reply to Client
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td class=""mobile-padding"" style=""padding: 25px 40px; background-color: #fafafa; border-top: 1px solid #e5e5e5;"">
+                            <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""100%"">
+                                <tr>
+                                    <td style=""text-align: center;"">
+                                        <p style=""margin: 0 0 8px; color: #666666; font-size: 13px; line-height: 1.6;"">
+                                            <strong style=""color: #000000;"">Professional Response Required</strong><br>
+                                            Please respond to this inquiry within 24 business hours.
+                                        </p>
+                                        <p style=""margin: 8px 0 0 0; color: #999999; font-size: 11px;"">
+                                            Automated notification from your website contact system
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>";
+        }
+
+
     }
 }

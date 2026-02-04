@@ -40,6 +40,7 @@
     "lucide-react": "^0.555.0",
     "motion": "^12.29.0",
     "qs": "^6.14.1",
+    "radix-ui": "^1.4.3",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-rough-notation": "^1.0.8",
