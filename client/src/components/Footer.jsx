@@ -195,11 +195,11 @@ const Footer = () => {
         ],
         company: [
             { name: 'Contact', href: '/contact' },
-            { name: 'FAQ', href: '/' },
+            { name: 'FAQ', href: '/faq' },
         ],
         legal: [
-            { name: 'Terms', href: '#terms', sectionId: 'terms' },
-            { name: 'Privacy', href: '#privacy', sectionId: 'privacy' }
+            { name: 'Terms & Conditions', href: '/terms' },
+            { name: 'Privacy Policy', href: '/privacy' }
         ]
     };
 
@@ -261,7 +261,8 @@ const Footer = () => {
                                 <li key={index}>
                                     <a
                                         href={link.href}
-                                        className="text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                                        onClick={(e) => handleLinkClick(e, link.href, link.sectionId)}
+                                        className="text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200 cursor-pointer"
                                     >
                                         {link.name}
                                     </a>
@@ -272,7 +273,7 @@ const Footer = () => {
                         <h3 className="font-semibold text-sm mb-4 text-gray-900">Social</h3>
                         <div className="flex gap-4">
                             <a
-                                href="#"
+                                href="https://www.instagram.com/talenexcommunity/"
                                 className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
                                 aria-label="Instagram"
                             >

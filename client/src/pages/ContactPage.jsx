@@ -56,7 +56,7 @@ export default function ContactPage() {
         } catch (error) {
             console.error("Contact form error:", error);
             console.log("error");
-            
+
             setSubmitStatus("error");
         } finally {
             setIsSubmitting(false);
@@ -151,7 +151,7 @@ export default function ContactPage() {
                                 <CardTitle className="text-xl">Join Our Community</CardTitle>
                                 <div className="flex mt-6 gap-4">
                                     <a
-                                        href="#"
+                                        href="https://www.instagram.com/talenexcommunity/"
                                         className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
                                         aria-label="Instagram"
                                     >
