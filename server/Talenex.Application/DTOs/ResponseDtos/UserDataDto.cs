@@ -25,7 +25,7 @@ namespace Talenex.Application.DTOs.ResponseDtos
         public UserReputationDto? Reputation { get; set; }
         public UserNotificationPreferencesDto? Notifications { get; set; }
 
-        public UserReviewDto? Reviews { get; set; }
+        public List<UserReviewDto> Reviews { get; set; } = new();
     }
 }
             

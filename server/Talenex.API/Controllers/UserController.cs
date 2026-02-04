@@ -151,17 +151,20 @@ namespace Talenex.API.Controllers
                             };
                             break;
                         case UserInclude.Reviews:
-                            // Assuming UserReviews is a collection of review entities
-                            dto.Reviews = user.UserReviews == null ? null : new UserReviewDto
-                            {
-                                Id = user.UserReviews.Id,
-                                ReviewerAvatar = user.UserReviews.ReviewerAvatar,
-                                ReviewerName = user.UserReviews.ReviewerName,
-                                Rating = user.UserReviews.Rating,
-                                ReviewMsg = user.UserReviews.ReviewMsg,
 
-                            };
+                            dto.Reviews = user.UserReviews == null
+                                ? new List<UserReviewDto>()
+                                : user.UserReviews.Select(r => new UserReviewDto
+                                {
+                                    Id = r.Id,
+                                    ReviewerAvatar = r.ReviewerAvatar,
+                                    ReviewerName = r.ReviewerName,
+                                    Rating = r.Rating,
+                                    ReviewMsg = r.ReviewMsg,
+                                }).ToList();
+
                             break;
+
                     }
                 }
 
@@ -278,15 +281,17 @@ namespace Talenex.API.Controllers
 
                     case UserInclude.Reviews:
                         // Assuming UserReviews is a collection of review entities
-                        response.Reviews = user.UserReviews == null ? null : new UserReviewDto
-                        {
-                            Id = user.UserReviews.Id,
-                            ReviewerAvatar = user.UserReviews.ReviewerAvatar,
-                            ReviewerName = user.UserReviews.ReviewerName,
-                            Rating = user.UserReviews.Rating,
-                            ReviewMsg = user.UserReviews.ReviewMsg,
+                        response.Reviews = user.UserReviews == null
+                                ? new List<UserReviewDto>()
+                                : user.UserReviews.Select(r => new UserReviewDto
+                                {
+                                    Id = r.Id,
+                                    ReviewerAvatar = r.ReviewerAvatar,
+                                    ReviewerName = r.ReviewerName,
+                                    Rating = r.Rating,
+                                    ReviewMsg = r.ReviewMsg,
+                                }).ToList();
 
-                        };
                         break;
                 }
             }
@@ -395,15 +400,17 @@ namespace Talenex.API.Controllers
                         break;
 
                     case UserInclude.Reviews:
-                        response.Reviews = user.UserReviews == null ? null : new UserReviewDto
-                        {
-                            Id = user.UserReviews.Id,
-                            ReviewerAvatar = user.UserReviews.ReviewerAvatar,
-                            ReviewerName = user.UserReviews.ReviewerName,
-                            Rating = user.UserReviews.Rating,
-                            ReviewMsg = user.UserReviews.ReviewMsg,
+                        response.Reviews = user.UserReviews == null
+                                 ? new List<UserReviewDto>()
+                                 : user.UserReviews.Select(r => new UserReviewDto
+                                 {
+                                     Id = r.Id,
+                                     ReviewerAvatar = r.ReviewerAvatar,
+                                     ReviewerName = r.ReviewerName,
+                                     Rating = r.Rating,
+                                     ReviewMsg = r.ReviewMsg,
+                                 }).ToList();
 
-                        };
                         break;
                 }
             }

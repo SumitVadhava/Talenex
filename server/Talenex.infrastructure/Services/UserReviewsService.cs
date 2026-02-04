@@ -16,6 +16,11 @@ public class UserReviewService : IUserReviewsService
         _reputationRepository = reputationRepository;
     }
 
+    public async Task<List<UserReviews>> GetByUserIdAsync(Guid userId)
+    {
+        return await _userReviewRepository.GetByUserIdAsync(userId);
+    }
+
     public async Task AddReviewAsync(CreateUserReviewDto dto)
     {
         var review = new UserReviews

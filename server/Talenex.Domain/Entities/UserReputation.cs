@@ -20,8 +20,6 @@ namespace Talenex.Domain.Entities
         public int ? TrustScore { get; set; } 
         public string ? BadgesJson { get; set; }
 
-        //public int StreakCount { get; set; }
-        //public int ReputationPoints { get; set; }
     }
 
 }

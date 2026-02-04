@@ -4,6 +4,7 @@ using Talenex.Application.DTOs;
 using Talenex.Application.DTOs.CreateDtos;
 using Talenex.Application.IRepository;
 using Talenex.Domain.Entities;
+using Talenex.infrastructure.Repositories;
 using Talenex.Infrastructure.Services; 
 
 namespace Talenex.API.Controllers
@@ -25,6 +26,14 @@ namespace Talenex.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
             => Ok(await _service.GetAllAsync());
+
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetByUserIdAsync(Guid userId)
+        {
+            var reviews = await _userReviewService.GetByUserIdAsync(userId);
+            return Ok(reviews);
+        }
+
 
         [HttpPost("add")]
         public async Task<IActionResult> AddReview([FromBody] CreateUserReviewDto dto)
