@@ -34,6 +34,7 @@ export default function Step2SelectSkillToLearn({
   userData
 }) {
   const [selected, setSelected] = useState(data?.skillToLearn || null);
+  const [requestSkill, setRequestSkill] = useState(data?.requestSkill || '');
   const [search, setSearch] = useState('');
   const [tab, setTab] = useState('available');
 
@@ -44,8 +45,8 @@ export default function Step2SelectSkillToLearn({
   );
 
   const handleNext = () => {
-    if (selected) {
-      onNext({ skillToLearn: selected });
+    if (selected || requestSkill) {
+      onNext({ skillToLearn: tab === 'available' ? selected : requestSkill });
     }
   };
 
@@ -70,10 +71,10 @@ export default function Step2SelectSkillToLearn({
           From {userData.user.name}'s Skills
         </button>
         <button
-          onClick={() => setTab('request')}
+          onClick={() => { setSelected(null); setTab('request') }}
           className={`pb-2 sm:pb-3 px-3 sm:px-4 font-medium transition-colors whitespace-nowrap text-sm sm:text-base ${tab === 'request'
-              ? 'border-b-2 border-blue-600 text-gray-900'
-              : 'text-gray-600 hover:text-gray-900'
+            ? 'border-b-2 border-blue-600 text-gray-900'
+            : 'text-gray-600 hover:text-gray-900'
             }`}
         >
           Request a New Skill
@@ -98,7 +99,7 @@ export default function Step2SelectSkillToLearn({
             {filteredSkills.map((skill) => (
               <button
                 key={skill.id}
-                onClick={() => setSelected(skill.title)}
+                onClick={() => selected ? setSelected(null) : setSelected(skill.title)}
                 className={`w-full p-3 sm:p-4 rounded-lg border-2 text-left transition-all ${selected === skill.title
                     ? 'border-blue-600 bg-blue-50'
                     : 'border-gray-200 bg-white hover:border-gray-300'
@@ -133,7 +134,7 @@ export default function Step2SelectSkillToLearn({
           <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
             Can't find the skill you're looking for? You can request it from the person you're swapping with.
           </p>
-          <Input placeholder="Describe the skill you'd like to learn..." className="border-gray-200 text-sm sm:text-base" />
+          <Input value={requestSkill} onChange={(e) => setRequestSkill(e.target.value)} placeholder="Describe the skill you'd like to learn..." className="border-gray-200 text-sm sm:text-base" />
         </div>
       )}
 
@@ -144,7 +145,7 @@ export default function Step2SelectSkillToLearn({
         </Button>
         <Button
           onClick={handleNext}
-          disabled={!selected && tab === 'available'}
+          disabled={(!selected && tab === 'available') || (tab === 'request' && !requestSkill)}
           className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8"
         >
           Next

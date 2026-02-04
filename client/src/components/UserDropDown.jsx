@@ -77,7 +77,7 @@ export default function UserDropdown() {
                                 navigate("/user-profile")
                                 setIsOpen(false);
                             }}
-                            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
                         >
                             <div className="w-9 h-9 rounded-md bg-slate-100 flex items-center justify-center">
                                 <Settings className="w-5 h-5 text-slate-600" />
@@ -92,7 +92,7 @@ export default function UserDropdown() {
                                     navigate('/');
                                 });
                             }}
-                            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
                         >
                             <div className="w-9 h-9 rounded-md bg-slate-100 flex items-center justify-center">
                                 <LogOut className="w-5 h-5 text-slate-600" />
