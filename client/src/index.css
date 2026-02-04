@@ -149,3 +149,7 @@
 .zego-responsive-container {
   overflow-x: hidden !important;
 }
+
+.cl-footer > div:last-child {
+  display: none !important;
+}
