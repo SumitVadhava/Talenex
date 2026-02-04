@@ -11,7 +11,6 @@ namespace Talenex.infrastructure.Repositories
     public class UserSkillsRepository  : Repository<UserSkills>
     {
          public UserSkillsRepository(AppDBContext db) : base(db) { }
-
         
     }
 }

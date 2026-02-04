@@ -31,6 +31,8 @@ namespace Talenex.infrastructure.Data
 
         public DbSet<UserSwapRequest> UserSwapRequests { get; set; }
 
+        public DbSet<UserReviews> UserReviews { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(u =>
@@ -181,7 +183,23 @@ namespace Talenex.infrastructure.Data
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
-               
+
+            modelBuilder.Entity<UserReviews>(r =>
+            {
+                r.ToTable("UserReviews");
+                r.HasKey(r => r.Id);
+
+                r.Property(r => r.UserId)
+                    .IsRequired();
+
+                r.Property(r => r.Rating)
+                    .IsRequired();
+
+                r.Property(r => r.CreatedAt)
+                    .IsRequired();
+            });
+
+
 
             base.OnModelCreating(modelBuilder);
         }
