@@ -25,7 +25,7 @@ builder.WebHost.UseUrls("http://0.0.0.0:10000");
 // ==========================
 builder.Services.AddControllers();
 
-builder.WebHost.UseUrls("http://0.0.0.0:10000");
+//builder.WebHost.UseUrls("http://0.0.0.0:10000");
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -139,6 +139,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 builder.Services.AddScoped<IUserSwapRequestRepository, UserSwapRequestRepository>();
 builder.Services.AddScoped<IUserReviewRepository, UserReviewRepository>();
+builder.Services.AddScoped<IUserReputationRepository, UserReputationRepository>();
 builder.Services.AddScoped<IUserSwapRequestService, UserSwapRequestService>();
 builder.Services.AddScoped<IUserReviewsService,UserReviewService>();
 

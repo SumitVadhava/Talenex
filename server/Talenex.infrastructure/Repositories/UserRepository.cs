@@ -47,6 +47,11 @@ namespace Talenex.infrastructure.Repositories
                     case UserInclude.Notifications:
                         query = query.Include(u => u.UserNotifications);
                         break;
+
+                    case UserInclude.Reviews:
+                        query = query.Include(u => u.UserReviews);
+                        break;
+
                 }
             }
 
@@ -85,6 +90,10 @@ namespace Talenex.infrastructure.Repositories
 
                     case UserInclude.Notifications:
                         query = query.Include(u => u.UserNotifications);
+                        break;
+
+                    case UserInclude.Reviews:
+                        query = query.Include(u => u.UserReviews);
                         break;
                 }
             }

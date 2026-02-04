@@ -10,8 +10,13 @@ namespace Talenex.Application.DTOs.ResponseDtos
     public class UserReviewDto
     {
         public Guid Id { get; set; }
+
+        public string ReviewerAvatar { get; set; }
+
+        public string ReviewerName { get; set; }
+
         public int Rating { get; set; }
-        public string ReviewMsg { get; set; } = string.Empty;
+        public string ReviewMsg { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

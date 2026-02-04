@@ -7,7 +7,7 @@ using Talenex.Domain.Entities;
 
 namespace Talenex.Application.IRepository
 {
-    public interface IUserReviewRepository
+    public interface IUserReviewRepository : IRepository<UserReviews>
     {
         Task<List<UserReviews>> GetByUserIdAsync(Guid userId);
     }

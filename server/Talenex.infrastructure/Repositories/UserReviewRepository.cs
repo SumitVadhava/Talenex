@@ -23,7 +23,7 @@ namespace Talenex.infrastructure.Repositories
                 .ToListAsync();
         }
 
-        
+            
     }
 
 }

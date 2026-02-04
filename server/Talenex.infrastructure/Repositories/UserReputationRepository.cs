@@ -9,7 +9,7 @@ using Talenex.infrastructure.Data;
 
 namespace Talenex.infrastructure.Repositories
 {
-    public class UserReputationRepository  : Repository<UserReputation>
+    public class UserReputationRepository  : Repository<UserReputation>, IUserReputationRepository
     {
          public UserReputationRepository(AppDBContext db) : base(db) { }
 

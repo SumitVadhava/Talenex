@@ -13,16 +13,17 @@ namespace Talenex.API.Controllers
     [Route("api/[controller]")]
     public class UserReviewsController : ControllerBase
     {
-        private readonly IService<UserPrivacy> _service;
+        private readonly IService<UserReviews> _service;
         private readonly IUserReviewsService _userReviewService;
 
-        public UserReviewsController(IUserReviewsService userReviewService)
+        public UserReviewsController(IService<UserReviews> service,IUserReviewsService userReviewService)
         {
+            _service = service;
             _userReviewService = userReviewService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllReviews()
+        public async Task<IActionResult> GetAll()
             => Ok(await _service.GetAllAsync());
 
         [HttpPost("add")]

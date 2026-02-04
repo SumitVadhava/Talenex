@@ -45,7 +45,6 @@ namespace Talenex.Domain.Entities
         //Notifications
         public UserNotificationPreferences UserNotifications { get; set; }
 
-        //Navigation collentions
-
+        public UserReviews UserReviews { get; set; }
     }
 }

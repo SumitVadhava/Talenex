@@ -150,6 +150,18 @@ namespace Talenex.API.Controllers
                                 NotifyOnSwapRequest = user.UserNotifications.NotifyOnSwapRequest,
                             };
                             break;
+                        case UserInclude.Reviews:
+                            // Assuming UserReviews is a collection of review entities
+                            dto.Reviews = user.UserReviews == null ? null : new UserReviewDto
+                            {
+                                Id = user.UserReviews.Id,
+                                ReviewerAvatar = user.UserReviews.ReviewerAvatar,
+                                ReviewerName = user.UserReviews.ReviewerName,
+                                Rating = user.UserReviews.Rating,
+                                ReviewMsg = user.UserReviews.ReviewMsg,
+
+                            };
+                            break;
                     }
                 }
 
@@ -160,26 +172,22 @@ namespace Talenex.API.Controllers
         }
 
         [HttpGet("Details")]
-        public async Task<IActionResult> GetUser(
-           [FromQuery] string[] include)
+        public async Task<IActionResult> GetUser([FromQuery] string[] include)
         {
             var includes = include
                 .Select(i => Enum.TryParse<UserInclude>(i, true, out var parsed)
                     ? parsed
                     : (UserInclude?)null)
                 .Where(i => i.HasValue)
-                //.Select(i => i.Value)
                 .Select(i => i!.Value)
                 .ToList();
 
             var userIdClaim = User.FindFirst("sub") ?? User.FindFirst(ClaimTypes.NameIdentifier);
 
-
             if (userIdClaim == null)
                 return Unauthorized("UserId not found in token");
 
             var userId = Guid.Parse(userIdClaim.Value);
-
 
             var user = await _userService.GetUserAsync(userId, includes);
 
@@ -212,7 +220,6 @@ namespace Talenex.API.Controllers
                             Latitude = user.UserProfile.Latitude,
                             Longitude = user.UserProfile.Longitude,
                         };
-
                         break;
 
                     case UserInclude.Skills:
@@ -268,6 +275,19 @@ namespace Talenex.API.Controllers
                             NotifyOnSwapRequest = user.UserNotifications.NotifyOnSwapRequest,
                         };
                         break;
+
+                    case UserInclude.Reviews:
+                        // Assuming UserReviews is a collection of review entities
+                        response.Reviews = user.UserReviews == null ? null : new UserReviewDto
+                        {
+                            Id = user.UserReviews.Id,
+                            ReviewerAvatar = user.UserReviews.ReviewerAvatar,
+                            ReviewerName = user.UserReviews.ReviewerName,
+                            Rating = user.UserReviews.Rating,
+                            ReviewMsg = user.UserReviews.ReviewMsg,
+
+                        };
+                        break;
                 }
             }
 
@@ -275,15 +295,13 @@ namespace Talenex.API.Controllers
         }
 
         [HttpGet("Details/{id}")]
-        public async Task<IActionResult> GetUserById(Guid id,
-           [FromQuery] string[] include)
+        public async Task<IActionResult> GetUserById(Guid id,[FromQuery] string[] include)
         {
             var includes = include
                 .Select(i => Enum.TryParse<UserInclude>(i, true, out var parsed)
                     ? parsed
                     : (UserInclude?)null)
                 .Where(i => i.HasValue)
-                //.Select(i => i.Value)
                 .Select(i => i!.Value)
                 .ToList();
 
@@ -373,6 +391,18 @@ namespace Talenex.API.Controllers
                             NotifyOnMessage = user.UserNotifications.NotifyOnMessage,
                             NotifyOnRatingReceived = user.UserNotifications.NotifyOnRatingReceived,
                             NotifyOnSwapRequest = user.UserNotifications.NotifyOnSwapRequest,
+                        };
+                        break;
+
+                    case UserInclude.Reviews:
+                        response.Reviews = user.UserReviews == null ? null : new UserReviewDto
+                        {
+                            Id = user.UserReviews.Id,
+                            ReviewerAvatar = user.UserReviews.ReviewerAvatar,
+                            ReviewerName = user.UserReviews.ReviewerName,
+                            Rating = user.UserReviews.Rating,
+                            ReviewMsg = user.UserReviews.ReviewMsg,
+
                         };
                         break;
                 }

@@ -13,6 +13,7 @@ namespace Talenex.Application.Common.Enums
         Availability,
         Privacy,
         Reputation,
-        Notifications
+        Notifications,
+        Reviews
     }
 }

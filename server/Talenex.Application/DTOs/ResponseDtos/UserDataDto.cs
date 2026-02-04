@@ -24,6 +24,8 @@ namespace Talenex.Application.DTOs.ResponseDtos
         public UserPrivacyDto? Privacy { get; set; }
         public UserReputationDto? Reputation { get; set; }
         public UserNotificationPreferencesDto? Notifications { get; set; }
+
+        public UserReviewDto? Reviews { get; set; }
     }
 }
             
