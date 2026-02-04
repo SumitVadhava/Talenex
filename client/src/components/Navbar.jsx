@@ -25,9 +25,9 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
   const { isLoaded, isSignedIn, user } = useUser();
   const { signOut } = useClerk();
 
-  const scrollToSection = (ref) => {
-    ref.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  // const scrollToSection = (ref) => {
+  //   ref.current?.scrollIntoView({ behavior: "smooth" });
+  // };
 
   const navLinks = {
     default: [

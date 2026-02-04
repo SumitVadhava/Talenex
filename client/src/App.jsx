@@ -27,6 +27,8 @@ import ContactPage from "./pages/ContactPage";
 import FAQPage from "./pages/FAQPage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
+import ScrollToTop from "./components/ScrollToTop";
+// import VerifyEmailPage from "./components/VerifyEmailPage";
 
 function App() {
   const location = useLocation();
@@ -60,6 +62,7 @@ function App() {
   return (
 
     <div className="min-h-screen">
+      <ScrollToTop />
       {!hideNavbar && (
         <Navbar
           featureRef={featureRef}
