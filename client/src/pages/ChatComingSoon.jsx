@@ -307,8 +307,6 @@ const ChatComingSoon = () => {
                 </div>
 
               </div>
-
-              {/* Decorative Blur Elements */}
               <div className="absolute -top-8 -right-8 w-32 h-32 bg-emerald-400/20 rounded-full blur-3xl -z-10"></div>
               <div className="absolute -bottom-8 -left-8 w-28 h-28 bg-zinc-900/10 rounded-full blur-3xl -z-10"></div>
             </div>
