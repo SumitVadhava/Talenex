@@ -96,7 +96,7 @@ const ChatComingSoon = () => {
 
       <div className="max-w-7xl w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          
+
           {/* Left Content */}
           <div className="space-y-8 lg:space-y-10">
             {/* Enhanced Badge */}
@@ -108,7 +108,7 @@ const ChatComingSoon = () => {
                 </span>
                 <span className="text-sm font-semibold tracking-wide uppercase">Coming Soon</span>
                 <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </div>
             </div>
@@ -133,7 +133,7 @@ const ChatComingSoon = () => {
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
                 <span className="text-zinc-700 font-medium">Real-time messaging</span>
@@ -141,7 +141,7 @@ const ChatComingSoon = () => {
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
                 <span className="text-zinc-700 font-medium">File sharing & media support</span>
@@ -149,7 +149,7 @@ const ChatComingSoon = () => {
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
                 <span className="text-zinc-700 font-medium">Group conversations</span>
@@ -174,15 +174,15 @@ const ChatComingSoon = () => {
             <div className="relative max-w-md mx-auto">
               {/* Chat Container */}
               <div className="bg-white border border-zinc-200 rounded-2xl shadow-xl overflow-hidden">
-                
+
                 {/* Chat Header */}
                 <div className="bg-zinc-900 p-5 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="relative">
                       <div className="w-11 h-11 bg-zinc-700 rounded-full flex items-center justify-center">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                          <path d="M10 10C12.0711 10 13.75 8.32107 13.75 6.25C13.75 4.17893 12.0711 2.5 10 2.5C7.92893 2.5 6.25 4.17893 6.25 6.25C6.25 8.32107 7.92893 10 10 10Z" fill="white"/>
-                          <path d="M3.75 17.5C3.75 14.0482 6.54822 11.25 10 11.25C13.4518 11.25 16.25 14.0482 16.25 17.5" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                          <path d="M10 10C12.0711 10 13.75 8.32107 13.75 6.25C13.75 4.17893 12.0711 2.5 10 2.5C7.92893 2.5 6.25 4.17893 6.25 6.25C6.25 8.32107 7.92893 10 10 10Z" fill="white" />
+                          <path d="M3.75 17.5C3.75 14.0482 6.54822 11.25 10 11.25C13.4518 11.25 16.25 14.0482 16.25 17.5" stroke="white" strokeWidth="2" strokeLinecap="round" />
                         </svg>
                       </div>
                       <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 rounded-full border-2 border-zinc-900"></div>
@@ -192,13 +192,13 @@ const ChatComingSoon = () => {
                       <div className="text-zinc-400 text-xs">Active now</div>
                     </div>
                   </div>
-                  <button className="text-zinc-400 hover:text-white transition">
+                  {/* <button className="text-zinc-400 hover:text-white transition">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                       <circle cx="10" cy="4" r="1.5" fill="currentColor"/>
                       <circle cx="10" cy="10" r="1.5" fill="currentColor"/>
                       <circle cx="10" cy="16" r="1.5" fill="currentColor"/>
                     </svg>
-                  </button>
+                  </button> */}
                 </div>
 
                 {/* Date Separator */}
@@ -208,7 +208,7 @@ const ChatComingSoon = () => {
 
                 {/* Messages */}
                 <div className="px-5 pb-5 space-y-4" style={{ height: '320px', overflowY: 'auto' }}>
-                  
+
                   {/* Message 1 */}
                   <div className="message flex gap-2" style={{ animationDelay: '0.5s' }}>
                     <div className="w-8 h-8 bg-zinc-200 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-semibold text-zinc-600">
@@ -284,22 +284,22 @@ const ChatComingSoon = () => {
                     <div className="absolute inset-0 bg-zinc-50/90 backdrop-blur-sm z-10 flex items-center justify-center rounded-xl">
                       <div className="text-center">
                         <svg className="w-8 h-8 mx-auto mb-2 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                         <p className="text-xs font-semibold text-zinc-600">Available Soon</p>
                       </div>
                     </div>
                     {/* Input (Blurred) */}
                     <div className="flex items-center gap-3 opacity-40">
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         placeholder="Type your message..."
                         disabled
                         className="flex-1 bg-white border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none cursor-not-allowed"
                       />
                       <button disabled className="bg-zinc-900 text-white p-3 rounded-xl cursor-not-allowed">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                          <path d="M2.5 10L17.5 3.33334L10.8333 18.3333L8.33333 11.6667L2.5 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M2.5 10L17.5 3.33334L10.8333 18.3333L8.33333 11.6667L2.5 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </button>
                     </div>
