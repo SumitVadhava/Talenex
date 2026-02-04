@@ -27,7 +27,6 @@ import ContactPage from "./pages/ContactPage";
 import FAQPage from "./pages/FAQPage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
-// import VerifyEmailPage from "./components/VerifyEmailPage";
 
 function App() {
   const location = useLocation();

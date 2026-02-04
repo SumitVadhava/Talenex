@@ -13,6 +13,8 @@ namespace Talenex.Application.DTOs.ResponseDtos
         public Guid Id { get; set; }
 
         public decimal AverageRating { get; set; } = 0;
+
+        public List<string>? UserReview { get; set; }
         public int TotalReviews { get; set; } = 0;
         public int? TrustScore { get; set; }
         public List<string>? BadgesJson { get; set; }
