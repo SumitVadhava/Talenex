@@ -286,6 +286,10 @@ import {
   ChevronDown,
   ChevronUp,
   Check,
+  Award,
+  ShieldCheckIcon,
+  BadgeCheck,
+  StarIcon,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -301,6 +305,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const UserProfilePage = () => {
   const [showAllSkills, setShowAllSkills] = useState(false);
@@ -378,26 +383,126 @@ const UserProfilePage = () => {
 
 
 
-  if (loading) {
+  if (loading || !userData) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground animate-pulse">Loading...</p>
+      <div className="min-h-screen bg-gray-50/50 p-4 md:p-8">
+        <div className="max-w-5xl mx-auto space-y-6">
+          {/* Header Skeleton */}
+          <Card className="border-none shadow-md overflow-hidden bg-white">
+            <Skeleton className="h-32 w-full bg-slate-200" />
+            <div className="px-6 md:px-8 pb-6 md:pb-8">
+              <div className="flex flex-col md:flex-row items-start md:items-end -mt-12 mb-4 gap-6">
+                <Skeleton className="h-32 w-32 rounded-full border-4 border-white bg-slate-200" />
+                <div className="flex-1 space-y-3 mt-2 md:mt-0 w-full">
+                  <Skeleton className="h-8 w-48 bg-slate-200" />
+                  <Skeleton className="h-4 w-32 bg-slate-200" />
+                  <Skeleton className="h-6 w-24 rounded-full bg-slate-200" />
+                </div>
+                <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
+                  <Skeleton className="h-10 w-28 rounded-md bg-slate-200" />
+                  <Skeleton className="h-10 w-32 rounded-md bg-slate-200" />
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Stats Skeleton */}
+            <div className="space-y-6">
+              <Card className="shadow-sm border-slate-200">
+                <CardHeader className="border-b border-slate-50">
+                  <Skeleton className="h-6 w-32 bg-slate-200" />
+                </CardHeader>
+                <CardContent className="space-y-4 pt-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="flex justify-between items-center">
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="h-8 w-8 rounded-md bg-slate-200" />
+                        <Skeleton className="h-4 w-24 bg-slate-200" />
+                      </div>
+                      <Skeleton className="h-4 w-8 bg-slate-200" />
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Skills Skeleton */}
+            <div className="md:col-span-2 space-y-6">
+              <Card className="shadow-sm border-slate-200 h-full">
+                <CardHeader className="border-b border-slate-50">
+                  <Skeleton className="h-6 w-32 bg-slate-200" />
+                </CardHeader>
+                <CardContent className="space-y-8 pt-4">
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <Skeleton className="h-4 w-24 bg-slate-200" />
+                      <Skeleton className="h-4 w-16 rounded-full bg-slate-200" />
+                    </div>
+                    <div className="flex gap-2 flex-wrap">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Skeleton key={i} className="h-8 w-24 rounded-md bg-slate-200" />
+                      ))}
+                    </div>
+                  </div>
+                  <Separator className="bg-slate-200" />
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <Skeleton className="h-4 w-24 bg-slate-200" />
+                      <Skeleton className="h-4 w-16 rounded-full bg-slate-200" />
+                    </div>
+                    <div className="flex gap-2 flex-wrap">
+                      {[1, 2, 3].map((i) => (
+                        <Skeleton key={i} className="h-8 w-24 rounded-md bg-slate-200" />
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Achievements Skeleton */}
+            <Card className="shadow-sm border-slate-200">
+              <CardHeader className="border-b border-slate-50">
+                <Skeleton className="h-6 w-32 bg-slate-200" />
+              </CardHeader>
+              <CardContent className="h-48 flex items-center justify-center">
+                <Skeleton className="h-8 w-48 bg-slate-200" />
+              </CardContent>
+            </Card>
+
+            {/* Reviews Skeleton */}
+            <Card className="shadow-sm border-slate-200">
+              <CardHeader className="border-b border-slate-50 flex flex-row justify-between items-center">
+                <div className="flex gap-2">
+                  <Skeleton className="h-6 w-24 bg-slate-200" />
+                  <Skeleton className="h-6 w-12 rounded-full bg-slate-200" />
+                </div>
+                <Skeleton className="h-8 w-24 rounded-md bg-slate-200" />
+              </CardHeader>
+              <CardContent className="h-48 flex items-center justify-center">
+                <Skeleton className="h-8 w-32 bg-slate-200" />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Certificates Skeleton */}
+          <Card className="shadow-sm border-slate-200 w-full">
+            <CardHeader className="border-b border-slate-50">
+              <Skeleton className="h-6 w-32 bg-slate-200" />
+            </CardHeader>
+            <CardContent className="h-32 flex items-center justify-center">
+              <Skeleton className="h-8 w-40 bg-slate-200" />
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
   }
 
-  if (!userData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>User data not found</p>
-      </div>
-    );
-  }
-
-  const displayedSkills = userData.offeredSkills || [];
+  const displayedSkills = userData?.offeredSkills || [];
   const hiddenCount = displayedSkills.length - 5;
 
   return (
@@ -415,11 +520,32 @@ const UserProfilePage = () => {
                     variant="ghost"
                     size="icon"
                     className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 hover:bg-white/80 backdrop-blur-sm transition-all cursor-pointer"
-                    onClick={() => {
+                    onClick={async () => {
                       const url = `${window.location.origin}/user-details/${userData.id}`;
-                      navigator.clipboard.writeText(url);
-                      setIsCopied(true);
-                      setTimeout(() => setIsCopied(false), 2000);
+                      const shareData = {
+                        title: `Check out ${userData.user.name}'s profile on Talenex`,
+                        text: `View ${userData.user.name}'s skills and achievements on Talenex.`,
+                        url: url,
+                      };
+
+                      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+                        try {
+                          await navigator.share(shareData);
+                        } catch (err) {
+                          if (err.name !== 'AbortError') {
+                            console.error('Error sharing:', err);
+                            // Fallback to clipboard if share fails
+                            navigator.clipboard.writeText(url);
+                            setIsCopied(true);
+                            setTimeout(() => setIsCopied(false), 2000);
+                          }
+                        }
+                      } else {
+                        // Fallback to clipboard
+                        navigator.clipboard.writeText(url);
+                        setIsCopied(true);
+                        setTimeout(() => setIsCopied(false), 2000);
+                      }
                     }}
                   >
                     {isCopied ? (
@@ -441,10 +567,10 @@ const UserProfilePage = () => {
               <div className="relative">
                 <Avatar className="h-32 w-32 border-4 border-white ring-1 ring-slate-100 bg-white shadow-sm transition-transform duration-300 ease-in-out group-hover:scale-105">
                   <AvatarImage
-                    src={userData.user.avatar}
-                    alt={userData.user.name}
+                    src={userData?.user.avatar}
+                    alt={userData?.user.name}
                   />
-                  <AvatarFallback>{userData.user.name}</AvatarFallback>
+                  <AvatarFallback>{userData?.user.name}</AvatarFallback>
                 </Avatar>
                 {/* Subtle status indicator integrated into border */}
                 <div
@@ -456,21 +582,21 @@ const UserProfilePage = () => {
               <div className="flex-1 space-y-1 mt-2 md:mt-0 text-center md:text-left">
                 <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
                   <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-                    {userData.user.name}
+                    {userData?.user.name}
                   </h1>
                 </div>
 
                 <div className="flex items-center justify-center md:justify-start text-slate-500 gap-1 text-sm font-medium">
                   <MapPin className="w-4 h-4" />
-                  <span>{userData.user.location}</span>
+                  <span>{userData?.user.location}</span>
                 </div>
 
                 <div className="flex items-center justify-center md:justify-start gap-2 pt-1">
                   <div className="flex items-center bg-amber-50 text-amber-700 border border-amber-100 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide hover:bg-amber-100 transition-colors">
                     <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500 mr-1.5" />
                     Rating :{" "}
-                    {userData.user.rating != 0
-                      ? userData.user.rating
+                    {userData?.user.rating != 0
+                      ? userData?.user.rating
                       : "No Rating"}
                   </div>
                 </div>
@@ -520,11 +646,11 @@ const UserProfilePage = () => {
                     bg: "bg-blue-100",
                   },
                   {
-                    icon: CheckCircle2,
-                    label: "Response Rate",
+                    icon: StarIcon,
+                    label: "Total Reviews",
                     value: 0,
-                    color: "text-green-600",
-                    bg: "bg-green-100",
+                    color: "text-yellow-600",
+                    bg: "bg-yellow-100",
                   },
                   {
                     icon: Calendar,
@@ -790,6 +916,51 @@ const UserProfilePage = () => {
             </CardContent>
           </Card>
         </div>
+        {/* Certificates */}
+        <Card className="shadow-sm border-slate-200 gap-0 w-full">
+          <CardHeader className="border-b border-slate-50">
+            <CardTitle className="text-base font-bold text-slate-800">
+              Certificates
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="h-full">
+            {userData.offeredSkills?.some((s) => s.certificateURL) ? (
+              <div className="space-y-4 pt-4">
+                {userData.offeredSkills
+                  .filter((s) => s.certificateURL)
+                  .map((skill, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 p-3 rounded-lg border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-colors"
+                    >
+                      <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <Award className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-slate-900 truncate">
+                          {skill.title}
+                        </p>
+                        <a
+                          href={skill.certificateURL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-blue-600 hover:text-blue-700 hover:underline"
+                        >
+                          View Certificate
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            ) : (
+              <div className="flex justify-center items-center h-full min-h-[100px]">
+                <h1 className="text-xl font-semibold text-gray-300">
+                  No Certificates
+                </h1>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

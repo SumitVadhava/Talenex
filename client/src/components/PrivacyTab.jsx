@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent, Switch } from './ui/Primitive
 import { Eye, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export const PrivacyTab = ({ data, onUpdate }) => {
+export const PrivacyTab = ({ data, onUpdate, readOnly }) => {
   const handleChange = (field, value) => {
     onUpdate({ [field]: value });
   };
@@ -17,16 +17,16 @@ export const PrivacyTab = ({ data, onUpdate }) => {
       className="space-y-6"
     >
       <div className="mb-6">
-         <h2 className="text-2xl font-bold tracking-tight text-foreground">Privacy & Visibility</h2>
-         <p className="text-muted-foreground mt-1">Manage who can see your profile and details.</p>
+        <h2 className="text-2xl font-bold tracking-tight text-foreground">Privacy & Visibility</h2>
+        <p className="text-muted-foreground mt-1">Manage who can see your profile and details.</p>
       </div>
 
       <Card>
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center gap-2.5 text-lg">
-             <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                {data.publicProfile ? <Eye size={20} /> : <Lock size={20} />}
-             </div>
+            <div className="p-2 bg-primary/10 rounded-lg text-primary">
+              {data.publicProfile ? <Eye size={20} /> : <Lock size={20} />}
+            </div>
             Profile Settings
           </CardTitle>
         </CardHeader>
@@ -36,22 +36,24 @@ export const PrivacyTab = ({ data, onUpdate }) => {
               <label className="text-base font-medium text-foreground">Public Profile</label>
               <p className="text-sm text-muted-foreground">Allow anyone to view your profile without logging in.</p>
             </div>
-            <Switch 
-              checked={data.publicProfile} 
-              onCheckedChange={(checked) => handleChange('publicProfile', checked)} 
+            <Switch
+              disabled={readOnly}
+              checked={data.publicProfile}
+              onCheckedChange={(checked) => handleChange('publicProfile', checked)}
             />
           </div>
 
           <div className="h-px bg-border/50" />
-          
+
           <div className="flex items-center justify-between">
             <div className="space-y-1.5">
               <label className="text-base font-medium text-foreground">Show Location</label>
               <p className="text-sm text-muted-foreground">Display your city and country on your profile.</p>
             </div>
-            <Switch 
-              checked={data.showLocation} 
-              onCheckedChange={(checked) => handleChange('showLocation', checked)} 
+            <Switch
+              disabled={readOnly}
+              checked={data.showLocation}
+              onCheckedChange={(checked) => handleChange('showLocation', checked)}
             />
           </div>
 
@@ -62,9 +64,10 @@ export const PrivacyTab = ({ data, onUpdate }) => {
               <label className="text-base font-medium text-foreground">Show Skills</label>
               <p className="text-sm text-muted-foreground">Make your offered and wanted skills visible.</p>
             </div>
-            <Switch 
-              checked={data.showSkills} 
-              onCheckedChange={(checked) => handleChange('showSkills', checked)} 
+            <Switch
+              disabled={readOnly}
+              checked={data.showSkills}
+              onCheckedChange={(checked) => handleChange('showSkills', checked)}
             />
           </div>
         </CardContent>

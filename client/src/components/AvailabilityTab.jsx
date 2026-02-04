@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent, Switch, Select } from './ui/P
 import { Clock, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export const AvailabilityTab = ({ data, onUpdate }) => {
+export const AvailabilityTab = ({ data, onUpdate, readOnly }) => {
   // Direct update wrapper for instant save
   const handleChange = (field, value) => {
     console.log(field, value);
@@ -19,8 +19,8 @@ export const AvailabilityTab = ({ data, onUpdate }) => {
       className="space-y-6"
     >
       <div className="mb-6">
-         <h2 className="text-2xl font-bold tracking-tight text-foreground">Availability Settings</h2>
-         <p className="text-muted-foreground mt-1">Manage your schedule and preferences for skill swaps.</p>
+        <h2 className="text-2xl font-bold tracking-tight text-foreground">Availability Settings</h2>
+        <p className="text-muted-foreground mt-1">Manage your schedule and preferences for skill swaps.</p>
       </div>
 
       <Card>
@@ -38,22 +38,24 @@ export const AvailabilityTab = ({ data, onUpdate }) => {
               <label className="text-base font-medium text-foreground">Available on Weekdays</label>
               <p className="text-sm text-muted-foreground">Monday - Friday</p>
             </div>
-            <Switch 
-              checked={data.weekdays} 
-              onCheckedChange={(checked) => handleChange('weekdays', checked)} 
+            <Switch
+              disabled={readOnly}
+              checked={data.weekdays}
+              onCheckedChange={(checked) => handleChange('weekdays', checked)}
             />
           </div>
-          
+
           <div className="h-px bg-border/50" />
-          
+
           <div className="flex items-center justify-between">
             <div className="space-y-1.5">
               <label className="text-base font-medium text-foreground">Available on Weekends</label>
               <p className="text-sm text-muted-foreground">Saturday & Sunday</p>
             </div>
-            <Switch 
-              checked={data.weekends} 
-              onCheckedChange={(checked) => handleChange('weekends', checked)} 
+            <Switch
+              disabled={readOnly}
+              checked={data.weekends}
+              onCheckedChange={(checked) => handleChange('weekends', checked)}
             />
           </div>
         </CardContent>
@@ -62,18 +64,19 @@ export const AvailabilityTab = ({ data, onUpdate }) => {
       <Card>
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center gap-2.5 text-lg">
-             <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                <Clock size={20} />
-             </div>
+            <div className="p-2 bg-primary/10 rounded-lg text-primary">
+              <Clock size={20} />
+            </div>
             Session Preferences
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-3">
             <label className="text-base font-medium text-foreground">Preferred Session Duration</label>
-            <Select 
-              value={data.duration} 
-              onChange={(e) => handleChange('duration', e.target.value)} 
+            <Select
+              disabled={readOnly}
+              value={data.duration}
+              onChange={(e) => handleChange('duration', e.target.value)}
               className="max-w-md"
             >
               <option value="30">30 Minutes</option>
@@ -83,14 +86,15 @@ export const AvailabilityTab = ({ data, onUpdate }) => {
             </Select>
             <p className="text-sm text-muted-foreground">Average length of time you can commit to a single session.</p>
           </div>
-          
+
           <div className="h-px bg-border/50" />
 
           <div className="grid gap-3">
             <label className="text-base font-medium text-foreground">Preferred Session Mode</label>
-            <Select 
-              value={data.mode} 
-              onChange={(e) => handleChange('mode', e.target.value)} 
+            <Select
+              disabled={readOnly}
+              value={data.mode}
+              onChange={(e) => handleChange('mode', e.target.value)}
               className="max-w-md"
             >
               <option value="online">Online (Video Call)</option>

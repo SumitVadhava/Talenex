@@ -138,7 +138,7 @@
 
 
 import React, { useRef, useState } from "react";
-import { MapPin, Share2, Check, X } from "lucide-react";
+import { MapPin, Share2, Check, X, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { Input } from "./ui/Primitives";
@@ -147,10 +147,12 @@ export const Header = ({
   user,
   showEditButton = true,
   isEditing = false,
+  isSaving = false,
   onEditToggle,
   onSave,
   onCancel,
-  onUserChange
+  onUserChange,
+  showShareButton = true
 }) => {
   const [copied, setCopied] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -159,11 +161,32 @@ export const Header = ({
   // -------------------------------
   // Share profile link
   // -------------------------------
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href).then(() => {
+  const handleShare = async () => {
+    const url = `${window.location.origin}/user-profile/${user.id}`;
+    const shareData = {
+      title: `Check out ${user.name}'s profile on Talenex`,
+      text: `View ${user.name}'s skills and profile on Talenex.`,
+      url: url,
+    };
+
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          console.error("Error sharing:", err);
+          // Fallback to clipboard if share fails
+          navigator.clipboard.writeText(url);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        }
+      }
+    } else {
+      // Fallback to clipboard
+      navigator.clipboard.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    });
+    }
   };
 
   // -------------------------------
@@ -271,12 +294,9 @@ export const Header = ({
                 className="text-xl md:text-2xl font-bold h-12"
                 placeholder="Your Name"
               />
-              <Input
-                value={user.handle}
-                onChange={(e) => onUserChange?.("handle", e.target.value)}
-                className="text-muted-foreground font-medium h-9 w-fit"
-                placeholder="@handle"
-              />
+              <p className="text-muted-foreground font-medium px-3 py-2">
+                {user.handle}
+              </p>
             </div>
           ) : (
             <>
@@ -314,33 +334,38 @@ export const Header = ({
             <div className="flex gap-2 w-full md:w-auto">
               <button
                 onClick={onCancel}
-                disabled={uploading}
-                className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 shadow-sm"
+                disabled={uploading || isSaving}
+                className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <X size={16} /> Cancel
               </button>
               <button
                 onClick={onSave}
-                disabled={uploading}
-                className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 shadow-sm"
+                disabled={uploading || isSaving}
+                className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Check size={16} /> Save
+                {isSaving ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Check size={16} />
+                )}
+                {isSaving ? "Saving..." : "Save"}
               </button>
             </div>
           ) : (
             <button
               onClick={onEditToggle}
-              className="flex-1 md:flex-none inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 shadow-sm"
+              className="flex-1 md:flex-none inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 shadow-sm cursor-pointer"
             >
               Edit Profile
             </button>
           )
         )}
 
-        {!isEditing && (
+        {!isEditing && showShareButton && (
           <button
             onClick={handleShare}
-            className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 shadow-sm"
+            className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 shadow-sm cursor-pointer"
           >
             {copied ? <Check size={16} /> : <Share2 size={16} />}
             {copied ? "Copied" : "Share"}

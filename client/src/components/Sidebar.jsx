@@ -20,14 +20,18 @@ const NAV_ITEMS = [
   { label: "Settings", icon: Settings, id: "settings" },
 ];
 
-export const Sidebar = ({ activeTab, setActiveTab }) => {
+export const Sidebar = ({ activeTab, setActiveTab, readOnly }) => {
+  const items = readOnly
+    ? NAV_ITEMS.filter((item) => item.id !== "settings" && item.id !== "privacy")
+    : NAV_ITEMS;
+
   return (
     <motion.nav
       initial={{ x: -20, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       className="flex flex-col space-y-1"
     >
-      {NAV_ITEMS.map((item) => {
+      {items.map((item) => {
         const isActive = activeTab === item.id;
         return (
           <button

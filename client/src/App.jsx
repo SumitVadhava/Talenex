@@ -95,6 +95,15 @@ function App() {
         />
 
         <Route
+          path="/user-profile/:id"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/user-details"
           element={
             <ProtectedRoute>

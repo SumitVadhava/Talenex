@@ -24,6 +24,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axios";
 import qs from "qs";
 import { useUser } from "@clerk/clerk-react";
+import { useParams } from "react-router-dom";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("general");
@@ -32,6 +33,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState(null);
+  const { id } = useParams();
   const [sectionIds, setSectionIds] = useState({
     availability: null,
     notifications: null,
@@ -47,14 +49,18 @@ const ProfilePage = () => {
 
   // Simulate Database Fetch
   useEffect(() => {
-    fetchData();
+    if (id) {
+      fetchData(id);
+    } else {
+      fetchData();
+    }
   }, []);
 
-  const fetchData = async () => {
+  const fetchData = async (userId) => {
     // Simulate network delay
     try {
       const response = await api.get(
-        "/User/Details",
+        "/User/Details" + (userId ? "/" + userId : ""),
         {
           params: {
             include: [
@@ -92,7 +98,7 @@ const ProfilePage = () => {
 
   const mapApiUserToMockUser = (api) => {
     return {
-      id: api.profile?.userId || api.id,
+      id: api?.userId || api.id,
 
       name: api.profile?.fullName || "", // --
       handle: api.email || "", // -- |
@@ -330,18 +336,25 @@ const ProfilePage = () => {
     });
   };
 
+  const [isSaving, setIsSaving] = useState(false);
+
   const handleEditToggle = () => {
     setEditedUser(user);
     setIsEditing(true);
   };
 
   const handleSave = async () => {
-    await Promise.all([updateProfile(), updateSkills()]);
+    setIsSaving(true);
+    try {
+      await Promise.all([updateProfile(), updateSkills()]);
 
-    setUser(editedUser);
-    setIsEditing(false);
-    // Simulate batch save for General tab
-    console.log("[PUT] Batch update for General profile:", editedUser);
+      setUser(editedUser);
+      setIsEditing(false);
+      // Simulate batch save for General tab
+      console.log("[PUT] Batch update for General profile:", editedUser);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleCancel = () => {
@@ -380,6 +393,7 @@ const ProfilePage = () => {
 
   // Determine which user object to display for General Tab
   const displayUser = isEditing ? editedUser : user;
+  const isReadOnly = !!id;
 
   const renderContent = () => {
     switch (activeTab) {
@@ -434,6 +448,7 @@ const ProfilePage = () => {
             key="availability"
             data={user.preferences.availability}
             onUpdate={updateAvailability}
+            readOnly={isReadOnly}
           />
         );
       case "notifications":
@@ -442,6 +457,7 @@ const ProfilePage = () => {
             key="notifications"
             data={user.preferences.notifications}
             onUpdate={updateNotifications}
+            readOnly={isReadOnly}
           />
         );
       case "privacy":
@@ -450,6 +466,7 @@ const ProfilePage = () => {
             key="privacy"
             data={user.preferences.privacy}
             onUpdate={updatePrivacy}
+            readOnly={isReadOnly}
           />
         );
       case "settings":
@@ -471,8 +488,10 @@ const ProfilePage = () => {
         {/* Header is always visible at the top */}
         <Header
           user={displayUser}
-          showEditButton={activeTab === "general"}
+          showEditButton={activeTab === "general" && !isReadOnly}
+          showShareButton={!isReadOnly}
           isEditing={isEditing}
+          isSaving={isSaving}
           onEditToggle={handleEditToggle}
           onSave={handleSave}
           onCancel={handleCancel}
@@ -482,7 +501,11 @@ const ProfilePage = () => {
         <div className="flex flex-col md:flex-row gap-8 mt-8">
           {/* Internal Sidebar / Tabs */}
           <aside className="w-full md:w-64 flex-shrink-0">
-            <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+            <Sidebar
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              readOnly={isReadOnly}
+            />
           </aside>
 
           {/* Main Content Area */}
