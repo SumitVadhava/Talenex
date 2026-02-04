@@ -138,7 +138,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 builder.Services.AddScoped<IUserSwapRequestRepository, UserSwapRequestRepository>();
+builder.Services.AddScoped<IUserReviewRepository, UserReviewRepository>();
 builder.Services.AddScoped<IUserSwapRequestService, UserSwapRequestService>();
+builder.Services.AddScoped<IUserReviewsService,UserReviewService>();
 
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IClerkService, ClerkService>();
