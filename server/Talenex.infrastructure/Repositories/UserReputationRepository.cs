@@ -19,5 +19,14 @@ namespace Talenex.infrastructure.Repositories
                 
         }
 
+        public async Task UpdateByUserIdAsync(Guid userId)
+        {
+            var reputation = await GetByUserIdAsync(userId);
+            if (reputation != null)
+            {
+                _table.Update(reputation);
+                await _db.SaveChangesAsync();
+            }
+        }
     }
 }

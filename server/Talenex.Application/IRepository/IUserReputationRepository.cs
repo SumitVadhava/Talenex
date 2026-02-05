@@ -12,6 +12,8 @@ namespace Talenex.infrastructure.Repositories
     {
 
         public Task<UserReputation?> GetByUserIdAsync(Guid userId);
-        
+
+        public Task UpdateByUserIdAsync(Guid userId);
+
     }
 }

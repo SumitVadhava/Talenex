@@ -17,7 +17,7 @@ namespace Talenex.API.Controllers
         private readonly IService<UserReviews> _service;
         private readonly IUserReviewsService _userReviewService;
 
-        public UserReviewsController(IService<UserReviews> service,IUserReviewsService userReviewService)
+        public UserReviewsController(IService<UserReviews> service, IUserReviewsService userReviewService)
         {
             _service = service;
             _userReviewService = userReviewService;
