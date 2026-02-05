@@ -280,16 +280,17 @@
 
 // =================================== 
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useContext } from 'react';
 import { SwapStatus } from './../constants/swapStatus';
 import { SwapCard, Modal, SwapCardSkeleton, ReviewModal } from './../components/SwapReqSections';
 import { HubConnectionBuilder } from '@microsoft/signalr';
-import { useUser } from '@clerk/clerk-react';
-
 import api from '../api/axios';
 import { toast } from 'react-toastify';
 import { notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '@/context/UserContext';
+import { useUser } from '@clerk/clerk-react';
+import axios from 'axios';
 
 const formatProposedTime = (proposedTime) => {
     if (!proposedTime) return { date: "TBD", time: "TBD" };
@@ -366,7 +367,7 @@ const mapBackendToFrontend = (request) => {
         id: request.id,
         partnerId: partner.userId || partner.id, // Store partner's userId for review submission
         partnerName: partner.fullName,
-        partnerAvatar: partner.profilePhotoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(partner.fullName)}&background=random`,
+        partnerAvatar: partner.profilePhotoUrl,
         giveSkill: isRequester ? request.skillToOffer : request.skillToLearn,
         getSkill: isRequester ? request.skillToLearn : request.skillToOffer,
         date: date,
@@ -381,7 +382,7 @@ const mapBackendToFrontend = (request) => {
 
 
 const App = () => {
-    const { user } = useUser(); // Get current user from Clerk
+
     const [activeTab, setActiveTab] = useState(SwapStatus.PENDING);
     const [swaps, setSwaps] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -396,6 +397,9 @@ const App = () => {
     // Review Modal State
     const [reviewModalOpen, setReviewModalOpen] = useState(false);
     const [selectedSwapForReview, setSelectedSwapForReview] = useState(null);
+
+    const { userData } = useContext(UserContext);
+    const { user } = useUser();
 
     useEffect(() => {
         fetchSwaps();
@@ -549,29 +553,31 @@ const App = () => {
         try {
             setReviewLoader(true);
             // Get current user info from Clerk
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem("token");
 
             // Get reviewer info from Clerk user object
-            const reviewerName = user?.fullName || `${user?.firstName || ''} ${user?.lastName || ''}`.trim() || 'Anonymous User';
-            const reviewerAvatar = user?.imageUrl || '';
+            const reviewerName = userData?.fullName || user?.unsafeMetadata?.fullName;
+            const reviewerAvatar = userData?.profilePhotoUrl || user?.unsafeMetadata?.profile?.avatarUrl;
 
             // Prepare the request body according to backend API spec
             const requestBody = {
-                userId: selectedSwapForReview?.partnerId, // The partner's userId (person being reviewed)
+                userId: 'bc5376fb-7d98-47d6-2790-08de4f8fc021', // The partner's userId (person being reviewed)
                 reviewerAvatar: reviewerAvatar,
                 reviewerName: reviewerName,
-                rating: reviewData.rating,
+                rating: Number(reviewData.rating),
                 reviewMsg: reviewData.review
             };
 
             console.log("Submitting Review to Backend:", requestBody);
 
             // Call the backend API
-            const response = await api.post('/UserReviews/add', requestBody, {
-                headers: {
-                    Authorization: `Bearer ${token}`
+            const response = await api.post('/UserReviews/add', requestBody,
+               {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
                 }
-            });
+            );
 
             console.log("Review submitted successfully:", response.data);
 
