@@ -294,6 +294,7 @@ export default function Step1BasicInfo({ formData, updateFormData, onNext }) {
             id="username"
             name="username"
             placeholder="yourname"
+            maxLength={25}
             prefixText="telnex.com/"
             value={formData.username}
             onChange={handleInputChange}
@@ -305,6 +306,7 @@ export default function Step1BasicInfo({ formData, updateFormData, onNext }) {
           <Input
             id="location"
             name="location"
+            maxLength={40}
             placeholder="e.g. Rajkot, Gujarat"
             value={formData.location}
             onChange={handleInputChange}

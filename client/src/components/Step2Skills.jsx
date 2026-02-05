@@ -238,6 +238,7 @@ export default function Step2Skills({
             <Input
               placeholder="e.g. Python Programming"
               value={newSkill.title}
+              maxLength={40}
               onChange={(e) => {
                 setNewSkill({ ...newSkill, title: e.target.value });
                 if (errors.title) {
@@ -316,6 +317,7 @@ export default function Step2Skills({
           <Textarea
             placeholder="Briefly describe your experience..."
             value={newSkill.description}
+            maxLength={200}
             onChange={(e) =>
               setNewSkill({ ...newSkill, description: e.target.value })
             }

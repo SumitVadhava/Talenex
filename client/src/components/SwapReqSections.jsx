@@ -330,8 +330,10 @@ import {
     AlertTriangle,
     Info,
     Star,
-    Video
+    Video,
+    Loader2
 } from 'lucide-react';
+import { UserContext } from '@/context/UserContext';
 
 
 
@@ -409,7 +411,7 @@ export const Modal = ({
                         </div>
                         <button
                             onClick={onClose}
-                            className="p-2 -mr-2 text-slate-300 hover:text-slate-500 hover:bg-slate-50 rounded-full transition-colors"
+                            className="p-2 -mr-2 text-slate-300 hover:text-slate-500 hover:bg-slate-50 rounded-full transition-colors cursor-pointer"
                         >
                             <X size={20} />
                         </button>
@@ -423,13 +425,13 @@ export const Modal = ({
                     <div className="grid grid-cols-2 gap-4">
                         <button
                             onClick={onClose}
-                            className="px-6 py-3.5 text-slate-600 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 hover:text-slate-800 font-semibold transition-colors"
+                            className="px-6 py-3.5 text-slate-600 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 hover:text-slate-800 font-semibold transition-colors cursor-pointer"
                         >
                             Cancel
                         </button>
                         <button
                             onClick={onConfirm}
-                            className={`px-6 py-3.5 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 ${buttonBg}`}
+                            className={`px-6 py-3.5 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 cursor-pointer ${buttonBg}`}
                         >
                             {actionLabel}
                         </button>
@@ -445,6 +447,7 @@ export const ReviewModal = ({
     isOpen,
     onClose,
     onSubmit,
+    isLoading,
     partnerName
 }) => {
     const [rating, setRating] = React.useState(0);
@@ -466,7 +469,7 @@ export const ReviewModal = ({
                 <div className="p-8">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Write a Review</h2>
-                        <button onClick={onClose} className="p-2 text-slate-300 hover:text-slate-500 rounded-full transition-colors">
+                        <button onClick={onClose} className="p-2 text-slate-300 hover:text-slate-500 rounded-full transition-colors cursor-pointer">
                             <X size={20} />
                         </button>
                     </div>
@@ -485,7 +488,7 @@ export const ReviewModal = ({
                                     onClick={() => setRating(star)}
                                     className={`p-1 transition-all ${rating >= star ? 'text-amber-400 scale-110' : 'text-slate-200 hover:text-slate-300'}`}
                                 >
-                                    <Star size={32} fill={rating >= star ? 'currentColor' : 'none'} strokeWidth={2.5} />
+                                    <Star size={32} fill={rating >= star ? 'currentColor' : 'none'} className='cursor-pointer' strokeWidth={2.5} />
                                 </button>
                             ))}
                         </div>
@@ -516,16 +519,23 @@ export const ReviewModal = ({
                     <div className="grid grid-cols-2 gap-4">
                         <button
                             onClick={onClose}
-                            className="px-6 py-3.5 text-slate-600 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 font-semibold transition-colors"
+                            className="px-6 py-3.5 text-slate-600 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 font-semibold transition-colors cursor-pointer"
                         >
                             Cancel
                         </button>
                         <button
-                            disabled={rating === 0 || wordCount > 100}
+                            disabled={rating === 0 || wordCount > 100 || isLoading}
                             onClick={() => onSubmit?.({ rating, review })}
-                            className={`px-6 py-3.5 text-white rounded-xl font-bold transition-all shadow-lg ${rating === 0 || wordCount > 100 ? 'bg-slate-300 cursor-not-allowed shadow-none' : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-indigo-200 hover:-translate-y-0.5'}`}
+                            className={`px-6 py-3.5 text-white rounded-xl font-bold transition-all shadow-lg flex items-center justify-center gap-2 ${rating === 0 || wordCount > 100 ? 'bg-slate-300 cursor-not-allowed shadow-none' : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-indigo-200 hover:-translate-y-0.5 cursor-pointer'}`}
                         >
-                            Submit Review
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    Submitting...
+                                </>
+                            ) : (
+                                'Submit Review'
+                            )}
                         </button>
                     </div>
 
@@ -553,14 +563,14 @@ export const SwapCard = ({
                     <div className="mt-4 flex flex-wrap items-center gap-3">
                         <button
                             onClick={() => onAccept?.(swap.id)}
-                            className="group flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm rounded-full font-semibold transition-all shadow-sm shadow-indigo-500/20 hover:shadow-md hover:shadow-indigo-500/30 hover:-translate-y-0.5"
+                            className="group flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm rounded-full font-semibold transition-all shadow-sm shadow-indigo-500/20 hover:shadow-md hover:shadow-indigo-500/30 hover:-translate-y-0.5 cursor-pointer"
                         >
                             <Check size={16} strokeWidth={3} className="transition-transform group-hover:scale-110" />
                             Accept
                         </button>
                         <button
                             onClick={() => onReject?.(swap.id)}
-                            className="group flex items-center gap-1.5 px-4 py-2 bg-white border border-rose-200 text-rose-500 text-sm hover:bg-rose-50 hover:border-rose-300 rounded-full font-medium transition-all hover:-translate-y-0.5"
+                            className="group flex items-center gap-1.5 px-4 py-2 bg-white border border-rose-200 text-rose-500 text-sm hover:bg-rose-50 hover:border-rose-300 rounded-full font-medium transition-all hover:-translate-y-0.5 cursor-pointer"
                         >
                             <X size={16} strokeWidth={3} className="transition-transform group-hover:rotate-90" />
                             Reject
@@ -574,14 +584,14 @@ export const SwapCard = ({
                         <div className="flex flex-wrap items-center gap-3">
                             <button
                                 onClick={() => onComplete?.(swap.id)}
-                                className="group flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm rounded-full font-semibold transition-all shadow-sm shadow-emerald-500/20 hover:shadow-md hover:shadow-emerald-500/30 hover:-translate-y-0.5"
+                                className="group flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm rounded-full font-semibold transition-all shadow-sm shadow-emerald-500/20 hover:shadow-md hover:shadow-emerald-500/30 hover:-translate-y-0.5 cursor-pointer"
                             >
                                 <ThumbsUp size={16} className="transition-transform group-hover:-rotate-12" />
                                 Complete
                             </button>
                             <button
                                 onClick={() => onCancel?.(swap.id)}
-                                className="group flex items-center gap-1.5 px-4 py-2 bg-white border border-slate-200 text-slate-500 text-sm hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 rounded-full font-medium transition-all hover:-translate-y-0.5"
+                                className="group flex items-center gap-1.5 px-4 py-2 bg-white border border-slate-200 text-slate-500 text-sm hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 rounded-full font-medium transition-all hover:-translate-y-0.5 cursor-pointer"
                             >
                                 <XCircle size={16} />
                                 Cancel
@@ -590,7 +600,7 @@ export const SwapCard = ({
 
                         <button
                             onClick={() => onConnect?.(swap)}
-                            className="group flex-shrink-0 flex items-center gap-1.5 px-4 py-2 bg-indigo-50 text-indigo-600 border border-indigo-100 hover:bg-indigo-100 text-sm rounded-full font-bold transition-all hover:-translate-y-0.5 shadow-sm shadow-indigo-100/50"
+                            className="group flex-shrink-0 flex items-center gap-1.5 px-4 py-2 bg-indigo-50 text-indigo-600 border border-indigo-100 hover:bg-indigo-100 text-sm rounded-full font-bold transition-all hover:-translate-y-0.5 shadow-sm shadow-indigo-100/50 cursor-pointer"
                         >
                             <Video size={16} />
                             Connect
@@ -611,7 +621,7 @@ export const SwapCard = ({
                         <div className="ml-auto">
                             <button
                                 onClick={() => onReview?.(swap)}
-                                className="text-indigo-600 hover:text-indigo-700 font-semibold text-xs hover:underline"
+                                className="text-indigo-600 hover:text-indigo-700 font-semibold text-xs hover:underline cursor-pointer"
                             >
                                 Write Review
                             </button>
@@ -646,7 +656,7 @@ export const SwapCard = ({
                         {swap.subStatus === 'Accepted' && (
                             <button
                                 onClick={() => onConnect?.(swap)}
-                                className="ml-auto text-indigo-600 hover:text-indigo-700 font-bold text-xs flex items-center gap-1 px-3 py-1 bg-white border border-indigo-100 rounded-md hover:bg-indigo-50 transition-colors animate-fade-in"
+                                className="ml-auto text-indigo-600 hover:text-indigo-700 font-bold text-xs flex items-center gap-1 px-3 py-1 bg-white border border-indigo-100 rounded-md hover:bg-indigo-50 transition-colors animate-fade-in cursor-pointer"
                             >
                                 <Video size={14} />
                                 Connect

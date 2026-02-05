@@ -19,6 +19,7 @@ import {
   BadgeCheck,
   StarIcon,
   Trophy,
+  FileText,
 } from "lucide-react";
 import b1 from "../assets/b-1.png";
 import b2 from "../assets/b-2.png";
@@ -742,11 +743,15 @@ const UserProfilePage = () => {
                       className="flex items-center gap-3 p-3 rounded-lg border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-colors"
                     >
                       <div className="h-12 w-12 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-slate-200">
-                        <img
-                          src={skill.certificateURL}
-                          alt={skill.title}
-                          className="h-full w-full object-cover select-none pointer-events-none"
-                        />
+                        {skill.certificateURL?.split("?")[0].toLowerCase().endsWith(".pdf") ? (
+                          <FileText className="h-6 w-6 text-slate-400" />
+                        ) : (
+                          <img
+                            src={skill.certificateURL}
+                            alt={skill.title}
+                            className="h-full w-full object-cover select-none pointer-events-none"
+                          />
+                        )}
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium text-slate-900 truncate">

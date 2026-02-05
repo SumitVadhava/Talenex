@@ -89,6 +89,7 @@ export default function Step3WantedSkills({
           <Input
             placeholder="e.g. Learn Spanish, Coding in Python, Guitar basics"
             value={skillName}
+            maxLength={40}
             onChange={(e) => setSkillName(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleAddSkill()}
           />
