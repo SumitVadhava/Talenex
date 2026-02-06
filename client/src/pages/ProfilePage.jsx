@@ -123,7 +123,7 @@ const ProfilePage = () => {
 
       stats: {
         swapsCompleted: api.reputation?.totalswapsCompleted || 0,
-        totalReviews: api.reputation ?.totalReviews,
+        totalReviews: api.reputation?.totalReviews,
         memberSince: api.createdAt
           ? new Date(api.createdAt).toLocaleDateString("en-US", {
             month: "long",
