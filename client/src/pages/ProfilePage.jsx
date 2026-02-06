@@ -122,8 +122,8 @@ const ProfilePage = () => {
       latitude: api.profile?.latitude,
 
       stats: {
-        swapsCompleted: api.reputation?.swapsCompleted || 0,
-        responseRate: 0,
+        swapsCompleted: api.reputation?.totalswapsCompleted || 0,
+        totalReviews: api.reputation ?.totalReviews,
         memberSince: api.createdAt
           ? new Date(api.createdAt).toLocaleDateString("en-US", {
             month: "long",
@@ -496,7 +496,7 @@ const ProfilePage = () => {
                 <div className="space-y-6">
                   <AchievementsSection
                     achievements={user.achievements}
-                    swapsCompleted={user.stats.swapsCompleted}
+                    swapsCompleted={user.stats.totalswapsCompleted}
                   />
                 </div>
                 {/* Reviews & Ratings Section */}
