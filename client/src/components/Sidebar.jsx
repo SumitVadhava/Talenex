@@ -17,12 +17,13 @@ const NAV_ITEMS = [
   { label: "Availability", icon: Calendar, id: "availability" },
   { label: "Notifications", icon: Bell, id: "notifications" },
   { label: "Privacy", icon: Shield, id: "privacy" },
+  { label: "Rate Us", icon: Star, id: "rate-us" },
   { label: "Settings", icon: Settings, id: "settings" },
 ];
 
 export const Sidebar = ({ activeTab, setActiveTab, readOnly }) => {
   const items = readOnly
-    ? NAV_ITEMS.filter((item) => item.id !== "settings" && item.id !== "privacy")
+    ? NAV_ITEMS.filter((item) => item.id !== "settings" && item.id !== "privacy" && item.id !== "rate-us")
     : NAV_ITEMS;
 
   return (

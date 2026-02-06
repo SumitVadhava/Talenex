@@ -44,7 +44,7 @@ export default function PrivacyPage() {
                     </Card>
                     <Card className="border-slate-200 shadow-sm text-center p-6">
                         <Lock className="w-10 h-10 mx-auto mb-3 text-slate-700" />
-                        <h3 className="font-semibold text-slate-900 mb-2">No Selling Data</h3>
+                        <h3 className="font-semibold text-slate-900 mb-2">No Data Selling</h3>
                         <p className="text-sm text-slate-600">We never sell your information</p>
                     </Card>
                     <Card className="border-slate-200 shadow-sm text-center p-6">

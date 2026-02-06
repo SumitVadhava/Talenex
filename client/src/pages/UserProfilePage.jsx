@@ -121,6 +121,8 @@ const UserProfilePage = () => {
 
       // Assuming response.data is the user object. 
       // If it's wrapped (e.g. response.data.user), adjust accordingly.
+      console.log("response : ", response.data);
+
       const mappedUser = mapApiUserToState(response.data);
       setUserData(mappedUser);
     } catch (err) {
@@ -131,6 +133,37 @@ const UserProfilePage = () => {
   };
 
 
+
+
+
+  const displayedSkills = userData?.offeredSkills || [];
+  const hiddenCount = displayedSkills.length - 5;
+
+  // Sort and filter reviews
+  const sortedReviews = useMemo(() => {
+    if (!userData?.reviews || userData.reviews.length === 0) return [];
+
+    const reviews = [...userData.reviews];
+
+    switch (reviewSortOption) {
+      case "newest":
+        return reviews.sort((a, b) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateB - dateA; // Most recent first
+        });
+      case "highest":
+        return reviews.sort((a, b) => b.rating - a.rating);
+      case "lowest":
+        return reviews.sort((a, b) => a.rating - b.rating);
+      default:
+        return reviews;
+    }
+  }, [userData?.reviews, reviewSortOption]);
+
+  // Display only top 2 reviews by default
+  const displayedReviews = showAllReviews ? sortedReviews : sortedReviews.slice(0, 2);
+  const hasMoreReviews = sortedReviews.length > 2;
 
   if (loading || !userData) {
     return (
@@ -251,35 +284,6 @@ const UserProfilePage = () => {
     );
   }
 
-  const displayedSkills = userData?.offeredSkills || [];
-  const hiddenCount = displayedSkills.length - 5;
-
-  // Sort and filter reviews
-  const sortedReviews = useMemo(() => {
-    if (!userData?.reviews || userData.reviews.length === 0) return [];
-
-    const reviews = [...userData.reviews];
-
-    switch (reviewSortOption) {
-      case "newest":
-        return reviews.sort((a, b) => {
-          const dateA = new Date(a.createdAt);
-          const dateB = new Date(b.createdAt);
-          return dateB - dateA; // Most recent first
-        });
-      case "highest":
-        return reviews.sort((a, b) => b.rating - a.rating);
-      case "lowest":
-        return reviews.sort((a, b) => a.rating - b.rating);
-      default:
-        return reviews;
-    }
-  }, [userData?.reviews, reviewSortOption]);
-
-  // Display only top 2 reviews by default
-  const displayedReviews = showAllReviews ? sortedReviews : sortedReviews.slice(0, 2);
-  const hasMoreReviews = sortedReviews.length > 2;
-
   return (
     <div className="min-h-screen bg-gray-50/50 p-4 md:p-8 font-sans">
       <div className="max-w-5xl mx-auto space-y-6">
@@ -371,7 +375,7 @@ const UserProfilePage = () => {
                     <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500 mr-1.5" />
                     Rating :{" "}
                     {userData?.user.rating != 0
-                      ? userData?.user.rating
+                      ? userData?.user.rating.toFixed(1)
                       : "No Rating"}
                   </div>
                 </div>

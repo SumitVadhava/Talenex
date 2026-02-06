@@ -28,6 +28,7 @@ import { AvailabilityTab } from "../components/AvailabilityTab";
 import { NotificationsTab } from "../components/NotificationsTab";
 import { PrivacyTab } from "../components/PrivacyTab";
 import { SettingsTab } from "../components/SettingsTab";
+import { RateUsTab } from "../components/RateUsTab";
 import { Textarea } from "../components/ui/Primitives";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -709,6 +710,8 @@ const ProfilePage = () => {
             readOnly={isReadOnly}
           />
         );
+      case "rate-us":
+        return <RateUsTab key="rate-us" />;
       case "settings":
         return (
           <SettingsTab

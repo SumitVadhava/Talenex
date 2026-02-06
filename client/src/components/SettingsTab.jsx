@@ -68,6 +68,7 @@ export const SettingsTab = ({ data, onUpdate }) => {
             <Input
               type="email"
               value={email}
+              disabled
               onChange={(e) => setEmail(e.target.value)}
               className="max-w-md"
             />
