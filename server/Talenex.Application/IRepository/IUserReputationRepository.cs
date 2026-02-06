@@ -13,7 +13,7 @@ namespace Talenex.infrastructure.Repositories
 
         public Task<UserReputation?> GetByUserIdAsync(Guid userId);
 
-        public Task UpdateByUserIdAsync(Guid userId, int totalReviews, decimal avgRating, int trustScore);
+        public Task UpdateByUserIdAsync(Guid userId, int ? totalReviews, decimal ? avgRating, int? trustScore, int? totalSwapsCompleted);
 
     }
 }

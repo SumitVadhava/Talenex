@@ -84,7 +84,8 @@ public class UserReviewService : IUserReviewsService
                 reputation.UserId,
                 reputation.TotalReviews,
                 reputation.AverageRating,
-                reputation.TrustScore ?? 0 // Fix: convert int? to int
+                reputation.TrustScore ?? 0,
+                reputation.TotalSwapsCompleted
             );
         }
 

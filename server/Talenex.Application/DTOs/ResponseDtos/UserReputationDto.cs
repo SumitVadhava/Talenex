@@ -18,5 +18,7 @@ namespace Talenex.Application.DTOs.ResponseDtos
         public int TotalReviews { get; set; } = 0;
         public int? TrustScore { get; set; }
         public List<string>? BadgesJson { get; set; }
+
+        public int? TotalSwapsCompleted { get; set; } = 0;
     }
 }

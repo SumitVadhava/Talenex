@@ -125,7 +125,8 @@ namespace Talenex.infrastructure.Services
                 AverageRating = 0,
                 TotalReviews = 0,
                 TrustScore = 0,
-                BadgesJson = JsonSerializer.Serialize(new List<string>())
+                BadgesJson = JsonSerializer.Serialize(new List<string>()),
+                TotalSwapsCompleted = 0,
             };
 
             await _reputationRepository.AddAsync(userReputation);

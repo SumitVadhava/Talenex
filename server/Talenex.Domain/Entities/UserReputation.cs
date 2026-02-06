@@ -19,6 +19,7 @@ namespace Talenex.Domain.Entities
         public int  TotalReviews { get; set; } = 0;
         public int ? TrustScore { get; set; } 
         public string ? BadgesJson { get; set; }
+        public int? TotalSwapsCompleted { get; set; } = 0;
 
     }
 

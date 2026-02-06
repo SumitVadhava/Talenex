@@ -28,6 +28,10 @@ namespace Talenex.Application.Validators
             RuleFor(x => x.BadgesJson)
                 .Must(badges => badges == null || badges.All(b => !string.IsNullOrWhiteSpace(b)))
                 .WithMessage("Badges cannot contain empty or null values.");
+
+            RuleFor(x => x.TotalSwapsCompleted)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("TotalSwapsCompleted cannot be negative.");
         }
     }
 }

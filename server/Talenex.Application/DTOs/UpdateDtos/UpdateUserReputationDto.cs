@@ -15,5 +15,7 @@ namespace Talenex.Application.DTOs.UpdateDtos
 
         public int? TrustScore { get; set; }
         public List<string>? BadgesJson { get; set; }
+
+        public int? TotalSwapsCompleted { get; set; } = 0;
     }
 }
