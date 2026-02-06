@@ -11,6 +11,12 @@ import {
   ChevronUp,
   Trophy,
 } from "lucide-react";
+import b1 from "../assets/b-1.png";
+import b2 from "../assets/b-2.png";
+import b3 from "../assets/b-3.png";
+import b4 from "../assets/b-4.png";
+import b5 from "../assets/b-5.png";
+import b6 from "../assets/b-6.png";
 import React, { useState, useEffect, useMemo } from "react";
 // import { MOCK_USER } from './constants';
 import { Sidebar } from "../components/Sidebar";
@@ -122,7 +128,7 @@ const ProfilePage = () => {
       latitude: api.profile?.latitude,
 
       stats: {
-        swapsCompleted: api.reputation?.totalswapsCompleted || 0,
+        totalSwapsCompleted: api.reputation?.totalSwapsCompleted || 0,
         totalReviews: api.reputation?.totalReviews,
         memberSince: api.createdAt
           ? new Date(api.createdAt).toLocaleDateString("en-US", {
@@ -148,7 +154,14 @@ const ProfilePage = () => {
           level: skill.level,
         })) || [],
 
-      achievements: [],
+      achievements: [
+        { threshold: 1, img: b1, label: "1st Swap" },
+        { threshold: 5, img: b2, label: "5 Swaps" },
+        { threshold: 10, img: b3, label: "10 Swaps" },
+        { threshold: 25, img: b4, label: "25 Swaps" },
+        { threshold: 50, img: b5, label: "50 Swaps" },
+        { threshold: 100, img: b6, label: "Knight" },
+      ],
 
       reviews: Array.isArray(api.reviews) ? api.reviews.map((review) => ({
         id: review.id,
@@ -496,7 +509,7 @@ const ProfilePage = () => {
                 <div className="space-y-6">
                   <AchievementsSection
                     achievements={user.achievements}
-                    swapsCompleted={user.stats.totalswapsCompleted}
+                    swapsCompleted={user.stats.totalSwapsCompleted}
                   />
                 </div>
                 {/* Reviews & Ratings Section */}

@@ -9,7 +9,7 @@ import b5 from "../assets/b-5.png";
 import b6 from "../assets/b-6.png";
 
 export const AchievementsSection = ({ achievements, swapsCompleted }) => {
-  const badgeConfig = [
+  const badgeConfig = (achievements && achievements.length > 0) ? achievements : [
     { threshold: 1, img: b1, label: "1st Swap" },
     { threshold: 5, img: b2, label: "5 Swaps" },
     { threshold: 10, img: b3, label: "10 Swaps" },

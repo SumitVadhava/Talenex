@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent } from './ui/Primitives';
-import { RefreshCcw, MessageCircle, Calendar, Star } from 'lucide-react';
+import { RefreshCcw, MessageCircle, Calendar, Star, UserCheck, ArrowLeftRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const StatsSection = ({ stats }) => {
@@ -22,20 +22,20 @@ export const StatsSection = ({ stats }) => {
   const statItems = [
     {
       label: 'Swaps Completed',
-      value: stats.swapsCompleted,
-      icon: RefreshCcw,
+      value: stats.totalSwapsCompleted,
+      icon: ArrowLeftRight,
       color: 'text-blue-500',
       bg: 'bg-blue-50'
     },
     {
       label: 'Total Reviews',
-      value: `${stats.totalReviews}%`,
-      icon: MessageCircle,
+      value: `${stats.totalReviews}`,
+      icon: UserCheck,
       color: 'text-green-500',
       bg: 'bg-green-50'
     },
     {
-      label: 'Rating',
+      label: 'Avg.Rating',
       value: stats.rating,
       icon: Star,
       color: 'text-amber-500',

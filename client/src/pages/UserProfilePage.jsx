@@ -20,6 +20,7 @@ import {
   StarIcon,
   Trophy,
   FileText,
+  UserCheckIcon,
 } from "lucide-react";
 import b1 from "../assets/b-1.png";
 import b2 from "../assets/b-2.png";
@@ -76,7 +77,7 @@ const UserProfilePage = () => {
         location: apiUser.profile?.location ?? "",
         rating: apiUser.reputation?.averageRating ?? 0,
         reviewCount: apiUser.reputation?.totalReviews ?? 0,
-        swapsCompleted: apiUser.reputation?.swapsCompleted ?? 0,
+        totalSwapsCompleted: apiUser.reputation?.totalSwapsCompleted ?? 0,
       },
       offeredSkills: apiUser.skills?.skillsOffered?.map((skill) => ({
         title: skill.title,
@@ -415,16 +416,16 @@ const UserProfilePage = () => {
                   {
                     icon: ArrowLeftRight,
                     label: "Swaps Completed",
-                    value: userData.user?.totalswapsCompleted || 0,
+                    value: userData.user?.totalSwapsCompleted || 0,
                     color: "text-blue-600",
                     bg: "bg-blue-100",
                   },
                   {
-                    icon: StarIcon,
+                    icon: UserCheckIcon,
                     label: "Total Reviews",
                     value: userData.user?.reviewCount || 0,
-                    color: "text-yellow-600",
-                    bg: "bg-yellow-100",
+                    color: "text-green-600",
+                    bg: "bg-green-100",
                   },
                   {
                     icon: Calendar,
