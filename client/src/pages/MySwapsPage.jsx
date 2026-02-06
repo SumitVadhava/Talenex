@@ -285,12 +285,9 @@ import { SwapStatus } from './../constants/swapStatus';
 import { SwapCard, Modal, SwapCardSkeleton, ReviewModal } from './../components/SwapReqSections';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import api from '../api/axios';
-import { toast } from 'react-toastify';
-import { notification } from 'antd';
-import { useNavigate } from 'react-router-dom';
 import { UserContext } from '@/context/UserContext';
 import { useUser } from '@clerk/clerk-react';
-import axios from 'axios';
+
 
 const formatProposedTime = (proposedTime) => {
     if (!proposedTime) return { date: "TBD", time: "TBD" };
@@ -387,8 +384,6 @@ const App = () => {
     const [swaps, setSwaps] = useState([]);
     const [loading, setLoading] = useState(true);
     const [sentFilter, setSentFilter] = useState('All');
-    const [reviewLoader, setReviewLoader] = useState(false);
-    const navigate = useNavigate();
 
     // Modal State
     const [modalOpen, setModalOpen] = useState(false);
@@ -551,17 +546,16 @@ const App = () => {
 
     const handleReviewSubmit = async (reviewData) => {
         try {
-            setReviewLoader(true);
             // Get current user info from Clerk
-            const token = localStorage.getItem("token");
+
 
             // Get reviewer info from Clerk user object
-            const reviewerName = userData?.fullName || user?.unsafeMetadata?.fullName;
+            const reviewerName = userData?.fullName || user?.fullName;
             const reviewerAvatar = userData?.profilePhotoUrl || user?.unsafeMetadata?.profile?.avatarUrl;
 
             // Prepare the request body according to backend API spec
             const requestBody = {
-                userId: 'bc5376fb-7d98-47d6-2790-08de4f8fc021', // The partner's userId (person being reviewed)
+                userId: selectedSwapForReview?.partnerId, // The partner's userId (person being reviewed)
                 reviewerAvatar: reviewerAvatar,
                 reviewerName: reviewerName,
                 rating: Number(reviewData.rating),
@@ -571,34 +565,20 @@ const App = () => {
             console.log("Submitting Review to Backend:", requestBody);
 
             // Call the backend API
-            const response = await api.post('/UserReviews/add', requestBody,
-               {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
-                }
-            );
+            const response = await api.post('/UserReviews/add', requestBody);
 
             console.log("Review submitted successfully:", response.data);
 
             // Close modal and reset state
             setReviewModalOpen(false);
             setSelectedSwapForReview(null);
-            notification.success({
-                message: 'Review Sent Successfully',
-                placement: 'topRight',
-            });
-            setReviewLoader(false);
+
             // Optionally show success message to user
             // You can add a toast notification here if you have one
         } catch (error) {
             console.error("Error submitting review:", error);
-            setReviewLoader(false);
             // Optionally show error message to user
             // You can add a toast notification here if you have one
-        }
-        finally {
-            setReviewLoader(false);
         }
     };
 
@@ -608,7 +588,6 @@ const App = () => {
     };
 
     const handleConnect = (swap) => {
-        navigate(`/join/room_1`);
         console.log("Connect initiated for swap:", swap.id);
     };
 
@@ -660,7 +639,7 @@ const App = () => {
                                 <button
                                     key={filter}
                                     onClick={() => setSentFilter(filter)}
-                                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all border cursor-pointer ${sentFilter === filter
+                                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all border ${sentFilter === filter
                                         ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-200'
                                         : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                                         }`}
@@ -717,7 +696,6 @@ const App = () => {
             {/* Review Modal */}
             <ReviewModal
                 isOpen={reviewModalOpen}
-                isLoading={reviewLoader}
                 onClose={() => setReviewModalOpen(false)}
                 onSubmit={handleReviewSubmit}
                 partnerName={selectedSwapForReview?.partnerName}
