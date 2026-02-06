@@ -27,6 +27,9 @@ public class UserReviewService : IUserReviewsService
     public async Task AddReviewAsync(CreateUserReviewDto dto)
     {
         var user = await _userProfileService.GetByIdAsync(dto.UserId);
+        Console.WriteLine($"Debug: Retrieved user profile for UserId {dto.UserId}");
+        Console.WriteLine(user);
+
 
         if (user == null)
         {
@@ -44,15 +47,16 @@ public class UserReviewService : IUserReviewsService
             CreatedAt = DateTime.UtcNow
         };
 
-        // ✅ Save review
         await _userReviewRepository.AddAsync(review);
 
-        // ✅ Update reputation
         var reputation = await _reputationRepository.GetByUserIdAsync(user.UserId);
+
+        Console.WriteLine($"Debug: Retrieved user reputation for UserId {user.UserId}");
+        Console.WriteLine(reputation);
 
         if (reputation == null)
         {
-            // First review for this user → create new reputation
+            
             reputation = new UserReputation
             {
                 UserId = user.UserId,
@@ -71,11 +75,18 @@ public class UserReviewService : IUserReviewsService
             var newCount = oldCount + 1;
             var newAvg = ((oldAvg * oldCount) + dto.Rating) / newCount;
 
+
             reputation.TotalReviews = newCount;
             reputation.AverageRating = newAvg;
             reputation.TrustScore = (int)Math.Round((newAvg / 5m) * 100m);
 
-            await _reputationRepository.UpdateByUserIdAsync(reputation.UserId);
+            await _reputationRepository.UpdateByUserIdAsync(
+                reputation.UserId,
+                reputation.TotalReviews,
+                reputation.AverageRating,
+                reputation.TrustScore ?? 0,
+                reputation.TotalSwapsCompleted
+            );
         }
 
     }

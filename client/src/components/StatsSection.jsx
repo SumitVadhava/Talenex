@@ -28,8 +28,8 @@ export const StatsSection = ({ stats }) => {
       bg: 'bg-blue-50'
     },
     {
-      label: 'Response Rate',
-      value: `${stats.responseRate}%`,
+      label: 'Total Reviews',
+      value: `${stats.totalReviews}%`,
       icon: MessageCircle,
       color: 'text-green-500',
       bg: 'bg-green-50'

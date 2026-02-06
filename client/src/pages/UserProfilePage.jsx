@@ -415,7 +415,7 @@ const UserProfilePage = () => {
                   {
                     icon: ArrowLeftRight,
                     label: "Swaps Completed",
-                    value: userData.user?.swapsCompleted || 0,
+                    value: userData.user?.totalswapsCompleted || 0,
                     color: "text-blue-600",
                     bg: "bg-blue-100",
                   },
@@ -552,7 +552,7 @@ const UserProfilePage = () => {
               </div>
             </CardHeader>
             <CardContent className="h-full">
-              {userData.user?.swapsCompleted > 0 ? (
+              {userData.user?.totalSwapsCompleted > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4">
                   {[
                     { threshold: 1, img: b1, label: "1st Swap" },
@@ -562,7 +562,7 @@ const UserProfilePage = () => {
                     { threshold: 50, img: b5, label: "50 Swaps" },
                     { threshold: 100, img: b6, label: "Knight" },
                   ].map((badge, i) => {
-                    const isEarned = userData.user?.swapsCompleted >= badge.threshold;
+                    const isEarned = userData.user?.totalSwapsCompleted >= badge.threshold;
                     return (
                       <div
                         key={i}

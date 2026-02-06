@@ -13,8 +13,9 @@ namespace Talenex.Application.DTOs.UpdateDtos
         public decimal AverageRating { get; set; } = 0;
         public int TotalReviews { get; set; } = 0;
 
-        public List<string>?  userReviews { get; set; }
         public int? TrustScore { get; set; }
         public List<string>? BadgesJson { get; set; }
+
+        public int? TotalSwapsCompleted { get; set; } = 0;
     }
 }

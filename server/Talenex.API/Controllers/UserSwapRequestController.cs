@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.SignalR;
 using Talenex.API.Hubs;
 using Talenex.infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Talenex.infrastructure.Repositories;
 
 
 [ApiController]
@@ -24,17 +25,20 @@ public class UserSwapRequestController : ControllerBase
 {
     private readonly IService<UserSwapRequest> _service;
     private readonly IUserSwapRequestService _swapService;
+    private readonly IUserReputationRepository _userReputationRepository;
     private readonly IValidator<CreateSwapRequestDto> _createValidator;
     private readonly IValidator<UpdateSwapRequestDto> _updateValidator;
 
     private readonly IEmailService _emailService;
     private readonly IHubContext<SwapHub> _hubContext;
+
     private readonly AppDBContext _db;
 
     public UserSwapRequestController(
 
         IService<UserSwapRequest> service,
         IUserSwapRequestService swapService,
+        IUserReputationRepository userReputationRepository,
         IValidator<CreateSwapRequestDto> createValidator,
         IValidator<UpdateSwapRequestDto> updateValidator,
         IEmailService emailService,
@@ -44,6 +48,7 @@ public class UserSwapRequestController : ControllerBase
     {
         _service = service;
         _swapService = swapService;
+        _userReputationRepository = userReputationRepository;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
 
@@ -232,7 +237,6 @@ public class UserSwapRequestController : ControllerBase
             return NotFound();
         }
 
-        // Map properties from dto to entity
         swapRequest.Status = dto.Status;
 
         switch (dto.Status)
@@ -259,6 +263,22 @@ public class UserSwapRequestController : ControllerBase
 
         if (receiverProfile != null)
             await _hubContext.Clients.Group(receiverProfile.UserId.ToString()).SendAsync("ReceiveSwapUpdate");
+
+        if(swapRequest.Status == "Completed")
+        {
+            var RequesterId = requesterProfile.UserId;
+            var ReceiverId = receiverProfile.UserId;
+            
+            var requesterReputation = await _userReputationRepository.GetByUserIdAsync(RequesterId);
+            var receiverReputation = await _userReputationRepository.GetByUserIdAsync(ReceiverId);
+
+            var newRequesterSwapCount = requesterReputation.TotalSwapsCompleted + 1;
+            var newReceiverSwapCount = receiverReputation.TotalSwapsCompleted + 1;
+
+            await _userReputationRepository.UpdateByUserIdAsync(RequesterId,null,null,null, newRequesterSwapCount);
+            await _userReputationRepository.UpdateByUserIdAsync(ReceiverId,null, null,null, newReceiverSwapCount);
+
+        }   
 
         return Ok(new { message = "Swap request updated successfully." });
     }

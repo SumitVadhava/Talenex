@@ -19,14 +19,25 @@ namespace Talenex.infrastructure.Repositories
                 
         }
 
-        public async Task UpdateByUserIdAsync(Guid userId)
+        public async Task UpdateByUserIdAsync(
+          Guid userId,
+          int? totalReviews,
+          decimal? avgRating,
+          int? trustScore,
+          int? totalSwapsCompleted)
         {
             var reputation = await GetByUserIdAsync(userId);
-            if (reputation != null)
-            {
-                _table.Update(reputation);
-                await _db.SaveChangesAsync();
-            }
+
+            if (reputation == null)
+                throw new Exception("Reputation not found");
+
+            reputation.TotalReviews = totalReviews ?? reputation.TotalReviews;
+            reputation.AverageRating = avgRating ?? reputation.AverageRating;
+            reputation.TrustScore = trustScore ?? reputation.TrustScore;
+            reputation.TotalSwapsCompleted = totalSwapsCompleted ?? reputation.TotalSwapsCompleted;
+
+            await _db.SaveChangesAsync();
         }
+
     }
 }

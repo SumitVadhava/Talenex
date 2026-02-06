@@ -7,8 +7,6 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { SignOutButton } from "@clerk/clerk-react";
-// import { useSignIn } from "@clerk/clerk-react";
-// import { GoogleOneTap } from "@clerk/clerk-react";
 import ScrollButtons from "./components/ScrollBtn";
 import { useEffect, useRef, useState } from "react";
 import Homepage from "./pages/Homepage";

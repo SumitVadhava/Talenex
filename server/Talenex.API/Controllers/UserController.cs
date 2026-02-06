@@ -138,6 +138,7 @@ namespace Talenex.API.Controllers
                                 BadgesJson = string.IsNullOrEmpty(user.UserReputation.BadgesJson)
                                     ? null
                                     : System.Text.Json.JsonSerializer.Deserialize<List<string>>(user.UserReputation.BadgesJson),
+                                TotalSwapsCompleted = user.UserReputation?.TotalSwapsCompleted ?? 0,
                             };
                             break;
 
@@ -266,6 +267,8 @@ namespace Talenex.API.Controllers
                             BadgesJson = string.IsNullOrEmpty(user.UserReputation.BadgesJson)
                                 ? null
                                 : System.Text.Json.JsonSerializer.Deserialize<List<string>>(user.UserReputation.BadgesJson),
+                            TotalSwapsCompleted = user.UserReputation?.TotalSwapsCompleted ?? 0,
+
                         };
                         break;
 
@@ -386,6 +389,8 @@ namespace Talenex.API.Controllers
                             BadgesJson = string.IsNullOrEmpty(user.UserReputation.BadgesJson)
                                 ? null
                                 : System.Text.Json.JsonSerializer.Deserialize<List<string>>(user.UserReputation.BadgesJson),
+                            TotalSwapsCompleted = user.UserReputation?.TotalSwapsCompleted ?? 0,
+
                         };
                         break;
 

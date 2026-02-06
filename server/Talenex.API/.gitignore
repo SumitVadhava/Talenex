@@ -6,6 +6,13 @@
 # dotenv files
 .env
 
+# Keep this tracked (template for others)
+appsettings.example.json
+
+# Ignore personal/local settings
+appsettings.json
+appsettings.*.json
+
 # User-specific files
 *.rsuser
 *.suo

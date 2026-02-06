@@ -1081,6 +1081,7 @@ const Homepage = () => {
           location: user.profile?.location ?? "",
           rating: user.reputation?.averageRating ?? 0,
           reviewCount: user.reputation?.totalReviews ?? 0,
+          totalSwapsCompleted: user.reputation?.totalSwapsCompleted ?? 0,
         },
 
         // 🔥 ALL OFFERED SKILLS

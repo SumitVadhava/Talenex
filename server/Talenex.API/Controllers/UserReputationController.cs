@@ -57,10 +57,8 @@ namespace Talenex.API.Controllers
                 AverageRating = dto.AverageRating,
                 TotalReviews = dto.TotalReviews,
                 TrustScore = dto.TrustScore,
-
-                BadgesJson = dto.BadgesJson == null ? null: JsonSerializer.Serialize(dto.BadgesJson)
-
-
+                BadgesJson = dto.BadgesJson == null ? null: JsonSerializer.Serialize(dto.BadgesJson),
+                TotalSwapsCompleted = dto.TotalSwapsCompleted,
             };
 
             var created = await _service.CreateAsync(entity);
@@ -93,6 +91,8 @@ namespace Talenex.API.Controllers
 
             if (dto.BadgesJson != null)
                 existing.BadgesJson = JsonSerializer.Serialize(dto.BadgesJson);
+
+            existing.TotalSwapsCompleted = dto.TotalSwapsCompleted;
 
 
             return Ok(await _service.UpdateAsync(existing));
