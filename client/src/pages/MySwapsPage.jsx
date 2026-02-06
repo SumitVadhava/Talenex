@@ -287,6 +287,7 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 import api from '../api/axios';
 import { UserContext } from '@/context/UserContext';
 import { useUser } from '@clerk/clerk-react';
+import { notification } from 'antd';
 
 
 const formatProposedTime = (proposedTime) => {
@@ -384,6 +385,7 @@ const App = () => {
     const [swaps, setSwaps] = useState([]);
     const [loading, setLoading] = useState(true);
     const [sentFilter, setSentFilter] = useState('All');
+    const [reviewLoader, setReviewLoader] = useState(false);
 
     // Modal State
     const [modalOpen, setModalOpen] = useState(false);
@@ -547,7 +549,7 @@ const App = () => {
     const handleReviewSubmit = async (reviewData) => {
         try {
             // Get current user info from Clerk
-
+            reviewLoader(true);
 
             // Get reviewer info from Clerk user object
             const reviewerName = userData?.fullName || user?.fullName;
@@ -572,13 +574,26 @@ const App = () => {
             // Close modal and reset state
             setReviewModalOpen(false);
             setSelectedSwapForReview(null);
+            setReviewLoader(false);
 
-            // Optionally show success message to user
-            // You can add a toast notification here if you have one
+             notification.success({
+                    message: 'Review submited Successfully',
+                    placement: 'topRight',
+            });
+
         } catch (error) {
             console.error("Error submitting review:", error);
+            notification.error({
+                    message: 'Please try again!',
+                    description: 'Review not submited',
+                    placement: 'topRight',
+            });
+            setReviewLoader(false);
             // Optionally show error message to user
             // You can add a toast notification here if you have one
+        }
+        finally {
+            setReviewLoader(false);
         }
     };
 
@@ -696,6 +711,7 @@ const App = () => {
             {/* Review Modal */}
             <ReviewModal
                 isOpen={reviewModalOpen}
+                isLoading={reviewLoader}
                 onClose={() => setReviewModalOpen(false)}
                 onSubmit={handleReviewSubmit}
                 partnerName={selectedSwapForReview?.partnerName}
