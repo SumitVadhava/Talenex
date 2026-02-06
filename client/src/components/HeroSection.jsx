@@ -46,10 +46,10 @@ export default function HeroSection({ heroRef }) {
     const [isHovered, setIsHovered] = useState(false)
 
     const stats = [
-        { icon: <HeartHandshake className="w-6 h-6" />, label: "Skills Shared", value: "1500+" },
-        { icon: <UserRoundCheck className="w-6 h-6" />, label: "Users", value: "1000+" },
+        { icon: <HeartHandshake className="w-6 h-6" />, label: "Skills Shared", value: "20+" },
+        { icon: <UserRoundCheck className="w-6 h-6" />, label: "Users", value: "30+" },
         { icon: <Sparkles className="w-6 h-6" />, label: "Avg.Rating", value: "4.6+" },
-        { icon: <Shapes className="w-6 h-6" />, label: "Categories", value: "25+" },
+        { icon: <Shapes className="w-6 h-6" />, label: "Categories", value: "6+" },
     ]
 
     return (

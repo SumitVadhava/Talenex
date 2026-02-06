@@ -1674,8 +1674,8 @@ const SearchStats = ({ cardColor = '#06b6d4' }) => {
   return (
     <div className="grid grid-cols-3 gap-3 mt-6">
       {[
-        { icon: Users, value: '10K+', label: 'Users' },
-        { icon: Star, value: '1000+', label: 'Skills' },
+        { icon: Users, value: '30+', label: 'Users' },
+        { icon: Star, value: '20+', label: 'Skills' },
         { icon: TrendingUp, value: '95%', label: 'Match' }
       ].map((stat, i) => (
         <motion.div
@@ -2012,7 +2012,7 @@ const cardData = [
     subtitle: 'DISCOVER',
     description: 'Filter skills by category, level, location, and availability.',
     icon: Search,
-    stats: '1000+ Skills Available',
+    stats: '20+ Skills Available',
     size: 'small',
     color: 'from-emerald-50 to-teal-50',
     borderColor: 'border-emerald-200',
@@ -2038,9 +2038,9 @@ const cardData = [
     id: 3,
     title: 'Thriving Community',
     subtitle: 'CONNECT',
-    description: 'Join 10,000+ learners exchanging skills without money in a trusted network.',
+    description: 'Join 30+ learners exchanging skills without money in a trusted network.',
     icon: Users,
-    stats: '10K+ Active Users',
+    stats: '30+ Active Users',
     size: 'small',
     color: 'from-blue-50 to-cyan-50',
     borderColor: 'border-blue-200',

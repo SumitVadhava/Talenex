@@ -42,7 +42,7 @@ const SkillCard = ({ skill }) => {
               <div className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
                 <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                 <span className="font-medium text-slate-700">
-                  {skill.user.rating}
+                  {skill.user.rating != 0 ? skill.user.rating.toFixed(1) : 0}
                 </span>
                 <span className="text-slate-300">•</span>
                 <span>{skill.user.reviewCount} reviews</span>
