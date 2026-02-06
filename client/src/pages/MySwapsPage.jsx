@@ -549,7 +549,7 @@ const App = () => {
     const handleReviewSubmit = async (reviewData) => {
         try {
             // Get current user info from Clerk
-            reviewLoader(true);
+            setReviewLoader(true);
 
             // Get reviewer info from Clerk user object
             const reviewerName = userData?.fullName || user?.fullName;
