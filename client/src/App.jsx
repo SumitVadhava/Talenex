@@ -26,7 +26,6 @@ import FAQPage from "./pages/FAQPage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import ScrollToTop from "./components/ScrollToTop";
-// import VerifyEmailPage from "./components/VerifyEmailPage";
 
 function App() {
   const location = useLocation();
