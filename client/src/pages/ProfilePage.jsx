@@ -95,8 +95,8 @@ const ProfilePage = () => {
             qs.stringify(params, { arrayFormat: "repeat" }),
         },
       );
-      console.log(response.data);
-      console.log("Fetched user data:", response.data);
+      // console.log(response.data);
+      // console.log("Fetched user data:", response.data);
 
       const mapped = mapApiUserToMockUser(response.data);
       setSectionIds({
@@ -352,7 +352,7 @@ const ProfilePage = () => {
       longitude: user.longitude,
     };
 
-    console.log("profile payload", payload);
+    // console.log("profile payload", payload);
 
     if (!id) {
       console.log(`No ID found for section: profile`);
@@ -392,7 +392,7 @@ const ProfilePage = () => {
       setUser(editedUser);
       setIsEditing(false);
       // Simulate batch save for General tab
-      console.log("[PUT] Batch update for General profile:", editedUser);
+      // console.log("[PUT] Batch update for General profile:", editedUser);
     } finally {
       setIsSaving(false);
     }

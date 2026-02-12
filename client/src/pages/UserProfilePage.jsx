@@ -58,7 +58,7 @@ const UserProfilePage = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log("userData : ", userData);
+    // console.log("userData : ", userData);
     if (!userData && id) {
       fetchUser();
     }
@@ -121,7 +121,7 @@ const UserProfilePage = () => {
 
       // Assuming response.data is the user object. 
       // If it's wrapped (e.g. response.data.user), adjust accordingly.
-      console.log("response : ", response.data);
+      // console.log("response : ", response.data);
 
       const mappedUser = mapApiUserToState(response.data);
       setUserData(mappedUser);

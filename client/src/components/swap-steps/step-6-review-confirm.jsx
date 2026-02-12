@@ -21,7 +21,7 @@ export default function Step6ReviewRequest({ data, onNext, onBack, userData, par
     return date.toLocaleDateString("en-US", options);
   };
 
-  console.log(partnerData);
+  // console.log(partnerData);
 
   return (
     <div className="p-4 sm:p-6 md:p-8">

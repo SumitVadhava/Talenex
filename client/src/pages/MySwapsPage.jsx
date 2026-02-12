@@ -428,12 +428,12 @@ const App = () => {
 
             try {
                 await connection.start();
-                console.log("SignalR Connected state:", connection.state);
-                console.log("Connected to SignalR as group:", userId);
+                // console.log("SignalR Connected state:", connection.state);
+                // console.log("Connected to SignalR as group:", userId);
                 await connection.invoke("JoinUserGroup", userId);
 
                 connection.on("ReceiveSwapUpdate", () => {
-                    console.log("Real-time update: Swap message received via SignalR");
+                    // console.log("Real-time update: Swap message received via SignalR");
                     fetchSwaps();
                 });
 
@@ -442,7 +442,7 @@ const App = () => {
                 });
 
                 connection.onreconnected(connectionId => {
-                    console.log(`SignalR Reconnected with ID: ${connectionId}`);
+                    // console.log(`SignalR Reconnected with ID: ${connectionId}`);
                     connection.invoke("JoinUserGroup", userId);
                 });
 
@@ -476,7 +476,7 @@ const App = () => {
             );
             const mappedData = response.data.map(request => mapBackendToFrontend(request));
 
-            console.log(mappedData);
+            // console.log(mappedData);
 
             setSwaps(mappedData);
         }
@@ -564,12 +564,12 @@ const App = () => {
                 reviewMsg: reviewData.review
             };
 
-            console.log("Submitting Review to Backend:", requestBody);
+            // console.log("Submitting Review to Backend:", requestBody);
 
             // Call the backend API
             const response = await api.post('/UserReviews/add', requestBody);
 
-            console.log("Review submitted successfully:", response.data);
+            // console.log("Review submitted successfully:", response.data);
 
             // Close modal and reset state
             setReviewModalOpen(false);
@@ -603,7 +603,7 @@ const App = () => {
     };
 
     const handleConnect = (swap) => {
-        console.log("Connect initiated for swap:", swap.id);
+        // console.log("Connect initiated for swap:", swap.id);
     };
 
 

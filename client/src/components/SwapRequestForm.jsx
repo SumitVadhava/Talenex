@@ -46,7 +46,7 @@ export default function SwapRequestForm({ onClose }) {
         },
       );
 
-      console.log(response.data);
+      // console.log(response.data);
       setData(response.data);
     } catch (error) {
       console.log("Error fetching skills:", error);
@@ -121,13 +121,13 @@ export default function SwapRequestForm({ onClose }) {
       message: finalData?.message ?? null,
     };
 
-    console.log("User Data :", data);
-    console.log("userData2:", userData);
+    // console.log("User Data :", data);
+    // console.log("userData2:", userData);
 
 
-    console.log("Final Data :", finalData);
+    // console.log("Final Data :", finalData);
 
-    console.log("Request Payload :", requestPayload);
+    // console.log("Request Payload :", requestPayload);
 
 
     try {
@@ -141,8 +141,8 @@ export default function SwapRequestForm({ onClose }) {
         emailrequestPayload,
       );
 
-      console.log("Swap request created:", response.data);
-      console.log("Email request sent:", emailResponse.data);
+      // console.log("Swap request created:", response.data);
+      // console.log("Email request sent:", emailResponse.data);
 
       notification.success({
         message: 'Request Sent Successfully',
@@ -163,7 +163,7 @@ export default function SwapRequestForm({ onClose }) {
     finally {
       setIsLoading(false);
     }
-    console.log("Final Swap Request Data:", requestPayload);
+    // console.log("Final Swap Request Data:", requestPayload);
 
   }
 
