@@ -14,11 +14,9 @@ import {
 import { Button } from "./ui/button";
 
 export const SettingsTab = ({ data, onUpdate }) => {
-  // Local state for debounced inputs
   const [email, setEmail] = useState(data.email);
   const debouncedEmail = useDebounce(email, 800);
 
-  // Delete account flow state
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
