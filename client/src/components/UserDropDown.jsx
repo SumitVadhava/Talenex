@@ -19,7 +19,7 @@ export default function UserDropdown() {
     useEffect(() => {
         if (!isLoaded || !isSignedIn) return;
 
-        console.log("user from Clerk:", user.unsafeMetadata);
+        // console.log("user from Clerk:", user.unsafeMetadata);
 
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
