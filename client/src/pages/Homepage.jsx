@@ -1067,7 +1067,7 @@ const Homepage = () => {
   const mapUsersApiToSkillsList = (users) => {
     if (!Array.isArray(users)) return [];
 
-    console.log("Mapping done");
+    // console.log("Mapping done");
 
     return users
       .filter((user) => user.skills?.skillsOffered?.length > 0)
@@ -1124,7 +1124,7 @@ const Homepage = () => {
       try {
         const token = await getToken({ template: "customJWT" });
 
-        console.log("Fetched token:", token);
+        // console.log("Fetched token:", token);
 
         var response = await api.post(
           "/auth/",
@@ -1165,10 +1165,10 @@ const Homepage = () => {
             qs.stringify(params, { arrayFormat: "repeat" }),
         });
 
-        console.log("response", response.data);
+        // console.log("response", response.data);
 
         const skillsList = mapUsersApiToSkillsList(response.data);
-        console.log(skillsList);
+        // console.log(skillsList);
 
         setSkills(skillsList);
       } catch (error) {

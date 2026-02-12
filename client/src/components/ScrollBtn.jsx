@@ -86,7 +86,7 @@ export default function ScrollButton() {
       {showTop && (
         <button
           onClick={scrollToTop}
-          className="bg-gray-900 text-white p-3 rounded-full shadow-lg hover:bg-gray-700 transition"
+          className="bg-gray-900 text-white p-3 rounded-full shadow-lg hover:bg-gray-700 transition cursor-pointer"
         >
           <FontAwesomeIcon icon={faChevronUp} />
         </button>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BookOpen, Pencil, Trash2 } from "lucide-react";
+import { BookOpen, Info, Pencil, Trash2 } from "lucide-react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -76,10 +76,19 @@ export default function Step3WantedSkills({
         <h1 className="text-3xl font-bold tracking-tight text-zinc-900 mb-2">
           What do you want to learn?
         </h1>
-        <p className="text-zinc-500">
+        <p className="text-zinc-500 mb-3">
           Add skills you're interested in acquiring. This helps us match you
           with the right mentors.
         </p>
+        <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="flex gap-2 sm:gap-3">
+            <Info className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <p className="text-xs sm:text-sm text-gray-700">
+              <span className="font-semibold text-blue-900">Note:</span> Add
+              skills individually to keep your profile structured.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Add Skill Section */}

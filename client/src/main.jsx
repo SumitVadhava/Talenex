@@ -16,7 +16,6 @@ const Goggle_OAuth_CLIENTID = import.meta.env.Goggle_OAuth_CLIENTID
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* <GoogleOAuthProvider clientId="863502675248-h4qsus2lapne6ev5tg2t1uvru69kdo1o.apps.googleusercontent.com"> */}
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl='/'>
       <GoogleOneTap cancelOnTapOutside={true} />
       <BrowserRouter>

@@ -57,7 +57,7 @@ const Stepper = ({ steps, currentStep }) => {
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
-                    <Check className="w-4 h-4 text-green-900" strokeWidth={3} />
+                    <Check className="w-4 h-4 text-white" strokeWidth={3} />
                   </motion.div>
                 ) : (
                   <span className="text-black">{step.id}</span>
@@ -138,7 +138,7 @@ export default function OnBoarding() {
       try {
         const token = await getToken({ template: "customJWT" });
 
-        console.log("Fetched token:", token);
+        // console.log("Fetched token:", token);
 
         var response = await api.post(
           "/auth/",
@@ -215,7 +215,7 @@ export default function OnBoarding() {
       formData.profilePhotoUrl = cloudProfilePhoto;
     }
 
-    console.log(user);
+    // console.log(user);
     try {
       await user.update({
         unsafeMetadata: {
@@ -263,8 +263,8 @@ export default function OnBoarding() {
       const processedOfferedSkills = await processSkills(
         formData.offeredSkills,
       );
-      console.log(formData);
-      console.log(processedOfferedSkills);
+      // console.log(formData);
+      // console.log(processedOfferedSkills);
 
       // creating user and its skills
       const createUserProfile = async () => {
@@ -295,7 +295,7 @@ export default function OnBoarding() {
           },
         };
 
-        console.log("onboarding payload", onboardingPayload);
+        // console.log("onboarding payload", onboardingPayload);
 
         try {
           await api.post(
@@ -315,7 +315,7 @@ export default function OnBoarding() {
           );
           const existingMetadata = user.unsafeMetadata || {};
 
-          console.log(existingMetadata);
+          // console.log(existingMetadata);
 
 
         } catch (error) {
@@ -326,7 +326,7 @@ export default function OnBoarding() {
       await createUserProfile();
 
       const token = await getToken();
-      console.log(token);
+      // console.log(token);
 
       // const response = await axios.get(
       //   "URL",

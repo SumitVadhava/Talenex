@@ -14,8 +14,11 @@ import {
   Award,
   Building2,
   Shapes,
-  Terminal, 
-  Briefcase
+  Terminal,
+  Briefcase,
+  Lightbulb,
+  ListPlus,
+  Info,
 } from "lucide-react";
 // import { Input, Label, Select, Textarea, Button } from './ui';
 import { Label } from "./ui/label";
@@ -55,13 +58,12 @@ export default function Step2Skills({
 
   const categories = [
     { value: "development", label: "Development" },
-    { value : "Programming Language", label: "Programming Language" },
+    { value: "Programming Language", label: "Programming Language" },
     { value: "design", label: "Design" },
     { value: "music", label: "Music" },
     { value: "language", label: "Language" },
     { value: "business", label: "Business" },
     { value: "Other", label: "Other" },
-
   ];
 
   const levels = ["Beginner", "Intermediate", "Advanced", "Expert"];
@@ -81,7 +83,7 @@ export default function Step2Skills({
       // Update existing skill
       updateFormData({
         offeredSkills: formData.offeredSkills.map((s) =>
-          s.id === editingId ? { ...newSkill, id: editingId } : s
+          s.id === editingId ? { ...newSkill, id: editingId } : s,
         ),
       });
       setIsEditing(false);
@@ -152,15 +154,26 @@ export default function Step2Skills({
 
   const validateFile = (file) => {
     const maxSize = 5 * 1024 * 1024; // 5MB
-    const allowedTypes = ["image/svg+xml", "image/png", "image/jpeg", "application/pdf"];
+    const allowedTypes = [
+      "image/svg+xml",
+      "image/png",
+      "image/jpeg",
+      "application/pdf",
+    ];
 
     if (file.size > maxSize) {
-      setErrors(prev => ({ ...prev, file: "File size must be less than 5MB" }));
+      setErrors((prev) => ({
+        ...prev,
+        file: "File size must be less than 5MB",
+      }));
       return false;
     }
 
     if (!allowedTypes.includes(file.type)) {
-      setErrors(prev => ({ ...prev, file: "Only SVG, PNG, JPG, and PDF files are allowed" }));
+      setErrors((prev) => ({
+        ...prev,
+        file: "Only SVG, PNG, JPG, and PDF files are allowed",
+      }));
       return false;
     }
 
@@ -170,7 +183,7 @@ export default function Step2Skills({
   const handleFileSelect = (file) => {
     if (validateFile(file)) {
       setNewSkill({ ...newSkill, file });
-      setErrors(prev => {
+      setErrors((prev) => {
         const { file: _, ...rest } = prev;
         return rest;
       });
@@ -207,7 +220,7 @@ export default function Step2Skills({
 
   const handleRemoveFile = () => {
     setNewSkill({ ...newSkill, file: null });
-    setErrors(prev => {
+    setErrors((prev) => {
       const { file: _, ...rest } = prev;
       return rest;
     });
@@ -220,10 +233,18 @@ export default function Step2Skills({
         <h1 className="text-3xl font-bold tracking-tight text-zinc-900 mb-2">
           What Skills Can You Offer?
         </h1>
-        <p className="text-zinc-500">
+        <p className="text-zinc-500 mb-3">
           Add the skills you're proficient in and willing to teach or exchange
           with others.
         </p>
+        <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="flex gap-2 sm:gap-3">
+            <Info className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <p className="text-xs sm:text-sm text-gray-700">
+              <span className="font-semibold text-blue-900">Note:</span> Add skills individually to keep your profile structured.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Add Skill Card */}
@@ -242,13 +263,17 @@ export default function Step2Skills({
               onChange={(e) => {
                 setNewSkill({ ...newSkill, title: e.target.value });
                 if (errors.title) {
-                  setErrors(prev => {
+                  setErrors((prev) => {
                     const { title: _, ...rest } = prev;
                     return rest;
                   });
                 }
               }}
-              className={errors.title ? "border-red-500 focus-visible:border-red-500" : ""}
+              className={
+                errors.title
+                  ? "border-red-500 focus-visible:border-red-500"
+                  : ""
+              }
             />
             {errors.title && (
               <p className="text-xs text-red-500 mt-1">{errors.title}</p>
@@ -262,14 +287,16 @@ export default function Step2Skills({
               onValueChange={(value) => {
                 setNewSkill({ ...newSkill, category: value });
                 if (errors.category) {
-                  setErrors(prev => {
+                  setErrors((prev) => {
                     const { category: _, ...rest } = prev;
                     return rest;
                   });
                 }
               }}
             >
-              <SelectTrigger className={`w-full ${errors.category ? "border-red-500" : ""}`}>
+              <SelectTrigger
+                className={`w-full ${errors.category ? "border-red-500" : ""}`}
+              >
                 <SelectValue placeholder="Select skill category" />
               </SelectTrigger>
               <SelectContent>
@@ -296,14 +323,16 @@ export default function Step2Skills({
                 type="button"
                 onClick={() => setNewSkill({ ...newSkill, level })}
                 className={`flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium border transition-all
-                  ${newSkill.level === level
-                    ? "border-gray-500 bg-gray-100 text-gray-700 ring-1 ring-gray-500"
-                    : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
+                  ${
+                    newSkill.level === level
+                      ? "border-gray-500 bg-gray-100 text-gray-700 ring-1 ring-gray-500"
+                      : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
                   }`}
               >
                 <div
-                  className={`w-2 h-2 rounded-full mr-2 ${newSkill.level === level ? "bg-gray-600" : "bg-zinc-300"
-                    }`}
+                  className={`w-2 h-2 rounded-full mr-2 ${
+                    newSkill.level === level ? "bg-gray-600" : "bg-zinc-300"
+                  }`}
                 />
                 {level}
               </button>
@@ -365,14 +394,16 @@ export default function Step2Skills({
               onDragOver={handleDrag}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all ${dragActive
-                ? "border-indigo-500 bg-indigo-50"
-                : "border-zinc-200 hover:bg-zinc-50"
-                }`}
+              className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all ${
+                dragActive
+                  ? "border-indigo-500 bg-indigo-50"
+                  : "border-zinc-200 hover:bg-zinc-50"
+              }`}
             >
               <UploadCloud
-                className={`w-8 h-8 mb-2 ${dragActive ? "text-indigo-500" : "text-zinc-400"
-                  }`}
+                className={`w-8 h-8 mb-2 ${
+                  dragActive ? "text-indigo-500" : "text-zinc-400"
+                }`}
               />
               <p className="text-sm font-medium text-zinc-600">
                 Click to upload{" "}
@@ -392,7 +423,11 @@ export default function Step2Skills({
 
         <div className="flex justify-end gap-3">
           {isEditing && (
-            <Button variant="outline" onClick={handleCancelEdit} className="cursor-pointer">
+            <Button
+              variant="outline"
+              onClick={handleCancelEdit}
+              className="cursor-pointer"
+            >
               Cancel
             </Button>
           )}
@@ -480,14 +515,15 @@ export default function Step2Skills({
 
                         {/* Elegant Certificate Badge */}
                         {skill.file && (
-                          <div className="flex items-center gap-1.5 px-2 py-[2px] rounded-md 
-                          bg-amber-50 border border-amber-100 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+                          <div
+                            className="flex items-center gap-1.5 px-2 py-[2px] rounded-md 
+                          bg-amber-50 border border-amber-100 shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+                          >
                             <Award className="w-3.5 h-3.5 text-amber-500" />
                             <span className="text-[10px] font-semibold uppercase tracking-wide text-amber-600">
                               Certificate
                             </span>
                           </div>
-
                         )}
                       </div>
 
@@ -527,7 +563,10 @@ export default function Step2Skills({
           Back
         </Button>
 
-        <Button onClick={onNext} className="bg-indigo-600 hover:bg-indigo-700 cursor-pointer">
+        <Button
+          onClick={onNext}
+          className="bg-indigo-600 hover:bg-indigo-700 cursor-pointer"
+        >
           Next: Skills Wanted
           <ArrowRight className="ml-2 w-4 h-4" />
         </Button>
