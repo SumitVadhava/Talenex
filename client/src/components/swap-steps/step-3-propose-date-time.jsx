@@ -17,12 +17,32 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
   const [proposedSlots, setProposedSlots] = useState(data?.selectedDates || []);
 
   const timeSlots = [
+    "12:00 AM",
+    "12:30 AM",
+    "1:00 AM",
+    "1:30 AM",
+    "2:00 AM",
+    "2:30 AM",
+    "3:00 AM",
+    "3:30 AM",
+    "4:00 AM",
+    "4:30 AM",
+    "5:00 AM",
+    "5:30 AM",
+    "6:00 AM",
+    "6:30 AM",
+    "7:00 AM",
+    "7:30 AM",
+    "8:00 AM",
+    "8:30 AM",
     "9:00 AM",
     "9:30 AM",
     "10:00 AM",
     "10:30 AM",
     "11:00 AM",
     "11:30 AM",
+    "12:00 PM",
+    "12:30 PM",
     "1:00 PM",
     "1:30 PM",
     "2:00 PM",
@@ -31,7 +51,46 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
     "3:30 PM",
     "4:00 PM",
     "4:30 PM",
+    "5:00 PM",
+    "5:30 PM",
+    "6:00 PM",
+    "6:30 PM",
+    "7:00 PM",
+    "7:30 PM",
+    "8:00 PM",
+    "8:30 PM",
+    "9:00 PM",
+    "9:30 PM",
+    "10:00 PM",
+    "10:30 PM",
+    "11:00 PM",
+    "11:30 PM",
   ];
+
+
+  const isTodaySelected = selectedDate === todayStr;
+
+  const convertTo24Hour = (timeStr) => {
+    const [time, period] = timeStr.split(" ");
+    let [hours, minutes] = time.split(":").map(Number);
+
+    if (period === "PM" && hours !== 12) hours += 12;
+    if (period === "AM" && hours === 12) hours = 0;
+
+    return { hours, minutes };
+  };
+
+  const isFutureTime = (timeStr) => {
+    if (!isTodaySelected) return true;
+
+    const now = new Date();
+    const { hours, minutes } = convertTo24Hour(timeStr);
+
+    const slotTime = new Date();
+    slotTime.setHours(hours, minutes, 0, 0);
+
+    return slotTime > now;
+  };
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -174,15 +233,14 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
           key={day}
           onClick={() => !isPast && setSelectedDate(dateStr)}
           disabled={isPast}
-          className={`aspect-square flex items-center justify-center rounded-full text-sm font-medium transition-colors ${
-            isPast
-              ? "text-gray-300 cursor-not-allowed"
-              : isToday
-                ? "bg-blue-600 text-white"
-                : isSelected
-                  ? "border-2 border-blue-600 text-blue-600"
-                  : "text-gray-700 hover:bg-gray-100"
-          }`}
+          className={`aspect-square flex items-center justify-center rounded-full text-sm font-medium transition-colors ${isPast
+            ? "text-gray-300 cursor-not-allowed"
+            : isToday
+              ? "bg-blue-600 text-white"
+              : isSelected
+                ? "border-2 border-blue-600 text-blue-600"
+                : "text-gray-700 hover:bg-gray-100"
+            }`}
         >
           {day}
         </button>,
@@ -254,30 +312,36 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
                 All times are in your local time
               </p>
               <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
-                {timeSlots.map((time) => (
-                  <button
-                    key={time}
-                    onClick={() => handleTimeSelect(time)}
-                    className={`py-2 sm:py-3 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-colors ${
-                      selectedTime === time
+                {timeSlots
+                  .filter((time) => isFutureTime(time))
+                  .slice(0, 11)
+                  .map((time) => (
+                    <button
+                      key={time}
+                      onClick={() => handleTimeSelect(time)}
+                      className={`py-2 sm:py-3 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-colors ${selectedTime === time
                         ? "bg-blue-600 text-white"
                         : "border-2 border-gray-200 text-gray-700 hover:border-gray-300"
-                    }`}
-                  >
-                    {time}
-                  </button>
-                ))}
+                        }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
                 <button
                   onClick={() => handleTimeSelect("custom")}
-                  className={`py-2 sm:py-3 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-colors ${
-                    showCustomTimeInput
-                      ? "bg-blue-600 text-white"
-                      : "border-2 border-gray-200 text-gray-700 hover:border-gray-300"
-                  }`}
+                  className={`py-2 sm:py-3 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-colors ${showCustomTimeInput
+                    ? "bg-blue-600 text-white"
+                    : "border-2 border-gray-200 text-gray-700 hover:border-gray-300"
+                    }`}
                 >
                   Custom
                 </button>
               </div>
+              {timeSlots.filter((time) => isFutureTime(time)).length === 0 && (
+                <p className="text-sm text-gray-500 mb-4">
+                  No available preset time slots left for today. Use the Custom option instead.
+                </p>
+              )}
 
               {showCustomTimeInput && (
                 <div className="mb-3 sm:mb-4 space-y-2 sm:space-y-3">
