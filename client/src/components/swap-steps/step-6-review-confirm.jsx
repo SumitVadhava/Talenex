@@ -148,12 +148,12 @@ export default function Step6ReviewRequest({ data, onNext, onBack, userData, par
 
       {/* Buttons */}
       <div className="flex flex-col sm:flex-row gap-3 justify-between">
-        <Button variant="outline" onClick={onBack} className="w-full sm:w-auto px-6 sm:px-8">
+        <Button variant="outline" onClick={onBack} className="w-full sm:w-auto px-6 sm:px-8 cursor-pointer">
           Back
         </Button>
         <Button
           onClick={handleConfirm}
-          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 cursor-pointer"
           disabled={isLoading}
         >
           {isLoading ? (

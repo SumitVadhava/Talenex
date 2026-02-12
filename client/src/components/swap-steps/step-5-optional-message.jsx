@@ -72,7 +72,7 @@ export default function Step5OptionalMessage({
           type="button"
           variant="outline"
           onClick={onBack}
-          className="w-full sm:w-auto px-6 sm:px-8 bg-transparent order-1 sm:order-1"
+          className="w-full sm:w-auto px-6 sm:px-8 bg-transparent order-1 sm:order-1 cursor-pointer"
         >
           Back
         </Button>
@@ -82,7 +82,7 @@ export default function Step5OptionalMessage({
             type="button"
             variant="outline"
             onClick={handleNext}
-            className="w-full sm:w-auto px-6 sm:px-8 bg-transparent"
+            className="w-full sm:w-auto px-6 sm:px-8 bg-transparent cursor-pointer"
           >
             Skip this step
           </Button>
@@ -90,7 +90,7 @@ export default function Step5OptionalMessage({
           <Button
             type="button"
             onClick={handleNext}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8"
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 cursor-pointer"
           >
             Next
           </Button>

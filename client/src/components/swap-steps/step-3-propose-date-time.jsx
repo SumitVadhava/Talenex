@@ -233,7 +233,7 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
           key={day}
           onClick={() => !isPast && setSelectedDate(dateStr)}
           disabled={isPast}
-          className={`aspect-square flex items-center justify-center rounded-full text-sm font-medium transition-colors ${isPast
+          className={`aspect-square flex items-center justify-center rounded-full text-sm font-medium transition-colors cursor-pointer ${isPast
             ? "text-gray-300 cursor-not-allowed"
             : isToday
               ? "bg-blue-600 text-white"
@@ -274,7 +274,7 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <button
                 onClick={handlePrevMonth}
-                className={`p-1.5 sm:p-2 rounded ${isPastMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1)) ? "opacity-30 cursor-not-allowed" : "hover:bg-gray-100"}`}
+                className={`p-1.5 sm:p-2 rounded cursor-pointer ${isPastMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1)) ? "opacity-30 cursor-not-allowed" : "hover:bg-gray-100"}`}
                 disabled={isPastMonth(
                   new Date(
                     currentMonth.getFullYear(),
@@ -289,7 +289,7 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
               </h3>
               <button
                 onClick={handleNextMonth}
-                className="p-1.5 sm:p-2 hover:bg-gray-100 rounded"
+                className="p-1.5 sm:p-2 hover:bg-gray-100 rounded cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
@@ -319,7 +319,7 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
                     <button
                       key={time}
                       onClick={() => handleTimeSelect(time)}
-                      className={`py-2 sm:py-3 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-colors ${selectedTime === time
+                      className={`py-2 sm:py-3 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-colors cursor-pointer ${selectedTime === time
                         ? "bg-blue-600 text-white"
                         : "border-2 border-gray-200 text-gray-700 hover:border-gray-300"
                         }`}
@@ -329,7 +329,7 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
                   ))}
                 <button
                   onClick={() => handleTimeSelect("custom")}
-                  className={`py-2 sm:py-3 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-colors ${showCustomTimeInput
+                  className={`py-2 sm:py-3 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-colors cursor-pointer ${showCustomTimeInput
                     ? "bg-blue-600 text-white"
                     : "border-2 border-gray-200 text-gray-700 hover:border-gray-300"
                     }`}
@@ -352,7 +352,7 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
                     <select
                       value={customHour}
                       onChange={(e) => setCustomHour(e.target.value)}
-                      className="flex-1 p-2 sm:p-3 border-2 border-gray-200 rounded-lg font-medium text-xs sm:text-sm focus:border-blue-500 focus:outline-none"
+                      className="flex-1 p-2 sm:p-3 border-2 border-gray-200 rounded-lg font-medium text-xs sm:text-sm focus:border-blue-500 focus:outline-none cursor-pointer"
                     >
                       <option value="">Hour</option>
                       {[...Array(12)].map((_, i) => {
@@ -370,7 +370,7 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
                     <select
                       value={customMinute}
                       onChange={(e) => setCustomMinute(e.target.value)}
-                      className="flex-1 p-2 sm:p-3 border-2 border-gray-200 rounded-lg font-medium text-xs sm:text-sm focus:border-blue-500 focus:outline-none"
+                      className="flex-1 p-2 sm:p-3 border-2 border-gray-200 rounded-lg font-medium text-xs sm:text-sm focus:border-blue-500 focus:outline-none cursor-pointer"
                     >
                       <option value="">Min</option>
                       {["00", "15", "30", "45"].map((min) => (
@@ -382,7 +382,7 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
                     <select
                       value={customPeriod}
                       onChange={(e) => setCustomPeriod(e.target.value)}
-                      className="flex-1 p-2 sm:p-3 border-2 border-gray-200 rounded-lg font-medium text-xs sm:text-sm focus:border-blue-500 focus:outline-none"
+                      className="flex-1 p-2 sm:p-3 border-2 border-gray-200 rounded-lg font-medium text-xs sm:text-sm focus:border-blue-500 focus:outline-none cursor-pointer"
                     >
                       <option value="AM">AM</option>
                       <option value="PM">PM</option>
@@ -391,7 +391,7 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
                   <Button
                     onClick={handleCustomTimeSubmit}
                     disabled={!customHour || !customMinute}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base cursor-pointer"
                   >
                     Add This Time Slot
                   </Button>
@@ -401,7 +401,7 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
               {!showCustomTimeInput && selectedTime && (
                 <Button
                   onClick={handleAddTimeSlot}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base cursor-pointer"
                 >
                   Add This Time Slot
                 </Button>
@@ -428,7 +428,7 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
                 </span>
                 <button
                   onClick={() => handleRemoveSlot(index)}
-                  className="p-1 hover:bg-gray-100 rounded transition-colors flex-shrink-0"
+                  className="p-1 hover:bg-gray-100 rounded transition-colors flex-shrink-0 cursor-pointer"
                 >
                   <X className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                 </button>
@@ -443,14 +443,14 @@ export default function Step3ProposeDateAndTime({ data, onNext, onBack }) {
         <Button
           variant="outline"
           onClick={onBack}
-          className="w-full sm:w-auto px-6 sm:px-8"
+          className="w-full sm:w-auto px-6 sm:px-8 cursor-pointer"
         >
           Back
         </Button>
         <Button
           onClick={handleNext}
           disabled={proposedSlots.length === 0}
-          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 cursor-pointer"
         >
           Next
         </Button>

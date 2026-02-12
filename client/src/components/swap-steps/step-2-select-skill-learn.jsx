@@ -63,16 +63,16 @@ export default function Step2SelectSkillToLearn({
       <div className="flex gap-2 mb-4 sm:mb-6 border-b border-gray-200 overflow-x-auto">
         <button
           onClick={() => setTab('available')}
-          className={`pb-2 sm:pb-3 px-3 sm:px-4 font-medium transition-colors whitespace-nowrap text-sm sm:text-base ${tab === 'available'
-              ? 'border-b-2 border-blue-600 text-gray-900'
-              : 'text-gray-600 hover:text-gray-900'
+          className={`pb-2 sm:pb-3 px-3 sm:px-4 font-medium transition-colors whitespace-nowrap text-sm sm:text-base cursor-pointer ${tab === 'available'
+            ? 'border-b-2 border-blue-600 text-gray-900'
+            : 'text-gray-600 hover:text-gray-900'
             }`}
         >
           From {userData.user.name}'s Skills
         </button>
         <button
           onClick={() => { setSelected(null); setTab('request') }}
-          className={`pb-2 sm:pb-3 px-3 sm:px-4 font-medium transition-colors whitespace-nowrap text-sm sm:text-base ${tab === 'request'
+          className={`pb-2 sm:pb-3 px-3 sm:px-4 font-medium transition-colors whitespace-nowrap text-sm sm:text-base cursor-pointer ${tab === 'request'
             ? 'border-b-2 border-blue-600 text-gray-900'
             : 'text-gray-600 hover:text-gray-900'
             }`}
@@ -100,9 +100,9 @@ export default function Step2SelectSkillToLearn({
               <button
                 key={skill.id}
                 onClick={() => selected ? setSelected(null) : setSelected(skill.title)}
-                className={`w-full p-3 sm:p-4 rounded-lg border-2 text-left transition-all ${selected === skill.title
-                    ? 'border-blue-600 bg-blue-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
+                className={`w-full p-3 sm:p-4 rounded-lg border-2 text-left transition-all cursor-pointer ${selected === skill.title
+                  ? 'border-blue-600 bg-blue-50'
+                  : 'border-gray-200 bg-white hover:border-gray-300'
                   }`}
               >
                 <div className="flex items-center justify-between gap-3">
@@ -114,8 +114,8 @@ export default function Step2SelectSkillToLearn({
                   </div>
                   <div
                     className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex-shrink-0 ml-2 sm:ml-4 ${selected === skill.title
-                        ? 'border-blue-600 bg-blue-600'
-                        : 'border-gray-300'
+                      ? 'border-blue-600 bg-blue-600'
+                      : 'border-gray-300'
                       }`}
                   >
                     {selected === skill.title && (
@@ -140,13 +140,13 @@ export default function Step2SelectSkillToLearn({
 
       {/* Buttons */}
       <div className="flex flex-col sm:flex-row gap-3 justify-between">
-        <Button variant="outline" onClick={onBack} className="w-full sm:w-auto px-6 sm:px-8 bg-transparent">
+        <Button variant="outline" onClick={onBack} className="w-full sm:w-auto px-6 sm:px-8 bg-transparent cursor-pointer">
           Back
         </Button>
         <Button
           onClick={handleNext}
           disabled={(!selected && tab === 'available') || (tab === 'request' && !requestSkill)}
-          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 cursor-pointer"
         >
           Next
         </Button>

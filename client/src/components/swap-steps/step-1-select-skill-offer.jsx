@@ -79,9 +79,9 @@ export default function Step1SelectSkillToOffer({ data, onNext, onClose, userDat
           <button
             key={skill.id}
             onClick={() => handleSelect(skill.title)}
-            className={`w-full p-3 sm:p-4 rounded-lg border-2 text-left transition-all ${selected === skill.title
-                ? "border-blue-600 bg-blue-50"
-                : "border-gray-200 bg-white hover:border-gray-300"
+            className={`w-full p-3 sm:p-4 rounded-lg border-2 text-left transition-all cursor-pointer ${selected === skill.title
+              ? "border-blue-600 bg-blue-50"
+              : "border-gray-200 bg-white hover:border-gray-300"
               }`}
           >
             <div className="flex items-center justify-between gap-3">
@@ -93,8 +93,8 @@ export default function Step1SelectSkillToOffer({ data, onNext, onClose, userDat
               </div>
               <div
                 className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex-shrink-0 ml-2 sm:ml-4 ${selected === skill.title
-                    ? "border-blue-600 bg-blue-600"
-                    : "border-gray-300"
+                  ? "border-blue-600 bg-blue-600"
+                  : "border-gray-300"
                   }`}
               >
                 {selected === skill.title && (
@@ -121,13 +121,13 @@ export default function Step1SelectSkillToOffer({ data, onNext, onClose, userDat
         {/*<Button variant="outline" onClick={onClose} className="px-8">
           Cancel
         </Button>*/}
-        <Button variant="outline" onClick={() => navigate(-1)} className="w-full sm:w-auto px-6 sm:px-8">
+        <Button variant="outline" onClick={() => navigate(-1)} className="w-full sm:w-auto px-6 sm:px-8 cursor-pointer">
           Cancel
         </Button>
         <Button
           onClick={handleNext}
           disabled={!selected}
-          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 cursor-pointer"
         >
           Next
         </Button>

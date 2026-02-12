@@ -46,9 +46,9 @@ export default function Step4ChooseDuration({
                 setCustomDuration('');
               }
             }}
-            className={`p-3 sm:p-4 rounded-lg border-2 font-medium transition-all text-center text-sm sm:text-base ${selected === option.value
-                ? 'border-blue-600 bg-blue-50 text-blue-900'
-                : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+            className={`p-3 sm:p-4 rounded-lg border-2 font-medium transition-all text-center text-sm sm:text-base cursor-pointer ${selected === option.value
+              ? 'border-blue-600 bg-blue-50 text-blue-900'
+              : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
               }`}
           >
             {option.label}
@@ -83,13 +83,13 @@ export default function Step4ChooseDuration({
 
       {/* Buttons */}
       <div className="flex flex-col sm:flex-row gap-3 justify-between">
-        <Button variant="outline" onClick={onBack} className="w-full sm:w-auto px-6 sm:px-8 bg-transparent">
+        <Button variant="outline" onClick={onBack} className="w-full sm:w-auto px-6 sm:px-8 bg-transparent cursor-pointer">
           Back
         </Button>
         <Button
           onClick={handleNext}
           disabled={!selected || (selected === 'custom' && !customDuration)}
-          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8"
+          className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 cursor-pointer"
         >
           Next
         </Button>
