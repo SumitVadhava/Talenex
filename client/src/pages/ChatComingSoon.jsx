@@ -168,8 +168,6 @@ const ChatComingSoon = () => {
               </div>
             </div>
           </div>
-
-          {/* Right - Chat Preview */}
           <div className="fade-in delay-2">
             <div className="relative max-w-md mx-auto">
               {/* Chat Container */}
