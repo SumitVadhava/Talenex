@@ -173,7 +173,6 @@ const ChatComingSoon = () => {
               {/* Chat Container */}
               <div className="bg-white border border-zinc-200 rounded-2xl shadow-xl overflow-hidden">
 
-                {/* Chat Header */}
                 <div className="bg-zinc-900 p-5 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="relative">
