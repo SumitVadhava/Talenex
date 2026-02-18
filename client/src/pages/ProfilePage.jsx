@@ -452,7 +452,7 @@ const ProfilePage = () => {
           <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
           <p className="text-muted-foreground animate-pulse">
             Loading Profile...
-          </p>
+          </p>  
         </div>
       </div>
     );
@@ -726,7 +726,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 text-slate-900 font-sans p-6 md:p-10">
+    <div className="min-h-screen text-slate-900 font-sans p-6 md:p-10">
       <div className="max-w-7xl mx-auto w-full">
         {/* Header is always visible at the top */}
         <Header
