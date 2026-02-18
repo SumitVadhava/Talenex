@@ -21,7 +21,7 @@ namespace Talenex.Application.DTOs.ResponseDtos
         [Required]
         public string UserEmail { get; set; }
 
-        public DateTime DateTime { get; set; } = DateTime.UtcNow.AddHours(5).AddMinutes(30);
+        public DateTime ?Created { get; set; }
 
         public int OverallExperience { get; set; } = 0;
 

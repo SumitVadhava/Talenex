@@ -19,17 +19,56 @@ using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/rate-us")]
+[Authorize(AuthenticationSchemes = "TalenexJwt")]
 public class RateUsController : ControllerBase
 {
 
     private readonly IEmailService _emailService;
-  
+    private readonly IService<RateUs> _service;
 
-    public RateUsController(IEmailService emailService)
+    public RateUsController(IEmailService emailService, IService<RateUs> service)
     {
       
         _emailService = emailService;
-     
+        _service = service;
+    
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+          => Ok(await _service.GetAllAsync());
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(Guid id)
+    {
+        var user = await _service.GetByIdAsync(id);
+        return user == null ? NotFound() : Ok(user);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateFeedbackDto dto)
+    {
+
+        var entity = new RateUs
+        {
+            UserId = dto.UserId,
+            UserName = dto.UserName,
+            UserEmail = dto.UserEmail,
+            OverallExperience = dto.OverallExperience,
+            UiUxDesign = dto.UiUxDesign,
+            ApplicationSpeed = dto.ApplicationSpeed,
+            SkillsMatchingAccuracy = dto.SkillsMatchingAccuracy,
+            SearchAndFiltersEffectiveness = dto.SearchAndFiltersEffectiveness,
+            CommunityTrust = dto.CommunityTrust,
+            EaseOfNavigation = dto.EaseOfNavigation,
+            FeatureUsefulness = dto.FeatureUsefulness,
+            HelpAndSupportQuality = dto.HelpAndSupportQuality,
+            Message =   dto.Message
+        };
+
+
+        var created = await _service.CreateAsync(entity);
+        return Ok(created);
     }
 
     [HttpPost("send")]

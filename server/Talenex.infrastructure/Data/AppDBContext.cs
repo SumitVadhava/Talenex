@@ -33,6 +33,8 @@ namespace Talenex.infrastructure.Data
 
         public DbSet<UserReviews> UserReviews { get; set; }
 
+        public DbSet<RateUs> RateUs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(u =>
@@ -199,6 +201,48 @@ namespace Talenex.infrastructure.Data
                     .IsRequired();
             });
 
+
+            modelBuilder.Entity<RateUs>(r =>
+            {
+                r.ToTable("RateUs");
+                r.HasKey(r => r.Id);
+
+                r.Property(r => r.UserId)
+                    .IsRequired();
+
+                r.Property(r => r.OverallExperience)
+                    .IsRequired();
+
+                r.Property(r => r.UiUxDesign)
+                    .IsRequired();
+
+                r.Property(r => r.ApplicationSpeed)
+                    .IsRequired();
+
+                r.Property(r => r.SkillsMatchingAccuracy)
+                    .IsRequired();
+
+                r.Property(r => r.SearchAndFiltersEffectiveness)
+                    .IsRequired();
+
+                r.Property(r => r.CommunityTrust)
+                    .IsRequired();
+
+                r.Property(r => r.EaseOfNavigation)
+                    .IsRequired();
+
+                r.Property(r => r.FeatureUsefulness)
+                    .IsRequired();
+
+                r.Property(r => r.HelpAndSupportQuality)
+                    .IsRequired();
+
+                r.Property(r => r.Message)
+                    .HasMaxLength(1000);
+
+                r.Property(r => r.CreatedAt)
+                    .IsRequired();
+            });
 
 
             base.OnModelCreating(modelBuilder);

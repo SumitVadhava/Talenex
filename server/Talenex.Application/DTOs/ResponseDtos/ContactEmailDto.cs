@@ -22,6 +22,6 @@ namespace Talenex.Application.DTOs.ResponseDtos
         [Required]
         public string Message { get; set; }
 
-        public DateTime DateTime { get; set; } =  DateTime.UtcNow;
+        public DateTime ? Created { get; set; }
     }
 }

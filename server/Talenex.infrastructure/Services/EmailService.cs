@@ -255,6 +255,7 @@ namespace Infrastructure.Services
         private string BuildContactEmailBody(ContactEmailDto emaildto)
         {
             var Message = TruncateMessage(emaildto.Message);
+            var Created = emaildto.Created ?? DateTime.UtcNow.AddHours(5).AddMinutes(30);
 
             return $@"
 <!DOCTYPE html>
@@ -289,10 +290,10 @@ namespace Infrastructure.Services
                                         <table role=""presentation"" cellspacing=""0"" cellpadding=""0"" border=""0"" width=""100%"">
                                             <tr>
                                                 <td style=""vertical-align: middle;"">
-                                                    <h1 class=""mobile-heading"" style=""margin: 0; color: #ffffff; font-size: 26px; font-weight: 600; letter-spacing: -0.5px; line-height: 1.2;"">New Client Inquiry</h1>
+                                                    <h1 class=""mobile-heading"" style=""margin: 0; color: #ffffff; font-size: 26px; font-weight: 600; letter-spacing: -0.5px; line-height: 1.2;"">New User Inquiry</h1>
                                                 </td>
                                                 <td style=""text-align: right; vertical-align: middle;"" class=""mobile-stack"">
-                                                    <p style=""margin: 0; color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 500;"">{emaildto.DateTime}</p>
+                                                    <p style=""margin: 0; color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 500;"">{Created}</p>
                                                 </td>
                                             </tr>
                                         </table>
@@ -488,8 +489,7 @@ namespace Infrastructure.Services
 
             var userName = HtmlSafe(feedbackDto.UserName);
             var message = HtmlSafe(feedbackDto.Message);
-            var dateStr = feedbackDto.DateTime.ToString("dd MMM yyyy, hh:mm tt");
-
+            var dateStr = feedbackDto.Created ?? DateTime.UtcNow.AddHours(5).AddMinutes(30);
             return $@"
         <!DOCTYPE html>
         <html lang=""en"">
