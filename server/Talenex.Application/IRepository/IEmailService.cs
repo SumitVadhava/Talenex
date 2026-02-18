@@ -12,6 +12,9 @@ namespace Application.IRepository
     {
         Task SendSwapRequestEmailAsync(SwapRequestEmailDto dto);
         Task SendContactEmailAsync(ContactEmailDto dto);
+
+        Task SendFeedBackEmailAsync(FeedbackResponseDto dto);
+
     }
 }
 

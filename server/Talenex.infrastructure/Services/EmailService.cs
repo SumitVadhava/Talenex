@@ -1,167 +1,4 @@
-﻿// using Application.DTOs;
-// using Application.IRepository;
-// using Microsoft.Extensions.Configuration;
-// using System.Net;
-// using System.Net.Mail;
-
-// namespace Infrastructure.Services
-// {
-//     public class EmailService : IEmailService
-//     {
-//         private readonly IConfiguration _configuration;
-
-//         public EmailService(IConfiguration configuration)
-//         {
-//             _configuration = configuration;
-//         }
-
-//         public async Task SendSwapRequestEmailAsync(SwapRequestEmailDto dto)
-//         {
-//             if (string.IsNullOrWhiteSpace(dto.PartnerEmail))
-//                 throw new Exception("Partner email is required");
-
-//             var smtpClient = new SmtpClient
-//             {
-//                 Host = _configuration["Email:SmtpHost"],
-//                 Port = int.Parse(_configuration["Email:SmtpPort"]),
-//                 EnableSsl = true,
-//                 Credentials = new NetworkCredential(
-//                     _configuration["Email:Username"],
-//                     _configuration["Email:Password"]
-//                 )
-//             };
-
-//             var mail = new MailMessage
-//             {
-//                 From = new MailAddress(_configuration["Email:From"], "Talenex"),
-//                 Subject = "New Skill Swap Request",
-//                 Body = BuildEmailBody(dto),
-//                 IsBodyHtml = true
-//             };
-
-//             mail.To.Add(new MailAddress(dto.PartnerEmail.Trim()));
-
-//             await smtpClient.SendMailAsync(mail);
-//         }
-
-
-//         private string BuildEmailBody(SwapRequestEmailDto dto)
-//         {
-//             return $@"
-//                 <!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional//EN""
-//                   ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"">
-//                 <html xmlns=""http://www.w3.org/1999/xhtml"">
-//                 <head>
-//                   <meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"" />
-//                   <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"" />
-//                   <title>Talenex Swap Message</title>
-//                 </head>
-
-//                 <body style=""margin:0;padding:0;background-color:#f3f4f6;font-family:Arial,Helvetica,sans-serif;"">
-
-//                 <table width=""100%"" cellpadding=""0"" cellspacing=""0"" style=""padding:30px;"">
-//                 <tr>
-//                 <td align=""center"">
-
-//                 <table width=""600"" cellpadding=""0"" cellspacing=""0"" style=""background:#ffffff;border-radius:10px;padding:24px;"">
-
-//                 <tr>
-//                 <td style=""font-size:22px;font-weight:600;color:#111827;padding-bottom:20px;"">
-//                 Swap Request
-//                 </td>
-//                 </tr>
-
-//                 <tr>
-//                 <td style=""font-size:18px;font-weight:600;padding-bottom:12px;"">
-//                 The Swap
-//                 </td>
-//                 </tr>
-
-//                 <tr>
-//                 <td>
-//                 <table width=""100%"" style=""border:2px solid #e5e7eb;border-radius:8px;padding:16px;"">
-//                 <tr>
-
-//                 <td align=""center"" width=""40%"">
-//                 <img src=""{dto.PartnerImageUrl}"" width=""64"" height=""64"" style=""border-radius:50%;margin-bottom:8px;"" />
-//                 <div style=""font-size:13px;color:#6b7280;"">You</div>
-//                 <div style=""font-weight:600;"">{dto.PartnerSkill}</div>
-//                 </td>
-
-//                 <td align=""center"" width=""20%"" style=""font-size:28px;color:#2563eb;"">
-//                 ⇄
-//                 </td>
-
-//                 <td align=""center"" width=""40%"">
-//                 <img src=""{dto.YourImageUrl}"" width=""64"" height=""64"" style=""border-radius:50%;margin-bottom:8px;"" />
-//                 <div style=""font-size:13px;color:#6b7280;"">Partner</div>
-//                 <div style=""font-weight:600;"">{dto.YourSkill}</div>
-//                 </td>
-
-//                 </tr>
-//                 </table>
-//                 </td>
-//                 </tr>
-
-//                 <tr>
-//                 <td style=""padding-top:20px;"">
-//                 <table width=""100%"">
-//                 <tr>
-
-//                 <td width=""50%"" valign=""top"">
-//                 <div style=""font-size:18px;font-weight:600;margin-bottom:10px;"">
-//                 Proposed Schedule
-//                 </div>
-
-//                 <strong>Date & Time</strong><br/>
-//                 {dto.ScheduleDateTime}<br/><br/>
-
-//                 <strong>Format</strong><br/>
-//                 Online via Video Call<br/><br/>
-
-//                 <strong>Estimated Duration</strong><br/>
-//                 {dto.DurationMinutes} Minutes
-//                 </td>
-
-//                 <td width=""50%"" valign=""top"">
-//                 <div style=""font-size:18px;font-weight:600;margin-bottom:10px;"">
-//                 Personal Message
-//                 </div>
-
-//                 <div style=""border:2px solid #e5e7eb;background:#f9fafb;border-radius:6px;padding:12px;font-size:14px;"">
-//                 {dto.PersonalMessage}
-//                 </div>
-//                 </td>
-
-//                 </tr>
-//                 </table>
-//                 </td>
-//                 </tr>
-
-//                 <tr>
-//                 <td align=""center"" style=""padding-top:24px;"">
-//                 <a href=""https://talenex.com/u/swap-request""
-//                 style=""background:#2563eb;color:#ffffff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:600;"">
-//                 View Swap Request
-//                 </a>
-//                 </td>
-//                 </tr>
-
-//                 </table>
-
-//                 </td>
-//                 </tr>
-//                 </table>
-
-//                 </body>
-//                 </html>";
-//         }
-
-//     }
-// }  
-
-
-using Application.DTOs;
+﻿using Application.DTOs;
 using Application.IRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Http;
@@ -573,6 +410,161 @@ namespace Infrastructure.Services
 </html>";
         }
 
+        public async Task SendFeedBackEmailAsync(FeedbackResponseDto feedbackDto)
+        {
+            if (string.IsNullOrWhiteSpace(feedbackDto.UserEmail))
+                throw new Exception("User email is required");
+
+            var scriptUrl = "https://script.google.com/macros/s/AKfycbykpuhZuv2zlwdxK0I0iqj-AAw2i1k-sb2c1d6Wp0712VE_A1KocZt2MWH3d1evQbn-2A/exec";
+
+            var payload = new
+            {
+                to = feedbackDto.UserEmail, // send to user
+                subject = "Thanks for your feedback on Talenex ❤️",
+                body = BuildFeedbackEmailBody(feedbackDto)
+            };
+
+            var json = JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            using var client = _httpClientFactory.CreateClient();
+
+            try
+            {
+                var response = await client.PostAsync(scriptUrl, content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Email proxy failed: {response.StatusCode} - {error}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[EmailService] Failed to send email: {ex.Message}");
+                throw;
+            }
+        }
+
+        private static string RenderStars(int rating)
+        {
+            rating = Math.Clamp(rating, 0, 5);
+
+            var filledStar = "<span style=\"color:#F5C518;font-size:18px;line-height:1;\">★</span>";
+            var emptyStar = "<span style=\"color:#E4E4E7;font-size:18px;line-height:1;\">★</span>";
+
+            return string.Concat(Enumerable.Repeat(filledStar, rating)) +
+                   string.Concat(Enumerable.Repeat(emptyStar, 5 - rating));
+        }
+
+        private static string RenderRow(string title, string starsHtml)
+        {
+            return $@"
+<tr>
+  <td style=""padding:11px 0;border-bottom:1px solid #F4F4F5;font-size:13.5px;color:#18181B;font-weight:500;"">{title}</td>
+  <td align=""right"" style=""padding:11px 0;border-bottom:1px solid #F4F4F5;white-space:nowrap;"">
+    {starsHtml}
+  </td>
+</tr>";
+        }
+
+        private static string HtmlSafe(string input)
+        {
+            return System.Net.WebUtility.HtmlEncode(input ?? string.Empty);
+        }
+
+
+        private string BuildFeedbackEmailBody(FeedbackResponseDto feedbackDto)
+        {
+            var overallStars = RenderStars(feedbackDto.OverallExperience);
+            var uiuxStars = RenderStars(feedbackDto.UiUxDesign);
+            var speedStars = RenderStars(feedbackDto.ApplicationSpeed);
+            var skillsStars = RenderStars(feedbackDto.SkillsMatching);
+            var searchStars = RenderStars(feedbackDto.SearchAndFilters);
+            var trustStars = RenderStars(feedbackDto.CommunityTrust);
+            var navStars = RenderStars(feedbackDto.EaseOfNavigation);
+            var featureStars = RenderStars(feedbackDto.FeatureUsefulness);
+            var supportStars = RenderStars(feedbackDto.HelpAndSupport);
+
+            var userName = HtmlSafe(feedbackDto.UserName);
+            var message = HtmlSafe(feedbackDto.Message);
+            var dateStr = feedbackDto.DateTime.ToString("dd MMM yyyy, hh:mm tt");
+
+            return $@"
+        <!DOCTYPE html>
+        <html lang=""en"">
+        <head>
+        <meta charset=""UTF-8"" />
+        <meta name=""viewport"" content=""width=device-width, initial-scale=1.0""/>
+        <title>Thank you for your feedback!</title>
+        </head>
+        <body style=""margin:0;padding:0;background-color:#f7f7f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;"">
+
+        <table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"" style=""padding:44px 16px;"">
+        <tr><td align=""center"">
+
+        <table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"" style=""max-width:540px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.07);"">
+
+        <tr><td style=""background:#111;height:4px;""></td></tr>
+
+        <tr>
+        <td style=""padding:40px 44px 36px;"">
+        <p style=""margin:0 0 8px;font-size:28px;font-weight:600;color:#09090B;"">We got your feedback! 😊</p>
+        <p style=""margin-top:20px;font-size:15px;color:#52525B;"">
+        Hey <strong>{userName}</strong>, thanks for taking the time on <strong>{dateStr}</strong>.
+        Your input goes straight to our team and helps us build a better product for everyone.
+        </p>
+        </td>
+        </tr>
+
+        <tr><td style=""padding:0 44px;""><div style=""height:1px;background:#F4F4F5;""></div></td></tr>
+
+        <tr>
+        <td style=""padding:32px 44px 8px;"">
+        <p style=""font-size:11px;font-weight:700;color:#A1A1AA;text-transform:uppercase;"">Your ratings</p>
+
+        <table width=""100%"" cellpadding=""0"" cellspacing=""0"">
+        {RenderRow("Overall Experience", overallStars)}
+        {RenderRow("UI / UX Design", uiuxStars)}
+        {RenderRow("Application Speed", speedStars)}
+        {RenderRow("Skills Matching", skillsStars)}
+        {RenderRow("Search & Filters", searchStars)}
+        {RenderRow("Community Trust", trustStars)}
+        {RenderRow("Ease of Navigation", navStars)}
+        {RenderRow("Feature Usefulness", featureStars)}
+        {RenderRow("Help & Support", supportStars)}
+        </table>
+        </td>
+        </tr>
+
+        <tr><td style=""padding:8px 44px 0;""><div style=""height:1px;background:#F4F4F5;""></div></td></tr>
+
+        <tr>
+        <td style=""padding:32px 44px 8px;"">
+        <p style=""font-size:11px;font-weight:700;color:#A1A1AA;text-transform:uppercase;"">Your message</p>
+        <div style=""background:#FAFAFA;border:1.5px solid #E4E4E7;border-radius:12px;padding:18px 20px;"">
+        <p style=""margin:0;font-size:14px;color:#18181B;line-height:1.65;"">{message}</p>
+        </div>
+        </td>
+        </tr>
+
+        <tr>
+        <td style=""padding:28px 44px 40px;"">
+        <div style=""background:#F7F7F8;border-radius:12px;padding:20px 24px;"">
+        <p style=""margin:0;font-size:14px;color:#09090B;font-weight:600;"">Thanks again for helping us improve! ✨</p>
+        <p style=""margin:0;font-size:13px;color:#71717A;"">— Team Talenex</p>
+        </div>
+        </td>
+        </tr>
+
+        </table>
+
+        </td></tr>
+        </table>
+
+        </body>
+        </html>";
+        }
 
     }
 }

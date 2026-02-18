@@ -18,14 +18,14 @@ using Microsoft.EntityFrameworkCore;
 
 
 [ApiController]
-[Route("api/contact-us")]
-public class ContactUsController : ControllerBase
+[Route("api/rate-us")]
+public class RateUsController : ControllerBase
 {
 
     private readonly IEmailService _emailService;
   
 
-    public ContactUsController(IEmailService emailService)
+    public RateUsController(IEmailService emailService)
     {
       
         _emailService = emailService;
@@ -33,9 +33,9 @@ public class ContactUsController : ControllerBase
     }
 
     [HttpPost("send")]
-    public async Task<IActionResult> SendContactRequest([FromBody] ContactEmailDto emaildto)
+    public async Task<IActionResult> SendFeedbackRequest([FromBody] FeedbackResponseDto feedbackDto)
     {
-        await _emailService.SendContactEmailAsync(emaildto);
-        return Ok("Contact email sent successfully.");
+        await _emailService.SendFeedBackEmailAsync(feedbackDto);
+        return Ok("Rating email sent successfully.");
     }
 } 
