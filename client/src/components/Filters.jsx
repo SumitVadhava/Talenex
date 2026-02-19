@@ -4,7 +4,7 @@ import { Search, SlidersHorizontal } from 'lucide-react';
 import { Checkbox } from "@/components/ui/checkbox";
 
 const Filters = ({ filters, setFilters }) => {
-  
+
   const toggleLevel = (level) => {
     setFilters((prev) => {
       const currentLevels = prev.level || [];
@@ -27,8 +27,8 @@ const Filters = ({ filters, setFilters }) => {
       {/* Search within filters (per request) */}
       <div className="space-y-3">
         <label className="text-sm font-medium text-slate-700">Search Skills</label>
-        <Input 
-          placeholder="Keyword..." 
+        <Input
+          placeholder="Keyword..."
           icon={<Search className="w-4 h-4" />}
           value={filters.search}
           onChange={(e) =>
@@ -63,36 +63,36 @@ const Filters = ({ filters, setFilters }) => {
       <div className="space-y-3">
         <label className="text-sm font-medium text-slate-700">Experience Level</label>
         <div className="flex flex-col gap-2">
-    {['Beginner', 'Intermediate', 'Advanced', 'Expert'].map((lvl) => (
-      <label
-        key={lvl}
-        htmlFor={lvl}
-        className="flex items-center gap-2 cursor-pointer group"
-      >
-        <Checkbox
-          id={lvl}
-          checked={filters.level.includes(lvl)}
-          onCheckedChange={() => toggleLevel(lvl)}
-          className="border-slate-300 data-[state=checked]:bg-slate-600 data-[state=checked]:border-slate-600"
-        />
-        <span className="text-sm text-slate-600 group-hover:text-slate-900">
-          {lvl}
-        </span>
-      </label>
-    ))}
-  </div>
+          {['Beginner', 'Intermediate', 'Advanced', 'Expert'].map((lvl) => (
+            <label
+              key={lvl}
+              htmlFor={lvl}
+              className="flex items-center gap-2 cursor-pointer group"
+            >
+              <Checkbox
+                id={lvl}
+                checked={filters.level.includes(lvl)}
+                onCheckedChange={() => toggleLevel(lvl)}
+                className="border-slate-300 data-[state=checked]:bg-slate-600 data-[state=checked]:border-slate-600"
+              />
+              <span className="text-sm text-slate-600 group-hover:text-slate-900">
+                {lvl}
+              </span>
+            </label>
+          ))}
+        </div>
       </div>
 
       {/* Minimum Rating */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-slate-700">Min Rating</label>
-            <span className="text-xs font-medium text-slate-500">{filters.minRating} & up</span>
+          <label className="text-sm font-medium text-slate-700">Min Rating</label>
+          <span className="text-xs font-medium text-slate-500">{filters.minRating} & up</span>
         </div>
-        <input 
-          type="range" 
-          min="0" 
-          max="5" 
+        <input
+          type="range"
+          min="0"
+          max="5"
           step="0.5"
           value={filters.minRating}
           onChange={(e) =>
@@ -105,21 +105,21 @@ const Filters = ({ filters, setFilters }) => {
         />
       </div>
 
-       <Button 
-         variant="ghost" 
-         className="w-full text-slate-500 hover:bg-red-50 hover:text-slate-600"
-         onClick={() =>
-           setFilters({
-             category: 'all',
-             search: '',
-             onlyOnline: false,
-             level: [],
-             minRating: 0,
-           })
-         }
-       >
-         Reset Filters
-       </Button>
+      <Button
+        variant="ghost"
+        className="w-full text-slate-500 hover:bg-red-50 hover:text-slate-600"
+        onClick={() =>
+          setFilters({
+            category: ['all'],
+            search: '',
+            onlyOnline: false,
+            level: [],
+            minRating: 0,
+          })
+        }
+      >
+        Reset Filters
+      </Button>
 
     </div>
   );

@@ -20,6 +20,7 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
   const navigate = useNavigate();
   const location = useLocation();
   const [userData, setUserData] = useState(null);
+  const pathName = useLocation();
   const { isLoaded, isSignedIn, user } = useUser();
   const { signOut } = useClerk();
 
@@ -92,7 +93,14 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
                           // }
                         } else if (link.action && link.ref) {
                           e.preventDefault();
-                          link.action(link.ref);
+                          if(pathName.pathname === "/") {
+                            link.action(link.ref);
+                          } else {
+                            navigate("/");
+                            setTimeout(() => {
+                              link.action(link.ref);
+                            }, 100);
+                          }
                         }
                       }}
                     >

@@ -949,7 +949,7 @@ const Homepage = () => {
   const tokenSentRef = useRef(false);
 
   const [filters, setFilters] = useState({
-    category: "all",
+    category: ["all"],
     search: "",
     onlyOnline: false,
     level: [],
@@ -968,20 +968,24 @@ const Homepage = () => {
       if (skill.user.email === currentUserEmail) return false;
 
       // Category Filter
-      if (filters.category !== "all") {
-        const matchTerms = CATEGORY_MATCH_TERMS[filters.category] || [filters.category.toLowerCase()];
+      if (filters.category.length > 0 && !filters.category.includes("all")) {
+        const isMatch = filters.category.some(catId => {
+          const matchTerms = CATEGORY_MATCH_TERMS[catId] || [catId.toLowerCase()];
 
-        const offeredMatch = skill.offeredSkills?.some(
-          (s) =>
-            matchTerms.some(term => s.category?.toLowerCase().includes(term.toLowerCase())) ||
-            matchTerms.some(term => s.title?.toLowerCase().includes(term.toLowerCase()))
-        );
+          const offeredMatch = skill.offeredSkills?.some(
+            (s) =>
+              matchTerms.some(term => s.category?.toLowerCase().includes(term.toLowerCase())) ||
+              matchTerms.some(term => s.title?.toLowerCase().includes(term.toLowerCase()))
+          );
 
-        const seekingMatch = skill.seekingSkills?.some(
-          (s) => matchTerms.some(term => s?.toLowerCase().includes(term.toLowerCase()))
-        );
+          const seekingMatch = skill.seekingSkills?.some(
+            (s) => matchTerms.some(term => s?.toLowerCase().includes(term.toLowerCase()))
+          );
 
-        if (!offeredMatch && !seekingMatch) return false;
+          return offeredMatch || seekingMatch;
+        });
+
+        if (!isMatch) return false;
       }
 
       // Search Filter (Offers OR Seeking OR Name)
@@ -1238,10 +1242,29 @@ const Homepage = () => {
               <button
                 key={cat.id}
                 onClick={() => {
-                  setFilters({ ...filters, category: cat.id });
+                  setFilters((prev) => {
+                    let newCategories;
+                    if (cat.id === "all") {
+                      newCategories = ["all"];
+                    } else {
+                      // Remove "all" if it exists, then toggle the current category
+                      const filtered = prev.category.filter((c) => c !== "all");
+                      if (filtered.includes(cat.id)) {
+                        newCategories = filtered.filter((c) => c !== cat.id);
+                      } else {
+                        newCategories = [...filtered, cat.id];
+                      }
+
+                      // If no categories are selected, default back to "all"
+                      if (newCategories.length === 0) {
+                        newCategories = ["all"];
+                      }
+                    }
+                    return { ...prev, category: newCategories };
+                  });
                   setCurrentPage(1);
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all cursor-pointer ${filters.category === cat.id
+                className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all cursor-pointer ${filters.category.includes(cat.id)
                   ? "bg-slate-900 text-white shadow-md"
                   : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                   }`}
@@ -1354,7 +1377,7 @@ const Homepage = () => {
                   className="mt-6"
                   onClick={() =>
                     setFilters({
-                      category: "All",
+                      category: ["all"],
                       search: "",
                       onlyOnline: false,
                       level: [],
