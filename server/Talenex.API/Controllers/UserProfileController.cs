@@ -30,6 +30,7 @@ namespace Talenex.API.Controllers
             => Ok(await _service.GetAllAsync());
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(Guid id)
         {
             var user = await _service.GetByIdAsync(id);

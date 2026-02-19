@@ -537,8 +537,6 @@ namespace Infrastructure.Services
         </td>
         </tr>
 
-        <tr><td style=""padding:8px 44px 0;""><div style=""height:1px;background:#F4F4F5;""></div></td></tr>
-
         <tr>
         <td style=""padding:32px 44px 8px;"">
         <p style=""font-size:11px;font-weight:700;color:#A1A1AA;text-transform:uppercase;"">Your message</p>

@@ -303,6 +303,7 @@ namespace Talenex.API.Controllers
         }
 
         [HttpGet("Details/{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetUserById(Guid id,[FromQuery] string[] include)
         {
             var includes = include
