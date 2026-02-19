@@ -601,7 +601,7 @@ export const SwapCard = ({
                         </div>
 
                         <button
-                            onClick={() => { onConnect?.(swap); navigate('/join/room_1') }}
+                            onClick={() => { onConnect?.(swap); navigate(`/join/${swap.id}`) }}
                             className="group flex-shrink-0 flex items-center gap-1.5 px-4 py-2 bg-indigo-50 text-indigo-600 border border-indigo-100 hover:bg-indigo-100 text-sm rounded-full font-bold transition-all hover:-translate-y-0.5 shadow-sm shadow-indigo-100/50 cursor-pointer"
                         >
                             <Video size={16} />
@@ -657,7 +657,7 @@ export const SwapCard = ({
                         <span className="font-medium">{swap.subStatus}</span>
                         {swap.subStatus === 'Accepted' && (
                             <button
-                                onClick={() => {onConnect?.(swap); navigate('/join/room_1')}}
+                                onClick={() => {onConnect?.(swap); navigate(`/join/${swap.id}`)}}
                                 className="ml-auto text-indigo-600 hover:text-indigo-700 font-bold text-xs flex items-center gap-1 px-3 py-1 bg-white border border-indigo-100 rounded-md hover:bg-indigo-50 transition-colors animate-fade-in cursor-pointer"
                             >
                                 <Video size={14} />
