@@ -7,16 +7,14 @@ import {
 } from "@/components/ui/navigation-menu";
 
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-
 import { Menu } from "lucide-react";
 import Logo from "/logo.png";
 import { Terminal } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useUser, SignedIn, SignedOut, useClerk } from "@clerk/clerk-react";
 import UserDropdown from "./UserDropDown";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { LogOut, X } from "lucide-react";
+import { useState } from "react";
 
 export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsRef }) {
   const navigate = useNavigate();
@@ -56,7 +54,7 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
       { label: "Explore", href: "/home" },
       { label: "My Swaps", href: "/my-swaps" },
       { label: "Messages", href: "/messages" },
-      { label: "Connect", href: "/join/room_1" }
+      { label: "Connect", href: "/join/live-room" }
     ]
   };
 
@@ -86,7 +84,12 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
                         // Use href for route navigation, action+ref for in-page scroll
                         if (link.href) {
                           e.preventDefault();
-                          navigate(link.href);
+                          // if (link.href === "/messages") {
+                          //   const url = window.location.origin + "/messages";
+                          //   window.open(url, "_blank", "width=1500,height=1500");
+                          // } else {
+                            navigate(link.href);
+                          // }
                         } else if (link.action && link.ref) {
                           e.preventDefault();
                           link.action(link.ref);
@@ -162,7 +165,11 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
                         onClick={() => {
                           setIsOpen(false);
                           if (link.href) {
-                            navigate(link.href);
+                            if (link.href === "/messages") {
+                              window.open(link.href, "_blank");
+                            } else {
+                              navigate(link.href);
+                            }
                           } else if (link.action && link.ref) {
                             link.action(link.ref);
                           }
