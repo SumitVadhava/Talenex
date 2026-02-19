@@ -26,7 +26,7 @@ import FAQPage from "./pages/FAQPage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import ScrollToTop from "./components/ScrollToTop";
-import MessagesPage from "./pages/MessagesPage";
+// import MessagesPage from "./pages/MessagesPage";
 
 function App() {
   const location = useLocation();
