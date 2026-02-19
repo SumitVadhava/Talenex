@@ -476,7 +476,7 @@ const App = () => {
             );
             const mappedData = response.data.map(request => mapBackendToFrontend(request));
 
-            console.log(mappedData);
+            // console.log(mappedData);
 
             setSwaps(mappedData);
         }
