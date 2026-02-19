@@ -27,12 +27,12 @@ namespace Talenex.Application.DTOs.ResponseDtos
 
         public int UiUxDesign { get; set; } = 0;
         public int ApplicationSpeed { get; set; } = 0;
-        public int SkillsMatching { get; set; } = 0;
-        public int SearchAndFilters { get; set; } = 0;
+        public int SkillsMatchingAccuracy { get; set; } = 0;
+        public int SearchAndFiltersEffectiveness { get; set; } = 0;
         public int CommunityTrust { get; set; } = 0;
         public int EaseOfNavigation { get; set; } = 0;
         public int FeatureUsefulness { get; set; } = 0;
-        public int HelpAndSupport { get; set; } = 0;
+        public int HelpAndSupportQuality { get; set; } = 0;
 
         public string Message { get; set; } =  string.Empty;
 

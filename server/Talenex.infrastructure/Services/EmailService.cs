@@ -480,12 +480,12 @@ namespace Infrastructure.Services
             var overallStars = RenderStars(feedbackDto.OverallExperience);
             var uiuxStars = RenderStars(feedbackDto.UiUxDesign);
             var speedStars = RenderStars(feedbackDto.ApplicationSpeed);
-            var skillsStars = RenderStars(feedbackDto.SkillsMatching);
-            var searchStars = RenderStars(feedbackDto.SearchAndFilters);
+            var skillsStars = RenderStars(feedbackDto.SkillsMatchingAccuracy);
+            var searchStars = RenderStars(feedbackDto.SearchAndFiltersEffectiveness);
             var trustStars = RenderStars(feedbackDto.CommunityTrust);
             var navStars = RenderStars(feedbackDto.EaseOfNavigation);
             var featureStars = RenderStars(feedbackDto.FeatureUsefulness);
-            var supportStars = RenderStars(feedbackDto.HelpAndSupport);
+            var supportStars = RenderStars(feedbackDto.HelpAndSupportQuality);
 
             var userName = HtmlSafe(feedbackDto.UserName);
             var message = HtmlSafe(feedbackDto.Message);
