@@ -43,6 +43,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useChat } from "@/hooks/useChat";
 
 const UserProfilePage = () => {
   const [showAllSkills, setShowAllSkills] = useState(false);
@@ -56,6 +57,7 @@ const UserProfilePage = () => {
 
   const [userData, setUserData] = useState(state?.userData || null);
   const [loading, setLoading] = useState(false);
+  const { openChatWithUser } = useChat();
 
   useEffect(() => {
     // console.log("userData : ", userData);
@@ -384,7 +386,7 @@ const UserProfilePage = () => {
               <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
                 <Button
                   variant="outline"
-                  onClick={() => navigate("/messages")}
+                  onClick={() => openChatWithUser(userData.id) }
                   className="flex-1 md:flex-none border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-all transform hover:-translate-y-1 cursor-pointer"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />

@@ -26,7 +26,7 @@ import FAQPage from "./pages/FAQPage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import ScrollToTop from "./components/ScrollToTop";
-import MessagesPage from "./pages/MessagesPage";
+import ChatsPage from "./pages/ChatsPage";
 
 function App() {
   const location = useLocation();
@@ -49,7 +49,7 @@ function App() {
     "/faq",
     "/terms",
     "/privacy",
-    // "/messages"
+    "/messages"
   ];
 
   const [hideNavbar, setHideNavbar] = useState(hideNavbarRoutes.includes(location.pathname));
@@ -138,10 +138,10 @@ function App() {
         <Route
           path="/messages"
           element={
-            <ProtectedRoute requireOnboarding={true}>
-              <ChatComingSoon />
-              {/* <MessagesPage /> */}
-            </ProtectedRoute>
+            // <ProtectedRoute requireOnboarding={true}>
+            // <ChatComingSoon />
+            <ChatsPage />
+            // </ProtectedRoute>
           }
         />
 

@@ -1,0 +1,1247 @@
+/* =========================================================
+   chat_overrides.css
+   WhatsApp UX × Shadcn Slate — v3
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+/* ─────────────────────────────────────────────────────────
+   GLOBAL
+───────────────────────────────────────────────────────── */
+.str-chat * {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+    box-sizing: border-box;
+}
+
+.str-chat {
+    --str-chat__primary-color: #0f172a;
+    --str-chat__font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --str-chat__font-size: 14px;
+    --str-chat__background-color: transparent;
+    --str-chat__secondary-background-color: #f8fafc;
+    --str-chat__border-radius-circle: 50%;
+    --str-chat__message-max-width: 62%;
+    --str-chat__message-with-attachment-max-width: 340px;
+}
+
+/* Smooth scroll when jumpToMessage is called */
+.str-chat__list,
+.str-chat__virtual-list,
+.str-chat__message-list-scroll {
+    scroll-behavior: smooth !important;
+}
+
+/* Longer, gentler highlight for jumped-to messages */
+@keyframes talenex-highlight-fade {
+    0% {
+        background-color: rgba(251, 191, 36, 0.35);
+    }
+
+    20% {
+        background-color: rgba(251, 191, 36, 0.28);
+    }
+
+    40% {
+        background-color: rgba(251, 191, 36, 0.28);
+    }
+
+    60% {
+        background-color: rgba(251, 191, 36, 0.28);
+    }
+
+    80% {
+        background-color: rgba(251, 191, 36, 0.28);
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+.str-chat__message--highlighted,
+.str-chat__message--highlighted .str-chat__message-inner {
+    animation: talenex-highlight-fade 10.5s ease-out forwards !important;
+    border-radius: 8px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   CHANNEL LIST
+───────────────────────────────────────────────────────── */
+.str-chat-channel-list,
+.str-chat__channel-list {
+    background: #ffffff !important;
+    border-right: none !important;
+    scrollbar-width: none !important;
+    padding: 5px;
+}
+
+.str-chat__channel-list::-webkit-scrollbar {
+    display: none;
+}
+
+.str-chat__channel-preview {
+    padding: 5px 10px !important;
+    margin: 0 0 4px 0 !important;
+    border-radius: 10px !important;
+    border-bottom: none !important;
+    position: relative;
+    /* background-color: #f8fafc; */
+}
+
+.str-chat__channel-preview::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 74px;
+    right: 0;
+    height: 1px;
+    background: #f1f5f9;
+    pointer-events: none;
+}
+
+.str-chat__channel-preview-messenger--wrapper {
+    padding: 14px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    transition: background 0.15s ease !important;
+    cursor: pointer !important;
+    border-radius: 10px !important;
+}
+
+.str-chat__channel-preview:hover .str-chat__channel-preview-messenger--wrapper,
+.str-chat__channel-preview--active .str-chat__channel-preview-messenger--wrapper {
+    background: #f8fafc !important;
+}
+
+.str-chat__channel-preview-messenger--active {
+    /* background: #f8fafc !important; */
+    border-radius: 10px !important;
+}
+
+/* Avatar */
+.str-chat__channel-preview .str-chat__avatar {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #334155, #0f172a) !important;
+    box-shadow: none !important;
+    flex-shrink: 0 !important;
+    overflow: hidden !important;
+}
+
+.str-chat__channel-preview .str-chat__avatar-image,
+.str-chat__channel-preview .str-chat__avatar-fallback {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Text column */
+.str-chat__channel-preview-messenger--right {
+    flex: 1 !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+}
+
+.str-chat__channel-preview-messenger--top {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.str-chat__channel-preview-messenger--name {
+    font-size: 14.5px !important;
+    font-weight: 600 !important;
+    color: #0f172a !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    letter-spacing: -0.01em !important;
+}
+
+.str-chat__channel-preview-messenger--timestamp {
+    font-size: 11px !important;
+    color: #94a3b8 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+
+.str-chat__channel-preview-messenger--bottom {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.str-chat__channel-preview-messenger--last-message {
+    font-size: 12.5px !important;
+    color: #64748b !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 190px !important;
+}
+
+.str-chat__channel-preview-unread-badge {
+    background: #0f172a !important;
+    color: #ffffff !important;
+    border-radius: 999px !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    min-width: 20px !important;
+    height: 20px !important;
+    padding: 0 5px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   HIDE CHANNEL PREVIEW ACTION BUTTONS (pin & archive)
+───────────────────────────────────────────────────────── */
+.str-chat__channel-preview__action-buttons,
+.str-chat__channel-preview__action-button,
+.str-chat__channel-preview__action-button--pin,
+.str-chat__channel-preview__action-button--archive {
+    display: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   PINNED MESSAGE — highlight & indicator banner
+───────────────────────────────────────────────────────── */
+
+/* Row highlight for pinned messages */
+.str-chat__message--pinned {
+    background: rgba(245, 158, 11, 0.07) !important;
+    border-left: 3px solid #f59e0b !important;
+    border-radius: 0 8px 8px 0 !important;
+    padding-left: 8px !important;
+    margin-left: -8px !important;
+}
+
+/* Pin indicator banner (rendered by CustomPinIndicator) */
+.talenex-pin-indicator {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    color: #d97706 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    padding: 3px 10px 5px !important;
+    margin-bottom: 2px !important;
+}
+
+.talenex-pin-indicator svg {
+    color: #d97706 !important;
+    flex-shrink: 0 !important;
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   STREAM DEFAULT CHANNEL HEADER — hide it (we use custom)
+───────────────────────────────────────────────────────── */
+.str-chat__channel-header {
+    display: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   MESSAGE LIST — transparent so JSX animated BG shows
+───────────────────────────────────────────────────────── */
+.str-chat__list,
+.str-chat__ul {
+    background: transparent !important;
+    padding: 12px 20px 4px !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   MESSAGE WINDOW wrapper — transparent
+───────────────────────────────────────────────────────── */
+.str-chat__main-panel,
+.str-chat__container,
+.str-chat__window {
+    background: transparent !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   MESSAGE BUBBLES
+───────────────────────────────────────────────────────── */
+.str-chat__message {
+    animation: waMsgIn 0.18s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    padding: 2px 0 !important;
+    overflow: visible !important;
+}
+
+@keyframes waMsgIn {
+    from {
+        opacity: 0;
+        transform: translateY(7px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.str-chat__message-bubble,
+.str-chat__message-text {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    width: max-content !important;
+}
+
+.str-chat__message-attachment--img {
+    border-radius: 0 !important;
+}
+
+/* Bubble content — normal flow, no absolute timestamp */
+.str-chat__message-text-inner {
+    font-size: 14.5px !important;
+    line-height: 1.55 !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    padding: 9px 13px !important;
+    position: relative !important;
+    min-width: 72px !important;
+    overflow: visible !important;
+}
+
+/* SENT */
+.str-chat__message--me .str-chat__message-text .str-chat__message-text-inner {
+    background: #1e293b !important;
+    color: #f1f5f9 !important;
+    border-radius: 14px 14px 3px 14px !important;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18) !important;
+    border: none !important;
+}
+
+/* SENT tail */
+.str-chat__message--me .str-chat__message-text .str-chat__message-text-inner::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    right: -7px !important;
+    border-style: solid !important;
+    border-width: 0 0 10px 9px !important;
+    border-color: transparent transparent transparent #1e293b !important;
+}
+
+/* RECEIVED */
+.str-chat__message--other .str-chat__message-text .str-chat__message-text-inner {
+    background: #6d28d9 !important;
+    color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px 14px 14px 3px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.09) !important;
+    border: none !important;
+}
+
+/* RECEIVED tail */
+.str-chat__message--other .str-chat__message-text .str-chat__message-text-inner::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: -7px !important;
+    border-style: solid !important;
+    border-width: 0 9px 10px 0 !important;
+    border-color: transparent #6d28d9 transparent transparent !important;
+}
+
+.str-chat__message-image {
+    border-radius: 0 !important;
+}
+
+/* Timestamp — BELOW bubble, never overlapping */
+.str-chat__message-metadata,
+.str-chat__message--me .str-chat__message-metadata,
+.str-chat__message--other .str-chat__message-metadata {
+    position: static !important;
+    font-size: 10.5px !important;
+    color: #94a3b8 !important;
+    margin: 2px 4px 0 !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 3px !important;
+}
+
+.str-chat__message--me .str-chat__message-metadata {
+    justify-content: flex-end !important;
+}
+
+.str-chat__message--other .str-chat__message-metadata {
+    justify-content: flex-start !important;
+}
+
+/* Avatar next to received */
+.str-chat__message--other .str-chat__avatar {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #475569, #1e293b) !important;
+    align-self: flex-end !important;
+    margin-bottom: 2px !important;
+}
+
+/* Sender name */
+.str-chat__message-sender-name {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: #334155 !important;
+    margin-bottom: 2px !important;
+}
+
+/* Kill horizontal overflow everywhere */
+.str-chat__li,
+.str-chat__message-inner {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+}
+
+.str-chat__message-reactions-list,
+.str-chat__message-reactions-options {
+    background: transparent !important;
+    border-radius: 999px !important;
+    border: none !important;
+    padding: 2px 8px !important;
+    font-size: 12px !important;
+    box-shadow: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   HIDE STREAM'S CAROUSEL / NAV ARROWS (◄ ►)
+───────────────────────────────────────────────────────── */
+[data-testid="previous-element"],
+[data-testid="next-element"],
+.str-chat__attachment--action-controls,
+button[aria-label="Previous image"],
+button[aria-label="Next image"],
+.str-chat__gallery-two-rows button,
+.str-chat__image-gallery__previous,
+.str-chat__image-gallery__next {
+    display: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   STREAM IMAGE VIEWER — keep default, don't override
+   (just ensure no broken styles from above bleed in)
+───────────────────────────────────────────────────────── */
+.str-chat__modal {
+    all: revert !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   DATE SEPARATOR — floating pill
+───────────────────────────────────────────────────────── */
+.str-chat__date-separator {
+    padding: 14px 0 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.str-chat__date-separator-line {
+    display: none !important;
+}
+
+.str-chat__date-separator-date {
+    background: rgba(255, 255, 255, 0.88) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    color: #475569 !important;
+    font-size: 11.5px !important;
+    font-weight: 500 !important;
+    border-radius: 999px !important;
+    padding: 5px 16px !important;
+    border: none !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   EMOJI PICKER — no oval background
+───────────────────────────────────────────────────────── */
+/* Remove Stream's pill/oval wrapper around emoji trigger button */
+.str-chat__emojiselect-wrapper,
+.str-chat__input-flat-emojiselect,
+.str-chat__fileupload-wrapper,
+[data-testid="emojiselect"],
+[data-testid="fileinput"] {
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* Also nuke any pill/badge shape on emoji icon parent */
+.str-chat__emoji-picker-container,
+.rfu-file-upload-button,
+.str-chat__message-input .str-chat__input-flat-emojiselect {
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   REACTIONS
+───────────────────────────────────────────────────────── */
+.str-chat__reaction-selector {
+    background: #ffffff !important;
+    border-radius: 999px !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+    padding: 6px 10px !important;
+    display: flex !important;
+    gap: 2px !important;
+}
+
+.str-chat__reaction-selector-item button {
+    border-radius: 50% !important;
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 20px !important;
+    transition: transform 0.15s ease, background 0.12s !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: none !important;
+    border: none !important;
+    /* No oval/pill on individual emoji items */
+}
+
+.str-chat__reaction-selector-item button:hover {
+    background: #f1f5f9 !important;
+    transform: scale(1.22) !important;
+}
+
+.str-chat__reaction-list {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-radius: 999px !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 2px 8px !important;
+    font-size: 12px !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   MESSAGE INPUT — WhatsApp pill
+───────────────────────────────────────────────────────── */
+.str-chat__message-input {
+    background: transparent !important;
+    backdrop-filter: blur(8px) !important;
+    border-top: none !important;
+    padding: 8px 14px 14px !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.str-chat__message-input-inner {
+    background: #ffffff !important;
+    border: none !important;
+    border-radius: 26px !important;
+    padding: 6px 6px 6px 14px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.09) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 2px !important;
+    flex: 1 !important;
+    transition: box-shadow 0.2s !important;
+}
+
+.str-chat__message-input-inner:focus-within {
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.13) !important;
+}
+
+.str-chat__message-textarea {
+    font-size: 14.5px !important;
+    color: #0f172a !important;
+    line-height: 1.5 !important;
+    padding: 4px 0 !important;
+    max-height: 120px !important;
+    resize: none !important;
+    flex: 1 !important;
+    background: transparent !important;
+    outline-color: transparent !important;
+    outline: none !important;
+}
+
+.str-chat__message-textarea::placeholder {
+    color: #94a3b8 !important;
+}
+
+/* Input icon buttons — clean, no ovals */
+.str-chat__message-input button:not(.str-chat__send-button) {
+    background: none !important;
+    border: none !important;
+    padding: 7px !important;
+    border-radius: 50% !important;
+    color: #94a3b8 !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: color 0.15s, background 0.15s !important;
+    width: 34px !important;
+    height: 34px !important;
+    flex-shrink: 0 !important;
+    box-shadow: none !important;
+}
+
+.str-chat__message-input button:not(.str-chat__send-button):hover {
+    color: #475569 !important;
+    background: #f1f5f9 !important;
+}
+
+.str-chat__message-input button:not(.str-chat__send-button) svg {
+    width: 19px !important;
+    height: 19px !important;
+    stroke-width: 1.8 !important;
+}
+
+/* SEND BUTTON — round */
+.str-chat__send-button {
+    background: #0f172a !important;
+    border-radius: 50% !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    transition: background 0.15s, transform 0.15s, box-shadow 0.15s !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.28) !important;
+    border: none !important;
+    cursor: pointer !important;
+    margin-left: 6px !important;
+}
+
+.str-chat__send-button:hover {
+    background: #334155 !important;
+    transform: scale(1.07) !important;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.32) !important;
+}
+
+.str-chat__send-button:active {
+    transform: scale(0.94) !important;
+}
+
+.str-chat__send-button svg {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.str-chat__send-button svg path {
+    fill: #ffffff !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   THREAD
+───────────────────────────────────────────────────────── */
+.str-chat__thread {
+    background: #ffffff !important;
+    border-left: 1px solid #f1f5f9 !important;
+}
+
+.str-chat__thread-header {
+    background: #ffffff !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    padding: 14px 16px !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   TYPING INDICATOR
+───────────────────────────────────────────────────────── */
+.str-chat__typing-indicator {
+    padding: 2px 20px 4px !important;
+    font-size: 12px !important;
+    color: #64748b !important;
+    font-style: italic !important;
+}
+
+/* ─────────────────────────────────────────────────────────
+   SCROLLBAR
+───────────────────────────────────────────────────────── */
+.str-chat__list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.str-chat__list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.str-chat__list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   EMPTY STATE
+───────────────────────────────────────────────────────── */
+.talenex-chat-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 14px;
+    text-align: center;
+    padding: 40px;
+    background: transparent;
+}
+
+.talenex-chat-empty h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.02em;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.talenex-chat-empty p {
+    font-size: 13.5px;
+    color: #64748b;
+    margin: 0;
+    max-width: 280px;
+    line-height: 1.65;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* ─────────────────────────────────────────────────────────
+   LOCK BADGE
+───────────────────────────────────────────────────────── */
+.talenex-lock-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px 14px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(8px);
+    border-radius: 999px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+    font-size: 11.5px;
+    color: #64748b;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+/* ─────────────────────────────────────────────
+   REMOVE STREAM IMAGE OVERLAY CONTROLS
+   (close, expand, counter, dark overlay)
+───────────────────────────────────────────── */
+
+/* remove overlay container */
+/* .str-chat__image-gallery__overlay,
+.str-chat__attachment-preview-overlay,
+.str-chat__gallery-overlay {
+    display: none !important;
+} */
+
+/* remove buttons inside images */
+/* .str-chat__image-gallery__close,
+.str-chat__image-gallery__expand,
+.str-chat__image-gallery__actions,
+.str-chat__image-gallery__count,
+.str-chat__image-gallery__controls,
+.str-chat__image-gallery button,
+.str-chat__attachment-preview button {
+    display: none !important;
+} */
+
+.str-chat__image-gallery-icon {
+    display: none !important;
+}
+
+.str-chat__modal__close-button {
+    display: none !important;
+}
+
+/* .image-gallery-icon .image-gallery-fullscreen-button {
+    display: none !important;
+} */
+
+/* ensure image still clickable */
+.str-chat__message-attachment--img img,
+.str-chat__attachment img {
+    cursor: zoom-in !important;
+    pointer-events: auto !important;
+}
+
+/* Hide image counter like 1/1 */
+.str-chat__image-gallery__count,
+.str-chat__gallery-count,
+.image-gallery-index {
+    display: none !important;
+}
+
+
+/* make gallery container the positioning reference */
+.str-chat__image-gallery,
+.image-gallery,
+.image-gallery-content {
+    position: relative !important;
+}
+
+/* ensure fullscreen button is visible */
+.str-chat__image-gallery__expand,
+.image-gallery-fullscreen-button {
+    display: block !important;
+}
+
+/* move fullscreen button to bottom-right */
+.str-chat__image-gallery__expand,
+.image-gallery-fullscreen-button {
+    position: absolute !important;
+    top: auto !important;
+    bottom: 18px !important;
+    right: 18px !important;
+    left: auto !important;
+    z-index: 1000 !important;
+
+    background: rgba(0, 0, 0, 0.55) !important;
+    color: #fff !important;
+    padding: 8px !important;
+    border-radius: 999px !important;
+    backdrop-filter: blur(6px);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+/* hover effect */
+.str-chat__image-gallery__expand:hover,
+.image-gallery-fullscreen-button:hover {
+    transform: scale(1.08);
+    background: rgba(0, 0, 0, 0.75) !important;
+}
+
+/* make message image wrapper positioning context */
+.str-chat__message-attachment--img,
+.str-chat__attachment-media,
+.str-chat__gallery {
+    position: relative !important;
+}
+
+/* make the actual image container the positioning context */
+.str-chat__gallery-image,
+.str-chat__attachment,
+.str-chat__attachment--image {
+    position: relative !important;
+}
+
+/* move expand button to bottom-right in message images */
+.str-chat__gallery-image .image-gallery-fullscreen-button,
+.str-chat__gallery-image .str-chat__image-gallery__expand {
+    position: absolute !important;
+    top: auto !important;
+    bottom: 8px !important;
+    right: 8px !important;
+    left: auto !important;
+    z-index: 5 !important;
+
+    background: rgba(0, 0, 0, 0.55) !important;
+    color: #fff !important;
+    padding: 6px !important;
+    border-radius: 999px !important;
+    backdrop-filter: blur(4px);
+}
+
+/* =========================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================= */
+
+/* ─────────────────────────────────────────────────────────
+   ≤ 1024px  — Small desktops / large tablets (landscape)
+───────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .str-chat {
+        --str-chat__message-max-width: 70%;
+        --str-chat__message-with-attachment-max-width: 300px;
+    }
+
+    .str-chat__list,
+    .str-chat__ul {
+        padding: 10px 14px 4px !important;
+    }
+
+    .str-chat__message-input {
+        padding: 6px 10px 10px !important;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────
+   ≤ 768px  — Tablets (portrait) / large phones (landscape)
+───────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .str-chat {
+        --str-chat__message-max-width: 78%;
+        --str-chat__message-with-attachment-max-width: 260px;
+        --str-chat__font-size: 13.5px;
+    }
+
+    /* Channel list sidebar — make narrower */
+    .str-chat-channel-list,
+    .str-chat__channel-list {
+        width: 100% !important;
+        max-width: 260px !important;
+    }
+
+    /* Preview item tighter padding */
+    .str-chat__channel-preview-messenger--wrapper {
+        padding: 8px 10px !important;
+        gap: 10px !important;
+    }
+
+    .str-chat__channel-preview-messenger--name {
+        font-size: 13.5px !important;
+    }
+
+    .str-chat__channel-preview-messenger--last-message {
+        font-size: 12px !important;
+        max-width: 140px !important;
+    }
+
+    /* Message bubbles */
+    .str-chat__message-text-inner {
+        font-size: 13.5px !important;
+        padding: 8px 12px !important;
+    }
+
+    /* Message input */
+    .str-chat__message-input {
+        padding: 6px 8px 10px !important;
+    }
+
+    .str-chat__message-input-inner {
+        padding: 5px 5px 5px 12px !important;
+        border-radius: 22px !important;
+    }
+
+    .str-chat__message-textarea {
+        font-size: 13.5px !important;
+    }
+
+    /* Send button — slightly smaller */
+    .str-chat__send-button {
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+    }
+
+    /* Thread — stack below on tablet */
+    .str-chat__thread {
+        width: 100% !important;
+        border-left: none !important;
+        border-top: 1px solid #f1f5f9 !important;
+    }
+
+    /* Reaction selector — smaller */
+    .str-chat__reaction-selector-item button {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 17px !important;
+    }
+
+    /* Empty state — reduce padding */
+    .talenex-chat-empty {
+        padding: 24px 20px !important;
+    }
+
+    .talenex-chat-empty h3 {
+        font-size: 16px !important;
+    }
+
+    .talenex-chat-empty p {
+        font-size: 13px !important;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────
+   ≤ 640px  — Mobile phones
+───────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .str-chat {
+        --str-chat__message-max-width: 85%;
+        --str-chat__message-with-attachment-max-width: 260px;
+        --str-chat__font-size: 13px;
+    }
+
+    /* Force channel list and chat area into full-width mode */
+    .str-chat-channel-list,
+    .str-chat__channel-list {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-right: none !important;
+    }
+
+    /* Channel list sidebar takes full width on mobile */
+    .str-chat__channel-list-messenger {
+        width: 100% !important;
+    }
+
+    /* Preview names / timestamps */
+    .str-chat__channel-preview-messenger--name {
+        font-size: 13px !important;
+    }
+
+    .str-chat__channel-preview-messenger--timestamp {
+        font-size: 10.5px !important;
+    }
+
+    .str-chat__channel-preview-messenger--last-message {
+        max-width: calc(100vw - 120px) !important;
+        font-size: 11.5px !important;
+    }
+
+    /* Message list — tighter horizontal padding */
+    .str-chat__list,
+    .str-chat__ul {
+        padding: 8px 10px 4px !important;
+    }
+
+    /* Bubbles */
+    .str-chat__message-text-inner {
+        font-size: 13px !important;
+        padding: 7px 11px !important;
+        min-width: 60px !important;
+    }
+
+    /* Timestamp text */
+    .str-chat__message-metadata,
+    .str-chat__message--me .str-chat__message-metadata,
+    .str-chat__message--other .str-chat__message-metadata {
+        font-size: 10px !important;
+    }
+
+    /* Sender name */
+    .str-chat__message-sender-name {
+        font-size: 11px !important;
+    }
+
+    /* Message input bar */
+    .str-chat__message-input {
+        padding: 5px 6px 8px !important;
+    }
+
+    .str-chat__message-input-inner {
+        padding: 4px 4px 4px 10px !important;
+        border-radius: 20px !important;
+        gap: 1px !important;
+    }
+
+    .str-chat__message-textarea {
+        font-size: 13px !important;
+        max-height: 100px !important;
+    }
+
+    /* Input icon buttons — touch-friendly 40px tap target */
+    .str-chat__message-input button:not(.str-chat__send-button) {
+        width: 36px !important;
+        height: 36px !important;
+        padding: 6px !important;
+    }
+
+    .str-chat__message-input button:not(.str-chat__send-button) svg {
+        width: 17px !important;
+        height: 17px !important;
+    }
+
+    /* Send button */
+    .str-chat__send-button {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        margin-left: 4px !important;
+    }
+
+    .str-chat__send-button svg {
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    /* Avatar in message */
+    .str-chat__message--other .str-chat__avatar {
+        width: 24px !important;
+        height: 24px !important;
+        min-width: 24px !important;
+    }
+
+    /* Date separator pill */
+    .str-chat__date-separator-date {
+        font-size: 10.5px !important;
+        padding: 4px 12px !important;
+    }
+
+    /* Typing indicator */
+    .str-chat__typing-indicator {
+        padding: 2px 10px 4px !important;
+        font-size: 11px !important;
+    }
+
+    /* Thread — full-screen overlay on mobile */
+    .str-chat__thread {
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        z-index: 100 !important;
+        overflow-y: auto !important;
+        border: none !important;
+        background: #ffffff !important;
+        width: 100% !important;
+    }
+
+    /* Reaction selector — compact */
+    .str-chat__reaction-selector {
+        padding: 4px 6px !important;
+        gap: 0 !important;
+    }
+
+    .str-chat__reaction-selector-item button {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 15px !important;
+    }
+
+    /* Empty state */
+    .talenex-chat-empty {
+        padding: 20px 16px !important;
+        gap: 10px !important;
+    }
+
+    .talenex-chat-empty h3 {
+        font-size: 15px !important;
+    }
+
+    .talenex-chat-empty p {
+        font-size: 12.5px !important;
+        max-width: 240px !important;
+    }
+
+    /* Lock badge */
+    .talenex-lock-badge {
+        font-size: 10.5px !important;
+        padding: 4px 10px !important;
+    }
+
+    /* Channel preview avatar — keep consistent size on mobile */
+    .str-chat__channel-preview .str-chat__avatar {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+    }
+
+    .str-chat__channel-preview .str-chat__avatar-image,
+    .str-chat__channel-preview .str-chat__avatar-fallback {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    /* ── Image fix: prevent full-screen-tall images on mobile ── */
+
+    /* Cap the image itself — height and width */
+    .str-chat__message-attachment--img img,
+    .str-chat__attachment img,
+    .str-chat__gallery-image img,
+    .str-chat__message-image img,
+    .image-gallery-image img,
+    .image-gallery-slide img {
+        max-height: 240px !important;
+        max-width: 70vw !important;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain !important;
+        display: block !important;
+    }
+
+    /* Cap the wrapper containers so they don't stretch wider than the image */
+    .str-chat__message-attachment--img,
+    .str-chat__message-attachment,
+    .str-chat__message-attachment--image,
+    .str-chat__attachment-media,
+    .str-chat__gallery,
+    .str-chat__gallery-image,
+    .image-gallery,
+    .image-gallery-content,
+    .image-gallery-slide-wrapper,
+    .image-gallery-slides,
+    .image-gallery-slide {
+        max-width: 70vw !important;
+        max-height: 240px !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Bubble/message-text must not overflow the viewport */
+    .str-chat__message-bubble,
+    .str-chat__message-text {
+        max-width: calc(100vw - 72px) !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────
+   ≤ 480px  — Small / older phones
+───────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+    .str-chat {
+        --str-chat__message-max-width: 90%;
+        --str-chat__message-with-attachment-max-width: 92%;
+    }
+
+    .str-chat__list,
+    .str-chat__ul {
+        padding: 6px 8px 4px !important;
+    }
+
+    .str-chat__message-text-inner {
+        font-size: 12.5px !important;
+        padding: 6px 10px !important;
+    }
+
+    .str-chat__message-input {
+        padding: 4px 4px 6px !important;
+    }
+
+    .str-chat__message-input-inner {
+        padding: 3px 3px 3px 8px !important;
+        border-radius: 18px !important;
+    }
+
+    /* Fullscreen-button repositioned on tiny screens */
+    .str-chat__image-gallery__expand,
+    .image-gallery-fullscreen-button {
+        bottom: 10px !important;
+        right: 10px !important;
+        padding: 6px !important;
+    }
+
+    .str-chat__gallery-image .image-gallery-fullscreen-button,
+    .str-chat__gallery-image .str-chat__image-gallery__expand {
+        bottom: 5px !important;
+        right: 5px !important;
+        padding: 5px !important;
+    }
+
+    /* Reaction selector wraps on very small screens */
+    .str-chat__reaction-selector {
+        flex-wrap: wrap !important;
+        border-radius: 16px !important;
+    }
+}

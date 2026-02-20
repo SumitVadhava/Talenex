@@ -657,7 +657,7 @@ export const SwapCard = ({
                         <span className="font-medium">{swap.subStatus}</span>
                         {swap.subStatus === 'Accepted' && (
                             <button
-                                onClick={() => {onConnect?.(swap); navigate(`/join/${swap.id}`)}}
+                                onClick={() => { onConnect?.(swap); navigate(`/join/${swap.id}`) }}
                                 className="ml-auto text-indigo-600 hover:text-indigo-700 font-bold text-xs flex items-center gap-1 px-3 py-1 bg-white border border-indigo-100 rounded-md hover:bg-indigo-50 transition-colors animate-fade-in cursor-pointer"
                             >
                                 <Video size={14} />

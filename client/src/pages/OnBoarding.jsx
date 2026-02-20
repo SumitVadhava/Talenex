@@ -305,14 +305,14 @@ export default function OnBoarding() {
               headers: {
                 "Content-Type": "application/json",
               },
-            },
-
-            setUserData({
-              fullName: user.fullName,
-              email: user.primaryEmailAddress?.emailAddress,
-              profilePhotoUrl: formData.profilePhotoUrl,
-            })
+            }
           );
+
+          setUserData({
+            fullName: user.fullName,
+            email: user.primaryEmailAddress?.emailAddress,
+            profilePhotoUrl: formData.profilePhotoUrl,
+          });
           const existingMetadata = user.unsafeMetadata || {};
 
           // console.log(existingMetadata);

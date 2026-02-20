@@ -763,6 +763,8 @@ import api from "../api/axios";
 import qs from "qs";
 import Loader from "@/components/Loader";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
+import { fetchSkills } from "../api/skillsApi";
 
 const CATEGORIES = [
   { id: "all", name: "All Skills", icon: "LayoutGrid" },
@@ -942,11 +944,12 @@ const Homepage = () => {
   // --- State ---
   // const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
-  const { getToken } = useAuth();
-  const [isLoading, setIsLoading] = useState(true);
+  const { getToken, isLoaded, isSignedIn } = useAuth();
+  // const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
 
   const tokenSentRef = useRef(false);
+  const [tokenReady, setTokenReady] = useState(false);
 
   const [filters, setFilters] = useState({
     category: ["all"],
@@ -959,7 +962,18 @@ const Homepage = () => {
   const [sortBy, setSortBy] = useState("oldest");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-  const [skills, setSkills] = useState([]);
+  // const [skills, setSkills] = useState([]);
+  const {
+    data: skills = [],
+    isLoading,
+    isFetching,
+    error,
+  } = useQuery({
+    queryKey: ["skills"],
+    queryFn: fetchSkills,
+    enabled: isLoaded && isSignedIn && tokenReady
+  });
+
 
   // --- Filtering Logic ---
   const filteredData = useMemo(() => {
@@ -1068,58 +1082,59 @@ const Homepage = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const mapUsersApiToSkillsList = (users) => {
-    if (!Array.isArray(users)) return [];
+  // const mapUsersApiToSkillsList = (users) => {
+  //   if (!Array.isArray(users)) return [];
 
-    // console.log("Mapping done");
+  //   // console.log("Mapping done");
 
-    return users
-      .filter((user) => user.skills?.skillsOffered?.length > 0)
-      .map((user) => ({
-        id: user?.userId ?? user.email,
-        user: {
-          id: user.profile?.id ?? user.email,
-          email: user.email,
-          name: user.profile?.fullName ?? `${user.firstName} ${user.lastName}`,
-          avatar: user.profile?.profilePhotoUrl ?? user.imageUrl ?? "",
-          location: user.profile?.location ?? "",
-          rating: user.reputation?.averageRating ?? 0,
-          reviewCount: user.reputation?.totalReviews ?? 0,
-          totalSwapsCompleted: user.reputation?.totalSwapsCompleted ?? 0,
-        },
+  //   return users
+  //     .filter((user) => user.skills?.skillsOffered?.length > 0)
+  //     .map((user) => ({
+  //       id: user?.userId ?? user.email,
+  //       user: {
+  //         id: user.profile?.id ?? user.email,
+  //         email: user.email,
+  //         name: user.profile?.fullName ?? `${user.firstName} ${user.lastName}`,
+  //         avatar: user.profile?.profilePhotoUrl ?? user.imageUrl ?? "",
+  //         location: user.profile?.location ?? "",
+  //         rating: user.reputation?.averageRating ?? 0,
+  //         reviewCount: user.reputation?.totalReviews ?? 0,
+  //         totalSwapsCompleted: user.reputation?.totalSwapsCompleted ?? 0,
+  //       },
 
-        // 🔥 ALL OFFERED SKILLS
-        offeredSkills: user.skills.skillsOffered.map((skill) => ({
-          title: skill.title,
-          category: skill.category,
-          level: skill.level,
-          description: skill.description,
-          certificateURL: skill.certificateURL,
-        })),
+  //       // 🔥 ALL OFFERED SKILLS
+  //       offeredSkills: user.skills.skillsOffered.map((skill) => ({
+  //         title: skill.title,
+  //         category: skill.category,
+  //         level: skill.level,
+  //         description: skill.description,
+  //         certificateURL: skill.certificateURL,
+  //       })),
 
-        // 🔥 ALL WANTED SKILLS
-        seekingSkills: user.skills.skillsWanted?.map((s) => s.name || s.title || s) ?? [],
+  //       // 🔥 ALL WANTED SKILLS
+  //       seekingSkills: user.skills.skillsWanted?.map((s) => s.name || s.title || s) ?? [],
 
-        isOnline: true,
-        postedAt: user.createdAt
-          ? new Date(user.createdAt).toLocaleDateString("en-US", {
-            month: "long",
-            year: "numeric",
-          })
-          : "",
-        reviews: Array.isArray(user.reviews) ? user.reviews.map((review) => ({
-          id: review.id,
-          reviewerAvatar: review.reviewerAvatar,
-          reviewerName: review.reviewerName,
-          rating: review.rating,
-          reviewMsg: review.reviewMsg,
-          createdAt: review.createdAt,
-        })) : [],
-      }));
-  };
+  //       isOnline: true,
+  //       postedAt: user.createdAt
+  //         ? new Date(user.createdAt).toLocaleDateString("en-US", {
+  //           month: "long",
+  //           year: "numeric",
+  //         })
+  //         : "",
+  //       reviews: Array.isArray(user.reviews) ? user.reviews.map((review) => ({
+  //         id: review.id,
+  //         reviewerAvatar: review.reviewerAvatar,
+  //         reviewerName: review.reviewerName,
+  //         rating: review.rating,
+  //         reviewMsg: review.reviewMsg,
+  //         createdAt: review.createdAt,
+  //       })) : [],
+  //     }));
+  // };
 
   useEffect(() => {
-    // const alreadySent = sessionStorage.getItem("token");
+    // Wait until Clerk has fully loaded and the user is signed in
+    if (!isLoaded || !isSignedIn) return;
     if (tokenSentRef.current) return;
 
     tokenSentRef.current = true;
@@ -1128,7 +1143,10 @@ const Homepage = () => {
       try {
         const token = await getToken({ template: "customJWT" });
 
-        // console.log("Fetched token:", token);
+        if (!token) {
+          console.warn("Clerk returned a null token – skipping auth call");
+          return;
+        }
 
         var response = await api.post(
           "/auth/",
@@ -1143,50 +1161,15 @@ const Homepage = () => {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("userId", response.data.userId);
 
-
-        await getSkills();
+        // Signal that the token is ready so useQuery can fire
+        setTokenReady(true);
       } catch (error) {
         console.error("Error sending token:", error);
       }
     };
 
-    const getSkills = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.log("No token found.");
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-
-        const response = await api.get("/User/All", {
-          params: {
-            include: ["Profile", "Skills", "Reputation", "Reviews"],
-          },
-          paramsSerializer: (params) =>
-            qs.stringify(params, { arrayFormat: "repeat" }),
-        });
-
-        // console.log("response", response.data);
-
-        const skillsList = mapUsersApiToSkillsList(response.data);
-        // console.log(skillsList);
-
-        setSkills(skillsList);
-      } catch (error) {
-        console.error("Error fetching skills:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    // getSkills();
-    // console.log(skills);
-    // fetchAndSendToken();
     init();
-  }, [getToken]);
+  }, [isLoaded, isSignedIn, getToken]);
 
   const SkeletonCard = () => (
     <div className="flex flex-col gap-4 border border-slate-200 rounded-xl p-6 bg-white shadow-sm h-full">

@@ -85,12 +85,12 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
                         // Use href for route navigation, action+ref for in-page scroll
                         if (link.href) {
                           e.preventDefault();
-                          // if (link.href === "/messages") {
-                          //   const url = window.location.origin + "/messages";
-                          //   window.open(url, "_blank", "width=1500,height=1500");
-                          // } else {
+                          if (link.href === "/messages") {
+                            const url = window.location.origin + "/messages";
+                            window.open(url, "_blank");
+                          } else {
                             navigate(link.href);
-                          // }
+                          }
                         } else if (link.action && link.ref) {
                           e.preventDefault();
                           if(pathName.pathname === "/") {
