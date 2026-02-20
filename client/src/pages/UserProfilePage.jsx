@@ -57,7 +57,7 @@ const UserProfilePage = () => {
 
   const [userData, setUserData] = useState(state?.userData || null);
   const [loading, setLoading] = useState(false);
-  const { openChatWithUser } = useChat();
+  const { openChatWithUser, isChatReady } = useChat();
 
   useEffect(() => {
     // console.log("userData : ", userData);
@@ -386,11 +386,21 @@ const UserProfilePage = () => {
               <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
                 <Button
                   variant="outline"
-                  onClick={() => openChatWithUser(userData.id) }
-                  className="flex-1 md:flex-none border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-all transform hover:-translate-y-1 cursor-pointer"
+                  onClick={() => isChatReady && openChatWithUser(userData.id)}
+                  disabled={!isChatReady}
+                  className="flex-1 md:flex-none border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-all transform hover:-translate-y-1 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  Message
+                  {isChatReady ? (
+                    <>
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      Message
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-4 h-4 mr-2 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin" />
+                      Connecting...
+                    </>
+                  )}
                 </Button>
                 <Button
                   className="flex-1 md:flex-none bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-200 hover:shadow-purple-300 transition-all transform hover:-translate-y-0.5 cursor-pointer"

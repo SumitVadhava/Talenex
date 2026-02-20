@@ -7,7 +7,10 @@ export const useChat = () => {
     const navigate = useNavigate();
 
     const openChatWithUser = async (otherUserId) => {
-        if (!client) return;
+        if (!client) {
+            console.warn("Chat client not ready yet.");
+            return;
+        }
 
         try {
             const channel = client.channel("messaging", {
@@ -15,24 +18,17 @@ export const useChat = () => {
                 distinct: true,
             });
 
-            // Watch (creates/joins) the channel
             await channel.watch();
 
-            // Tell ChatsPage to:
-            //   1. Pin this channel to the top of the ChannelList
-            //   2. Open this channel's chat panel immediately
             setPendingChannelCid(channel.cid);
             setActiveChannel(channel);
 
             const url = window.location.origin + `/messages?cid=${channel.cid}`;
             window.open(url, "_blank");
-
-
-        }
-        catch (error) {
+        } catch (error) {
             console.error("Error opening chat:", error);
         }
     };
 
-    return { client, activeChannel, openChatWithUser };
+    return { client, activeChannel, openChatWithUser, isChatReady: !!client };
 };

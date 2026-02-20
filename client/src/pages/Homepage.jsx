@@ -735,7 +735,7 @@
 // export default Homepage;
 
 
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect, useRef, useContext } from "react";
 // import { MOCK_SKILLS, CATEGORIES } from './constants';
 import SkillCard from "../components/SkillCard";
 import Filters from "../components/Filters";
@@ -765,6 +765,7 @@ import Loader from "@/components/Loader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSkills } from "../api/skillsApi";
+import { UserContext } from "@/context/UserContext";
 
 const CATEGORIES = [
   { id: "all", name: "All Skills", icon: "LayoutGrid" },
@@ -947,9 +948,9 @@ const Homepage = () => {
   const { getToken, isLoaded, isSignedIn } = useAuth();
   // const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
+  const { authVersion } = useContext(UserContext);
 
   const tokenSentRef = useRef(false);
-  const [tokenReady, setTokenReady] = useState(() => !!localStorage.getItem("token"));
 
   const [filters, setFilters] = useState({
     category: ["all"],
@@ -969,9 +970,9 @@ const Homepage = () => {
     isFetching,
     error,
   } = useQuery({
-    queryKey: ["skills"],
+    queryKey: ["skills", authVersion],
     queryFn: fetchSkills,
-    enabled: isLoaded && isSignedIn && tokenReady
+    enabled: isLoaded && isSignedIn && authVersion > 0,
   });
 
 
@@ -1132,44 +1133,7 @@ const Homepage = () => {
   //     }));
   // };
 
-  useEffect(() => {
-    // Wait until Clerk has fully loaded and the user is signed in
-    if (!isLoaded || !isSignedIn) return;
-    if (tokenSentRef.current) return;
-
-    tokenSentRef.current = true;
-
-    const init = async () => {
-      try {
-        const token = await getToken({ template: "customJWT" });
-
-        if (!token) {
-          console.warn("Clerk returned a null token – skipping auth call");
-          return;
-        }
-
-        var response = await api.post(
-          "/auth/",
-          {}, // body
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("userId", response.data.userId);
-
-        // Signal that the token is ready so useQuery can fire
-        setTokenReady(true);
-      } catch (error) {
-        console.error("Error sending token:", error);
-      }
-    };
-
-    init();
-  }, [isLoaded, isSignedIn, getToken]);
+  // Removed local auth useEffect - now handled by UserContext globally
 
   const SkeletonCard = () => (
     <div className="flex flex-col gap-4 border border-slate-200 rounded-xl p-6 bg-white shadow-sm h-full">
@@ -1298,7 +1262,7 @@ const Homepage = () => {
                 >
                   <Filter className="w-4 h-4 mr-2" /> Filters
                 </Button>
-                <div className="relative w-full sm:w-80">
+                <div className="relative w-full sm:w-80 min-w-md">
                   <Input
                     placeholder="Search python, design..."
                     icon={<Search className="w-4 h-4" />}
@@ -1306,7 +1270,7 @@ const Homepage = () => {
                     onChange={(e) =>
                       setFilters({ ...filters, search: e.target.value })
                     }
-                    className="bg-slate-50 border-transparent focus:bg-white"
+                    className="bg-slate-50 border-transparent focus:bg-white w-full"
                   />
                 </div>
               </div>
@@ -1321,8 +1285,8 @@ const Homepage = () => {
                       <SelectValue placeholder="Sort by..." />
                     </SelectTrigger>
                     <SelectContent className="z-50">
-                      <SelectItem value="newest">Newest First</SelectItem>
                       <SelectItem value="oldest">Oldest First</SelectItem>
+                      <SelectItem value="newest">Newest First</SelectItem>
                       <SelectItem value="rating">Highest Rated</SelectItem>
                       {/*<SelectItem value="popular">Most Popular</SelectItem>*/}
                     </SelectContent>
@@ -1332,7 +1296,7 @@ const Homepage = () => {
             </div>
 
             {/* Results Grid */}
-            {((!tokenReady || isLoading) && skills.length === 0) ? (
+            {((authVersion === 0 || isLoading) && skills.length === 0) ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-pulse">
                 {Array.from({ length: 6 }).map((_, index) => (
                   <SkeletonCard key={index} />
