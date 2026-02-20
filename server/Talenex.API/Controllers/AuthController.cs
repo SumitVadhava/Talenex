@@ -96,7 +96,5 @@ namespace Talenex.API.Controllers
 
             return Ok(new { token, userId = user.Id, Message = "User registered/logged in successfully" });
         }
-
-
     }
 }
