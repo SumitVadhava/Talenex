@@ -77,6 +77,8 @@ const ProfilePage = () => {
   const fetchData = async (userId) => {
     // Simulate network delay
     try {
+      console.log(userId);
+
       const response = await api.get(
         "/User/Details" + (userId ? "/" + userId : ""),
         {
@@ -375,6 +377,17 @@ const ProfilePage = () => {
         }
       }
     });
+
+    // Backend sync to Stream Chat
+    try {
+      await api.post("/stream/user/upsert", {
+        fullName: editedUser.name,
+        profilePic: editedUser.avatarUrl
+      });
+      console.log("Stream profile sync successful");
+    } catch (err) {
+      console.error("Error syncing profile with Stream:", err);
+    }
   };
 
   const [isSaving, setIsSaving] = useState(false);
@@ -452,7 +465,7 @@ const ProfilePage = () => {
           <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
           <p className="text-muted-foreground animate-pulse">
             Loading Profile...
-          </p>  
+          </p>
         </div>
       </div>
     );
