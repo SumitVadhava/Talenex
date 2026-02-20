@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { StreamChat } from "stream-chat";
 import { UserContext } from "./UserContext";
 import api from "@/api/axios";
+import qs from "qs";
 
 const ChatContext = createContext();
 
@@ -15,22 +16,36 @@ export const ChatProvider = ({ children }) => {
     const [pendingChannelCid, setPendingChannelCid] = useState(null);
     const { userData } = useContext(UserContext);
 
+
     useEffect(() => {
         const userId = localStorage.getItem("userId");
         console.log(userId);
 
 
-        if (!userData?.fullName || !userData?.profilePhotoUrl || !userId) {
-            console.log("Chat sync: Waiting for complete user data...", {
-                hasName: !!userData?.fullName,
-                hasImage: !!userData?.profilePhotoUrl,
-                hasUserId: !!userId
-            });
-            return;
-        }
+        // if (!userData?.fullName || !userData?.profilePhotoUrl || !userId) {
+        //     console.log("Chat sync: Waiting for complete user data...", {
+        //         hasName: !!userData?.fullName,
+        //         hasImage: !!userData?.profilePhotoUrl,
+        //         hasUserId: !!userId
+        //     });
+        //     return;
+        // }
+
+        // console.log("User data:", userData);
 
         const init = async () => {
             try {
+                const res = await api.get(`/User/Details/${userId}`, {
+                    params: {
+                        include: ["Profile"],
+                    },
+                    paramsSerializer: (params) =>
+                        qs.stringify(params, { arrayFormat: "repeat" }),
+                });
+                const userData = res.data;
+                // console.log(userData);
+
+
                 const chatClient = StreamChat.getInstance(apiKey);
 
                 // If already connected with same user, just set client
@@ -55,8 +70,8 @@ export const ChatProvider = ({ children }) => {
                 await chatClient.connectUser(
                     {
                         id: userId,
-                        name: userData.fullName,
-                        image: userData.profilePhotoUrl,
+                        name: userData.profile.fullName,
+                        image: userData.profile.profilePhotoUrl,
                     },
                     token
                 );
@@ -77,7 +92,7 @@ export const ChatProvider = ({ children }) => {
                 setClient(null);
             }
         };
-    }, [userData, localStorage.getItem("userId")]); // Note: localStorage isn't reactive, but userData changes often trigger this
+    }, [localStorage.getItem("userId")]); // Note: localStorage isn't reactive, but userData changes often trigger this
 
     return (
         <ChatContext.Provider
