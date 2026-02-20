@@ -521,6 +521,17 @@ export default function ChatPage() {
   const showSidebar = !isMobile || mobileSidebarOpen;
   const showChat = !isMobile || !mobileSidebarOpen;
 
+  // Lock body scroll when in Chat (prevent mobile "bounce" and parent scroll)
+  useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    if (isMobile) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, [isMobile]);
+
   if (!client) return (<><FontStyle /><LoadingScreen /></>);
 
   const currentUserName = client.user?.name || "You";
@@ -530,7 +541,9 @@ export default function ChatPage() {
     <>
       <FontStyle />
       <div style={{
-        height: "100dvh",
+        position: isMobile ? "fixed" : "relative",
+        top: 0, left: 0, right: 0, bottom: 0,
+        height: isMobile ? "100dvh" : "100vh",
         background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
         display: "flex", alignItems: "center", justifyContent: "center",
         padding: isMobile ? 0 : 16,
