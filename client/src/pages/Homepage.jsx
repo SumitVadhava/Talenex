@@ -949,7 +949,7 @@ const Homepage = () => {
   const { user } = useUser();
 
   const tokenSentRef = useRef(false);
-  const [tokenReady, setTokenReady] = useState(false);
+  const [tokenReady, setTokenReady] = useState(() => !!localStorage.getItem("token"));
 
   const [filters, setFilters] = useState({
     category: ["all"],
@@ -1332,7 +1332,7 @@ const Homepage = () => {
             </div>
 
             {/* Results Grid */}
-            {isLoading ? (
+            {((!tokenReady || isLoading) && skills.length === 0) ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-pulse">
                 {Array.from({ length: 6 }).map((_, index) => (
                   <SkeletonCard key={index} />

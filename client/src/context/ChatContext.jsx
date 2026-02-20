@@ -10,6 +10,9 @@ const apiKey = import.meta.env.VITE_STREAM_API_KEY;
 export const ChatProvider = ({ children }) => {
     const [client, setClient] = useState(null);
     const [activeChannel, setActiveChannel] = useState(null);
+    // pendingChannelCid: the channel that should be pinned to top + opened
+    // when navigating from a profile's "Message" button
+    const [pendingChannelCid, setPendingChannelCid] = useState(null);
     const { userData } = useContext(UserContext);
 
     useEffect(() => {
@@ -78,7 +81,7 @@ export const ChatProvider = ({ children }) => {
 
     return (
         <ChatContext.Provider
-            value={{ client, setClient, activeChannel, setActiveChannel }}
+            value={{ client, setClient, activeChannel, setActiveChannel, pendingChannelCid, setPendingChannelCid }}
         >
             {children}
         </ChatContext.Provider>

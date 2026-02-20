@@ -1,4 +1,5 @@
 import { useTalenexChat } from "@/context/ChatContext";
+import { useSearchParams } from "react-router-dom";
 import { MessageCircle, Search, Lock, ChevronDown, ArrowLeft, MessageCircleIcon, MessageCircleHeart } from "lucide-react";
 import ChatBg from "../assets/chat-bg-4.png";
 import TalenexLogo from "/logo.png";
@@ -84,16 +85,42 @@ const useWindowWidth = () => {
   return width;
 };
 
-/* ─── Sync Stream channel → context ──────────────────── */
+/* ─── Sync Stream channel → context ──────────────────────────
+   Fires when the user clicks a channel in the ChannelList.
+   Also clears pendingChannelCid if the user manually picks a
+   different channel than the one we pre-set from the Message button.
+───────────────────────────────────────────────────────────── */
 const ChannelSelectionWatcher = ({ onChannelSelected }) => {
-  const { channel } = useStreamChatContext();
-  const { setActiveChannel, activeChannel } = useTalenexChat();
+  const { channel: streamChannel, setActiveChannel: setStreamChannel } = useStreamChatContext();
+  const { setActiveChannel, activeChannel, pendingChannelCid, setPendingChannelCid } = useTalenexChat();
+
+  // Use a ref to prevent bidirectional sync loops
+  const syncLock = useRef(false);
+
+  // 1. Sync Stream -> Our Context (When user clicks a list item)
   useEffect(() => {
-    if (channel && channel.cid !== activeChannel?.cid) {
-      setActiveChannel(channel);
-      onChannelSelected?.(); // notify parent so mobile view switches to chat
+    if (streamChannel && streamChannel.cid !== activeChannel?.cid) {
+      if (syncLock.current) {
+        syncLock.current = false;
+        return;
+      }
+      setActiveChannel(streamChannel);
+      // Clear the pending pin if user switched to a different channel manually
+      if (pendingChannelCid && streamChannel.cid !== pendingChannelCid) {
+        setPendingChannelCid(null);
+      }
+      onChannelSelected?.(streamChannel);
     }
-  }, [channel, activeChannel, setActiveChannel, onChannelSelected]);
+  }, [streamChannel]); // Only depend on streamChannel change
+
+  // 2. Sync Our Context -> Stream (When navigating from profile button)
+  useEffect(() => {
+    if (activeChannel && activeChannel.cid !== streamChannel?.cid) {
+      syncLock.current = true;
+      setStreamChannel(activeChannel);
+    }
+  }, [activeChannel, setStreamChannel]); // Only depend on activeChannel change
+
   return null;
 };
 
@@ -418,14 +445,47 @@ const LoadingScreen = () => (
 
 /* ─── Main ChatPage ───────────────────────────────────── */
 export default function ChatPage() {
-  const { client, activeChannel, setActiveChannel } = useTalenexChat();
+  const { client, activeChannel, setActiveChannel, pendingChannelCid, setPendingChannelCid } = useTalenexChat();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const rawQueryCid = searchParams.get("cid");
+
+  // Normalize queryCid (ensure it has "messaging:" prefix if missing)
+  const queryCid = rawQueryCid
+    ? (rawQueryCid.includes(":") ? rawQueryCid : `messaging:${rawQueryCid}`)
+    : null;
+
   const [searchQuery, setSearchQuery] = useState("");
   const windowWidth = useWindowWidth();
   const isMobile = windowWidth <= 640;
 
+  // Sync initial channel from URL (for multi-window support)
+  useEffect(() => {
+    if (client && queryCid && (!activeChannel || activeChannel.cid !== queryCid)) {
+      const initFromQuery = async () => {
+        try {
+          const [type, id] = queryCid.split(":");
+          const channel = client.channel(type, id);
+          await channel.watch();
+          setActiveChannel(channel);
+          setPendingChannelCid(queryCid);
+        } catch (err) {
+          console.error("Error initializing channel from URL query:", err);
+        }
+      };
+      initFromQuery();
+    }
+  }, [client, queryCid]); // Reduced dependencies to prevent loops
+
   // Independent mobile panel state — decoupled from Stream's channel state
   // so ChannelSelectionWatcher can't re-open chat after pressing back
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(true);
+
+  // If we navigated here via the "Message" button, close sidebar on mobile
+  useEffect(() => {
+    if (isMobile && (pendingChannelCid || queryCid)) {
+      setMobileSidebarOpen(false);
+    }
+  }, [isMobile, pendingChannelCid, queryCid]);
 
   // ── Resizable sidebar ──────────────────────────────────
   const [sidebarWidth, setSidebarWidth] = useState(296);
@@ -486,7 +546,13 @@ export default function ChatPage() {
         }}>
           <Chat client={client} theme="messaging light">
             <ChannelSelectionWatcher
-              onChannelSelected={isMobile ? () => setMobileSidebarOpen(false) : undefined}
+              onChannelSelected={(channel) => {
+                if (isMobile) setMobileSidebarOpen(false);
+                // Update URL when channel changes (Guard strictly against current queryCid)
+                if (channel?.cid && channel.cid !== queryCid) {
+                  setSearchParams({ cid: channel.cid }, { replace: true });
+                }
+              }}
             />
 
             {/* ══ SIDEBAR ══ */}
@@ -542,12 +608,23 @@ export default function ChatPage() {
                   filters={{ type: "messaging", members: { $in: [client.userID] } }}
                   sort={{ last_message_at: -1, created_at: -1 }}
                   options={{ limit: 100 }}
+                  setActiveChannelOnMount={false}
                   sendChannelsToList
                   channelRenderFilterFn={(channels) => {
-                    if (!searchQuery.trim()) return channels;
+                    // Reorder logic: if there's a pendingChannelCid, find it and move to top
+                    let processedChannels = [...channels];
+                    if (pendingChannelCid) {
+                      const pendingIdx = processedChannels.findIndex(c => c.cid === pendingChannelCid);
+                      if (pendingIdx > -1) {
+                        const [pendingChannel] = processedChannels.splice(pendingIdx, 1);
+                        processedChannels.unshift(pendingChannel);
+                      }
+                    }
+
+                    if (!searchQuery.trim()) return processedChannels;
                     const q = searchQuery.toLowerCase().trim();
-                    return channels.filter((channel) => {
-                      // 1. Match against channel data
+                    return processedChannels.filter((channel) => {
+                      // 1. Match against channel data (name/title/id)
                       const channelFields = [
                         channel.data?.name,
                         channel.data?.title,
@@ -556,20 +633,23 @@ export default function ChatPage() {
 
                       if (channelFields.some(f => f.toLowerCase().includes(q))) return true;
 
-                      // 2. Match against all member properties (handles DMs)
+                      // 2. Match against OTHER members only (exclude self)
+                      //    This prevents searching your own name from matching all conversations
                       const members = Object.values(channel.state?.members || {});
-                      return members.some((m) => {
-                        const user = m.user || {};
-                        const userFields = [
-                          user.name,
-                          user.id,
-                          user.firstName,
-                          user.lastName,
-                          user.email
-                        ].filter(Boolean);
+                      return members
+                        .filter((m) => m.user?.id !== client.userID)
+                        .some((m) => {
+                          const user = m.user || {};
+                          const userFields = [
+                            user.name,
+                            user.id,
+                            user.firstName,
+                            user.lastName,
+                            user.email,
+                          ].filter(Boolean);
 
-                        return userFields.some(f => f.toLowerCase().includes(q));
-                      });
+                          return userFields.some(f => f.toLowerCase().includes(q));
+                        });
                     });
                   }}
                 />
@@ -606,7 +686,7 @@ export default function ChatPage() {
               position: "relative", minWidth: 0, overflow: "hidden",
             }}>
               {activeChannel ? (
-                <Channel channel={activeChannel} key={activeChannel.cid} PinIndicator={CustomPinIndicator}>
+                <Channel channel={activeChannel} PinIndicator={CustomPinIndicator}>
                   <Window>
                     <CustomChannelHeader
                       activeChannel={activeChannel}
@@ -639,7 +719,7 @@ export default function ChatPage() {
             </div>
           </Chat>
         </div>
-      </div>
+      </div >
     </>
   );
 }
