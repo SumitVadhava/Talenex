@@ -34,6 +34,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 builder.Services.AddSignalR();
 
+
 // ==========================
 // Authentication (JWT + Clerk)
 // ==========================
@@ -147,6 +148,7 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IClerkService, ClerkService>();
 builder.Services.AddScoped<IZegoTokenService, ZegoTokenService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IChatService, ChatService>();
 
 
 

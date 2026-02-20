@@ -391,6 +391,17 @@ const App = () => {
     }, [queryClient]);
 
 
+    // console.log(mappedData);
+
+    //     setSwaps(mappedData);
+    // }
+    //         catch (error) {
+    //     console.error("Error fetching swaps:", error);
+    // }
+    // finally {
+    //     setLoading(false);
+    // }
+    //     };
 
 
     const filteredSwaps = useMemo(() => {

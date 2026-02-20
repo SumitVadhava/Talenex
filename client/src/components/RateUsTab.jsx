@@ -32,7 +32,7 @@ export const RateUsTab = ({ id, name, email }) => {
 
   const handleSubmit = async () => {
     // Simulate API call
-    console.log({ ratings, feedback });
+    // console.log({ ratings, feedback });
     const payload = {
       userId: id,
       userName: name,
@@ -48,7 +48,7 @@ export const RateUsTab = ({ id, name, email }) => {
       helpAndSupportQuality: ratings.support,
       message: feedback,
     };
-    console.log(payload);
+    // console.log(payload);
     
     try {
       setIsSubmitting(true);
@@ -56,8 +56,8 @@ export const RateUsTab = ({ id, name, email }) => {
 
       const emailResponse = await api.post("/rate-us/send", payload);
 
-      console.log(response.data);
-      console.log(emailResponse.data);
+      // console.log(response.data);
+      // console.log(emailResponse.data);
 
       notification.success({
         message: "Thank you for your feedback! 😊",
