@@ -578,8 +578,8 @@ export default function ChatPage() {
                   title="Drag to resize"
                 />
               )}
-              {/* Header */}
-              <div style={{ padding: "16px 16px 12px", display: "flex", flexDirection: "column", gap: 15, borderBottom: "1px solid #e2e8f0" }}>
+              {/* Header (Fixed) */}
+              <div style={{ flexShrink: 0, padding: "16px 16px 12px", display: "flex", flexDirection: "column", gap: 15, borderBottom: "1px solid #e2e8f0", background: "#ffffff", zIndex: 11 }}>
                 <div style={{
                   display: "flex", alignItems: "center",
                   justifyContent: "space-between", marginBottom: 12,
@@ -603,8 +603,8 @@ export default function ChatPage() {
                 <SidebarSearch value={searchQuery} onChange={setSearchQuery} />
               </div>
 
-              {/* Channel list */}
-              <div style={{ flex: 1, overflowY: "auto", paddingTop: 4 }}>
+              {/* Channel list (Scrollable) */}
+              <div style={{ flex: 1, minHeight: 0, overflowY: "auto", paddingTop: 4 }}>
                 <ChannelList
                   filters={{ type: "messaging", members: { $in: [client.userID] } }}
                   sort={{ last_message_at: -1, created_at: -1 }}
@@ -656,8 +656,9 @@ export default function ChatPage() {
                 />
               </div>
 
-              {/* Current user footer */}
+              {/* Current user footer (Fixed) */}
               <div style={{
+                flexShrink: 0,
                 padding: "10px 14px",
                 borderTop: "1px solid #e2e8f0",
                 display: "flex", alignItems: "center", gap: 10,
@@ -683,7 +684,7 @@ export default function ChatPage() {
 
             {/* ══ CHAT AREA ══ */}
             <div style={{
-              flex: 1, display: showChat ? "flex" : "none", flexDirection: "column",
+              flex: 1, minHeight: 0, display: showChat ? "flex" : "none", flexDirection: "column",
               position: "relative", minWidth: 0, overflow: "hidden",
             }}>
               {activeChannel ? (
@@ -696,6 +697,7 @@ export default function ChatPage() {
                     />
                     <div style={{
                       flex: 1,
+                      minHeight: 0,
                       position: "relative",
                       overflow: "hidden",
                       display: "flex",
@@ -706,7 +708,7 @@ export default function ChatPage() {
                       backgroundPosition: "center center",
                       backgroundRepeat: "no-repeat",
                     }}>
-                      <div style={{ position: "relative", zIndex: 1, flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+                      <div style={{ position: "relative", zIndex: 1, flex: 1, minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden" }}>
                         <MessageList messageActions={["delete", "edit", "markUnread", "mute", "pin", "quote", "react", "remindMe", "reply", "saveForLater"]} />
                         <MessageInput grow maxRows={6} />
                       </div>
