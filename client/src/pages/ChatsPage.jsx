@@ -530,15 +530,16 @@ export default function ChatPage() {
     <>
       <FontStyle />
       <div style={{
-        height: "100vh",
+        height: "100dvh",
         background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
         display: "flex", alignItems: "center", justifyContent: "center",
         padding: isMobile ? 0 : 16,
+        overflow: "hidden", // Prevent redundant page-level scrolling
       }}>
         {/* Card */}
         <div style={{
           width: "100vw",
-          height: isMobile ? "100vh" : "calc(100vh - 32px)",
+          height: isMobile ? "100dvh" : "calc(100vh - 32px)",
           background: "#ffffff",
           borderRadius: isMobile ? 0 : 20,
           boxShadow: isMobile ? "none" : "0 20px 60px rgba(15,23,42,0.12), 0 4px 16px rgba(15,23,42,0.06)",

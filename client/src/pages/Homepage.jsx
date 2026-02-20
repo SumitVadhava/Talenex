@@ -1262,7 +1262,7 @@ const Homepage = () => {
                 >
                   <Filter className="w-4 h-4 mr-2" /> Filters
                 </Button>
-                <div className="relative w-full sm:w-80 min-w-md">
+                <div className="relative w-full sm:w-80 md:w-96 lg:w-[450px]">
                   <Input
                     placeholder="Search python, design..."
                     icon={<Search className="w-4 h-4" />}

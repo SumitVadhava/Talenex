@@ -73,6 +73,7 @@
     border-right: none !important;
     scrollbar-width: none !important;
     padding: 5px;
+    overflow-y: auto !important; /* Only scroll if needed */
 }
 
 .str-chat__channel-list::-webkit-scrollbar {
@@ -262,6 +263,7 @@
 .str-chat__ul {
     background: transparent !important;
     padding: 12px 20px 4px !important;
+    overflow-y: auto !important; /* Only scroll if needed */
 }
 
 /* ─────────────────────────────────────────────────────────
