@@ -162,25 +162,15 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
+import ImageCropper from "./ImageCropper";
+import { DEFAULT_AVATARS } from "../constants/avatars";
 
 const MAX_BIO_LENGTH = 500;
 
-// Default avatar options
-const DEFAULT_AVATARS = [
-  "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQMWomTM-eJ2UgFaZtokrqH5SbJYVIbAEYxV8-fwgOXCliTc5SR",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSo9XezaHC6SkgsvMNcZ9Z0jiq5t5_-dPvgJuBGrFcvHrSR0bbv",
-  "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTFkNVAiHF5YNxE8_gMu9nQpVA3qVILe_Ej0VwOs8LwrzJ4kkTU",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPXzM4OrfXW24QujfVo5ehxcmslJKTx5sa7oQj24mPIoiGfmzc",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm6x528Q9oTIZBLQqwe05Fze4Gb0DWmSUcb_D8oup7KkZtKFDD",
-  "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTCkvp1YNxOGLQlpCtO16GXT9Db4KHQaY35GGimlvEFL5ftjb8H",
-  "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSLPJdObuYRNMyOX_bPSIFa-Ogp-yMUrVV_NlwBDLY3IlCHQEmk",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzrdldSmy_e58vRheIwQV9v-W8ZDjEsbFEgnp5X10QvRBwaAi7",
-  "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTkR9i_L0C_fvyYk3rMnD4Sh02nF7PaJMLy3VpupB6WkEwJkVfw",
-  "https://img.freepik.com/premium-vector/friendly-smiling-cute-beautiful-girl-cartoon-character-wearing-hat-warm-clothes_7081-5061.jpg",
-];
-
 export default function Step1BasicInfo({ formData, updateFormData, onNext }) {
   const fileInputRef = useRef(null);
+  const [imageToCrop, setImageToCrop] = useState(null);
+  const [isCropperOpen, setIsCropperOpen] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -192,14 +182,30 @@ export default function Step1BasicInfo({ formData, updateFormData, onNext }) {
     const file = e.target.files?.[0];
 
     if (file) {
-      const preview = URL.createObjectURL(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageToCrop(reader.result);
+        setIsCropperOpen(true);
+      };
+      reader.readAsDataURL(file);
 
-      updateFormData({
-        profilePhotoFile: file, // real file
-        profilePhotoUrl: preview, // preview only
-        isDefaultAvatar: false // mark as custom upload
-      });
+      // Reset input value so the same file can be selected again if needed
+      e.target.value = "";
     }
+  };
+
+  const handleCropComplete = (croppedBlob) => {
+    // Create a preview URL for the cropped blob
+    const preview = URL.createObjectURL(croppedBlob);
+
+    // Create a File object from the Blob
+    const file = new File([croppedBlob], "profile-photo.jpg", { type: "image/jpeg" });
+
+    updateFormData({
+      profilePhotoFile: file,
+      profilePhotoUrl: preview,
+      isDefaultAvatar: false
+    });
   };
 
   const handleAvatarSelect = (avatarUrl) => {
@@ -285,6 +291,14 @@ export default function Step1BasicInfo({ formData, updateFormData, onNext }) {
           className="hidden"
         />
       </div>
+
+      {/* Image Cropper Modal */}
+      <ImageCropper
+        image={imageToCrop}
+        open={isCropperOpen}
+        onOpenChange={setIsCropperOpen}
+        onCropComplete={handleCropComplete}
+      />
 
       {/* Form Fields */}
       <div className="space-y-5">
