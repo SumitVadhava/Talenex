@@ -82,6 +82,7 @@ public class UserSwapRequestController : ControllerBase
             Requester = new SwapUserDto
             {
                 Id = x.Requester.Id,
+                UserId = x.Requester.UserId,
                 FullName = x.Requester.FullName,
                 ProfilePhotoUrl = x.Requester.ProfilePhotoUrl ?? string.Empty
             },
@@ -89,6 +90,7 @@ public class UserSwapRequestController : ControllerBase
             Receiver = new SwapUserDto
             {
                 Id = x.Receiver.Id,
+                UserId = x.Receiver.UserId,
                 FullName = x.Receiver.FullName,
                 ProfilePhotoUrl = x.Receiver.ProfilePhotoUrl ?? string.Empty
             },
