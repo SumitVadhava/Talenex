@@ -45,7 +45,6 @@ namespace Talenex.Application.DTOs.ResponseDtos
         public DateTime? CancelledAt { get; set; }
 
         public DateTime? CompleteAt { get; set; }
-
-
+        public string? GoogleEventId { get; set; }
     }
 }

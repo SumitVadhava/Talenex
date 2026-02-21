@@ -37,4 +37,5 @@ public class UserSwapRequest : IEntity
     public DateTime? AcceptedAt { get; set; }
     public DateTime? CancelledAt { get; set; }
     public DateTime? CompletedAt { get; set; }
+    public string? GoogleEventId { get; set; }
 }

@@ -101,7 +101,8 @@ public class UserSwapRequestController : ControllerBase
             CreatedAt = x.CreatedAt,
             AcceptedAt = x.AcceptedAt,
             CancelledAt = x.CancelledAt,
-            CompleteAt = x.CompletedAt
+            CompleteAt = x.CompletedAt,
+            GoogleEventId = x.GoogleEventId
 
         }).ToList();
 
@@ -192,6 +193,7 @@ public class UserSwapRequestController : ControllerBase
         Status = "Pending",
         CreatedAt = DateTime.UtcNow,
 
+
     };
 
     var created = await _service.CreateAsync(swapRequest);
@@ -243,6 +245,13 @@ public class UserSwapRequestController : ControllerBase
         {
             case "Accepted":
                 swapRequest.AcceptedAt = DateTime.UtcNow;
+
+                if (dto.GoogleEventId != null)
+                {
+                    swapRequest.GoogleEventId = dto.GoogleEventId;
+                }
+
+
                 break;
             case "Cancelled":
                 swapRequest.CancelledAt = DateTime.UtcNow;
@@ -250,6 +259,12 @@ public class UserSwapRequestController : ControllerBase
             case "Completed":
                 swapRequest.CompletedAt = DateTime.UtcNow;
                 break;
+        }
+
+
+        if (dto.GoogleEventId != null)
+        {
+            swapRequest.GoogleEventId = dto.GoogleEventId;
         }
 
         await _service.UpdateAsync(swapRequest);

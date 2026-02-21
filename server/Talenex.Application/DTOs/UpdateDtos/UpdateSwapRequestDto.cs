@@ -12,6 +12,6 @@ namespace Talenex.Application.DTOs.UpdateDtos
         [Required]
         [MaxLength(20)]
         public string Status { get; set; }
-
+        public string? GoogleEventId { get; set; }
     }
 }
