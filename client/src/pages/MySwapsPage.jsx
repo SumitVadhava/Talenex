@@ -311,6 +311,7 @@ const App = () => {
 
     const [sentFilter, setSentFilter] = useState('All');
     const [reviewLoader, setReviewLoader] = useState(false);
+    const [processingId, setProcessingId] = useState(null);
 
     // Modal State
     const [modalOpen, setModalOpen] = useState(false);
@@ -427,6 +428,7 @@ const App = () => {
 
     const handleUpdateStatus = async (id, newStatus) => {
         try {
+            setProcessingId({ id, action: newStatus });
             await api.put(`/swap-request/${id}`,
                 { status: newStatus },
                 {
@@ -435,9 +437,11 @@ const App = () => {
                     }
                 },
             );
-            queryClient.invalidateQueries(["swaps"]);
+            await queryClient.invalidateQueries(["swaps"]);
         } catch (error) {
             console.error(`Error updating swap to ${newStatus}:`, error);
+        } finally {
+            setProcessingId(null);
         }
     };
 
@@ -590,6 +594,7 @@ const App = () => {
                             <SwapCard
                                 key={swap.id}
                                 swap={swap}
+                                processingAction={processingId?.id === swap.id ? processingId.action : null}
                                 onAccept={(id) => handlePendingAction(id, 'ACCEPT')}
                                 onReject={(id) => handlePendingAction(id, 'REJECT')}
                                 onComplete={(id) => openModal('COMPLETE', id)}

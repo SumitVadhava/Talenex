@@ -553,7 +553,8 @@ export const SwapCard = ({
     onComplete,
     onCancel,
     onReview,
-    onConnect
+    onConnect,
+    processingAction = null
 }) => {
     const navigate = useNavigate();
 
@@ -621,16 +622,26 @@ export const SwapCard = ({
                     <div className="mt-4 flex flex-wrap items-center gap-3">
                         <button
                             onClick={() => onAccept?.(swap.id)}
-                            className="group flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm rounded-full font-semibold transition-all shadow-sm shadow-indigo-500/20 hover:shadow-md hover:shadow-indigo-500/30 hover:-translate-y-0.5 cursor-pointer"
+                            disabled={!!processingAction}
+                            className="group flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm rounded-full font-semibold transition-all shadow-sm shadow-indigo-500/20 hover:shadow-md hover:shadow-indigo-500/30 hover:-translate-y-0.5 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                         >
-                            <Check size={16} strokeWidth={3} className="transition-transform group-hover:scale-110" />
+                            {processingAction === 'Accepted' ? (
+                                <Loader2 size={16} className="animate-spin" />
+                            ) : (
+                                <Check size={16} strokeWidth={3} className="transition-transform group-hover:scale-110" />
+                            )}
                             Accept
                         </button>
                         <button
                             onClick={() => onReject?.(swap.id)}
-                            className="group flex items-center gap-1.5 px-4 py-2 bg-white border border-rose-200 text-rose-500 text-sm hover:bg-rose-50 hover:border-rose-300 rounded-full font-medium transition-all hover:-translate-y-0.5 cursor-pointer"
+                            disabled={!!processingAction}
+                            className="group flex items-center gap-1.5 px-4 py-2 bg-white border border-rose-200 text-rose-500 text-sm hover:bg-rose-50 hover:border-rose-300 rounded-full font-medium transition-all hover:-translate-y-0.5 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                         >
-                            <X size={16} strokeWidth={3} className="transition-transform group-hover:rotate-90" />
+                            {processingAction === 'Cancelled' ? (
+                                <Loader2 size={16} className="animate-spin" />
+                            ) : (
+                                <X size={16} strokeWidth={3} className="transition-transform group-hover:rotate-90" />
+                            )}
                             Reject
                         </button>
                     </div>
@@ -643,21 +654,32 @@ export const SwapCard = ({
                             <div className="flex flex-wrap items-center gap-3">
                                 <button
                                     onClick={() => onComplete?.(swap.id)}
-                                    className="group flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm rounded-full font-semibold transition-all shadow-sm shadow-emerald-500/20 hover:shadow-md hover:shadow-emerald-500/30 hover:-translate-y-0.5 cursor-pointer"
+                                    disabled={!!processingAction}
+                                    className="group flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm rounded-full font-semibold transition-all shadow-sm shadow-emerald-500/20 hover:shadow-md hover:shadow-emerald-500/30 hover:-translate-y-0.5 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                                 >
-                                    <ThumbsUp size={16} className="transition-transform group-hover:-rotate-12" />
+                                    {processingAction === 'Completed' ? (
+                                        <Loader2 size={16} className="animate-spin" />
+                                    ) : (
+                                        <ThumbsUp size={16} className="transition-transform group-hover:-rotate-12" />
+                                    )}
                                     Complete
                                 </button>
                                 <button
                                     onClick={() => onCancel?.(swap.id)}
-                                    className="group flex items-center gap-1.5 px-4 py-2 bg-white border border-slate-200 text-slate-500 text-sm hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 rounded-full font-medium transition-all hover:-translate-y-0.5 cursor-pointer"
+                                    disabled={!!processingAction}
+                                    className="group flex items-center gap-1.5 px-4 py-2 bg-white border border-slate-200 text-slate-500 text-sm hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 rounded-full font-medium transition-all hover:-translate-y-0.5 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                                 >
-                                    <XCircle size={16} />
+                                    {processingAction === 'Cancelled' ? (
+                                        <Loader2 size={16} className="animate-spin" />
+                                    ) : (
+                                        <XCircle size={16} />
+                                    )}
                                     Cancel
                                 </button>
                             </div>
 
                             <div className="flex items-center gap-2">
+
                                 <a
                                     href={generateGoogleCalendarLink(swap)}
                                     target="_blank"
@@ -733,13 +755,31 @@ export const SwapCard = ({
                         </div>
                         <span className="font-medium">{swap.subStatus}</span>
                         {swap.subStatus === 'Accepted' && (
-                            <button
-                                onClick={() => { onConnect?.(swap); navigate(`/join/${swap.id}`) }}
-                                className="ml-auto text-indigo-600 hover:text-indigo-700 font-bold text-xs flex items-center gap-1 px-3 py-1 bg-white border border-indigo-100 rounded-md hover:bg-indigo-50 transition-colors animate-fade-in cursor-pointer"
-                            >
-                                <Video size={14} />
-                                Connect
-                            </button>
+                            <div className="ml-auto flex items-center gap-2">
+
+                                <a
+                                    href={generateGoogleCalendarLink(swap)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group relative flex items-center justify-center w-8 h-8 bg-white border border-slate-100 rounded-full transition-all duration-500 hover:bg-slate-50 hover:border-indigo-200 shadow-sm shadow-slate-200/50 hover:shadow-lg hover:shadow-indigo-500/10 overflow-hidden cursor-pointer no-underline"
+                                    title="Add to Google Calendar"
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-50/0 to-indigo-50/0 group-hover:from-blue-50 group-hover:to-indigo-50 transition-all duration-500" />
+                                    <img
+                                        src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg"
+                                        alt="Google Calendar"
+                                        className="w-4 h-4 relative z-10 transition-transform duration-500 group-hover:scale-110"
+                                    />
+                                </a>
+
+                                <button
+                                    onClick={() => { onConnect?.(swap); navigate(`/join/${swap.id}`) }}
+                                    className="text-indigo-600 hover:text-indigo-700 font-bold text-xs flex items-center gap-1 px-3 py-1 bg-white border border-indigo-100 rounded-md hover:bg-indigo-50 transition-colors animate-fade-in cursor-pointer"
+                                >
+                                    <Video size={14} />
+                                    Connect
+                                </button>
+                            </div>
                         )}
                     </div>
 
