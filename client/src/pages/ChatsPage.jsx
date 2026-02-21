@@ -12,6 +12,7 @@ import {
   Window,
   ChannelList,
   Thread,
+  ReactionSelector,
   useChatContext as useStreamChatContext,
   useMessageContext,
   useChannelActionContext,
@@ -58,6 +59,15 @@ const FontStyle = () => (
     }
   `}</style>
 );
+
+const CustomReactionSelector = (props) => {
+  const { isMyMessage } = useMessageContext();
+  return (
+    <div className={`talenex-reaction-wrapper ${isMyMessage() ? 'talenex-reaction-me' : 'talenex-reaction-other'}`}>
+      <ReactionSelector {...props} />
+    </div>
+  );
+};
 
 const CustomPinIndicator = () => {
   const { message } = useMessageContext("CustomPinIndicator");
@@ -780,7 +790,12 @@ export default function ChatPage() {
               position: "relative", minWidth: 0, overflow: "hidden",
             }}>
               {activeChannel ? (
-                <Channel channel={activeChannel} PinIndicator={CustomPinIndicator} EmptyStateIndicator={CustomMessageEmptyIndicator}>
+                <Channel
+                  channel={activeChannel}
+                  PinIndicator={CustomPinIndicator}
+                  EmptyStateIndicator={CustomMessageEmptyIndicator}
+                  ReactionSelector={CustomReactionSelector}
+                >
                   <Window>
                     <CustomChannelHeader
                       activeChannel={activeChannel}

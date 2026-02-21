@@ -453,9 +453,18 @@
 }
 
 /* Kill horizontal overflow everywhere */
+/* Allow reactions to overflow message boundaries - Expanded */
+.str-chat__li,
+.str-chat__message,
+.str-chat__message-inner,
+.str-chat__message-bubble,
+.str-chat__message-text,
+.str-chat__message-text-inner {
+    overflow: visible !important;
+}
+
 .str-chat__li,
 .str-chat__message-inner {
-    overflow-x: hidden !important;
     max-width: 100% !important;
 }
 
@@ -546,6 +555,20 @@ button[aria-label="Next image"],
 /* ─────────────────────────────────────────────────────────
    REACTIONS
 ───────────────────────────────────────────────────────── */
+/* Global Reaction Selector Positioning Logic - Guaranteed Talenex Wrapper */
+
+.talenex-reaction-me .str-chat__reaction-selector {
+    right: 0 !important;
+    left: auto !important;
+    transform: none !important;
+}
+
+.talenex-reaction-other .str-chat__reaction-selector {
+    left: 0 !important;
+    right: auto !important;
+    transform: none !important;
+}
+
 .str-chat__reaction-selector {
     background: #ffffff !important;
     border-radius: 999px !important;
@@ -554,9 +577,10 @@ button[aria-label="Next image"],
     padding: 6px 10px !important;
     display: flex !important;
     gap: 2px !important;
-    /* Ensure it doesn't shift layout */
     position: absolute !important;
     z-index: 1000 !important;
+    bottom: 100% !important;
+    margin-bottom: 8px !important;
 }
 
 .str-chat__reaction-selector-item button {
@@ -1161,6 +1185,19 @@ button[aria-label="Next image"],
     .str-chat__reaction-selector {
         padding: 4px 6px !important;
         gap: 0 !important;
+    }
+
+    /* Mobile specific positioning - Guaranteed Talenex Wrapper */
+    .talenex-reaction-me .str-chat__reaction-selector {
+        right: -4px !important;
+        left: unset !important;
+        transform: none !important;
+    }
+
+    .talenex-reaction-other .str-chat__reaction-selector {
+        left: -4px !important;
+        right: unset !important;
+        transform: none !important;
     }
 
     .str-chat__reaction-selector-item button {

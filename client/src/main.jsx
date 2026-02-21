@@ -15,7 +15,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ChatProvider } from './context/ChatContext';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
-const Goggle_OAuth_CLIENTID = import.meta.env.Goggle_OAuth_CLIENTID
+const Goggle_OAuth_CLIENTID = import.meta.env.VITE_GOOGLE_CLIENT_ID || ""
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,6 +45,5 @@ createRoot(document.getElementById('root')).render(
         </BrowserRouter>
       </QueryClientProvider>
     </ClerkProvider>
-    {/* </GoogleOAuthProvider> */}
   </StrictMode>
 )

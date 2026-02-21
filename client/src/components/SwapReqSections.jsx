@@ -557,6 +557,62 @@ export const SwapCard = ({
 }) => {
     const navigate = useNavigate();
 
+    const generateGoogleCalendarLink = (swap) => {
+        try {
+            console.log("Generating link for swap:", swap);
+            let startDate;
+
+            if (swap.rawProposedTime && swap.rawProposedTime.includes('T')) {
+                const [datePart, timePart] = swap.rawProposedTime.split('T');
+                let y, m, d;
+
+                if (/^\d{4}-\d{2}-\d{2}$/.test(datePart)) {
+                    [y, m, d] = datePart.split('-').map(Number);
+                } else if (/^\d{2}-\d{2}-\d{4}$/.test(datePart)) {
+                    [d, m, y] = datePart.split('-').map(Number);
+                }
+
+                if (y && m && d) {
+                    let hour = 0, minute = 0;
+                    const timeMatch = timePart.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+                    if (timeMatch) {
+                        hour = parseInt(timeMatch[1]);
+                        minute = parseInt(timeMatch[2]);
+                        const ampm = timeMatch[3]?.toUpperCase();
+                        if (ampm === 'PM' && hour < 12) hour += 12;
+                        if (ampm === 'AM' && hour === 12) hour = 0;
+                    }
+                    startDate = new Date(y, m - 1, d, hour, minute);
+                }
+            }
+
+            if (!startDate || isNaN(startDate)) {
+                startDate = new Date(swap.rawProposedTime);
+            }
+
+            if (isNaN(startDate)) {
+                throw new Error("Invalid start date: " + swap.rawProposedTime);
+            }
+
+            const duration = parseInt(swap.duration) || 60;
+            const endDate = new Date(startDate.getTime() + duration * 60000);
+
+            const formatGDate = (date) => date.toISOString().replace(/-|:|\.\d+/g, '');
+
+            const title = encodeURIComponent(`Skill Swap Reminder: ${swap.giveSkill} ↔ ${swap.getSkill}`);
+            const details = encodeURIComponent(`Learning Session with ${swap.partnerName}.\n\n Your session is coming up. Be ready to join...`);
+            const dates = `${formatGDate(startDate)}/${formatGDate(endDate)}`;
+            const recur = encodeURIComponent('RRULE:FREQ=DAILY');
+
+            const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${dates}&recur=${recur}`;
+            console.log("Generated URL:", url);
+            return url;
+        } catch (e) {
+            console.error("Error generating calendar link:", e);
+            return "#";
+        }
+    };
+
 
     const renderActions = () => {
         switch (swap.status) {
@@ -582,31 +638,52 @@ export const SwapCard = ({
 
             case SwapStatus.ACCEPTED:
                 return (
-                    <div className="mt-4 flex items-center justify-between gap-3">
-                        <div className="flex flex-wrap items-center gap-3">
-                            <button
-                                onClick={() => onComplete?.(swap.id)}
-                                className="group flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm rounded-full font-semibold transition-all shadow-sm shadow-emerald-500/20 hover:shadow-md hover:shadow-emerald-500/30 hover:-translate-y-0.5 cursor-pointer"
-                            >
-                                <ThumbsUp size={16} className="transition-transform group-hover:-rotate-12" />
-                                Complete
-                            </button>
-                            <button
-                                onClick={() => onCancel?.(swap.id)}
-                                className="group flex items-center gap-1.5 px-4 py-2 bg-white border border-slate-200 text-slate-500 text-sm hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 rounded-full font-medium transition-all hover:-translate-y-0.5 cursor-pointer"
-                            >
-                                <XCircle size={16} />
-                                Cancel
-                            </button>
-                        </div>
+                    <div className="mt-4 flex flex-col gap-3">
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                            <div className="flex flex-wrap items-center gap-3">
+                                <button
+                                    onClick={() => onComplete?.(swap.id)}
+                                    className="group flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm rounded-full font-semibold transition-all shadow-sm shadow-emerald-500/20 hover:shadow-md hover:shadow-emerald-500/30 hover:-translate-y-0.5 cursor-pointer"
+                                >
+                                    <ThumbsUp size={16} className="transition-transform group-hover:-rotate-12" />
+                                    Complete
+                                </button>
+                                <button
+                                    onClick={() => onCancel?.(swap.id)}
+                                    className="group flex items-center gap-1.5 px-4 py-2 bg-white border border-slate-200 text-slate-500 text-sm hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 rounded-full font-medium transition-all hover:-translate-y-0.5 cursor-pointer"
+                                >
+                                    <XCircle size={16} />
+                                    Cancel
+                                </button>
+                            </div>
 
-                        <button
-                            onClick={() => { onConnect?.(swap); navigate(`/join/${swap.id}`) }}
-                            className="group flex-shrink-0 flex items-center gap-1.5 px-4 py-2 bg-indigo-50 text-indigo-600 border border-indigo-100 hover:bg-indigo-100 text-sm rounded-full font-bold transition-all hover:-translate-y-0.5 shadow-sm shadow-indigo-100/50 cursor-pointer"
-                        >
-                            <Video size={16} />
-                            Connect
-                        </button>
+                            <div className="flex items-center gap-2">
+                                <a
+                                    href={generateGoogleCalendarLink(swap)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group relative flex items-center justify-center w-10 h-10 bg-white border border-slate-100 rounded-full transition-all duration-500 hover:bg-slate-50 hover:border-indigo-200 shadow-sm shadow-slate-200/50 hover:shadow-lg hover:shadow-indigo-500/10 overflow-hidden cursor-pointer no-underline"
+                                    title="Add to Google Calendar"
+                                >
+                                    {/* Subtle Gradient Glow */}
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-50/0 to-indigo-50/0 group-hover:from-blue-50 group-hover:to-indigo-50 transition-all duration-500" />
+
+                                    <img
+                                        src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg"
+                                        alt="Google Calendar"
+                                        className="w-5 h-5 relative z-10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6"
+                                    />
+                                </a>
+
+                                <button
+                                    onClick={() => { onConnect?.(swap); navigate(`/join/${swap.id}`) }}
+                                    className="group flex-shrink-0 flex items-center gap-1.5 px-4 py-2 bg-indigo-50 text-indigo-600 border border-indigo-100 hover:bg-indigo-100 text-sm rounded-full font-bold transition-all hover:-translate-y-0.5 shadow-sm shadow-indigo-100/50 cursor-pointer"
+                                >
+                                    <Video size={16} />
+                                    Connect
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 );
 

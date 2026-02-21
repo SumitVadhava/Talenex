@@ -80,6 +80,8 @@ export const mapBackendToFrontend = (request) => {
         getSkill: isRequester ? request.skillToLearn : request.skillToOffer,
         date: date,
         time: time,
+        rawProposedTime: request.proposedTime,
+        googleEventId: request.googleEventId,
         duration: request.durationMinutes + ' min',
         status: frontendStatus,
         subStatus: isRequester ? (request.status === "Accepted" ? "Accepted" : (request.status === "Rejected" ? "Rejected" : request.status)) : request.status

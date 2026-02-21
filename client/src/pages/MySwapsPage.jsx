@@ -435,14 +435,11 @@ const App = () => {
                     }
                 },
             );
-            // fetchSwaps();
             queryClient.invalidateQueries(["swaps"]);
         } catch (error) {
             console.error(`Error updating swap to ${newStatus}:`, error);
         }
     };
-
-
 
     const handlePendingAction = (id, action) => {
         const newStatus = action === 'ACCEPT' ? 'Accepted' : 'Cancelled';

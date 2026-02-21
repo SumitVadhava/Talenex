@@ -184,9 +184,9 @@ export default function VideoCall({ setHideNavbar }) {
       showRoomDetailsButton: true, // Hide on mobile to save space
       showInviteButton: true, // Less critical on mobile screens
       showScreenSharingButton: true, // Usually fails or is clunky on mobile browsers
-      showTurnOffRemoteCameraButton: true,
-      showTurnOffRemoteMicrophoneButton: true,
-      showRemoveUserButton: true,
+      showTurnOffRemoteCameraButton: false,
+      showTurnOffRemoteMicrophoneButton: false,
+      showRemoveUserButton: false,
       videoResolutionDefault: ZegoUIKitPrebuilt.VideoResolution_720P,
       // Mobile-friendly layout settings
       layout: isMobileDevice ? "Auto" : "Grid",
