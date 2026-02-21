@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { MessageCircle, Search, Lock, ChevronDown, ArrowLeft, MessageCircleIcon, MessageCircleHeart } from "lucide-react";
 import ChatBg from "../assets/chat-bg-4.png";
 import TalenexLogo from "/logo.png";
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Chat,
   Channel,
@@ -125,8 +125,11 @@ const ChannelSelectionWatcher = ({ onChannelSelected }) => {
 };
 
 /* ─── Avatar ──────────────────────────────────────────── */
-const Avatar = ({ name = "", image = "", size = 40 }) => {
-  const initials = name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+const Avatar = React.memo(({ name = "", image = "", size = 40 }) => {
+  const initials = React.useMemo(() =>
+    name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase(),
+    [name]
+  );
   return (
     <div
       style={{
@@ -145,7 +148,8 @@ const Avatar = ({ name = "", image = "", size = 40 }) => {
       {!image && initials}
     </div>
   );
-};
+});
+Avatar.displayName = "Avatar";
 
 /* ─── Sidebar search ──────────────────────────────────── */
 const SidebarSearch = ({ value, onChange }) => {
@@ -208,11 +212,48 @@ const CustomChannelHeader = ({ activeChannel, currentUserId, onBackClick }) => {
     debounceRef.current = setTimeout(async () => {
       setSearching(true);
       try {
+        const q = msgQuery.toLowerCase().trim();
+
+        // 1. Local Search (Active messages)
+        const localMessages = activeChannel.state.messages || [];
+        const localResults = [];
+        for (let i = 0; i < localMessages.length; i++) {
+          const m = localMessages[i];
+          if ((m.text || "").toLowerCase().includes(q)) {
+            localResults.push({ message: m });
+          }
+        }
+
+        // 2. Server Search (Deep History)
         const res = await activeChannel.search(
           msgQuery.trim(),
-          { limit: 20, sort: [{ created_at: -1 }] }
+          { limit: 500, sort: [{ created_at: -1 }] }
         );
-        setResults(res.results || []);
+        const serverResults = res.results || [];
+
+        // 3. High-performance Merge
+        const mergedMap = new Map();
+
+        // Server results first
+        for (let i = 0; i < serverResults.length; i++) {
+          mergedMap.set(serverResults[i].message.id, serverResults[i]);
+        }
+
+        // Local results
+        for (let i = 0; i < localResults.length; i++) {
+          mergedMap.set(localResults[i].message.id, localResults[i]);
+        }
+
+        const mergedList = Array.from(mergedMap.values())
+          .filter(item => (item.message.text || "").toLowerCase().includes(q))
+          .sort((a, b) => {
+            const timeA = a.message.created_at;
+            const timeB = b.message.created_at;
+            // Native string comparison is faster than new Date()
+            return (timeB < timeA ? -1 : (timeB > timeA ? 1 : 0));
+          });
+
+        setResults(mergedList.slice(0, 50));
       } catch (err) {
         console.error("Message search error:", err);
         setResults([]);
@@ -532,6 +573,42 @@ export default function ChatPage() {
     };
   }, [isMobile]);
 
+  // Memoized channel filter (Must be before any early returns to satisfy Rules of Hooks)
+  const channelRenderFilterFn = React.useCallback((channels) => {
+    let processedChannels = [...channels];
+    if (pendingChannelCid) {
+      const pendingIdx = processedChannels.findIndex(c => c.cid === pendingChannelCid);
+      if (pendingIdx > -1) {
+        const [pendingChannel] = processedChannels.splice(pendingIdx, 1);
+        processedChannels.unshift(pendingChannel);
+      }
+    }
+
+    if (!searchQuery.trim()) return processedChannels;
+    const q = searchQuery.toLowerCase().trim();
+    const currentUserID = client?.userID;
+
+    return processedChannels.filter((channel) => {
+      const channelFields = [
+        channel.data?.name,
+        channel.data?.title,
+        channel.id,
+      ].filter(Boolean);
+
+      if (channelFields.some(f => f.toLowerCase().includes(q))) return true;
+
+      const members = Object.values(channel.state?.members || {});
+      return members
+        .filter((m) => m.user?.id !== currentUserID)
+        .some((m) => {
+          const user = m.user || {};
+          return [user.name, user.id, user.firstName, user.lastName, user.email]
+            .filter(Boolean)
+            .some(f => f.toLowerCase().includes(q));
+        });
+    });
+  }, [pendingChannelCid, searchQuery, client?.userID]);
+
   if (!client) return (<><FontStyle /><LoadingScreen /></>);
 
   const currentUserName = client.user?.name || "You";
@@ -624,48 +701,7 @@ export default function ChatPage() {
                   options={{ limit: 100 }}
                   setActiveChannelOnMount={false}
                   sendChannelsToList
-                  channelRenderFilterFn={(channels) => {
-                    // Reorder logic: if there's a pendingChannelCid, find it and move to top
-                    let processedChannels = [...channels];
-                    if (pendingChannelCid) {
-                      const pendingIdx = processedChannels.findIndex(c => c.cid === pendingChannelCid);
-                      if (pendingIdx > -1) {
-                        const [pendingChannel] = processedChannels.splice(pendingIdx, 1);
-                        processedChannels.unshift(pendingChannel);
-                      }
-                    }
-
-                    if (!searchQuery.trim()) return processedChannels;
-                    const q = searchQuery.toLowerCase().trim();
-                    return processedChannels.filter((channel) => {
-                      // 1. Match against channel data (name/title/id)
-                      const channelFields = [
-                        channel.data?.name,
-                        channel.data?.title,
-                        channel.id,
-                      ].filter(Boolean);
-
-                      if (channelFields.some(f => f.toLowerCase().includes(q))) return true;
-
-                      // 2. Match against OTHER members only (exclude self)
-                      //    This prevents searching your own name from matching all conversations
-                      const members = Object.values(channel.state?.members || {});
-                      return members
-                        .filter((m) => m.user?.id !== client.userID)
-                        .some((m) => {
-                          const user = m.user || {};
-                          const userFields = [
-                            user.name,
-                            user.id,
-                            user.firstName,
-                            user.lastName,
-                            user.email,
-                          ].filter(Boolean);
-
-                          return userFields.some(f => f.toLowerCase().includes(q));
-                        });
-                    });
-                  }}
+                  channelRenderFilterFn={channelRenderFilterFn}
                 />
               </div>
 
@@ -722,7 +758,10 @@ export default function ChatPage() {
                       backgroundRepeat: "no-repeat",
                     }}>
                       <div style={{ position: "relative", zIndex: 1, flex: 1, minHeight: 0, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-                        <MessageList messageActions={["delete", "edit", "markUnread", "mute", "pin", "quote", "react", "remindMe", "reply", "saveForLater"]} />
+                        <MessageList
+                          scrolledUpThreshold={200}
+                          messageActions={["delete", "edit", "markUnread", "mute", "pin", "quote", "react", "remindMe", "reply", "saveForLater"]}
+                        />
                         <MessageInput grow maxRows={6} />
                       </div>
                     </div>

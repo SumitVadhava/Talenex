@@ -148,9 +148,12 @@ export default function VideoCall({ setHideNavbar }) {
 
   // Detect if device is mobile
   const isMobile = () => {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    ) || window.innerWidth <= 768;
+    if (typeof window === "undefined") return false;
+    return (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      ) || window.innerWidth <= 768
+    );
   };
 
   useEffect(() => {
@@ -204,7 +207,7 @@ export default function VideoCall({ setHideNavbar }) {
           url: `${window.location.origin}/join/${roomId}`,
         },
       ],
-      // Fix for pre-join clipping on some mobile devices
+
       preJoinViewConfig: {
         showAvatarInPreJoinView: !isMobileDevice,
       },
@@ -225,19 +228,21 @@ export default function VideoCall({ setHideNavbar }) {
       className="zego-responsive-container"
       style={{
         position: isJoined ? "fixed" : "relative",
-        top: isJoined ? 0 : "auto",
-        left: isJoined ? 0 : "auto",
+        top: 0,
+        left: 0,
         width: "100%",
         maxWidth: "100vw",
-        height: isJoined ? "100dvh" : "calc(100svh - 100px)",
+        // Using svh for better mobile stability, and dvh for the joined state
+        height: isJoined ? "100dvh" : "calc(100svh - 64px)",
         zIndex: isJoined ? 999 : 1,
-        overflow: "hidden",
-        marginTop: isJoined ? "0" : "50px",
-        padding: 0,
+        marginTop: isJoined ? "0px" : "26px",
+        paddingBottom: "env(safe-area-inset-bottom)", // Account for mobile home indicators
         boxSizing: "border-box",
+        overflow: "visible", // Changed from hidden to show popups
         WebkitOverflowScrolling: "touch",
         touchAction: "manipulation",
       }}
     />
   );
 }
+
