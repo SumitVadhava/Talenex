@@ -12,10 +12,6 @@ namespace Talenex.Application.Validators
                 .NotNull().WithMessage("UserId Field is required")
                 .NotEmpty().WithMessage("UserId cannot be empty");
 
-            RuleFor(x => x.Bio)
-                .NotEmpty().WithMessage("Bio is not empty")
-                .MaximumLength(500).WithMessage("Bio is too long!(max 500 characters allowed)");
-
             RuleFor(x => x.ProfilePhotoUrl)
                .Cascade(CascadeMode.Stop)
                .NotNull().WithMessage("ProfilePhotoUrl field is required")
