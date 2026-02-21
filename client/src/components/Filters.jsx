@@ -129,7 +129,7 @@ const Filters = ({ filters, setFilters, showFavoritesOnly, setShowFavoritesOnly 
       <Button
         variant="ghost"
         className="w-full text-slate-500 hover:bg-red-50 hover:text-slate-600"
-        onClick={() =>
+        onClick={() => {
           setFilters({
             category: ['all'],
             search: '',
@@ -137,7 +137,8 @@ const Filters = ({ filters, setFilters, showFavoritesOnly, setShowFavoritesOnly 
             level: [],
             minRating: 0,
           })
-        }
+          setShowFavoritesOnly(false);
+        }}
       >
         Reset Filters
       </Button>

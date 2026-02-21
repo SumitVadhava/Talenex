@@ -415,7 +415,7 @@ const UserProfilePage = () => {
                       <Button
                         variant="outline"
                         size="icon"
-                        className={`border-slate-200 transition-all transform hover:-translate-y-1 cursor-pointer ${isFavorite ? 'text-red-500 bg-red-50 border-red-100 hover:bg-red-100' : 'text-slate-400 hover:text-red-500 hover:bg-red-50'}`}
+                        className={`border-slate-200 transition-all transform hover:-translate-y-1 cursor-pointer ${isFavorite ? 'text-red-500 bg-red-50 border-red-100 hover:bg-red-100 hover:text-red-500' : 'text-slate-400 hover:text-red-500 hover:bg-red-50'}`}
                         onClick={handleToggleFavorite}
                         disabled={favoriteMutation.isLoading}
                       >
