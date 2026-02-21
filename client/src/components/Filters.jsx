@@ -28,7 +28,7 @@ const Filters = ({ filters, setFilters, showFavoritesOnly, setShowFavoritesOnly 
       <div className="space-y-3">
         <label className="text-sm font-medium text-slate-700">Search Skills</label>
         <Input
-          placeholder="Keyword..."
+          placeholder="python, design..."
           icon={<Search className="w-4 h-4" />}
           value={filters.search}
           onChange={(e) =>
@@ -49,10 +49,10 @@ const Filters = ({ filters, setFilters, showFavoritesOnly, setShowFavoritesOnly 
               ? 'bg-red-500 border-red-500 text-white'
               : 'bg-white border-slate-300 text-transparent'
               }`}> */}
-              <Heart className={`w-5 h-5 ${showFavoritesOnly ? 'fill-current text-red-500 transition-all duration-300' : 'text-slate-600 transition-all duration-300'}`} />
+            <Heart className={`w-5 h-5 ${showFavoritesOnly ? 'fill-current text-red-500 transition-all duration-300' : 'text-slate-600 transition-all duration-300'}`} />
             {/* </div> */}
             <span className="text-sm text-slate-600 group-hover:text-slate-900 font-medium">
-              Favorites
+              Favourites
             </span>
           </div>
         </div>

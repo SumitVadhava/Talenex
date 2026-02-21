@@ -423,7 +423,7 @@ const UserProfilePage = () => {
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{isFavorite ? "Remove from Favorites" : "Add to Favorites"}</p>
+                      <p>{isFavorite ? "Remove from Favourites" : "Add to Favourites"}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>

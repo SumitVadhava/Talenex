@@ -1377,6 +1377,25 @@ const Homepage = () => {
                   />
                 ))}
               </div>
+            ) : showFavoritesOnly ? (
+              <div className="flex flex-col items-center justify-center py-24 text-center animate-fade-in bg-white rounded-2xl border border-dashed border-slate-200 shadow-sm">
+                <div className="bg-red-50 p-5 rounded-full mb-6 ring-8 ring-red-50/50">
+                  <Heart className="w-10 h-10 text-red-500 fill-red-500/20" />
+                </div>
+                <h3 className="text-xl font-semibold text-slate-900">
+                  No Favourites Yet
+                </h3>
+                <p className="text-slate-500 max-w-sm mx-auto mt-3 px-6">
+                  You haven't saved any users as favourites. Explore the skill partner...
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-8 border-slate-200 hover:bg-slate-50 cursor-pointer" 
+                  onClick={() => setShowFavoritesOnly(false)}
+                >
+                  Explore All
+                </Button>
+              </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
                 <div className="bg-slate-100 p-4 rounded-full mb-4">
@@ -1390,7 +1409,7 @@ const Homepage = () => {
                 </p>
                 <Button
                   variant="outline"
-                  className="mt-6"
+                  className="mt-6 border-slate-200 hover:bg-slate-50 cursor-pointer"
                   onClick={() =>
                     setFilters({
                       category: ["all"],
