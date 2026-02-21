@@ -35,6 +35,8 @@ namespace Talenex.infrastructure.Data
 
         public DbSet<RateUs> RateUs { get; set; }
 
+        public DbSet<UserFavourites> UserFavourites { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(u =>
@@ -244,6 +246,28 @@ namespace Talenex.infrastructure.Data
                     .IsRequired();
             });
 
+            modelBuilder.Entity<UserFavourites>(f =>
+            {
+                f.ToTable("UserFavourites");
+
+                f.HasKey(f => f.Id);
+
+                f.Property(f => f.UserId)
+                 .IsRequired();
+
+                // Relationship: UserFavourites -> UserProfile (1:1)
+                f.HasOne(f => f.User)                 // navigation in UserFavourites
+                 .WithOne(u => u.UserFavourites)      // navigation in UserProfile
+                 .HasForeignKey<UserFavourites>(f => f.UserId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+                f.Property(f => f.FavIds)
+                 .HasConversion(
+                     v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions)null),
+                     v => System.Text.Json.JsonSerializer.Deserialize<List<Guid>>(v, (System.Text.Json.JsonSerializerOptions)null)
+                 )
+                 .HasColumnType("NVARCHAR(MAX)");
+            });
 
             base.OnModelCreating(modelBuilder);
         }

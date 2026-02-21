@@ -52,6 +52,10 @@ namespace Talenex.infrastructure.Repositories
                         query = query.Include(u => u.UserReviews);
                         break;
 
+                    case UserInclude.Favourites:
+                        query = query.Include(u => u.UserFavourites);
+                        break;
+
                 }
             }
 
@@ -94,6 +98,10 @@ namespace Talenex.infrastructure.Repositories
 
                     case UserInclude.Reviews:
                         query = query.Include(u => u.UserReviews);
+                        break;
+
+                    case UserInclude.Favourites:
+                        query = query.Include(u => u.UserFavourites);
                         break;
                 }
             }

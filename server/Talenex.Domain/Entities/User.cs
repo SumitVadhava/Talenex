@@ -46,6 +46,8 @@ namespace Talenex.Domain.Entities
         public UserNotificationPreferences UserNotifications { get; set; }
 
         public ICollection<UserReviews> UserReviews { get; set; } = new List<UserReviews>();  // ✅
+        
+        public UserFavourites UserFavourites { get; set; }
 
     }
 }

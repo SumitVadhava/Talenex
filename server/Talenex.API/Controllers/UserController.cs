@@ -165,6 +165,14 @@ namespace Talenex.API.Controllers
                                 }).ToList();
 
                             break;
+                        case UserInclude.Favourites:
+                            dto.Favourites = user.UserFavourites == null ? null : new UserFavouritesDto
+                            {
+                                Id = user.UserFavourites.Id,
+                                FavIds = user.UserFavourites.FavIds
+                            };
+
+                            break;
 
                     }
                 }
@@ -296,6 +304,15 @@ namespace Talenex.API.Controllers
                                 }).ToList();
 
                         break;
+
+                    case UserInclude.Favourites:
+                        response.Favourites = user.UserFavourites == null ? null : new UserFavouritesDto
+                        {
+                            Id = user.UserFavourites.Id,
+                            FavIds = user.UserFavourites.FavIds
+                        };
+
+                        break;
                 }
             }
 
@@ -416,6 +433,14 @@ namespace Talenex.API.Controllers
                                      Rating = r.Rating,
                                      ReviewMsg = r.ReviewMsg,
                                  }).ToList();
+
+                        break;
+                    case UserInclude.Favourites:
+                        response.Favourites = user.UserFavourites == null ? null : new UserFavouritesDto
+                        {
+                            Id = user.UserFavourites.Id,
+                            FavIds = user.UserFavourites.FavIds
+                        };
 
                         break;
                 }
