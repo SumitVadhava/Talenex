@@ -1,6 +1,6 @@
 import { useTalenexChat } from "@/context/ChatContext";
 import { useSearchParams } from "react-router-dom";
-import { MessageCircle, Search, Lock, ChevronDown, ArrowLeft, MessageCircleIcon, MessageCircleHeart } from "lucide-react";
+import { MessageCircle, Search, Lock, ChevronDown, ArrowLeft, MessageCircleIcon, MessageCircleHeart, ChevronUp } from "lucide-react";
 import ChatBg from "../assets/chat-bg-4.png";
 import TalenexLogo from "/logo.png";
 import React, { useEffect, useState, useRef } from "react";
@@ -20,7 +20,7 @@ import {
 import "stream-chat-react/dist/css/v2/index.css";
 import "../chat_overrides.css";
 
-/* ─── Global font + keyframes ─────────────────────────── */
+
 const FontStyle = () => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
@@ -59,7 +59,6 @@ const FontStyle = () => (
   `}</style>
 );
 
-/* ─── Pin Indicator (shown above pinned messages) ────── */
 const CustomPinIndicator = () => {
   const { message } = useMessageContext("CustomPinIndicator");
   if (!message?.pinned) return null;
@@ -74,7 +73,6 @@ const CustomPinIndicator = () => {
   );
 };
 
-/* ─── Window width hook (for mobile layout) ──────────────── */
 const useWindowWidth = () => {
   const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
   useEffect(() => {
@@ -85,19 +83,12 @@ const useWindowWidth = () => {
   return width;
 };
 
-/* ─── Sync Stream channel → context ──────────────────────────
-   Fires when the user clicks a channel in the ChannelList.
-   Also clears pendingChannelCid if the user manually picks a
-   different channel than the one we pre-set from the Message button.
-───────────────────────────────────────────────────────────── */
+
 const ChannelSelectionWatcher = ({ onChannelSelected }) => {
   const { channel: streamChannel, setActiveChannel: setStreamChannel } = useStreamChatContext();
   const { setActiveChannel, activeChannel, pendingChannelCid, setPendingChannelCid } = useTalenexChat();
-
-  // Use a ref to prevent bidirectional sync loops
   const syncLock = useRef(false);
 
-  // 1. Sync Stream -> Our Context (When user clicks a list item)
   useEffect(() => {
     if (streamChannel && streamChannel.cid !== activeChannel?.cid) {
       if (syncLock.current) {
@@ -105,26 +96,23 @@ const ChannelSelectionWatcher = ({ onChannelSelected }) => {
         return;
       }
       setActiveChannel(streamChannel);
-      // Clear the pending pin if user switched to a different channel manually
       if (pendingChannelCid && streamChannel.cid !== pendingChannelCid) {
         setPendingChannelCid(null);
       }
       onChannelSelected?.(streamChannel);
     }
-  }, [streamChannel]); // Only depend on streamChannel change
+  }, [streamChannel]);
 
-  // 2. Sync Our Context -> Stream (When navigating from profile button)
   useEffect(() => {
     if (activeChannel && activeChannel.cid !== streamChannel?.cid) {
       syncLock.current = true;
       setStreamChannel(activeChannel);
     }
-  }, [activeChannel, setStreamChannel]); // Only depend on activeChannel change
+  }, [activeChannel, setStreamChannel]);
 
   return null;
 };
 
-/* ─── Avatar ──────────────────────────────────────────── */
 const Avatar = React.memo(({ name = "", image = "", size = 40 }) => {
   const initials = React.useMemo(() =>
     name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase(),
@@ -151,7 +139,6 @@ const Avatar = React.memo(({ name = "", image = "", size = 40 }) => {
 });
 Avatar.displayName = "Avatar";
 
-/* ─── Sidebar search ──────────────────────────────────── */
 const SidebarSearch = ({ value, onChange }) => {
   const [focused, setFocused] = useState(false);
   return (
@@ -184,7 +171,6 @@ const SidebarSearch = ({ value, onChange }) => {
   );
 };
 
-/* ─── Custom Channel Header ───────────────────────────── */
 const CustomChannelHeader = ({ activeChannel, currentUserId, onBackClick }) => {
   const members = Object.values(activeChannel?.state?.members || {});
   const otherMember = members.find((m) => m.user?.id !== currentUserId);
@@ -332,7 +318,7 @@ const CustomChannelHeader = ({ activeChannel, currentUserId, onBackClick }) => {
             padding: 4, borderRadius: "50%", color: "#94a3b8",
             display: "flex", alignItems: "center",
           }}>
-            <ChevronDown size={15} />
+            <ChevronUp size={15} />
           </button>
         </div>
       )}
@@ -391,7 +377,7 @@ const CustomChannelHeader = ({ activeChannel, currentUserId, onBackClick }) => {
   );
 };
 
-/* ─── Animated chat background ───────────────────────── */
+
 const AnimatedChatBg = () => (
   <div style={{
     position: "absolute", inset: 0, zIndex: 0,
@@ -429,19 +415,19 @@ const AnimatedChatBg = () => (
   </div>
 );
 
-/* ─── Empty State ─────────────────────────────────────── */
+/* ─── Empty State (No Channel Selected) ──────────────── */
 const EmptyState = () => (
   <div style={{ position: "relative", height: "100%", overflow: "hidden" }}>
     <AnimatedChatBg />
     <div className="talenex-chat-empty" style={{ position: "relative", zIndex: 1 }}>
       <div style={{
         background: "#ffffff",
-        borderRadius: "50%", width: 96, height: 96,
+        borderRadius: "50%", width: 120, height: 120,
         display: "flex", alignItems: "center", justifyContent: "center",
         boxShadow: "0 4px 24px rgba(15,23,42,0.10)",
         animation: "fadeSlideIn 0.4s ease both",
       }}>
-        <MessageCircle size={44} color="#0f172a" strokeWidth={1.4} />
+        <MessageCircle size={56} color="#0f172a" strokeWidth={1.4} />
       </div>
       <h3 style={{ animation: "fadeSlideIn 0.4s 0.08s ease both" }}>Your messages</h3>
       <p style={{ animation: "fadeSlideIn 0.4s 0.16s ease both" }}>
@@ -452,6 +438,62 @@ const EmptyState = () => (
         End-to-end encrypted
       </div>
     </div>
+  </div>
+);
+
+/* ─── Custom Empty States for Stream Components ────────── */
+const CustomChannelEmptyIndicator = () => (
+  <div style={{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "165px",
+    padding: "48px 24px",
+    gap: "12px",
+    color: "#94a3b8"
+  }}>
+    <MessageCircle size={36} color="#cbd5e1" strokeWidth={1.5} />
+    <p style={{
+      fontSize: "13.5px",
+      textAlign: "center",
+      margin: 0,
+      fontFamily: "'Plus Jakarta Sans', sans-serif",
+      fontWeight: 500
+    }}>
+      you have no user currently
+    </p>
+  </div>
+);
+
+const CustomMessageEmptyIndicator = () => (
+  <div style={{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
+    gap: "16px",
+    color: "#94a3b8"
+  }}>
+    <div style={{
+      background: "#ffffff",
+      borderRadius: "50%",
+      padding: "24px",
+      boxShadow: "0 8px 32px rgba(15,23,42,0.12)",
+      border: "1px solid #f1f5f9"
+    }}>
+      <MessageCircle size={48} color="#64748b" strokeWidth={1.5} />
+    </div>
+    <p style={{
+      fontSize: "15px",
+      fontWeight: "600",
+      fontFamily: "'Plus Jakarta Sans', sans-serif",
+      letterSpacing: "-0.01em",
+      color: "#475569"
+    }}>
+      No chats here yet...
+    </p>
   </div>
 );
 
@@ -702,6 +744,7 @@ export default function ChatPage() {
                   setActiveChannelOnMount={false}
                   sendChannelsToList
                   channelRenderFilterFn={channelRenderFilterFn}
+                  EmptyStateIndicator={CustomChannelEmptyIndicator}
                 />
               </div>
 
@@ -737,7 +780,7 @@ export default function ChatPage() {
               position: "relative", minWidth: 0, overflow: "hidden",
             }}>
               {activeChannel ? (
-                <Channel channel={activeChannel} PinIndicator={CustomPinIndicator}>
+                <Channel channel={activeChannel} PinIndicator={CustomPinIndicator} EmptyStateIndicator={CustomMessageEmptyIndicator}>
                   <Window>
                     <CustomChannelHeader
                       activeChannel={activeChannel}
@@ -761,6 +804,7 @@ export default function ChatPage() {
                         <MessageList
                           scrolledUpThreshold={200}
                           messageActions={["delete", "edit", "markUnread", "mute", "pin", "quote", "react", "remindMe", "reply", "saveForLater"]}
+                          EmptyStateIndicator={CustomMessageEmptyIndicator}
                         />
                         <MessageInput grow maxRows={6} />
                       </div>
