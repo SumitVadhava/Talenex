@@ -11,6 +11,7 @@ appsettings.example.json
 
 # Ignore personal/local settings
 appsettings.json
+appsettings.Development.json
 appsettings.*.json
 
 # User-specific files
