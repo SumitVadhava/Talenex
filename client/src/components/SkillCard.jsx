@@ -1,15 +1,21 @@
-import React from "react";
+import React, { Activity } from "react";
 import { Badge, Button, Card } from "./ui/Common";
-import { Star, MessageCircle, Globe, MapPin, ArrowBigRight, Info, ChevronRight } from "lucide-react";
+import { Star, MessageCircle, Globe, MapPin, ArrowBigRight, Info, ChevronRight, Wifi, Clock, Moon, Zap, ActivityIcon, ActivitySquare, Globe2, LucideGlobe2, GlobeIcon, GlobeLock, Network, NetworkIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Arrow } from "@radix-ui/react-select";
 
-const SkillCard = ({ skill }) => {
+const SkillCard = ({ skill, isFavorite, isOnline: realTimeOnline }) => {
   const navigate = useNavigate();
+
+  const isOnline = realTimeOnline !== undefined ? realTimeOnline : skill.isOnline;
 
   const handleSwapClick = () => {
     navigate("/user-details", {
-      state: { userData: skill },
+      state: {
+        userData: skill,
+        isFavorite: isFavorite,
+        isOnline: isOnline
+      },
     });
   };
 
@@ -28,10 +34,15 @@ const SkillCard = ({ skill }) => {
                 alt={skill.user.name}
                 className="h-10 w-10 rounded-full object-cover ring-2 ring-white shadow-sm"
               />
-              {skill.isOnline && (
+              {isOnline ? (
                 <span
                   className="absolute -bottom-0.5 -right-0.5 block h-2.5 w-2.5 rounded-full bg-green-500 ring-2 ring-white"
                   title="Online"
+                />
+              ) : (
+                <span
+                  className="absolute -bottom-0.5 -right-0.5 block h-2.5 w-2.5 rounded-full bg-gray-500 ring-2 ring-white"
+                  title="Offline"
                 />
               )}
             </div>
@@ -51,7 +62,7 @@ const SkillCard = ({ skill }) => {
           </div>
 
           <div className="flex flex-col items-end gap-1.5">
-            {skill.isOnline ? (
+            {isOnline ? (
               <Badge
                 variant="secondary"
                 className="bg-green-50 text-green-700 border-green-100 text-[10px] px-2 py-0.5 h-auto font-medium"
@@ -63,7 +74,7 @@ const SkillCard = ({ skill }) => {
                 variant="outline"
                 className="text-slate-500 border-slate-200 text-[10px] px-2 py-0.5 h-auto font-medium bg-white"
               >
-                <MapPin className="w-3 h-3 mr-1" /> Local
+                <img className="w-3 h-3 mr-1" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWdsb2JlLW9mZi1pY29uIGx1Y2lkZS1nbG9iZS1vZmYiPjxwYXRoIGQ9Ik0xMC4xMTQgNC40NjJBMTQuNSAxNC41IDAgMCAxIDEyIDJhMTAgMTAgMCAwIDEgOS4zMTMgMTMuNjQzIi8+PHBhdGggZD0iTTE1LjU1NyAxNS41NTZBMTQuNSAxNC41IDAgMCAxIDEyIDIyIDEwIDEwIDAgMCAxIDQuOTI5IDQuOTI5Ii8+PHBhdGggZD0iTTE1Ljg5MiAxMC4yMzRBMTQuNSAxNC41IDAgMCAwIDEyIDJhMTAgMTAgMCAwIDAtMy42NDMuNjg3Ii8+PHBhdGggZD0iTTE3LjY1NiAxMkgyMiIvPjxwYXRoIGQ9Ik0xOS4wNzEgMTkuMDcxQTEwIDEwIDAgMCAxIDEyIDIyIDE0LjUgMTQuNSAwIDAgMSA4LjQ0IDguNDUiLz48cGF0aCBkPSJNMiAxMmgxMCIvPjxwYXRoIGQ9Im0yIDIgMjAgMjAiLz48L3N2Zz4=" /> offline
               </Badge>
             )}
           </div>

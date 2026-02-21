@@ -30,7 +30,7 @@ export const mapUsersApiToSkillsList = (users) => {
         // 🔥 ALL WANTED SKILLS
         seekingSkills: user.skills.skillsWanted?.map((s) => s.name || s.title || s) ?? [],
 
-        isOnline: true,
+        isOnline: false,
         postedAt: user.createdAt
           ? new Date(user.createdAt).toLocaleDateString("en-US", {
             month: "long",

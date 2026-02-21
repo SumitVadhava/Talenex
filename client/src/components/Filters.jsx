@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Input } from './ui/Common';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { Search, SlidersHorizontal, Heart } from 'lucide-react';
 import { Checkbox } from "@/components/ui/checkbox";
 
-const Filters = ({ filters, setFilters }) => {
+const Filters = ({ filters, setFilters, showFavoritesOnly, setShowFavoritesOnly }) => {
 
   const toggleLevel = (level) => {
     setFilters((prev) => {
@@ -35,6 +35,27 @@ const Filters = ({ filters, setFilters }) => {
             setFilters((prev) => ({ ...prev, search: e.target.value }))
           }
         />
+      </div>
+
+      {/* Favorites Toggle */}
+      <div className="space-y-3">
+        <label className="text-sm font-medium text-slate-700">Quick Access</label>
+        <div className="flex flex-col gap-2 mt-3">
+          <div
+            className="flex items-center gap-2 cursor-pointer group"
+            onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+          >
+            {/* <div className={`flex items-center justify-center w-5 h-5 rounded border transition-all ${showFavoritesOnly
+              ? 'bg-red-500 border-red-500 text-white'
+              : 'bg-white border-slate-300 text-transparent'
+              }`}> */}
+              <Heart className={`w-5 h-5 ${showFavoritesOnly ? 'fill-current text-red-500 transition-all duration-300' : 'text-slate-600 transition-all duration-300'}`} />
+            {/* </div> */}
+            <span className="text-sm text-slate-600 group-hover:text-slate-900 font-medium">
+              Favorites
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Availability */}

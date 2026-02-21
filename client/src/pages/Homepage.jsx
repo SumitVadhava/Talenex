@@ -750,6 +750,7 @@ import {
   Sparkles,
   Filter,
   X,
+  Heart,
 } from "lucide-react";
 import {
   Select,
@@ -763,9 +764,10 @@ import api from "../api/axios";
 import qs from "qs";
 import Loader from "@/components/Loader";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useQuery } from "@tanstack/react-query";
-import { fetchSkills } from "../api/skillsApi";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchSkills, fetchFavorites } from "../api/skillsApi";
 import { UserContext } from "@/context/UserContext";
+import { useTalenexChat } from "@/context/ChatContext";
 
 const CATEGORIES = [
   { id: "all", name: "All Skills", icon: "LayoutGrid" },
@@ -949,8 +951,10 @@ const Homepage = () => {
   // const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
   const { authVersion } = useContext(UserContext);
+  const { client } = useTalenexChat();
 
   const tokenSentRef = useRef(false);
+  const queryClient = useQueryClient();
 
   const [filters, setFilters] = useState({
     category: ["all"],
@@ -959,6 +963,7 @@ const Homepage = () => {
     level: [],
     minRating: 0,
   });
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   const [sortBy, setSortBy] = useState("oldest");
   const [currentPage, setCurrentPage] = useState(1);
@@ -974,6 +979,55 @@ const Homepage = () => {
     queryFn: fetchSkills,
     enabled: isLoaded && isSignedIn && authVersion > 0,
   });
+
+  const { data: userFavsList = [], isLoading: isFavoritesLoading } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: fetchFavorites,
+    enabled: isLoaded && isSignedIn && authVersion > 0,
+    staleTime: 0, // Force fresh check
+    refetchOnMount: "always", // Ensure refresh when back from profile
+  });
+
+  const skillIdsKey = useMemo(() => skills.map((s) => s.id).sort().join(","), [skills]);
+
+  const { data: presenceMap = {}, isLoading: isPresenceLoading } = useQuery({
+    queryKey: ["presence", skillIdsKey],
+    queryFn: async () => {
+      if (!client || !skills.length) return {};
+      const userIds = skills.map((s) => s.id);
+      const response = await client.queryUsers({ id: { $in: userIds } });
+      const map = {};
+      response.users.forEach((u) => {
+        map[u.id] = u.online;
+      });
+      return map;
+    },
+    enabled: !!client && skills.length > 0 && authVersion > 0,
+    staleTime: 1000 * 60 * 2, // 2 minutes
+  });
+
+  // Real-time Presence Tracking Listeners
+  useEffect(() => {
+    if (!client) return;
+
+    const handleEvent = (event) => {
+      if (event.user) {
+        // Update the specific presence query cache
+        queryClient.setQueryData(["presence", skillIdsKey], (oldData = {}) => ({
+          ...oldData,
+          [event.user.id]: event.user.online,
+        }));
+      }
+    };
+
+    client.on("user.presence.changed", handleEvent);
+    client.on("user.updated", handleEvent);
+
+    return () => {
+      client.off("user.presence.changed", handleEvent);
+      client.off("user.updated", handleEvent);
+    };
+  }, [client, queryClient, skillIdsKey]);
 
 
   // --- Filtering Logic ---
@@ -1028,7 +1082,8 @@ const Homepage = () => {
       }
 
       // Online Filter
-      if (filters.onlyOnline && !skill.isOnline) return false;
+      const isUserOnline = presenceMap[skill.id] ?? skill.isOnline;
+      if (filters.onlyOnline && !isUserOnline) return false;
 
       // Level Filter (check if any offered skill matches the level filter)
       if (filters.level.length > 0) {
@@ -1045,9 +1100,13 @@ const Homepage = () => {
       // Rating Filter
       if (skill.user.rating < filters.minRating) return false;
 
+      // Favorites Filter
+      // Favorites Filter
+      if (showFavoritesOnly && (!Array.isArray(userFavsList) || !userFavsList.includes(skill.id))) return false;
+
       return true;
     });
-  }, [filters, skills, user]);
+  }, [filters, skills, user, presenceMap, showFavoritesOnly, userFavsList]);
 
   // --- Sorting Logic ---
   const sortedData = useMemo(() => {
@@ -1238,7 +1297,12 @@ const Homepage = () => {
               </Button>
             </div>
             <div className="lg:sticky lg:top-24">
-              <Filters filters={filters} setFilters={setFilters} />
+              <Filters
+                filters={filters}
+                setFilters={setFilters}
+                showFavoritesOnly={showFavoritesOnly}
+                setShowFavoritesOnly={setShowFavoritesOnly}
+              />
             </div>
           </aside>
 
@@ -1296,7 +1360,7 @@ const Homepage = () => {
             </div>
 
             {/* Results Grid */}
-            {((authVersion === 0 || isLoading) && skills.length === 0) ? (
+            {((authVersion === 0 || isLoading || isPresenceLoading || isFavoritesLoading)) ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-pulse">
                 {Array.from({ length: 6 }).map((_, index) => (
                   <SkeletonCard key={index} />
@@ -1305,7 +1369,12 @@ const Homepage = () => {
             ) : currentItems.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-fade-in">
                 {currentItems.map((skill) => (
-                  <SkillCard key={skill.id} skill={skill} />
+                  <SkillCard
+                    key={skill.id}
+                    skill={skill}
+                    isFavorite={Array.isArray(userFavsList) && userFavsList.includes(skill.id)}
+                    isOnline={presenceMap[skill.id]}
+                  />
                 ))}
               </div>
             ) : (

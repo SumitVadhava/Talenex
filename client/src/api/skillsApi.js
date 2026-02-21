@@ -19,3 +19,40 @@ export const fetchSkills = async () => {
 
   return mapUsersApiToSkillsList(response.data);
 };
+
+export const fetchFavorites = async () => {
+  const response = await api.get(
+    "/User/Details",
+    {
+      params: {
+        include: [
+          "favourites"
+        ],
+      },
+      paramsSerializer: (params) =>
+        qs.stringify(params, { arrayFormat: "repeat" }),
+    },
+  );
+  // Extract the favourites mapping. Based on logs, it contains a favIds array.
+  const favs = response.data?.favourites || {};
+
+  // Robustly return an array. If favIds is missing, safely return [].
+  const favoriteIds = Array.isArray(favs.favIds) ? favs.favIds : [];
+
+  return favoriteIds;
+};
+
+export const toggleFavorite = async ({ userId, value }) => {
+  console.log("userId : ", userId);
+  console.log("value : ", value);
+
+
+  const response = await api.patch(`/user-fav/upsert`, {
+    "favId": userId,
+    "isAdd": value
+  });
+
+  console.log(response.data);
+
+  return response.data;
+};

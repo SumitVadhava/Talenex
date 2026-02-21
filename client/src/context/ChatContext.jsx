@@ -25,7 +25,7 @@ export const ChatProvider = ({ children }) => {
         const init = async () => {
             console.log("[ChatContext] Auth ready (v" + authVersion + "), initializing Stream...");
             try {
-                
+
                 const res = await api.get(`/User/Details/${userId}`, {
                     params: { include: ["Profile"] },
                     paramsSerializer: (params) => qs.stringify(params, { arrayFormat: "repeat" }),
@@ -60,7 +60,8 @@ export const ChatProvider = ({ children }) => {
                         name: backendUserData.profile?.fullName || backendUserData.fullName || "User",
                         image: backendUserData.profile?.profilePhotoUrl || backendUserData.profilePhotoUrl || "",
                     },
-                    streamToken
+                    streamToken,
+                    { presence: true }
                 );
 
                 // console.log("[ChatContext] Stream connected successfully for:", userId);

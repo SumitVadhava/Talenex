@@ -21,6 +21,7 @@ import {
   Trophy,
   FileText,
   UserCheckIcon,
+  Heart,
 } from "lucide-react";
 import b1 from "../assets/b-1.png";
 import b2 from "../assets/b-2.png";
@@ -44,20 +45,44 @@ import {
 } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useChat } from "@/hooks/useChat";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toggleFavorite } from "../api/skillsApi";
 
 const UserProfilePage = () => {
   const [showAllSkills, setShowAllSkills] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [reviewSortOption, setReviewSortOption] = useState("newest");
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
-
   const { state } = useLocation();
+  const [isFavorite, setIsFavorite] = useState(state?.isFavorite || false);
+  const isOnline = state?.isOnline || false;
+
   const { id } = useParams();
   const [isCopied, setIsCopied] = useState(false);
 
   const [userData, setUserData] = useState(state?.userData || null);
   const [loading, setLoading] = useState(false);
   const { openChatWithUser, isChatReady } = useChat();
+
+  const favoriteMutation = useMutation({
+    mutationFn: toggleFavorite,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
+    },
+  });
+
+  const handleToggleFavorite = () => {
+    if (userData?.id) {
+      const newFavoriteState = !isFavorite;
+      setIsFavorite(newFavoriteState); // Optimistic update
+      favoriteMutation.mutate({ userId: userData.id, value: newFavoriteState }, {
+        onError: () => {
+          setIsFavorite(!newFavoriteState); // Rollback on error
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     // console.log("userData : ", userData);
@@ -355,8 +380,8 @@ const UserProfilePage = () => {
                 </Avatar>
                 {/* Subtle status indicator integrated into border */}
                 <div
-                  className="absolute bottom-2 right-2 h-4 w-4 bg-green-500 border-2 border-white rounded-full shadow-sm"
-                  title="Online"
+                  className={`absolute bottom-2 right-2 h-4 w-4 border-2 border-white rounded-full shadow-sm ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`}
+                  title={isOnline ? "Online" : "Offline"}
                 ></div>
               </div>
 
@@ -384,6 +409,24 @@ const UserProfilePage = () => {
               </div>
 
               <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className={`border-slate-200 transition-all transform hover:-translate-y-1 cursor-pointer ${isFavorite ? 'text-red-500 bg-red-50 border-red-100 hover:bg-red-100' : 'text-slate-400 hover:text-red-500 hover:bg-red-50'}`}
+                        onClick={handleToggleFavorite}
+                        disabled={favoriteMutation.isLoading}
+                      >
+                        <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{isFavorite ? "Remove from Favorites" : "Add to Favorites"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <Button
                   variant="outline"
                   onClick={() => isChatReady && openChatWithUser(userData.id)}
