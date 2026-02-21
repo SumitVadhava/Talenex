@@ -828,9 +828,9 @@ export const SwapCard = ({
                         alt={swap.partnerName}
                         className="w-12 h-12 rounded-xl object-cover shadow-sm ring-2 ring-slate-50"
                     />
-                    <div className="absolute -bottom-1 -right-1 bg-white p-0.5 rounded-full shadow-sm">
+                    {/* <div className="absolute -bottom-1 -right-1 bg-white p-0.5 rounded-full shadow-sm">
                         <div className="w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></div>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Content */}
