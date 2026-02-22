@@ -21,6 +21,8 @@ namespace Talenex.Domain.Entities
 
         public string UserEmail { get; set; }
 
+        public string ? UserProfileImg { get; set; } = null;
+
         public int OverallExperience { get; set; }
         public int UiUxDesign { get; set; }
         public int ApplicationSpeed { get; set; }

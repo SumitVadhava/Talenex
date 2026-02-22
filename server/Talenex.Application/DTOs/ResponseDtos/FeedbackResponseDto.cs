@@ -21,6 +21,10 @@ namespace Talenex.Application.DTOs.ResponseDtos
         [Required]
         public string UserEmail { get; set; }
 
+
+        [Required]
+        public string ? UserProfileImg { get; set; }
+
         public DateTime ?Created { get; set; }
 
         public int OverallExperience { get; set; } = 0;

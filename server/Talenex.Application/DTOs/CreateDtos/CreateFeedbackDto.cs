@@ -17,6 +17,9 @@ namespace Talenex.Application.DTOs.CreateDtos
         [Required]
         public string UserEmail { get; set; }
 
+        [Required]
+        public string? UserProfileImg { get; set; }
+
         public int OverallExperience { get; set; }
         public int UiUxDesign { get; set; }
         public int ApplicationSpeed { get; set; }

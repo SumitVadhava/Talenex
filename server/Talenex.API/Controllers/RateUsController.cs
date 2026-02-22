@@ -34,6 +34,7 @@ public class RateUsController : ControllerBase
     
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAll()
           => Ok(await _service.GetAllAsync());
@@ -54,6 +55,7 @@ public class RateUsController : ControllerBase
             UserId = dto.UserId,
             UserName = dto.UserName,
             UserEmail = dto.UserEmail,
+            UserProfileImg = dto.UserProfileImg,
             OverallExperience = dto.OverallExperience,
             UiUxDesign = dto.UiUxDesign,
             ApplicationSpeed = dto.ApplicationSpeed,
