@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Star } from 'lucide-react';
+import api from '@/api/axios';
+import axios from 'axios';
 
 const Marquee = ({ children, reverse = false, pauseOnHover = true, speed = 40 }) => {
     return (
@@ -29,9 +31,9 @@ const Marquee = ({ children, reverse = false, pauseOnHover = true, speed = 40 })
     );
 };
 
-const TestimonialCard = ({ name, handle, avatar, title, content, verified }) => {
-    const StarIcon = () => (
-        <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+const TestimonialCard = ({ name, avatar, content, rating = 5 }) => {
+    const StarIcon = ({ filled }) => (
+        <Star className={`w-4 h-4 ${filled ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`} />
     );
 
     const getGradientForAvatar = (name) => {
@@ -59,34 +61,33 @@ const TestimonialCard = ({ name, handle, avatar, title, content, verified }) => 
                         <div className="flex gap-1">
                             {[...Array(5)].map((_, i) => (
                                 <div key={i} className="transform group-hover:scale-110 transition-transform duration-300" style={{ transitionDelay: `${i * 50}ms` }}>
-                                    <StarIcon />
+                                    <StarIcon filled={i < rating} />
                                 </div>
                             ))}
                         </div>
-
-
                     </div>
 
-                    {verified && (
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200/50 mb-4">
-                            <svg className="w-3.5 h-3.5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                            </svg>
-                            <span className="text-xs font-semibold text-green-700">Verified User</span>
-                        </div>
-                    )}
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200/50 mb-4">
+                        <svg className="w-3.5 h-3.5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-xs font-semibold text-green-700">Verified User</span>
+                    </div>
 
-                    <h3 className="font-bold text-gray-900 mb-3 text-lg group-hover:text-purple-900 transition-colors duration-300">{title}</h3>
+
                     <p className="text-gray-600 text-sm leading-relaxed mb-5">{content}</p>
 
                     {/* User Info */}
                     <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                        <div className={`w-11 h-11 rounded-full bg-gradient-to-br ${getGradientForAvatar(name)} flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:shadow-xl transition-all duration-300 ring-2 ring-white`}>
-                            {avatar}
+                        <div className={`w-11 h-11 rounded-full ${avatar?.startsWith('http') ? '' : `bg-gradient-to-br ${getGradientForAvatar(name)}`} flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:shadow-xl transition-all duration-300 ring-2 ring-white overflow-hidden`}>
+                            {avatar?.startsWith('http') ? (
+                                <img src={avatar} alt={name} className="w-full h-full object-cover" />
+                            ) : (
+                                avatar
+                            )}
                         </div>
                         <div className="flex-1">
                             <div className="font-semibold text-gray-900 text-sm group-hover:text-purple-900 transition-colors duration-300">{name}</div>
-                            <div className="text-gray-500 text-xs">{handle}</div>
                         </div>
                     </div>
                 </div>
@@ -98,30 +99,30 @@ const TestimonialCard = ({ name, handle, avatar, title, content, verified }) => 
 const testimonials1 = [
     {
         name: "Eleanor Pena",
-        handle: "@eleanor877",
+
         avatar: "EP",
         rating: 5,
-        title: "Found My Perfect Mentor",
+
         content:
             "Talenex matched me with someone who understood exactly what I wanted to learn. The experience felt natural and incredibly rewarding.",
         platform: "twitter"
     },
     {
         name: "Floyd Miles",
-        handle: "@floyd",
+
         avatar: "FM",
         rating: 4,
-        title: "Made Learning So Simple",
+
         content:
             "The skill-swap concept is genius. I was able to learn video editing while teaching guitar—no fees, just pure exchange.",
         platform: "twitter"
     },
     {
         name: "Jerome Robertson",
-        handle: "@jerome102",
+
         avatar: "JR",
         rating: 5,
-        title: "The Support Is Amazing",
+
         content:
             "Whenever I had a question, the Talenex community and support team responded quickly. It truly feels like a safe, welcoming space.",
         platform: "twitter",
@@ -129,10 +130,10 @@ const testimonials1 = [
     },
     {
         name: "Brad Markin",
-        handle: "@bradmarkin",
+
         avatar: "BM",
         rating: 4,
-        title: "A Better Way to Learn",
+
         content:
             "I’ve tried multiple learning apps, but nothing beats exchanging skills directly. Talenex makes the process effortless and fun.",
         platform: "g2"
@@ -143,10 +144,10 @@ const testimonials1 = [
 const testimonials2 = [
     {
         name: "Theresa Webb",
-        handle: "@theresawebb",
+
         avatar: "TW",
         rating: 5,
-        title: "Genuinely Life-Changing",
+
         content:
             "I never realized how many people were willing to teach in exchange for learning something new. Talenex opened up a whole world of opportunity.",
         platform: "twitter",
@@ -154,10 +155,10 @@ const testimonials2 = [
     },
     {
         name: "Annette Black",
-        handle: "@annette",
+
         avatar: "AB",
         rating: 5,
-        title: "A Beautiful Community Experience",
+
         content:
             "Every swap feels personal and meaningful. The reviews, ratings, and communication tools make connecting with others incredibly smooth.",
         platform: "twitter",
@@ -165,20 +166,20 @@ const testimonials2 = [
     },
     {
         name: "Guy Hawkins",
-        handle: "@guyhawkins",
+
         avatar: "GH",
         rating: 4,
-        title: "Super Easy to Start",
+
         content:
             "I signed up, added my skills, and matched with someone within hours. The platform genuinely encourages learning—not just scrolling.",
         platform: "twitter"
     },
     {
         name: "James Smith",
-        handle: "@jamessmith",
+
         avatar: "JS",
         rating: 5,
-        title: "Swapping Skills Is Brilliant",
+
         content:
             "Learning without paying money feels refreshing. I’ve grown so much while also helping others grow. Talenex is truly unique.",
         platform: "twitter"
@@ -189,20 +190,20 @@ const testimonials2 = [
 const testimonials3 = [
     {
         name: "Sophia Turner",
-        handle: "@sophiaturner",
+
         avatar: "ST",
         rating: 4,
-        title: "Effortless to Use",
+
         content:
             "Setting up my profile and skills took just minutes. The interface feels clean, and finding people with similar interests is incredibly easy.",
         platform: "twitter"
     },
     {
         name: "Robert Fox",
-        handle: "@robertfox",
+
         avatar: "RF",
         rating: 5,
-        title: "A Total Game Changer",
+
         content:
             "Talenex completely changed how I learn. Instead of paying for courses, I now exchange skills with people all over the world.",
         platform: "g2",
@@ -210,20 +211,20 @@ const testimonials3 = [
     },
     {
         name: "Kristin Watson",
-        handle: "@kristinw",
+
         avatar: "KW",
         rating: 5,
-        title: "Highly Customizable Profiles",
+
         content:
             "I love how deeply I can personalize my skill list and availability. It helps me connect with the right partners almost instantly.",
         platform: "twitter"
     },
     {
         name: "Leslie Alexander",
-        handle: "@lesliealex",
+
         avatar: "LA",
         rating: 4,
-        title: "Beautifully Designed Platform",
+
         content:
             "Everything on Talenex—from the UI to the messaging system—feels thoughtfully designed. It’s a joy to use.",
         platform: "twitter",
@@ -233,6 +234,63 @@ const testimonials3 = [
 
 
 export default function TestimonialSection({ testimonialsRef }) {
+    const [testimonials, setTestimonials] = useState([]);
+
+    useEffect(() => {
+        const fetchTestimonials = async () => {
+            try {
+                const response = await api.get("/rate-us");
+                console.log("Raw Testimonials API Response:", response.data);
+
+                let data = response.data;
+                if (data && data.$values) data = data.$values;
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    console.log("No dynamic testimonials found, using fallback data.");
+                    setTestimonials([...testimonials1, ...testimonials2, ...testimonials3].slice(0, 10));
+                    return;
+                }
+
+                const mapped = data.map((t) => {
+                    const name = t.userName || t.UserName || "Anonymous";
+                    const profileImg = t.userProfileImg || t.UserProfileImg;
+                    const stars = t.overallExperience || t.OverallExperience || 5;
+                    const msg = t.message || t.Message || "";
+                    const date = t.createdAt || t.CreatedAt || new Date().toISOString();
+
+                    return {
+                        name: name,
+                        avatar: profileImg || name.charAt(0).toUpperCase(),
+                        rating: stars,
+                        content: msg,
+                        verified: true,
+                        date: date
+                    };
+                });
+
+                // Sort by latest and take 10
+                const sorted = mapped.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
+                console.log("Mapped and Sorted Testimonials:", sorted);
+                setTestimonials(sorted);
+            } catch (error) {
+                console.error("Error fetching testimonials:", error);
+                // Fallback to static testimonials if API fails
+                setTestimonials([
+                    ...testimonials1,
+                    ...testimonials2,
+                    ...testimonials3
+                ].slice(0, 10));
+            }
+        };
+
+        fetchTestimonials();
+    }, []);
+
+    // Split testimonials for the 3 marquees
+    const t1 = testimonials.filter((_, i) => i % 3 === 0);
+    const t2 = testimonials.filter((_, i) => i % 3 === 1);
+    const t3 = testimonials.filter((_, i) => i % 3 === 2);
+
     return (
         <div id="testimonials" ref={testimonialsRef} className="min-h-screen py-10 px-4 scroll-mt-28">
             <div className="max-w-7xl mx-auto">
@@ -263,23 +321,29 @@ export default function TestimonialSection({ testimonialsRef }) {
 
                 {/* Testimonial Marquees */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Marquee speed={50} reverse={false}>
-                        {testimonials1.map((testimonial, index) => (
-                            <TestimonialCard key={index} {...testimonial} />
-                        ))}
-                    </Marquee>
+                    {t1.length > 0 && (
+                        <Marquee speed={50} reverse={false}>
+                            {t1.map((testimonial, index) => (
+                                <TestimonialCard key={index} {...testimonial} />
+                            ))}
+                        </Marquee>
+                    )}
 
-                    <Marquee speed={50} reverse={true}>
-                        {testimonials2.map((testimonial, index) => (
-                            <TestimonialCard key={index} {...testimonial} />
-                        ))}
-                    </Marquee>
+                    {t2.length > 0 && (
+                        <Marquee speed={50} reverse={true}>
+                            {t2.map((testimonial, index) => (
+                                <TestimonialCard key={index} {...testimonial} />
+                            ))}
+                        </Marquee>
+                    )}
 
-                    <Marquee speed={50} reverse={false}>
-                        {testimonials3.map((testimonial, index) => (
-                            <TestimonialCard key={index} {...testimonial} />
-                        ))}
-                    </Marquee>
+                    {t3.length > 0 && (
+                        <Marquee speed={50} reverse={false}>
+                            {t3.map((testimonial, index) => (
+                                <TestimonialCard key={index} {...testimonial} />
+                            ))}
+                        </Marquee>
+                    )}
                 </div>
             </div>
         </div>

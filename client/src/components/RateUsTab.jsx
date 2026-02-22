@@ -19,7 +19,7 @@ const RATING_CATEGORIES = [
   { id: "support", label: "Help & Support Quality" },
 ];
 
-export const RateUsTab = ({ id, name, email }) => {
+export const RateUsTab = ({ id, name, email, profileImg }) => {
   const [ratings, setRatings] = useState(
     RATING_CATEGORIES.reduce((acc, cat) => ({ ...acc, [cat.id]: 0 }), {}),
   );
@@ -37,6 +37,7 @@ export const RateUsTab = ({ id, name, email }) => {
       userId: id,
       userName: name,
       userEmail: email,
+      userProfileImg: profileImg, // i want profile image of user
       overallExperience: ratings.overall,
       uiUxDesign: ratings.design,
       applicationSpeed: ratings.speed,
@@ -49,7 +50,7 @@ export const RateUsTab = ({ id, name, email }) => {
       message: feedback,
     };
     // console.log(payload);
-    
+
     try {
       setIsSubmitting(true);
       const response = await api.post("/rate-us", payload);
@@ -121,11 +122,10 @@ export const RateUsTab = ({ id, name, email }) => {
                       key={star}
                       type="button"
                       onClick={() => handleRatingChange(category.id, star)}
-                      className={`p-1 transition-all hover:scale-110 cursor-pointer ${
-                        ratings[category.id] >= star
+                      className={`p-1 transition-all hover:scale-110 cursor-pointer ${ratings[category.id] >= star
                           ? "text-yellow-400 scale-110"
                           : "text-slate-200 hover:text-slate-300"
-                      }`}
+                        }`}
                     >
                       <Star
                         size={22}

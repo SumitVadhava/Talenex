@@ -724,7 +724,7 @@ const ProfilePage = () => {
           />
         );
       case "rate-us":
-        return <RateUsTab key="rate-us" id={user.id} name={user.name} email={user.handle} />;
+        return <RateUsTab key="rate-us" id={user.id} name={user.name} email={user.handle} profileImg={user.avatarUrl} />;
       case "settings":
         return (
           <SettingsTab
