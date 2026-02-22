@@ -751,6 +751,8 @@ import {
   Filter,
   X,
   Heart,
+  UserMinus,
+  UserX,
 } from "lucide-react";
 import {
   Select,
@@ -950,7 +952,7 @@ const Homepage = () => {
   const { getToken, isLoaded, isSignedIn } = useAuth();
   // const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
-  const { authVersion } = useContext(UserContext);
+  const { authVersion, loading: isAuthLoading } = useContext(UserContext);
   const { client } = useTalenexChat();
 
   const tokenSentRef = useRef(false);
@@ -1360,7 +1362,7 @@ const Homepage = () => {
             </div>
 
             {/* Results Grid */}
-            {((authVersion === 0 || isLoading || isPresenceLoading || isFavoritesLoading)) ? (
+            {(!isLoaded || isAuthLoading || authVersion === 0 || isLoading || isPresenceLoading || isFavoritesLoading) ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-pulse">
                 {Array.from({ length: 6 }).map((_, index) => (
                   <SkeletonCard key={index} />
@@ -1390,7 +1392,7 @@ const Homepage = () => {
                 </p>
                 <Button
                   variant="outline"
-                  className="mt-8 border-slate-200 hover:bg-slate-50 cursor-pointer" 
+                  className="mt-8 border-slate-200 hover:bg-slate-50 cursor-pointer"
                   onClick={() => setShowFavoritesOnly(false)}
                 >
                   Explore All
@@ -1401,10 +1403,11 @@ const Homepage = () => {
                 <div className="bg-slate-100 p-4 rounded-full mb-4">
                   <Search className="w-8 h-8 text-slate-400" />
                 </div>
-                <h3 className="text-lg font-medium text-slate-900">
-                  No skills found
+                <h3 className="flex items-center gap-3 text-lg font-medium text-slate-900">
+                  No skilled users found
+                  <UserX className="w-6 h-6 text-slate-400" />
                 </h3>
-                <p className="text-slate-500 max-w-xs mx-auto mt-2">
+                <p className="text-slate-500 max-w-xs mx-auto mt-4">
                   Try adjusting your filters or search for something else.
                 </p>
                 <Button
