@@ -25,6 +25,7 @@ import ContactPage from "./pages/ContactPage";
 import FAQPage from "./pages/FAQPage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
+import AIMatchPage from "./pages/AIMatchPage";
 import ScrollToTop from "./components/ScrollToTop";
 import ChatsPage from "./pages/ChatsPage";
 
@@ -49,6 +50,7 @@ function App() {
     "/faq",
     "/terms",
     "/privacy",
+    "/ai-match",
     "/messages"
   ];
 
@@ -199,6 +201,11 @@ function App() {
         <Route
           path="/privacy"
           element={<PrivacyPage />}
+        />
+
+        <Route
+          path="/ai-match"
+          element={<AIMatchPage />}
         />
 
         <Route
