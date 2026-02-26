@@ -27,6 +27,7 @@ import TermsPage from "./pages/TermsPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import ScrollToTop from "./components/ScrollToTop";
 import ChatsPage from "./pages/ChatsPage";
+import PaymentPage from "./pages/PaymentPage";
 
 function App() {
   const location = useLocation();
@@ -49,6 +50,7 @@ function App() {
     "/faq",
     "/terms",
     "/privacy",
+    "/payment",
     "/messages"
   ];
 
@@ -206,6 +208,15 @@ function App() {
           element={
             <ProtectedRoute requireOnboarding={true}>
               <VideoCall setHideNavbar={setHideNavbar} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/payment"
+          element={
+            <ProtectedRoute requireOnboarding={true}>
+              <PaymentPage />
             </ProtectedRoute>
           }
         />

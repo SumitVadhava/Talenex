@@ -3,9 +3,12 @@ import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, Zap, Crown } from 'lucide-react';
+import PayButton from './PayButton';
+import { useNavigate } from 'react-router-dom';
 
 export default function PricingSection() {
   const [currency, setCurrency] = useState('USD');
+  const navigate = useNavigate();
 
   const plans = [
     {
@@ -119,6 +122,7 @@ export default function PricingSection() {
 
               <CardFooter>
                 <Button
+                  onClick={() => window.open(`/payment?plan=${plan.badge.toLowerCase()}`, "_blank")}
                   className={`w-full ${plan.highlighted ? 'bg-white text-black hover:bg-gray-100 cursor-pointer' : 'bg-black text-white hover:bg-gray-800 cursor-pointer'}`}
                 >
                   Get started →

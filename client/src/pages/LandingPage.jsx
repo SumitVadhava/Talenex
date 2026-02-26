@@ -19,9 +19,12 @@ const LandingPage = ({ heroRef, featureRef, workflowRef, testimonialsRef }) => {
   useEffect(() => {
     if (!isLoaded) return;
 
-    if (isSignedIn)
+    // Only redirect to /home if signed in AND we are on the landing page specifically
+    // AND there's no stored redirect intent in the location state
+    if (isSignedIn && location.pathname === "/" && !location.state?.from) {
       navigate('/home');
-  }, [isLoaded, isSignedIn, navigate]);
+    }
+  }, [isLoaded, isSignedIn, navigate, location.pathname, location.state]);
 
   // Handle scrolling to section when navigating from another page
   useEffect(() => {

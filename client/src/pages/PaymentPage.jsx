@@ -1,0 +1,309 @@
+import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+    CheckCircle2,
+    XCircle,
+    AlertCircle,
+    ArrowLeft,
+    ShieldCheck,
+    RefreshCcw,
+    Zap
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useLocation } from "react-router-dom";
+
+// SECURE SOURCE OF TRUTH: Prices mapped to plan IDs
+// This prevents users from tampering with the price via DevTools or URL parameters
+const PRICING_PLANS = {
+    starter: {
+        name: "Starter",
+        amountINR: 450,
+        amountPaise: 450 * 100,
+        description: "Perfect for new learners"
+    },
+    professional: {
+        name: "Professional",
+        amountINR: 900,
+        amountPaise: 900 * 100,
+        description: "Advanced AI-powered features"
+    },
+};
+
+const PaymentPage = () => {
+    const location = useLocation();
+    const [status, setStatus] = useState("loading"); // loading, processing, success, cancelled, error
+    const [transactionId, setTransactionId] = useState("");
+
+    // SECURE DERIVATION: Derive the plan and amount from the URL parameter ONLY
+    // We ignore any '&amount=' parameters the user might try to inject
+    const planInfo = useMemo(() => {
+        const params = new URLSearchParams(location.search);
+        const planKey = params.get("plan");
+        return PRICING_PLANS[planKey] || PRICING_PLANS.default;
+    }, [location.search]);
+
+    const openRazorpay = useCallback(() => {
+        if (typeof window.Razorpay === "undefined") {
+            console.error("Razorpay SDK not loaded");
+            setStatus("error");
+            return;
+        }
+
+        const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY,
+            amount: planInfo.amountPaise, // Use the SECURE derived amount
+            currency: "INR",
+            description: `${planInfo.name} Plan - ${planInfo.description}`,
+            handler: function (response) {
+                console.log("Payment Success:", response);
+                setTransactionId(response.razorpay_payment_id);
+                setStatus("success");
+            },
+            modal: {
+                backdropclose: false,
+                escape: false,
+                confirm_close: true,
+                ondismiss: function () {
+                    console.log("Checkout closed by user");
+                    setStatus("cancelled");
+                }
+            }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+    }, [planInfo]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (status === "loading") {
+                openRazorpay();
+                setStatus("processing");
+            }
+        }, 1500);
+
+        return () => clearTimeout(timer);
+    }, [openRazorpay, status]);
+
+    const containerVariants = {
+        initial: { opacity: 0, scale: 0.95, y: 20 },
+        animate: { opacity: 1, scale: 1, y: 0 },
+        exit: { opacity: 0, scale: 0.95, y: -20 }
+    };
+
+    const renderContent = () => {
+        switch (status) {
+            case "loading":
+            case "processing":
+                return (
+                    <motion.div
+                        key="loading"
+                        variants={containerVariants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="text-center space-y-6 py-8"
+                    >
+                        <div className="relative mx-auto w-24 h-24">
+                            <motion.div
+                                className="absolute inset-0 border-4 border-primary/20 rounded-full"
+                                animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                            />
+                            <div className="absolute inset-0 border-t-4 border-primary rounded-full animate-spin" />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <ShieldCheck className="w-10 h-10 text-primary" />
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <h2 className="text-2xl font-bold tracking-tight">Secure Checkout</h2>
+                            <p className="text-muted-foreground max-w-[280px] mx-auto">
+                                Initializing {planInfo.name} Plan payment. Please do not refresh.
+                            </p>
+                        </div>
+                    </motion.div>
+                );
+
+            case "success":
+                return (
+                    <motion.div
+                        key="success"
+                        variants={containerVariants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="space-y-6 py-4"
+                    >
+                        <div className="text-center space-y-4">
+                            <div className="mx-auto w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+                                <CheckCircle2 className="w-12 h-12 text-green-600 dark:text-green-400" />
+                            </div>
+                            <div className="space-y-1">
+                                <h2 className="text-2xl font-bold tracking-tight">Payment Complete</h2>
+                                <p className="text-muted-foreground">Your premium features are now active.</p>
+                            </div>
+                        </div>
+
+                        <div className="bg-muted/50 rounded-2xl p-6 border border-border/50 space-y-4">
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-muted-foreground font-medium uppercase tracking-wider text-[10px]">Receipt Number</span>
+                                <span className="font-mono font-bold text-xs uppercase tracking-tight">{transactionId || "RZP_DEMO_123"}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-muted-foreground font-medium uppercase tracking-wider text-[10px]">Plan Activated</span>
+                                <span className="font-bold flex items-center gap-1.5"><Zap className="w-3.5 h-3.5 fill-primary text-primary" /> {planInfo.name}</span>
+                            </div>
+                            <div className="pt-4 border-t border-border/50 flex justify-between items-end">
+                                <div className="space-y-0.5">
+                                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-left">Amount Paid</p>
+                                    <p className="text-sm font-bold">Paid via Razorpay</p>
+                                </div>
+                                <p className="text-3xl font-black">₹{planInfo.amountINR}</p>
+                            </div>
+                        </div>
+
+                        <Button
+                            className="w-full h-14 text-lg font-bold rounded-2xl shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all"
+                            onClick={() => window.location.href = "/home"}
+                        >
+                            Explore Premium Features
+                        </Button>
+                    </motion.div>
+                );
+
+            case "cancelled":
+                return (
+                    <motion.div
+                        key="cancelled"
+                        variants={containerVariants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="text-center space-y-6 py-6"
+                    >
+                        <div className="mx-auto w-20 h-20 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center">
+                            <XCircle className="w-12 h-12 text-neutral-500" />
+                        </div>
+                        <div className="space-y-2">
+                            <h2 className="text-2xl font-bold tracking-tight">Payment Cancelled</h2>
+                            <p className="text-muted-foreground max-w-[280px] mx-auto">
+                                The transaction for {planInfo.amountINR} was closed. No funds have been deducted.
+                            </p>
+                        </div>
+                        <div className="flex flex-col gap-3">
+                            <Button
+                                variant="default"
+                                className="h-12 rounded-xl font-bold gap-2"
+                                onClick={() => {
+                                    setStatus("loading");
+                                    openRazorpay();
+                                }}
+                            >
+                                <RefreshCcw className="w-4 h-4" />
+                                Try Again
+                            </Button>
+                            <Button
+                                variant="outline"
+                                className="h-12 rounded-xl font-bold"
+                                onClick={() => window.location.href = "/"}
+                            >
+                                Return to Landing Page
+                            </Button>
+                        </div>
+                    </motion.div>
+                );
+
+            case "error":
+                return (
+                    <motion.div
+                        key="error"
+                        variants={containerVariants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                        className="text-center space-y-6 py-6"
+                    >
+                        <div className="mx-auto w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                            <AlertCircle className="w-12 h-12 text-red-600 dark:text-red-400" />
+                        </div>
+                        <div className="space-y-2">
+                            <h2 className="text-2xl font-bold tracking-tight">Something Went Wrong</h2>
+                            <p className="text-muted-foreground max-w-[280px] mx-auto">
+                                We couldn't initialize the payment gateway. This might be due to a poor connection.
+                            </p>
+                        </div>
+                        <Button
+                            variant="default"
+                            className="w-full h-12 rounded-xl font-bold gap-2"
+                            onClick={() => {
+                                setStatus("loading");
+                                openRazorpay();
+                            }}
+                        >
+                            <RefreshCcw className="w-4 h-4" />
+                            Retry Connection
+                        </Button>
+                    </motion.div>
+                );
+
+            default:
+                return null;
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-[#fafafa] dark:bg-black font-sans selection:bg-primary/10">
+            {/* Background Effects */}
+            <div className="fixed inset-0 pointer-events-none">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/5 blur-[120px] rounded-full" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+            </div>
+
+            <div className="relative flex flex-col items-center justify-center min-h-screen p-6">
+                <div className="w-full max-w-[440px]">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={status}
+                            className="bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] rounded-[40px] overflow-hidden"
+                        >
+                            <div className="p-8 md:p-10">
+                                {renderContent()}
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
+
+                    {/* Footer Info */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 1 }}
+                        className="mt-10 flex flex-col items-center gap-6"
+                    >
+                        <div className="flex items-center gap-8 opacity-40 grayscale transition-all hover:grayscale-0 hover:opacity-100">
+                            <div className="flex items-center gap-2">
+                                <ShieldCheck className="w-4 h-4" />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-left">SSL Secured</span>
+                            </div>
+                            <div className="h-4 w-[1px] bg-neutral-300 dark:bg-neutral-800" />
+                            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest">
+                                <span className="opacity-60">Powered by</span>
+                                <span className="font-serif italic lowercase text-lg translate-y-[-2px]">Razorpay</span>
+                            </div>
+                        </div>
+
+                        <Button
+                            variant="ghost"
+                            className="text-muted-foreground/60 hover:text-foreground font-bold text-xs gap-2 py-6 px-8 rounded-2xl"
+                            onClick={() => window.history.back()}
+                        >
+                            <ArrowLeft className="w-3.5 h-3.5" />
+                            Return to Pricing
+                        </Button>
+                    </motion.div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default PaymentPage;

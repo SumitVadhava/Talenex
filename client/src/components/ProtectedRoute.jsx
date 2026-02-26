@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 /**
  * ProtectedRoute component that ensures only authenticated users can access certain routes
@@ -7,12 +7,13 @@ import { Navigate } from "react-router-dom";
  * @param {boolean} requireOnboarding - If true, also checks if onboarding is completed (default: false)
  * @param {string} redirectTo - Custom redirect path when not authenticated (default: "/sign-in")
  */
-export default function ProtectedRoute({ 
-  children, 
+export default function ProtectedRoute({
+  children,
   requireOnboarding = false,
-  redirectTo = "/sign-in" 
+  redirectTo = "/sign-in"
 }) {
   const { user, isLoaded, isSignedIn } = useUser();
+  const location = useLocation();
 
   // Show nothing while loading
   if (!isLoaded) {
@@ -25,13 +26,13 @@ export default function ProtectedRoute({
 
   // Redirect to sign-in if not authenticated
   if (!isSignedIn) {
-    return <Navigate to={redirectTo} replace />;
+    return <Navigate to={redirectTo} state={{ from: location.pathname + location.search }} replace />;
   }
 
   // If onboarding is required, check if it's completed
   if (requireOnboarding) {
     const onboardingCompleted = user?.unsafeMetadata?.onboardingCompleted;
-    
+
     if (!onboardingCompleted) {
       return <Navigate to="/onboarding" replace />;
     }

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Settings, LogOut, ChevronDown } from 'lucide-react';
+import { Settings, LogOut, ChevronDown, CreditCard, Crown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useUser, SignOutButton, useClerk } from "@clerk/clerk-react";
 import axios from 'axios';
@@ -84,6 +84,19 @@ export default function UserDropdown() {
                                 <Settings className="w-5 h-5 text-slate-600" />
                             </div>
                             <span className="font-medium">Manage account</span>
+                        </button>
+
+                        <button
+                            onClick={() => {
+                                navigate("/payment")
+                                setIsOpen(false);
+                            }}
+                            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+                        >
+                            <div className="w-9 h-9 rounded-md bg-slate-100 flex items-center justify-center">
+                                <Crown className="w-5 h-5 text-slate-600" />
+                            </div>
+                            <span className="font-medium">Explore Premium</span>
                         </button>
 
                         <button
