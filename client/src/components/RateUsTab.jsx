@@ -51,7 +51,7 @@ export const RateUsTab = ({ id, name, email, profileImg }) => {
     };
     // console.log(payload);
 
-    try {
+    try { 
       setIsSubmitting(true);
       const response = await api.post("/rate-us", payload);
 
