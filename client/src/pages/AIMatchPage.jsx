@@ -19,7 +19,7 @@ import {
     ArrowRight,
 } from 'lucide-react';
 import { GridPattern } from '@/components/ui/grid-pattern';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import searchIcon from '@/assets/search.png';
 
 /* ------------------------------------------------------------------ */
@@ -235,6 +235,7 @@ function DemoPopup({ onClose }) {
 /* ------------------------------------------------------------------ */
 export default function AIMatchPage() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [showPopup, setShowPopup] = useState(false);
 
     return (
@@ -277,8 +278,8 @@ export default function AIMatchPage() {
                         most compatible skill-swap partners — ranked just for you.
                     </p>
 
-                
-                    
+
+
                 </div>
 
                 {/* Highlight Cards */}
@@ -491,7 +492,7 @@ export default function AIMatchPage() {
                                 It has two input areas:
                             </p> */}
 
-                            {/* <div className="space-y-4 mb-6">
+                        {/* <div className="space-y-4 mb-6">
                                 <div className="bg-slate-50 p-5 rounded-xl border border-slate-200">
                                     <h3 className="font-semibold text-slate-900 mb-2 flex items-center gap-2">
                                         <Plus className="w-4 h-4 text-slate-600" />
@@ -507,7 +508,7 @@ export default function AIMatchPage() {
                                         before submitting.
                                     </p>
                                 </div> */}
-{/* 
+                        {/* 
                                 <div className="bg-slate-50 p-5 rounded-xl border border-slate-200">
                                     <h3 className="font-semibold text-slate-900 mb-2 flex items-center gap-2">
                                         <Users className="w-4 h-4 text-slate-600" />
@@ -522,10 +523,10 @@ export default function AIMatchPage() {
                                         Top 10 provides a broader set of candidates to choose from.
                                     </p>
                                 </div> */}
-                            {/* </div> */}
+                        {/* </div> */}
 
-                            {/* Try the Popup CTA */}
-                            {/* <div className="bg-slate-900 rounded-xl p-8 text-center relative overflow-hidden">
+                        {/* Try the Popup CTA */}
+                        {/* <div className="bg-slate-900 rounded-xl p-8 text-center relative overflow-hidden">
                                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#4285f4] via-[#ea4335] via-[#fac014] to-[#34a853] opacity-60"></div>
                                 <img src={searchIcon} className="w-12 h-12 mx-auto mb-4 brightness-0 invert opacity-90" alt="" />
                                 <h3 className="font-bold text-white text-xl mb-3">
@@ -610,7 +611,14 @@ export default function AIMatchPage() {
                                         Join over 50+ professionals using AI to find their perfect skill-swap partners instantly.
                                     </p>
 
-                                    <button className="ai-rainbow-btn w-full max-w-sm group">
+                                    <button
+                                        onClick={() => {
+                                            const params = new URLSearchParams(location.search);
+                                            const plan = params.get("plan") || "professional";
+                                            window.open(`/payment?plan=${plan}`, "_blank");
+                                        }}
+                                        className="ai-rainbow-btn w-full max-w-sm group"
+                                    >
                                         <div className="ai-rainbow-btn-inner w-full py-4 text-lg">
                                             Upgrade to Premium
                                             <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />

@@ -29,6 +29,7 @@ import AIMatchPage from "./pages/AIMatchPage";
 import ScrollToTop from "./components/ScrollToTop";
 import ChatsPage from "./pages/ChatsPage";
 import PaymentPage from "./pages/PaymentPage";
+import PricingPage from "./pages/PricingPage";
 
 function App() {
   const location = useLocation();
@@ -207,7 +208,11 @@ function App() {
 
         <Route
           path="/ai-match"
-          element={<AIMatchPage />}
+          element={
+            <ProtectedRoute requireOnboarding={true}>
+              <AIMatchPage />
+            </ProtectedRoute>
+          }
         />
 
         <Route
@@ -215,6 +220,15 @@ function App() {
           element={
             <ProtectedRoute requireOnboarding={true}>
               <VideoCall setHideNavbar={setHideNavbar} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/pricing"
+          element={
+            <ProtectedRoute requireOnboarding={true}>
+              <PricingPage />
             </ProtectedRoute>
           }
         />

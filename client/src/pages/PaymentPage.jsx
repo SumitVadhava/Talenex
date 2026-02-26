@@ -10,7 +10,7 @@ import {
     Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // SECURE SOURCE OF TRUTH: Prices mapped to plan IDs
 // This prevents users from tampering with the price via DevTools or URL parameters
@@ -33,6 +33,7 @@ const PaymentPage = () => {
     const location = useLocation();
     const [status, setStatus] = useState("loading"); // loading, processing, success, cancelled, error
     const [transactionId, setTransactionId] = useState("");
+    const navigate = useNavigate();
 
     // SECURE DERIVATION: Derive the plan and amount from the URL parameter ONLY
     // We ignore any '&amount=' parameters the user might try to inject
@@ -205,9 +206,9 @@ const PaymentPage = () => {
                             <Button
                                 variant="outline"
                                 className="h-12 rounded-xl font-bold"
-                                onClick={() => window.location.href = "/"}
+                                onClick={() => navigate("/home")}
                             >
-                                Return to Landing Page
+                                Return to Home
                             </Button>
                         </div>
                     </motion.div>
@@ -293,8 +294,8 @@ const PaymentPage = () => {
 
                         <Button
                             variant="ghost"
-                            className="text-muted-foreground/60 hover:text-foreground font-bold text-xs gap-2 py-6 px-8 rounded-2xl"
-                            onClick={() => window.history.back()}
+                            className="text-muted-foreground/60 hover:text-foreground font-bold text-xs gap-2 py-6 px-8 rounded-2xl cursor-pointer"
+                            onClick={() => navigate("/pricing")}
                         >
                             <ArrowLeft className="w-3.5 h-3.5" />
                             Return to Pricing

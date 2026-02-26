@@ -120,12 +120,13 @@ export default function PricingSection() {
                 ))}
               </CardContent>
 
-              <CardFooter>
+              <CardFooter >
                 <Button
-                  onClick={() => window.open(`/payment?plan=${plan.badge.toLowerCase()}`, "_blank")}
-                  className={`w-full ${plan.highlighted ? 'bg-white text-black hover:bg-gray-100 cursor-pointer' : 'bg-black text-white hover:bg-gray-800 cursor-pointer'}`}
+                  onClick={() => navigate(`/ai-match?plan=${plan.badge.toLowerCase()}`)}
+                  className={`w-full hover:-translate-y-1 transition-all duration-300 group ${plan.highlighted ? 'bg-white text-black hover:bg-gray-100 cursor-pointer ' : 'bg-black text-white  cursor-pointer hover:-translate-y-1 transition-all duration-300'}`}
                 >
-                  Get started →
+                  <span className='text-md'>Get started</span>
+                  <span className="ml-1 -mt-1 group-hover:translate-x-1 transition-all duration-300 text-lg">→</span>
                 </Button>
               </CardFooter>
             </Card>
