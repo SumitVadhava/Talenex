@@ -53,7 +53,6 @@ function App() {
     "/terms",
     "/privacy",
     "/payment",
-    "/ai-match",
     "/messages"
   ];
 
@@ -73,7 +72,6 @@ function App() {
           workflowRef={workflowRef}
           testimonialsRef={testimonialsRef}
           heroRef={heroRef}
-
         />
       )}
 
