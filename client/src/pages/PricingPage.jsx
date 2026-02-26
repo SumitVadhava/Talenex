@@ -6,6 +6,7 @@ import { Check, Zap, Crown, ArrowRight, CreditCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import creditCardImage from "./../assets/credit-card.png";
 import creditCardImage2 from "./../assets/credit-card-2.png";
+import { GridPattern } from '@/components/ui/grid-pattern';
 
 export default function PricingPage() {
     const [currency, setCurrency] = useState('USD');
@@ -51,7 +52,10 @@ export default function PricingPage() {
 
     return (
         <div id="pricing" className="min-h-screen py-16 px-4 scroll-mt-28">
-            <div className="max-w-6xl mx-auto">
+            <div className="fixed inset-0 z-0 w-full h-full overflow-hidden pointer-events-none">
+                <GridPattern strokeDasharray={"4 5"} width={50} height={50} className="stroke-zinc-500 opacity-30" /> {/* Background Grid color : stroke-zinc-500 opacity-20*/}
+            </div>  
+            <div className="relative z-20">
                 <div className="text-center mb-12">
                     <p className="text-sm font-semibold text-gray-500 tracking-wider mb-2">PRICING</p>
                     <h1 className="text-4xl font-bold text-gray-900 mb-3">Upgrade Your Learning</h1>

@@ -19,16 +19,14 @@ const LandingPage = ({ heroRef, featureRef, workflowRef, testimonialsRef }) => {
   useEffect(() => {
     if (!isLoaded) return;
 
-    
     if (isSignedIn && location.pathname === "/" && !location.state?.from) {
       navigate('/home');
     }
   }, [isLoaded, isSignedIn, navigate, location.pathname, location.state]);
 
-  // Handle scrolling to section when navigating from another page
   useEffect(() => {
     if (location.state?.scrollTo) {
-      // Small delay to ensure the page has rendered
+
       setTimeout(() => {
         const element = document.getElementById(location.state.scrollTo);
         if (element) {
@@ -36,7 +34,6 @@ const LandingPage = ({ heroRef, featureRef, workflowRef, testimonialsRef }) => {
         }
       }, 100);
 
-      // Clear the state to prevent scrolling on subsequent renders
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [location.state, navigate, location.pathname]);
