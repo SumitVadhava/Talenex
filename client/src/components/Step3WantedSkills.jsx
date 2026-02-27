@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BookOpen, Info, Pencil, Trash2 } from "lucide-react";
+import { notification } from "antd";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -20,6 +21,11 @@ export default function Step3WantedSkills({
 
   const handleAddSkill = () => {
     if (!skillName.trim()) return;
+
+    if (skillName.includes(",") || skillName.includes(" ")) {
+      notification.error({ message: "Please add skills one by one" });
+      return;
+    }
 
     if (isEditing) {
       // Update existing skill
@@ -102,14 +108,14 @@ export default function Step3WantedSkills({
             onChange={(e) => setSkillName(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleAddSkill()}
           />
-          <Button onClick={handleAddSkill} className="shrink-0 px-6">
+          <Button onClick={handleAddSkill} className="shrink-0 px-6 cursor-pointer">
             {isEditing ? "Update Skill" : "Add Skill"}
           </Button>
           {isEditing && (
             <Button
               variant="outline"
               onClick={handleCancelEdit}
-              className="shrink-0"
+              className="shrink-0 cursor-pointer"
             >
               Cancel
             </Button>
@@ -125,16 +131,14 @@ export default function Step3WantedSkills({
                 key={level}
                 type="button"
                 onClick={() => setSkillLevel(level)}
-                className={`px-3 py-2 flex justify-center items-center rounded-lg text-sm font-medium border transition-all ${
-                  skillLevel === level
-                    ? "border-gray-500 bg-gray-100 text-gray-700 ring-1 ring-gray-500"
-                    : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
-                }`}
+                className={`px-3 py-2 flex justify-center items-center rounded-lg text-sm font-medium border transition-all cursor-pointer ${skillLevel === level
+                  ? "border-gray-500 bg-gray-100 text-gray-700 ring-1 ring-gray-500"
+                  : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
+                  }`}
               >
                 <div
-                  className={`w-2 h-2 rounded-full mr-2 ${
-                    skillLevel === level ? "bg-gray-600" : "bg-zinc-300"
-                  }`}
+                  className={`w-2 h-2 rounded-full mr-2 ${skillLevel === level ? "bg-gray-600" : "bg-zinc-300"
+                    }`}
                 />
                 {level}
               </button>
@@ -188,16 +192,16 @@ export default function Step3WantedSkills({
 
       {/* Footer */}
       <div className="flex justify-between items-center pt-6 border-t border-zinc-100">
-        <Button variant="secondary" onClick={onBack}>
+        <Button variant="secondary" onClick={onBack} className="cursor-pointer">
           Back
         </Button>
         <div className="flex items-center gap-4">
-          <button className="text-sm font-medium text-zinc-500 hover:text-zinc-800 transition-colors">
+          <button className="text-sm font-medium text-zinc-500 hover:text-zinc-800 transition-colors cursor-pointer">
             Skip for now
           </button>
           <Button
             onClick={onFinish}
-            className="bg-indigo-600 hover:bg-indigo-700 px-8"
+            className="bg-indigo-600 hover:bg-indigo-700 px-8 cursor-pointer"
           >
             Next
           </Button>

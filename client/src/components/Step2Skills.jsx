@@ -21,6 +21,7 @@ import {
   Info,
 } from "lucide-react";
 // import { Input, Label, Select, Textarea, Button } from './ui';
+import { notification } from "antd";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -78,6 +79,11 @@ export default function Step2Skills({
 
   const handleAddSkill = () => {
     if (!validate()) return;
+
+    if (newSkill.title.includes(",") || newSkill.title.includes(" ")) {
+      notification.error({ message: "Add the skill one by one" });
+      return;
+    }
 
     if (isEditing) {
       // Update existing skill
@@ -295,20 +301,20 @@ export default function Step2Skills({
               }}
             >
               <SelectTrigger
-                className={`w-full ${errors.category ? "border-red-500" : ""}`}
+                className={`w-full cursor-pointer ${errors.category ? "border-red-500" : ""}`}
               >
                 <SelectValue placeholder="Select skill category" />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
-                  <SelectItem key={cat.value} value={cat.value}>
+                  <SelectItem key={cat.value} value={cat.value} className="cursor-pointer">
                     {cat.label}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             {errors.category && (
-              <p className="text-xs text-red-500 mt-1">{errors.category}</p>
+              <p className="text-xs text-red-500 mt-1 ">{errors.category}</p>
             )}
           </div>
         </div>
@@ -322,17 +328,15 @@ export default function Step2Skills({
                 key={level}
                 type="button"
                 onClick={() => setNewSkill({ ...newSkill, level })}
-                className={`flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium border transition-all
-                  ${
-                    newSkill.level === level
-                      ? "border-gray-500 bg-gray-100 text-gray-700 ring-1 ring-gray-500"
-                      : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
+                className={`flex items-center justify-center px-3 py-2 cursor-pointer rounded-lg text-sm font-medium border transition-all
+                  ${newSkill.level === level
+                    ? "border-gray-500 bg-gray-100 text-gray-700 ring-1 ring-gray-500"
+                    : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
                   }`}
               >
                 <div
-                  className={`w-2 h-2 rounded-full mr-2 ${
-                    newSkill.level === level ? "bg-gray-600" : "bg-zinc-300"
-                  }`}
+                  className={`w-2 h-2 rounded-full mr-2 ${newSkill.level === level ? "bg-gray-600" : "bg-zinc-300"
+                    }`}
                 />
                 {level}
               </button>
@@ -394,16 +398,14 @@ export default function Step2Skills({
               onDragOver={handleDrag}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all ${
-                dragActive
-                  ? "border-indigo-500 bg-indigo-50"
-                  : "border-zinc-200 hover:bg-zinc-50"
-              }`}
+              className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all ${dragActive
+                ? "border-indigo-500 bg-indigo-50"
+                : "border-zinc-200 hover:bg-zinc-50"
+                }`}
             >
               <UploadCloud
-                className={`w-8 h-8 mb-2 ${
-                  dragActive ? "text-indigo-500" : "text-zinc-400"
-                }`}
+                className={`w-8 h-8 mb-2 ${dragActive ? "text-indigo-500" : "text-zinc-400"
+                  }`}
               />
               <p className="text-sm font-medium text-zinc-600">
                 Click to upload{" "}
