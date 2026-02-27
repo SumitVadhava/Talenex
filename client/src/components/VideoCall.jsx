@@ -159,8 +159,8 @@ export default function VideoCall({ setHideNavbar }) {
   useEffect(() => {
     if (!roomId) return;
 
-    const appID = 169896951;
-    const serverSecret = "1003a466744c70ebde697eefceaea4cc";
+    const appID = Number(import.meta.env.VITE_ZEGO_APP_ID);
+    const serverSecret = import.meta.env.VITE_ZEGO_SERVER_SECRET;
     const userId = "user_" + Math.floor(Math.random() * 10000);
 
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
