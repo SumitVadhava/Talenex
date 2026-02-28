@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { MapPin, Share2, Check, X, Loader2, Camera, Pencil, PencilIcon, PencilOffIcon } from "lucide-react";
+import { MapPin, Share2, Check, X, Loader2, Camera, Pencil, PencilIcon, PencilOffIcon, Crown } from "lucide-react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { Input } from "./ui/Primitives";
@@ -183,8 +183,9 @@ export const Header = ({
             </div>
           ) : (
             <>
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight flex items-center gap-2">
                 {user.name}
+                {user.isPremium && <Crown className="w-6 h-6 text-amber-500 fill-amber-500" />}
               </h2>
               <p className="text-muted-foreground font-medium">{user.handle}</p>
             </>
@@ -233,7 +234,7 @@ export const Header = ({
               onClick={onEditToggle}
               className="flex-1 md:flex-none inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-input bg-background hover:bg-accent h-10 px-4 py-2 cursor-pointer"
             >
-              <PencilIcon size={16} className="mr-2"/>
+              <PencilIcon size={16} className="mr-2" />
               Edit Profile
             </button>
           )

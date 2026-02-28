@@ -753,7 +753,10 @@ import {
   Heart,
   UserMinus,
   UserX,
+  Crown,
 } from "lucide-react";
+import searchIcon from '@/assets/search.png';
+import AIDemoPopup, { RAINBOW_STYLE } from "@/components/AIDemoPopup";
 import {
   Select,
   SelectContent,
@@ -952,7 +955,7 @@ const Homepage = () => {
   const { getToken, isLoaded, isSignedIn } = useAuth();
   // const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
-  const { authVersion, loading: isAuthLoading } = useContext(UserContext);
+  const { authVersion, loading: isAuthLoading, userData } = useContext(UserContext);
   const { client } = useTalenexChat();
 
   const tokenSentRef = useRef(false);
@@ -970,7 +973,7 @@ const Homepage = () => {
   const [sortBy, setSortBy] = useState("oldest");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-  // const [skills, setSkills] = useState([]);
+  const [showAIMatchPopup, setShowAIMatchPopup] = useState(false);
   const {
     data: skills = [],
     isLoading,
@@ -1320,45 +1323,66 @@ const Homepage = () => {
           <div className="flex-1">
             {/* Toolbar (Search + Sort + Mobile Filter Trigger) */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-              <div className="flex items-center gap-2 w-full sm:w-auto">
-                <Button
-                  variant="outline"
-                  className="lg:hidden"
-                  onClick={() => setMobileFilterOpen(true)}
-                >
-                  <Filter className="w-4 h-4 mr-2" /> Filters
-                </Button>
-                <div className="relative w-full sm:w-80 md:w-96 lg:w-[450px]">
-                  <Input
-                    placeholder="Search python, design..."
-                    icon={<Search className="w-4 h-4" />}
-                    value={filters.search}
-                    onChange={(e) =>
-                      setFilters({ ...filters, search: e.target.value })
-                    }
-                    className="bg-slate-50 border-transparent focus:bg-white w-full"
-                  />
-                </div>
-              </div>
+              {isAuthLoading && isSignedIn ? (
+                <div className="w-full h-10 bg-slate-50 animate-pulse rounded-lg" />
+              ) : (
+                <>
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <Button
+                      variant="outline"
+                      className="lg:hidden"
+                      onClick={() => setMobileFilterOpen(true)}
+                    >
+                      <Filter className="w-4 h-4 mr-2" /> Filters
+                    </Button>
+                    <div className="relative w-full sm:w-80 md:w-96 lg:w-[450px]">
+                      <Input
+                        placeholder="Search python, design..."
+                        icon={<Search className="w-4 h-4" />}
+                        value={filters.search}
+                        onChange={(e) =>
+                          setFilters({ ...filters, search: e.target.value })
+                        }
+                        className="bg-slate-50 border-transparent focus:bg-white w-full"
+                      />
+                    </div>
 
-              <div className="flex items-center gap-2 self-end sm:self-auto">
-                <span className="text-sm text-slate-500 hidden sm:inline">
-                  Sort by:
-                </span>
-                <div className="relative group min-w-[175px]">
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full bg-transparent pl-3 pr-8 py-2 text-sm font-medium text-slate-900 border-none shadow-none focus:ring-0">
-                      <SelectValue placeholder="Sort by..." />
-                    </SelectTrigger>
-                    <SelectContent className="z-50">
-                      <SelectItem value="oldest">Oldest First</SelectItem>
-                      <SelectItem value="newest">Newest First</SelectItem>
-                      <SelectItem value="rating">Highest Rated</SelectItem>
-                      {/*<SelectItem value="popular">Most Popular</SelectItem>*/}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+                    <style>{RAINBOW_STYLE}</style>
+                    {userData?.isPremium && (
+                      <div
+                        className="ml-2 sm:ml-10 ai-mock-btn"
+                        onClick={() => setShowAIMatchPopup(true)}
+                      >
+                        <div className="ai-mock-btn-inner">
+                          <img src={searchIcon} className="w-4 h-4 object-contain" alt="" />
+                          <span>AI Match</span>
+                          <Crown className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+
+                  <div className="flex items-center gap-2 self-end sm:self-auto">
+                    <span className="text-sm text-slate-500 hidden sm:inline">
+                      Sort by:
+                    </span>
+                    <div className="relative group min-w-[175px]">
+                      <Select value={sortBy} onValueChange={setSortBy}>
+                        <SelectTrigger className="w-full bg-transparent pl-3 pr-8 py-2 text-sm font-medium text-slate-900 border-none shadow-none focus:ring-0">
+                          <SelectValue placeholder="Sort by..." />
+                        </SelectTrigger>
+                        <SelectContent className="z-50">
+                          <SelectItem value="oldest">Oldest First</SelectItem>
+                          <SelectItem value="newest">Newest First</SelectItem>
+                          <SelectItem value="rating">Highest Rated</SelectItem>
+                          {/*<SelectItem value="popular">Most Popular</SelectItem>*/}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Results Grid */}
@@ -1481,6 +1505,7 @@ const Homepage = () => {
           </div>
         </div>
       </main>
+      {showAIMatchPopup && <AIDemoPopup onClose={() => setShowAIMatchPopup(false)} />}
     </div>
   );
 };

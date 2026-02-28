@@ -129,6 +129,8 @@ const ProfilePage = () => {
       username: api.profile?.username,
       longitude: api.profile?.longitude,
       latitude: api.profile?.latitude,
+      isPremium: api.isPremium || false,
+      premiumPlan: api.premiumPlan || "",
 
       stats: {
         totalSwapsCompleted: api.reputation?.totalSwapsCompleted || 0,

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Settings, LogOut, ChevronDown, CreditCard, Crown } from 'lucide-react';
+import { Settings, LogOut, ChevronDown, CreditCard, Crown, CrownIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useUser, SignOutButton, useClerk } from "@clerk/clerk-react";
 import axios from 'axios';
@@ -61,8 +61,9 @@ export default function UserDropdown() {
                                 className="w-13 h-13 rounded-full ring-2 ring-slate-100"
                             />
                             <div className="flex-1 min-w-0">
-                                <div className="text-lg font-semibold text-slate-900 truncate">
+                                <div className="text-lg font-semibold text-slate-900 truncate flex items-center gap-1.5">
                                     {user?.unsafeMetadata?.fullName || userData?.fullName || user?.fullName || "Guest"}
+                                    {userData?.isPremium && <Crown className="w-4 h-4 text-amber-500 fill-amber-500" />}
                                 </div>
                                 <div className="text-sm text-slate-500 truncate">
                                     {userData?.email || user?.primaryEmailAddress?.emailAddress}
