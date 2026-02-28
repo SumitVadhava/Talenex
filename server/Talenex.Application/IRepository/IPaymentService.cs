@@ -8,7 +8,7 @@ namespace Talenex.Application.IRepository
 {
     public interface IPaymentService : IService<Talenex.Domain.Entities.Payment>
     {
-        Task<string> CreateOrderAsync(int amount);
+        Task<string> CreateOrderAsync(int amount, string currency);
         bool VerifyPayment(string orderId, string paymentId, string signature);
     }
 }

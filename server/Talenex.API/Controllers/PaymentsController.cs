@@ -27,7 +27,7 @@ namespace Talenex.API.Controllers
         {
             try
             {
-                var orderId = await _paymentService.CreateOrderAsync(dto.Amount);
+                var orderId = await _paymentService.CreateOrderAsync(dto.Amount, dto.Currency);
                 
                 var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 

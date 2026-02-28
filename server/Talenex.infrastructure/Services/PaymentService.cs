@@ -25,14 +25,14 @@ namespace Talenex.infrastructure.Services
             _keySecret = _config["Razorpay:Secret"] ?? "";
         }
 
-        public async Task<string> CreateOrderAsync(int amount)
+        public async Task<string> CreateOrderAsync(int amount, string currency)
         {
             RazorpayClient client = new RazorpayClient(_keyId, _keySecret);
 
             Dictionary<string, object> options = new Dictionary<string, object>();
 
             options.Add("amount", amount * 100);
-            options.Add("currency", "INR");
+            options.Add("currency", currency);
             options.Add("receipt", Guid.NewGuid().ToString());
 
             Order order = client.Order.Create(options);
