@@ -26,6 +26,10 @@ namespace Talenex.Domain.Entities
 
         public bool onBoarding {  get; set; }
 
+        public bool isPremium { get; set; } = false;
+
+        public string PremiumPlan { get; set; } = "Free";
+
         //Profile
         public UserProfile UserProfile { get; set; }
 
@@ -48,6 +52,8 @@ namespace Talenex.Domain.Entities
         public ICollection<UserReviews> UserReviews { get; set; } = new List<UserReviews>();  // ✅
         
         public UserFavourites UserFavourites { get; set; }
+
+        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     }
 }

@@ -103,19 +103,28 @@ builder.Services.AddHttpClient();
 // ==========================
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserProfileValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserProfileValidator>();
+
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserAvailabilityValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserAvailabilityValidator>();
+
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserPrivacyValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserPrivacyValidator>();
+
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserReputationValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserReputationValidator>();
+
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserValidator>();
+
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserSkillsValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserSkillsValidator>();
+
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserNotificationPreferencesValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserNotificationPreferencesValidator>();
+
 builder.Services.AddValidatorsFromAssemblyContaining<CreateSwapRequestValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateSwapRequestValidator>();
+
+// builder.Services.AddScoped<IPaymentService, RazorpayService>();
 
 
 
@@ -133,6 +142,8 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 // ==========================
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IService<>), typeof(GenericService<>));
+// IPaymentService is registered in AddInfrastructure, but we can also ensure it here if needed
+// builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddScoped<IOnboardingService, OnboardingService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -149,6 +160,8 @@ builder.Services.AddScoped<IClerkService, ClerkService>();
 builder.Services.AddScoped<IZegoTokenService, ZegoTokenService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IChatService, ChatService>();
+
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 
 

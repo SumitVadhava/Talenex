@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Talenex.infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Talenex.infrastructure.Data;
 namespace Talenex.infrastructure.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260228151136_PaymentEntityAdded")]
+    partial class PaymentEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,15 +161,10 @@ namespace Talenex.infrastructure.Migrations
 
                     b.Property<string>("PremiumPlan")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasDefaultValue("Free");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("isPremium")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<bool>("onBoarding")
                         .HasColumnType("bit");
@@ -488,7 +486,7 @@ namespace Talenex.infrastructure.Migrations
             modelBuilder.Entity("Talenex.Domain.Entities.Payment", b =>
                 {
                     b.HasOne("Talenex.Domain.Entities.User", "User")
-                        .WithMany("Payments")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -616,8 +614,6 @@ namespace Talenex.infrastructure.Migrations
 
             modelBuilder.Entity("Talenex.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Payments");
-
                     b.Navigation("UserAvailability")
                         .IsRequired();
 

@@ -12,8 +12,8 @@ using Talenex.infrastructure.Data;
 namespace Talenex.infrastructure.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20260221133927_alterRequestEntity")]
-    partial class alterRequestEntity
+    [Migration("20260228151709_alterUsersTable")]
+    partial class alterUsersTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,48 @@ namespace Talenex.infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Talenex.Domain.Entities.Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("INR");
+
+                    b.Property<string>("RazorpayOrderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RazorpayPaymentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RazorpaySignature")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Payments");
+                });
 
             modelBuilder.Entity("Talenex.Domain.Entities.RateUs", b =>
                 {
@@ -76,6 +118,9 @@ namespace Talenex.infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserProfileImg")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
@@ -113,6 +158,18 @@ namespace Talenex.infrastructure.Migrations
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PremiumPlan")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasDefaultValue("Free");
+
+                    b.Property<bool>("isPremium")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("onBoarding")
                         .HasColumnType("bit");
@@ -156,6 +213,27 @@ namespace Talenex.infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("UserAvailabilities", (string)null);
+                });
+
+            modelBuilder.Entity("Talenex.Domain.Entities.UserFavourites", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FavIds")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(MAX)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserFavourites", (string)null);
                 });
 
             modelBuilder.Entity("Talenex.Domain.Entities.UserNotificationPreferences", b =>
@@ -410,6 +488,17 @@ namespace Talenex.infrastructure.Migrations
                     b.ToTable("UserSwapRequests", (string)null);
                 });
 
+            modelBuilder.Entity("Talenex.Domain.Entities.Payment", b =>
+                {
+                    b.HasOne("Talenex.Domain.Entities.User", "User")
+                        .WithMany("Payments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Talenex.Domain.Entities.RateUs", b =>
                 {
                     b.HasOne("Talenex.Domain.Entities.User", "User")
@@ -426,6 +515,17 @@ namespace Talenex.infrastructure.Migrations
                     b.HasOne("Talenex.Domain.Entities.User", "User")
                         .WithOne("UserAvailability")
                         .HasForeignKey("Talenex.Domain.Entities.UserAvailability", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Talenex.Domain.Entities.UserFavourites", b =>
+                {
+                    b.HasOne("Talenex.Domain.Entities.User", "User")
+                        .WithOne("UserFavourites")
+                        .HasForeignKey("Talenex.Domain.Entities.UserFavourites", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -519,7 +619,12 @@ namespace Talenex.infrastructure.Migrations
 
             modelBuilder.Entity("Talenex.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Payments");
+
                     b.Navigation("UserAvailability")
+                        .IsRequired();
+
+                    b.Navigation("UserFavourites")
                         .IsRequired();
 
                     b.Navigation("UserNotifications")

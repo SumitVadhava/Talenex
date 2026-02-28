@@ -37,6 +37,8 @@ namespace Talenex.infrastructure.Data
 
         public DbSet<UserFavourites> UserFavourites { get; set; }
 
+        public DbSet<Payment> Payments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>(u =>
@@ -99,6 +101,13 @@ namespace Talenex.infrastructure.Data
                     .WithOne(p => p.User)
                     .HasForeignKey<UserNotificationPreferences>(p => p.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+                u.Property(x => x.isPremium)
+                    .HasDefaultValue(false);
+
+                u.Property(x => x.PremiumPlan)
+                    .HasMaxLength(50)
+                    .HasDefaultValue("Free");
             });
 
             modelBuilder.Entity<UserProfile>(u =>
@@ -269,6 +278,16 @@ namespace Talenex.infrastructure.Data
                  .HasColumnType("NVARCHAR(MAX)");
             });
 
+            modelBuilder.Entity<Payment>(p =>
+            {
+              p.Property(p => p.Status)
+                .HasConversion<string>();
+
+              p.Property(p => p.Currency)
+                .HasDefaultValue("INR");
+            });
+          
+      
             base.OnModelCreating(modelBuilder);
         }
     }
