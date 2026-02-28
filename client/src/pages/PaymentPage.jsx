@@ -64,7 +64,7 @@ const PaymentPage = () => {
             }
 
             // 1. Create Order on Backend
-            const { orderId } = await paymentApi.createOrder(planInfo.amount, planInfo.currency);
+            const { orderId } = await paymentApi.createOrder(planInfo.amount, planInfo.currency, planInfo.name);
 
             const options = {
                 key: import.meta.env.VITE_RAZORPAY_KEY,
