@@ -62,29 +62,40 @@ namespace Talenex.API.Controllers
         [HttpPost("verify")]
         public async Task<IActionResult> VerifyPayment([FromBody] VerifyPaymentDto dto)
         {
-            var isValid = _paymentService.VerifyPayment(
-                dto.RazorpayOrderId,
-                dto.RazorpayPaymentId,
-                dto.RazorpaySignature
-            );
-
-            if (!isValid)
-                return BadRequest(new { message = "Payment verification failed" });
-
-            var payments = await _paymentService.GetAllAsync();
-            var payment = payments.FirstOrDefault(p => p.RazorpayOrderId == dto.RazorpayOrderId);
-            
-            if (payment != null)
+            try
             {
-                payment.RazorpayPaymentId = dto.RazorpayPaymentId;
-                payment.RazorpaySignature = dto.RazorpaySignature;
-                payment.Status = PaymentStatus.Success;
-                payment.CompletedAt = DateTime.UtcNow.AddHours(5).AddMinutes(30);
+                var isValid = _paymentService.VerifyPayment(
+                    dto.RazorpayOrderId,
+                    dto.RazorpayPaymentId,
+                    dto.RazorpaySignature
+                );
 
-                await _paymentService.UpdateAsync(payment);
+                if (!isValid)
+                    return BadRequest(new { message = "Payment verification failed: Invalid signature" });
+
+                var payments = await _paymentService.GetAllAsync();
+                var payment = payments.FirstOrDefault(p => p.RazorpayOrderId == dto.RazorpayOrderId);
+                
+                if (payment != null)
+                {
+                    payment.RazorpayPaymentId = dto.RazorpayPaymentId;
+                    payment.RazorpaySignature = dto.RazorpaySignature;
+                    payment.Status = PaymentStatus.Success;
+                    payment.CompletedAt = DateTime.UtcNow.AddHours(5).AddMinutes(30);
+
+                    await _paymentService.UpdateAsync(payment);
+                }
+
+                return Ok(new { status = "Payment success", orderId = dto.RazorpayOrderId });
             }
-
-            return Ok(new { status = "Payment success", orderId = dto.RazorpayOrderId });
+            catch (Exception ex)
+            {
+                return BadRequest(new { 
+                    message = "Payment verification error", 
+                    error = ex.Message, 
+                    details = ex.InnerException?.Message 
+                });
+            }
         }
 
         [HttpGet]

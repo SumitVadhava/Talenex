@@ -2,6 +2,8 @@ using Microsoft.Extensions.Configuration;
 using Razorpay.Api;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Talenex.Application.IRepository;
 using Talenex.Domain.Common.Enums;
@@ -42,21 +44,34 @@ namespace Talenex.infrastructure.Services
         {
             try
             {
-                RazorpayClient client = new RazorpayClient(_keyId, _keySecret);
+                if (string.IsNullOrEmpty(orderId) || string.IsNullOrEmpty(paymentId) || string.IsNullOrEmpty(signature))
+                    throw new ArgumentException("Missing required payment verification data.");
 
-                Dictionary<string, string> attributes = new Dictionary<string, string>();
+                string payload = orderId + "|" + paymentId;
+                string secret = _keySecret;
 
-                attributes.Add("razorpay_order_id", orderId);
-                attributes.Add("razorpay_payment_id", paymentId);
-                attributes.Add("razorpay_signature", signature);
+                using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret)))
+                {
+                    byte[] hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payload));
+                    StringBuilder sb = new StringBuilder();
+                    foreach (byte b in hash)
+                    {
+                        sb.Append(b.ToString("x2"));
+                    }
+                    string generatedSignature = sb.ToString();
 
-                Utils.verifyPaymentSignature(attributes);
+                    if (generatedSignature != signature)
+                    {
+                        throw new Exception($"Signature mismatch. Generated: {generatedSignature}, Received: {signature}");
+                    }
+                }
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
+                // Re-throw to be captured by the controller
+                throw new Exception("Payment verification failed: " + ex.Message);
             }
         }
     }
