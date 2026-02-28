@@ -16,6 +16,7 @@ namespace Talenex.Domain.Entities
 
         public int Amount { get; set; }
         public string Currency { get; set; } = "INR";
+        public string PlanName { get; set; } = "Free";
 
         public string RazorpayOrderId { get; set; }
         public string? RazorpayPaymentId { get; set; }

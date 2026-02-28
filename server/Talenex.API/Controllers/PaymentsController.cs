@@ -16,10 +16,12 @@ namespace Talenex.API.Controllers
     public class PaymentsController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
+        private readonly IUserService _userService;
 
-        public PaymentsController(IPaymentService paymentService)
+        public PaymentsController(IPaymentService paymentService, IUserService userService)
         {
             _paymentService = paymentService;
+            _userService = userService;
         }
 
         [HttpPost("create-order")]
@@ -40,7 +42,8 @@ namespace Talenex.API.Controllers
                     Amount = dto.Amount,
                     RazorpayOrderId = orderId,
                     Status = PaymentStatus.Pending,
-                    Currency = dto.Currency
+                    Currency = dto.Currency,
+                    PlanName = dto.PlanName
                 };
                 
                 await _paymentService.CreateAsync(payment);
@@ -84,6 +87,15 @@ namespace Talenex.API.Controllers
                     payment.CompletedAt = DateTime.UtcNow.AddHours(5).AddMinutes(30);
 
                     await _paymentService.UpdateAsync(payment);
+
+                   
+                    var user = await _userService.GetByIdAsync(payment.UserId);
+                    if (user != null)
+                    {
+                        user.isPremium = true;
+                        user.PremiumPlan = payment.PlanName;
+                        await _userService.UpdateAsync(user);
+                    }
                 }
 
                 return Ok(new { status = "Payment success", orderId = dto.RazorpayOrderId });

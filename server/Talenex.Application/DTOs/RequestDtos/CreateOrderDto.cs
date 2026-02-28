@@ -6,5 +6,6 @@ namespace Talenex.Application.DTOs.RequestDtos
     {
         public int Amount { get; set; }
         public string Currency { get; set; }
+        public string PlanName { get; set; }
     }
 }
