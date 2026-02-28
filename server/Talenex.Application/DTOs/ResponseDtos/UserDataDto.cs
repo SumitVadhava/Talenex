@@ -18,6 +18,10 @@ namespace Talenex.Application.DTOs.ResponseDtos
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public bool isPremium { get; set; }
+
+        public string PremiumPlan { get; set; }
+
         public UserProfileDto? Profile { get; set; }
         public UserSkillsDto? Skills { get; set; }
         public UserAvailabilityDto? Availability { get; set; }

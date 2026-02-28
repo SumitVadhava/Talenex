@@ -76,7 +76,9 @@ namespace Talenex.API.Controllers
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     ImageUrl = user.ImageUrl,
-                    CreatedAt = user.CreatedAt
+                    CreatedAt = user.CreatedAt,
+                    isPremium = user.isPremium,
+                    PremiumPlan = user.PremiumPlan
                 };
 
                 foreach (var inc in includes)
@@ -213,7 +215,9 @@ namespace Talenex.API.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 ImageUrl = user.ImageUrl,
-                CreatedAt = user.CreatedAt
+                CreatedAt = user.CreatedAt,
+                isPremium = user.isPremium,
+                PremiumPlan = user.PremiumPlan
             };
 
             foreach (var inc in includes)
@@ -344,7 +348,9 @@ namespace Talenex.API.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 ImageUrl = user.ImageUrl,
-                CreatedAt = user.CreatedAt
+                CreatedAt = user.CreatedAt,
+                isPremium = user.isPremium,
+                PremiumPlan = user.PremiumPlan
             };
 
             foreach (var inc in includes)
@@ -472,6 +478,7 @@ namespace Talenex.API.Controllers
             existing.FirstName = dto.FirstName;
             existing.LastName = dto.LastName;
             existing.ImageUrl = dto.ImageUrl;
+
 
             return Ok(await _service.UpdateAsync(existing));
         }
