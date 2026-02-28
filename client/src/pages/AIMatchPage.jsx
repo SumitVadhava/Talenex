@@ -615,7 +615,8 @@ export default function AIMatchPage() {
                                         onClick={() => {
                                             const params = new URLSearchParams(location.search);
                                             const plan = params.get("plan") || "professional";
-                                            window.open(`/payment?plan=${plan}`, "_blank");
+                                            const currency = params.get("currency") || "USD";
+                                            window.open(`/payment?plan=${plan}&currency=${currency}`, "_blank");
                                         }}
                                         className="ai-rainbow-btn w-full max-w-sm group"
                                     >

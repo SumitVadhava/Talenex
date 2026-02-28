@@ -54,7 +54,7 @@ export default function PricingPage() {
         <div id="pricing" className="min-h-screen py-16 px-4 scroll-mt-28">
             <div className="fixed inset-0 z-0 w-full h-full overflow-hidden pointer-events-none">
                 <GridPattern strokeDasharray={"4 5"} width={50} height={50} className="stroke-zinc-500 opacity-30" /> {/* Background Grid color : stroke-zinc-500 opacity-20*/}
-            </div>  
+            </div>
             <div className="relative z-20">
                 <div className="text-center mb-12">
                     <p className="text-sm font-semibold text-gray-500 tracking-wider mb-2">PRICING</p>
@@ -127,7 +127,7 @@ export default function PricingPage() {
 
                             <CardFooter>
                                 <Button
-                                    onClick={() => navigate(`/ai-match?plan=${plan.badge.toLowerCase()}`)}
+                                    onClick={() => navigate(`/ai-match?plan=${plan.badge.toLowerCase()}&currency=${currency}`)}
                                     className={`w-full transition-all duration-300 hover:-translate-y-1   ${plan.highlighted ? 'bg-white text-black hover:bg-gray-100 cursor-pointer py-5 ' : 'bg-black text-white cursor-pointer py-6'}`}
                                 >
                                     {plan.badge == "STARTER"

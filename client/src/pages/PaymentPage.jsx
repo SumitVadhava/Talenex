@@ -18,18 +18,14 @@ import paymentApi from "@/api/paymentApi";
 const PRICING_PLANS = {
     starter: {
         name: "Starter",
-        // amountINR: 450,
-        // amountPaise: 450 * 100,
-        amountINR: 1,
-        amountPaise: 1 * 100,
+        INR: { amount: 450, subunit: 450 * 100, symbol: "₹" },
+        USD: { amount: 5, subunit: 5 * 100, symbol: "$" },
         description: "Perfect for new learners"
     },
     professional: {
         name: "Professional",
-        // amountINR: 900,
-        // amountPaise: 900 * 100,
-        amountINR: 1,
-        amountPaise: 1 * 100,
+        INR: { amount: 900, subunit: 900 * 100, symbol: "₹" },
+        USD: { amount: 10, subunit: 10 * 100, symbol: "$" },
         description: "Advanced AI-powered features"
     },
 };
@@ -45,7 +41,18 @@ const PaymentPage = () => {
     const planInfo = useMemo(() => {
         const params = new URLSearchParams(location.search);
         const planKey = params.get("plan");
-        return PRICING_PLANS[planKey] || PRICING_PLANS.starter;
+        const currencyKey = params.get("currency")?.toUpperCase() || "INR";
+
+        const basePlan = PRICING_PLANS[planKey] || PRICING_PLANS.starter;
+        const pricing = basePlan[currencyKey] || basePlan.INR;
+
+        return {
+            ...basePlan,
+            currency: currencyKey,
+            amount: pricing.amount,
+            subunit: pricing.subunit,
+            symbol: pricing.symbol
+        };
     }, [location.search]);
 
     const openRazorpay = useCallback(async () => {
@@ -57,15 +64,15 @@ const PaymentPage = () => {
             }
 
             // 1. Create Order on Backend
-            const { orderId } = await paymentApi.createOrder(planInfo.amountINR);
+            const { orderId } = await paymentApi.createOrder(planInfo.amount, planInfo.currency);
 
             const options = {
                 key: import.meta.env.VITE_RAZORPAY_KEY,
-                amount: planInfo.amountPaise,
-                currency: "INR",
+                amount: planInfo.subunit,
+                currency: planInfo.currency,
                 name: "Talenex Premium",
                 description: `${planInfo.name} Plan - ${planInfo.description}`,
-                order_id: orderId, // Use backend generated order ID
+                order_id: orderId,
                 handler: async function (response) {
                     try {
                         setStatus("processing");
@@ -192,7 +199,7 @@ const PaymentPage = () => {
                                     <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest text-left">Amount Paid</p>
                                     <p className="text-sm font-bold">Paid via Razorpay</p>
                                 </div>
-                                <p className="text-3xl font-black">₹{planInfo.amountINR}</p>
+                                <p className="text-3xl font-black">{planInfo.symbol}{planInfo.amount}</p>
                             </div>
                         </div>
 
@@ -221,7 +228,7 @@ const PaymentPage = () => {
                         <div className="space-y-2">
                             <h2 className="text-2xl font-bold tracking-tight">Payment Cancelled</h2>
                             <p className="text-muted-foreground max-w-[280px] mx-auto">
-                                The transaction for {planInfo.amountINR} was closed. No funds have been deducted.
+                                The transaction for {planInfo.symbol}{planInfo.amount} was closed. No funds have been deducted.
                             </p>
                         </div>
                         <div className="flex flex-col gap-3">
