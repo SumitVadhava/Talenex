@@ -11,20 +11,25 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation, useNavigate } from "react-router-dom";
+import paymentApi from "@/api/paymentApi";
 
 // SECURE SOURCE OF TRUTH: Prices mapped to plan IDs
 // This prevents users from tampering with the price via DevTools or URL parameters
 const PRICING_PLANS = {
     starter: {
         name: "Starter",
-        amountINR: 450,
-        amountPaise: 450 * 100,
+        // amountINR: 450,
+        // amountPaise: 450 * 100,
+        amountINR: 1,
+        amountPaise: 1 * 100,
         description: "Perfect for new learners"
     },
     professional: {
         name: "Professional",
-        amountINR: 900,
-        amountPaise: 900 * 100,
+        // amountINR: 900,
+        // amountPaise: 900 * 100,
+        amountINR: 1,
+        amountPaise: 1 * 100,
         description: "Advanced AI-powered features"
     },
 };
@@ -40,39 +45,67 @@ const PaymentPage = () => {
     const planInfo = useMemo(() => {
         const params = new URLSearchParams(location.search);
         const planKey = params.get("plan");
-        return PRICING_PLANS[planKey] || PRICING_PLANS.default;
+        return PRICING_PLANS[planKey] || PRICING_PLANS.starter;
     }, [location.search]);
 
-    const openRazorpay = useCallback(() => {
-        if (typeof window.Razorpay === "undefined") {
-            console.error("Razorpay SDK not loaded");
-            setStatus("error");
-            return;
-        }
-
-        const options = {
-            key: import.meta.env.VITE_RAZORPAY_KEY,
-            amount: planInfo.amountPaise, // Use the SECURE derived amount
-            currency: "INR",
-            description: `${planInfo.name} Plan - ${planInfo.description}`,
-            handler: function (response) {
-                console.log("Payment Success:", response);
-                setTransactionId(response.razorpay_payment_id);
-                setStatus("success");
-            },
-            modal: {
-                backdropclose: false,
-                escape: false,
-                confirm_close: true,
-                ondismiss: function () {
-                    console.log("Checkout closed by user");
-                    setStatus("cancelled");
-                }
+    const openRazorpay = useCallback(async () => {
+        try {
+            if (typeof window.Razorpay === "undefined") {
+                console.error("Razorpay SDK not loaded");
+                setStatus("error");
+                return;
             }
-        };
 
-        const rzp = new window.Razorpay(options);
-        rzp.open();
+            // 1. Create Order on Backend
+            const { orderId } = await paymentApi.createOrder(planInfo.amountINR);
+
+            const options = {
+                key: import.meta.env.VITE_RAZORPAY_KEY,
+                amount: planInfo.amountPaise,
+                currency: "INR",
+                name: "Talenex Premium",
+                description: `${planInfo.name} Plan - ${planInfo.description}`,
+                order_id: orderId, // Use backend generated order ID
+                handler: async function (response) {
+                    try {
+                        setStatus("processing");
+                        console.log("Razorpay Response:", response);
+
+                        // 2. Verify Payment on Backend
+                        const verifyResult = await paymentApi.verifyPayment({
+                            razorpayOrderId: response.razorpay_order_id,
+                            razorpayPaymentId: response.razorpay_payment_id,
+                            razorpaySignature: response.razorpay_signature
+                        });
+
+                        console.log("Verification Result:", verifyResult);
+                        setTransactionId(response.razorpay_payment_id);
+                        setStatus("success");
+                    } catch (err) {
+                        console.error("Verification failed:", err);
+                        setStatus("error");
+                    }
+                },
+                modal: {
+                    backdropclose: false,
+                    escape: false,
+                    confirm_close: true,
+                    ondismiss: function () {
+                        console.log("Checkout closed by user");
+                        setStatus("cancelled");
+                    }
+                },
+                theme: {
+                    color: "#000000"
+                }
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.open();
+        } catch (error) {
+            console.error("Failed to initialize payment:", error);
+            setStatus("error");
+        }
     }, [planInfo]);
 
     useEffect(() => {

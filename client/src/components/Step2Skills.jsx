@@ -303,7 +303,7 @@ export default function Step2Skills({
               <SelectTrigger
                 className={`w-full cursor-pointer ${errors.category ? "border-red-500" : ""}`}
               >
-                <SelectValue placeholder="Select skill category" />
+              <SelectValue placeholder="Select skill category" />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
