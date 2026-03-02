@@ -1335,7 +1335,7 @@ const Homepage = () => {
                     >
                       <Filter className="w-4 h-4 mr-2" /> Filters
                     </Button>
-                    <div className="relative w-full sm:w-80 md:w-96 lg:w-[450px]">
+                    <div className="relativew-full sm:w-80 md:w-96 lg:w-[450px]">
                       <Input
                         placeholder="Search python, design..."
                         icon={<Search className="w-4 h-4" />}
@@ -1343,40 +1343,39 @@ const Homepage = () => {
                         onChange={(e) =>
                           setFilters({ ...filters, search: e.target.value })
                         }
-                        className="bg-slate-50 border-transparent focus:bg-white w-full"
+                        className="bg-slate-50 border-slate-200  focus:bg-white w-full"
                       />
                     </div>
 
                     <style>{RAINBOW_STYLE}</style>
                     {userData?.isPremium && (
                       <div
-                        className="ml-2 sm:ml-10 ai-mock-btn"
+                        className="ml-2 sm:ml-10 ai-mock-btn ju"
                         onClick={() => setShowAIMatchPopup(true)}
                       >
-                        <div className="ai-mock-btn-inner">
+                        <div className="ai-mock-btn-inner w-40 h-9 flex items-center justify-center">
                           <img src={searchIcon} className="w-4 h-4 object-contain" alt="" />
                           <span>AI Match</span>
-                          <Crown className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                          <Crown className="w-3.5 h-3.5 text-amber-400 fill-amber-500" />
                         </div>
                       </div>
                     )}
                   </div>
 
 
-                  <div className="flex items-center gap-2 self-end sm:self-auto">
+                  <div className="flex items-center gap-2 self-end sm:self-autoustify">
                     <span className="text-sm text-slate-500 hidden sm:inline">
                       Sort by:
                     </span>
-                    <div className="relative group min-w-[175px]">
+                    <div className="relative group min-w-[140px]">
                       <Select value={sortBy} onValueChange={setSortBy}>
-                        <SelectTrigger className="w-full bg-transparent pl-3 pr-8 py-2 text-sm font-medium text-slate-900 border-none shadow-none focus:ring-0">
+                        <SelectTrigger className="w-full bg-transparent pr-8 py-2 text-sm font-medium text-slate-900 border-none shadow-none focus:ring-0">
                           <SelectValue placeholder="Sort by..." />
                         </SelectTrigger>
                         <SelectContent className="z-50">
                           <SelectItem value="oldest">Oldest First</SelectItem>
                           <SelectItem value="newest">Newest First</SelectItem>
                           <SelectItem value="rating">Highest Rated</SelectItem>
-                          {/*<SelectItem value="popular">Most Popular</SelectItem>*/}
                         </SelectContent>
                       </Select>
                     </div>

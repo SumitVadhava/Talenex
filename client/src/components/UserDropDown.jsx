@@ -63,7 +63,7 @@ export default function UserDropdown() {
                             <div className="flex-1 min-w-0">
                                 <div className="text-lg font-semibold text-slate-900 truncate flex items-center gap-1.5">
                                     {user?.unsafeMetadata?.fullName || userData?.fullName || user?.fullName || "Guest"}
-                                    {userData?.isPremium && <Crown className="w-4 h-4 text-amber-500 fill-amber-500" />}
+                                    {/*{userData?.isPremium && <Crown className="ml-1 mt-1 w-4 h-4 text-amber-400 fill-amber-400" />} */}
                                 </div>
                                 <div className="text-sm text-slate-500 truncate">
                                     {userData?.email || user?.primaryEmailAddress?.emailAddress}

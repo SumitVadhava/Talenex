@@ -140,13 +140,10 @@ export default function AIDemoPopup({ onClose }) {
                             <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center p-1.5">
                                 <img src={searchIcon} className="w-full h-full object-contain brightness-0 invert" alt="" />
                             </div>
-                            <div>
+                            <div className=''>
                                 <h3 className="font-bold text-slate-900 text-base leading-tight">
                                     AI Match
                                 </h3>
-                                <span className="text-xs text-amber-600 font-medium flex items-center gap-1">
-                                    <Crown className="w-3 h-3" /> Premium
-                                </span>
                             </div>
                         </div>
                         <button
@@ -203,10 +200,7 @@ export default function AIDemoPopup({ onClose }) {
                         </button>
                     </div>
 
-                    <p className="text-center text-xs text-slate-400 mt-3">
-                        This is a preview. AI Match is a{' '}
-                        <span className="text-amber-600 font-medium">Premium</span> feature.
-                    </p>
+                    
                 </div>
             </div>
         </>

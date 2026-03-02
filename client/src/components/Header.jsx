@@ -185,9 +185,14 @@ export const Header = ({
             <>
               <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight flex items-center gap-2">
                 {user.name}
-                {user.isPremium && <Crown className="w-6 h-6 text-amber-500 fill-amber-500" />}
+                {user.isPremium && (
+                  <div className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-300 rounded-full text-amber-700 text-[11px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider select-none ml-1 transform translate-y-[2px]">
+                    <Crown className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                    PRO
+                  </div>
+                )}
               </h2>
-              <p className="text-muted-foreground font-medium">{user.handle}</p>
+              <p className="text-muted-foreground font-medium ">{user.handle}</p>
             </>
           )}
         </div>
