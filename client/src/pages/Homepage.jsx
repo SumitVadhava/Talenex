@@ -974,6 +974,45 @@ const Homepage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [showAIMatchPopup, setShowAIMatchPopup] = useState(false);
+  const [aiMatchIds, setAiMatchIds] = useState(() => {
+    // Restore from localStorage (more robust than sessionStorage)
+    const saved = localStorage.getItem("aiMatchIds");
+    // console.log('[AiMatch] Initial load from storage:', saved);
+    try {
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      // console.error('[AiMatch] Error parsing storage:', e);
+      return null;
+    }
+  });
+
+  const [isAILoading, setIsAILoading] = useState(false);
+
+  useEffect(() => {
+    // console.log('[AiMatch] Homepage Mounted');
+  }, []);
+
+  // Sync state to localStorage whenever it changes
+  useEffect(() => {
+    if (aiMatchIds !== null) {
+      // console.log('[AiMatch] Syncing to storage:', aiMatchIds);  
+      localStorage.setItem("aiMatchIds", JSON.stringify(aiMatchIds));
+    } else {
+      // console.log('[AiMatch] Removing from storage (aiMatchIds is null)');
+      localStorage.removeItem("aiMatchIds");
+    }
+  }, [aiMatchIds]);
+
+  const handleAIResults = (matchedIds) => {
+    // console.log('[AiMatch] handleAIResults called with:', matchedIds);
+    setAiMatchIds(matchedIds);
+    setIsAILoading(false);
+  };
+
+  const clearAIMatch = () => {
+    // console.log('[AiMatch] clearAIMatch triggered');
+    setAiMatchIds(null);
+  };
   const {
     data: skills = [],
     isLoading,
@@ -1012,6 +1051,11 @@ const Homepage = () => {
   });
 
   // Real-time Presence Tracking Listeners
+  useEffect(() => {
+    // console.log('[AiMatch] Current aiMatchIds state:', aiMatchIds);
+    // console.log('[AiMatch] Total skills loaded:', skills.length);
+  }, [aiMatchIds, skills.length]);
+
   useEffect(() => {
     if (!client) return;
 
@@ -1385,12 +1429,91 @@ const Homepage = () => {
             </div>
 
             {/* Results Grid */}
-            {(!isLoaded || isAuthLoading || authVersion === 0 || isLoading || isPresenceLoading || isFavoritesLoading) ? (
+            {/* ── AI Match loading skeleton ── */}
+            {isAILoading ? (
+              <>
+                <div className="mb-4 flex items-center gap-2 px-1">
+                  <Sparkles className="w-4 h-4 text-slate-400 animate-pulse" />
+                  <span className="text-sm text-slate-500 animate-pulse">AI is analysing profiles…</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-pulse">
+                  {Array.from({ length: 6 }).map((_, index) => (
+                    <SkeletonCard key={index} />
+                  ))}
+                </div>
+              </>
+            ) : (!isLoaded || isAuthLoading || authVersion === 0 || isLoading || isPresenceLoading || isFavoritesLoading) ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-pulse">
                 {Array.from({ length: 6 }).map((_, index) => (
                   <SkeletonCard key={index} />
                 ))}
               </div>
+            ) : aiMatchIds !== null ? (
+              // ── AI Match Results Mode ──
+              <>
+                {/* Banner */}
+                <div className="mb-4 flex items-center justify-between bg-gradient-to-r from-slate-900 to-slate-700 rounded-xl px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-400" />
+                    <span className="text-sm font-semibold text-white">
+                      AI Match Results
+                    </span>
+                    <span className="text-xs text-slate-400">
+                      · {aiMatchIds.length} best partner{aiMatchIds.length !== 1 ? 's' : ''} found
+                      {skills.length === 0 && ' (Waiting for user data...)'}
+                    </span>
+                  </div>
+                  <button
+                    onClick={clearAIMatch}
+                    className="text-xs text-slate-300 hover:text-white flex items-center gap-1 border border-slate-600 hover:border-slate-400 rounded-full px-3 py-1 transition-colors cursor-pointer"
+                  >
+                    <X className="w-3 h-3" />
+                    Clear
+                  </button>
+                </div>
+
+                {/* AI-matched cards */}
+                {aiMatchIds.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
+                    <div className="bg-slate-100 p-4 rounded-full mb-4">
+                      <Search className="w-8 h-8 text-slate-400" />
+                    </div>
+                    <h3 className="text-lg font-medium text-slate-900">No matches found</h3>
+                    <p className="text-slate-500 max-w-xs mx-auto mt-2">Try different skill keywords.</p>
+                    <Button variant="outline" className="mt-6 cursor-pointer" onClick={clearAIMatch}>Back to Browse</Button>
+                  </div>
+                ) : skills.length === 0 ? (
+                  /* Show skeletons if we have IDs but the user data hasn't loaded yet (on back navigation) */
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-pulse">
+                    {Array.from({ length: Math.min(aiMatchIds.length, 6) }).map((_, index) => (
+                      <SkeletonCard key={index} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-fade-in">
+                    {aiMatchIds
+                      .map((id) => {
+                        const found = skills.find((s) => String(s.id).toLowerCase() === String(id).toLowerCase());
+                        if (!found) console.warn(`[AiMatch] User ID ${id} not found in skills list. Available IDs:`, skills.map(s => s.id).slice(0, 5));
+                        return found;
+                      })
+                      .filter(Boolean)
+                      .map((skill, idx) => (
+                        <div key={skill.id || idx} className="relative h-full">
+                          {/* Rank badge */}
+                          <div className="absolute -top-2 -left-2 z-10 w-7 h-7 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center shadow-md">
+                            #{idx + 1}
+                          </div>
+                          <SkillCard
+                            skill={skill}
+                            isFavorite={Array.isArray(userFavsList) && userFavsList.includes(skill.id)}
+                            isOnline={presenceMap[skill.id]}
+                          />
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </>
             ) : currentItems.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 animate-fade-in">
                 {currentItems.map((skill) => (
@@ -1451,8 +1574,8 @@ const Homepage = () => {
               </div>
             )}
 
-            {/* Pagination */}
-            {currentItems.length > 0 && (
+            {/* Pagination – hidden in AI Match mode */}
+            {aiMatchIds === null && currentItems.length > 0 && (
               <div className="mt-10 flex items-center justify-between border-t border-slate-200 pt-6">
                 <span className="text-sm text-slate-500">
                   Showing{" "}
@@ -1504,7 +1627,15 @@ const Homepage = () => {
           </div>
         </div>
       </main>
-      {showAIMatchPopup && <AIDemoPopup onClose={() => setShowAIMatchPopup(false)} />}
+      {showAIMatchPopup && (
+        <AIDemoPopup
+          onClose={() => setShowAIMatchPopup(false)}
+          onResults={(ids) => {
+            setIsAILoading(false);
+            setAiMatchIds(ids);
+          }}
+        />
+      )}
     </div>
   );
 };

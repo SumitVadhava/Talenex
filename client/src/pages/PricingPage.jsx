@@ -9,7 +9,7 @@ import creditCardImage2 from "./../assets/credit-card-2.png";
 import { GridPattern } from '@/components/ui/grid-pattern';
 
 export default function PricingPage() {
-    const [currency, setCurrency] = useState('USD');
+    const [currency, setCurrency] = useState('INR');
     const navigate = useNavigate();
 
     const plans = [
@@ -63,15 +63,6 @@ export default function PricingPage() {
 
                     <div className="inline-flex items-center bg-white rounded-lg p-1 shadow-sm border border-gray-200">
                         <button
-                            onClick={() => setCurrency('USD')}
-                            className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${currency === 'USD'
-                                ? 'bg-black text-white'
-                                : 'text-gray-600 hover:text-gray-900'
-                                }`}
-                        >
-                            USD ($)
-                        </button>
-                        <button
                             onClick={() => setCurrency('INR')}
                             className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${currency === 'INR'
                                 ? 'bg-black text-white'
@@ -79,6 +70,15 @@ export default function PricingPage() {
                                 }`}
                         >
                             INR (₹)
+                        </button>
+                        <button
+                            onClick={() => setCurrency('USD')}
+                            className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${currency === 'USD'
+                                ? 'bg-black text-white'
+                                : 'text-gray-600 hover:text-gray-900'
+                                }`}
+                        >
+                            USD ($)
                         </button>
                     </div>
                 </div>

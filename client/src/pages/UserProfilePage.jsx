@@ -163,8 +163,9 @@ const UserProfilePage = () => {
 
 
 
-  const displayedSkills = userData?.offeredSkills || [];
-  const hiddenCount = displayedSkills.length - 5;
+  const allOfferedSkills = userData?.offeredSkills || [];
+  const displayedSkills = showAllSkills ? allOfferedSkills : allOfferedSkills.slice(0, 5);
+  const hiddenCount = allOfferedSkills.length - 5;
 
   // Sort and filter reviews
   const sortedReviews = useMemo(() => {
@@ -539,7 +540,7 @@ const UserProfilePage = () => {
                   <div className="flex flex-wrap gap-2 animate-in fade-in duration-500">
                     {displayedSkills?.map((skill, i) => (
                       <Badge
-                        key={skill.name}
+                        key={skill.title}
                         variant="secondary"
                         className="rounded-md px-3 py-1.5 text-sm font-medium bg-slate-100 text-slate-700 border border-transparent hover:border-slate-300 hover:bg-white transition-all cursor-default shadow-sm"
                       >

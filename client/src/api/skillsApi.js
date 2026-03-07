@@ -56,3 +56,16 @@ export const toggleFavorite = async ({ userId, value }) => {
 
   return response.data;
 };
+
+/**
+ * AI Match – calls the LOCAL backend (localhost:5296) which uses Groq to rank users.
+ * Using a direct URL so this can be tested locally without deploying to the live server.
+ * @param {{ requiredSkills: string[], topN: number }} params
+ * @returns {Promise<string[]>} matchedIds – ordered best-to-least Talenex user IDs
+ */
+export const fetchAIMatches = async ({ requiredSkills, topN = 5 }) => {
+  const response = await api.post("/User/AiMatch",
+    { requiredSkills, topN }
+  );
+  return response.data?.matchedIds ?? [];
+};

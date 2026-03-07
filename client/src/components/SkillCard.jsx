@@ -23,7 +23,7 @@ const SkillCard = ({ skill, isFavorite, isOnline: realTimeOnline }) => {
     // why in card level on click not working?
     // give me changes 
 
-    <div onClick={handleSwapClick} className="cursor-pointer">
+    <div onClick={handleSwapClick} className="cursor-pointer h-full">
       <Card className="group flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 hover:-translate-y-1 hover:-translate-x-1 border-slate-200 hover:border-primary-200 bg-white overflow-hidden" >
         {/* User Header */}
         <div className="p-4 flex justify-between items-start border-b border-slate-50 bg-slate-50/30">
