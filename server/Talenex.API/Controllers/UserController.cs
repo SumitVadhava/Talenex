@@ -489,5 +489,213 @@ namespace Talenex.API.Controllers
             var deleted = await _service.DeleteAsync(id);
             return deleted != null ? Ok() : NotFound();
         }
+
+        // ─────────────────────────────────────────────────────
+        //  POST api/User/AiMatch
+        //  Body: { requiredSkills: ["React", "Python"], topN: 5 }
+        //  Returns: { matchedIds: ["guid1", "guid2", ...] }
+        // ─────────────────────────────────────────────────────
+        [HttpPost("AiMatch")]
+        public async Task<IActionResult> AiMatch(
+            [FromBody] Talenex.Application.DTOs.CreateDtos.AIMatchRequestDto dto,
+            [FromServices] IHttpClientFactory httpClientFactory,
+            [FromServices] IConfiguration configuration)
+        {
+            // 1. Identify the requesting user from JWT (Handle Guid or Clerk String sub)
+            var userIdClaim = User.FindFirst("sub") ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            Guid? requestingUserId = null;
+            if (userIdClaim != null)
+            {
+                if (Guid.TryParse(userIdClaim.Value, out var uid)) { requestingUserId = uid; }
+                else
+                {
+                    var clerkUser = await _userService.GetByClerkIdAsync(userIdClaim.Value);
+                    if (clerkUser != null) requestingUserId = clerkUser.Id;
+                }
+            }
+
+            if (dto.RequiredSkills == null || dto.RequiredSkills.Count == 0)
+                return BadRequest(new { error = "RequiredSkills cannot be empty." });
+
+            var topN = Math.Clamp(dto.TopN, 1, 20);
+            
+            // Split multi-word skills into individual terms for more lenient matching (e.g. "react js" -> "react", "js")
+            var searchWords = dto.RequiredSkills
+                .SelectMany(s => s.Split(new[] { ' ', ',', '.', '-' }, StringSplitOptions.RemoveEmptyEntries))
+                .Select(w => w.Trim().ToLowerInvariant())
+                .Distinct()
+                .Where(w => w.Length > 1) 
+                .ToList();
+
+            if (searchWords.Count == 0 && dto.RequiredSkills.Any())
+            {
+                searchWords = dto.RequiredSkills.Select(s => s.Trim().ToLowerInvariant()).ToList();
+            }
+
+            // 2. Fetch all users
+            var allIncludes = new List<Talenex.Application.Common.Enums.UserInclude>
+            {
+                Talenex.Application.Common.Enums.UserInclude.Profile,
+                Talenex.Application.Common.Enums.UserInclude.Skills,
+                Talenex.Application.Common.Enums.UserInclude.Reputation,
+                Talenex.Application.Common.Enums.UserInclude.Availability,
+            };
+            var allUsers = await _userService.GetAllUserAsync(allIncludes);
+
+            // 3. Filter
+            var filteredUsers = allUsers
+                .Where(u =>
+                    (requestingUserId == null || u.Id != requestingUserId) && 
+                    u.UserSkills?.SkillsOffered != null &&
+                    u.UserSkills.SkillsOffered.Any(s =>
+                    {
+                        var title = (s.Title ?? "").ToLowerInvariant();
+                        var cat = (s.Category ?? "").ToLowerInvariant();
+                        var desc = (s.Description ?? "").ToLowerInvariant();
+                        
+                        return searchWords.Any(word => 
+                            title.Contains(word) || 
+                            cat.Contains(word) || 
+                            desc.Contains(word)
+                        );
+                    })
+                )
+                .ToList();
+
+            if (filteredUsers.Count == 0)
+            {
+                Console.WriteLine($"[AiMatch] No users found offering matching keywords: {string.Join(", ", searchWords)}");
+                return Ok(new { matchedIds = Array.Empty<string>() });
+            }
+
+            var names = string.Join(", ", filteredUsers.Select(u => u.UserProfile?.FullName ?? u.Email));
+            Console.WriteLine($"[AiMatch] Found {filteredUsers.Count} candidate(s) for '{string.Join(", ", searchWords)}': {names}");
+
+            // 4. Build summaries (Enhanced with more quality signals)
+            var userSummaries = filteredUsers.Select(u => new
+            {
+                id = u.Id.ToString(),
+                name = u.UserProfile?.FullName ?? $"{u.FirstName} {u.LastName}",
+                isPremium = u.isPremium,
+                offeredSkills = u.UserSkills!.SkillsOffered!
+                    .Select(s => new { title = s.Title, level = s.Level, category = s.Category, hasCertificate = !string.IsNullOrEmpty(s.CertificateURL) })
+                    .ToList(),
+                wantedSkills = u.UserSkills.SkillsWanted?
+                    .Select(s => s.Name ?? "")
+                    .ToList() ?? new List<string>(),
+                rating = u.UserReputation?.AverageRating ?? 0,
+                totalReviews = u.UserReputation?.TotalReviews ?? 0,
+                totalSwaps = u.UserReputation?.TotalSwapsCompleted ?? 0,
+                bio = (u.UserProfile?.Bio ?? "").Length > 200
+                    ? u.UserProfile!.Bio!.Substring(0, 200)
+                    : (u.UserProfile?.Bio ?? "")
+            }).ToList();
+
+            var userSummariesJson = System.Text.Json.JsonSerializer.Serialize(userSummaries);
+            var skillsList = string.Join(", ", dto.RequiredSkills);
+
+            var systemPrompt = @"You are the matching engine for Talenex. Return ONLY a raw JSON array of user IDs (strings) representing the best partners.
+RANKING CRITERIA:
+1. Skills: How well their offered skills match keywords.
+2. Certs: Prefer users with certificates (hasCertificate: true).
+3. Record: Higher totalSwaps and totalReviews are better.
+4. Quality: Higher average ratings.
+5. Status: Premium users get a slight priority.
+FORMAT: JSON array only [""id1"", ""id2""]. NO text/reasoning.";
+
+            var userPrompt = $@"Requirements: {skillsList}
+Candidates: {userSummariesJson}
+Return top {topN} IDs in best order:";
+
+            // 5. Call Groq API
+            var groqApiKey = configuration["Groq:ApiKey"];
+            var groqRequest = new
+            {
+                model = "llama-3.3-70b-versatile",
+                messages = new[]
+                {
+                    new { role = "system", content = systemPrompt },
+                    new { role = "user", content = userPrompt }
+                },
+                temperature = 0.1,
+                max_tokens = 2048
+            };
+
+            var httpClient = httpClientFactory.CreateClient();
+            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {groqApiKey}");
+
+            var requestJson = System.Text.Json.JsonSerializer.Serialize(groqRequest);
+            var content = new System.Net.Http.StringContent(requestJson, System.Text.Encoding.UTF8, "application/json");
+
+            HttpResponseMessage groqResponse;
+            try
+            {
+                groqResponse = await httpClient.PostAsync("https://api.groq.com/openai/v1/chat/completions", content);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(502, new { error = "Failed to reach Groq API.", details = ex.Message });
+            }
+
+            if (!groqResponse.IsSuccessStatusCode)
+            {
+                var errorBody = await groqResponse.Content.ReadAsStringAsync();
+                return StatusCode(502, new { error = "Groq API returned an error.", details = errorBody });
+            }
+
+            var groqBody = await groqResponse.Content.ReadAsStringAsync();
+            string groqText;
+            try
+            {
+                using var doc = System.Text.Json.JsonDocument.Parse(groqBody);
+                groqText = doc.RootElement
+                    .GetProperty("choices")[0]
+                    .GetProperty("message")
+                    .GetProperty("content")
+                    .GetString() ?? "";
+                
+                Console.WriteLine($"[AiMatch] Groq Raw Response: {groqText}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[AiMatch] JSON Parse Error: {ex.Message}");
+                return StatusCode(502, new { error = "Failed to parse Groq response structure." });
+            }
+
+            // 6. Extract JSON array from Groq text (Groq sometimes wraps response in markdown)
+            var jsonStart = groqText.IndexOf('[');
+            var jsonEnd = groqText.LastIndexOf(']');
+            List<string> matchedIds = new List<string>();
+            
+            if (jsonStart >= 0 && jsonEnd > jsonStart)
+            {
+                var rawArray = groqText.Substring(jsonStart, jsonEnd - jsonStart + 1);
+                try
+                {
+                    matchedIds = System.Text.Json.JsonSerializer.Deserialize<List<string>>(rawArray) ?? new List<string>();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[AiMatch] Array Parse Error: {ex.Message} for text: {rawArray}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"[AiMatch] No '[' or ']' found in AI response.");
+            }
+
+            // Validate returned IDs are actually in our filtered set (Robust comparison)
+            var validIds = filteredUsers.Select(u => u.Id.ToString().ToLowerInvariant()).ToHashSet();
+            
+            var finalIds = matchedIds
+                .Select(id => id.Trim().ToLowerInvariant())
+                .Where(id => validIds.Contains(id))
+                .Take(topN)
+                .ToList();
+
+            Console.WriteLine($"[AiMatch] Successfully matched {finalIds.Count} ID(s) from {matchedIds.Count} total IDs returned by AI.");
+            
+            return Ok(new { matchedIds = finalIds });
+        }
     }
 }
