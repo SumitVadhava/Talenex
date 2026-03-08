@@ -76,7 +76,7 @@ const PaymentPage = () => {
                 handler: async function (response) {
                     try {
                         setStatus("processing");
-                        console.log("Razorpay Response:", response);
+                        // console.log("Razorpay Response:", response);
 
                         // 2. Verify Payment on Backend
                         const verifyResult = await paymentApi.verifyPayment({
@@ -85,7 +85,7 @@ const PaymentPage = () => {
                             razorpaySignature: response.razorpay_signature
                         });
 
-                        console.log("Verification Result:", verifyResult);
+                        // console.log("Verification Result:", verifyResult);
                         setTransactionId(response.razorpay_payment_id);
                         setStatus("success");
                     } catch (err) {
@@ -98,7 +98,7 @@ const PaymentPage = () => {
                     escape: false,
                     confirm_close: true,
                     ondismiss: function () {
-                        console.log("Checkout closed by user");
+                        // console.log("Checkout closed by user");
                         setStatus("cancelled");
                     }
                 },

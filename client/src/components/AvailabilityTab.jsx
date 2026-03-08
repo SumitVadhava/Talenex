@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 export const AvailabilityTab = ({ data, onUpdate, readOnly }) => {
   // Direct update wrapper for instant save
   const handleChange = (field, value) => {
-    console.log(field, value);
+    // console.log(field, value);
     onUpdate({ [field]: value });
   };
 

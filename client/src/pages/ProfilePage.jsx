@@ -77,7 +77,7 @@ const ProfilePage = () => {
   const fetchData = async (userId) => {
     // Simulate network delay
     try {
-      console.log(userId);
+      // console.log(userId);
 
       const response = await api.get(
         "/User/Details" + (userId ? "/" + userId : ""),
@@ -250,7 +250,7 @@ const ProfilePage = () => {
       return;
     }
 
-    console.log(payload);
+    // console.log(payload);
     try {
       await api.put(
         `/${mappingSection[section]}/${id}`,
@@ -263,7 +263,7 @@ const ProfilePage = () => {
 
   const updateAvailability = async (data) => {
     const merged = { ...user.preferences.availability, ...data };
-    console.log(merged);
+    // console.log(merged);
 
     await putSection("availability", {
       availableOnWeekdays:
@@ -276,7 +276,7 @@ const ProfilePage = () => {
       preferredSessionMode: merged.mode !== undefined ? merged.mode : "online",
     });
 
-    console.log(user);
+    // console.log(user);
     setUser((prev) => ({
       ...prev,
       preferences: { ...prev.preferences, availability: merged },
@@ -386,7 +386,7 @@ const ProfilePage = () => {
         fullName: editedUser.name,
         profilePic: editedUser.avatarUrl
       });
-      console.log("Stream profile sync successful");
+      // console.log("Stream profile sync successful");
     } catch (err) {
       console.error("Error syncing profile with Stream:", err);
     }

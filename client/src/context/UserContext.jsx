@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useRef } from "react";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import api from "@/api/axios";
+import qs from "qs";
 
 export const UserContext = createContext(null);
 
@@ -47,26 +48,34 @@ export function UserProvider({ children }) {
                 headers: { Authorization: `Bearer ${token}` },
               });
 
-              console.log("Auth Response Data:", response.data);
+              // console.log("Auth Response Data:", response.data);
 
               localStorage.setItem("token", response.data.token);
               localStorage.setItem("userId", response.data.userId);
 
               // 🚀 Fetch full details to get isPremium and other fields
               const detailRes = await api.get("/User/Details", {
+                params: {
+                  include: ["Profile"]
+                },
+                paramsSerializer: (params) =>
+                  qs.stringify(params, { arrayFormat: "repeat" }),
                 headers: { Authorization: `Bearer ${response.data.token}` }
               });
 
-              console.log("User Detail Response:", detailRes.data);
+              // console.log("User Detail Response:", detailRes.data);
 
               setUserData(prev => {
                 const updated = {
                   ...prev,
                   isPremium: detailRes.data.isPremium === true || detailRes.data.isPremium === 'true',
                   premiumPlan: detailRes.data.premiumPlan || "",
+                  fullName: detailRes.data.profile.fullName || "",
+                  profilePhotoUrl: detailRes.data.profile.profilePhotoUrl || "",
+                  profileId: detailRes.data.profile.id || "",
                   // Also update profile info if needed
                 };
-                console.log("Updated UserData in Context:", updated);
+                // console.log("Updated UserData in Context:", updated);
                 return updated;
               });
 

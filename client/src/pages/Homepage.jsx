@@ -1391,6 +1391,10 @@ const Homepage = () => {
                       />
                     </div>
 
+                  </div>
+
+
+                  <div className="flex items-center gap-5 self-end sm:self-autoustify">
                     <style>{RAINBOW_STYLE}</style>
                     {userData?.isPremium && (
                       <div
@@ -1404,24 +1408,23 @@ const Homepage = () => {
                         </div>
                       </div>
                     )}
-                  </div>
 
-
-                  <div className="flex items-center gap-2 self-end sm:self-autoustify">
-                    <span className="text-sm text-slate-500 hidden sm:inline">
-                      Sort by:
-                    </span>
-                    <div className="relative group min-w-[140px]">
-                      <Select value={sortBy} onValueChange={setSortBy}>
-                        <SelectTrigger className="w-full bg-transparent pr-8 py-2 text-sm font-medium text-slate-900 border-none shadow-none focus:ring-0">
-                          <SelectValue placeholder="Sort by..." />
-                        </SelectTrigger>
-                        <SelectContent className="z-50">
-                          <SelectItem value="oldest">Oldest First</SelectItem>
-                          <SelectItem value="newest">Newest First</SelectItem>
-                          <SelectItem value="rating">Highest Rated</SelectItem>
-                        </SelectContent>
-                      </Select>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-slate-500 hidden sm:inline">
+                        Sort by:
+                      </span>
+                      <div className="relative group min-w-[140px]">
+                        <Select value={sortBy} onValueChange={setSortBy}>
+                          <SelectTrigger className="w-full bg-transparent pr-8 py-2 text-sm font-medium text-slate-900 border-none shadow-none focus:ring-0">
+                            <SelectValue placeholder="Sort by..." />
+                          </SelectTrigger>
+                          <SelectContent className="z-50">
+                            <SelectItem value="oldest">Oldest First</SelectItem>
+                            <SelectItem value="newest">Newest First</SelectItem>
+                            <SelectItem value="rating">Highest Rated</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
                   </div>
                 </>
@@ -1452,7 +1455,7 @@ const Homepage = () => {
               // ── AI Match Results Mode ──
               <>
                 {/* Banner */}
-                <div className="mb-4 flex items-center justify-between bg-gradient-to-r from-slate-900 to-slate-700 rounded-xl px-4 py-3">
+                {/* <div className="mb-4 flex items-center justify-between bg-gradient-to-r from-slate-900 to-slate-700 rounded-xl px-4 py-3">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-amber-400" />
                     <span className="text-sm font-semibold text-white">
@@ -1470,7 +1473,31 @@ const Homepage = () => {
                     <X className="w-3 h-3" />
                     Clear
                   </button>
+                </div> */}
+                <div className="mb-6 flex items-center justify-between bg-[#0f172a] border border-slate-700/60 shadow-[0_0_20px_-5px_rgba(251,191,36,0.15)] rounded-xl px-4 py-3 relative overflow-hidden">
+                  {/* Premium top gradient line mimicking a glowing edge */}
+                  <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-amber-400/40 to-transparent"></div>
+
+                  <div className="flex items-center gap-2.5">
+                    <Sparkles className="w-4 h-4 text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.6)]" />
+                    <span className="text-sm font-semibold text-slate-100 tracking-wide">
+                      AI Match Results
+                    </span>
+                    <span className="text-xs font-medium text-slate-400 ml-1">
+                      · {aiMatchIds.length} best partner{aiMatchIds.length !== 1 ? 's' : ''} found
+                      {skills.length === 0 && ' (Waiting...)'}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={clearAIMatch}
+                    className="group text-xs font-medium text-slate-300 hover:text-white flex items-center gap-1.5 bg-slate-800/50 hover:bg-slate-700/80 border border-slate-600/50 hover:border-slate-500 rounded-full px-3 py-1.5 backdrop-blur-sm transition-all duration-200 cursor-pointer"
+                  >
+                    <X className="w-3 h-3 text-slate-400 group-hover:text-white transition-colors" />
+                    Clear
+                  </button>
                 </div>
+                
 
                 {/* AI-matched cards */}
                 {aiMatchIds.length === 0 ? (
@@ -1499,9 +1526,9 @@ const Homepage = () => {
                       })
                       .filter(Boolean)
                       .map((skill, idx) => (
-                        <div key={skill.id || idx} className="relative h-full">
+                        <div key={skill.id || idx} className="relative h-full group">
                           {/* Rank badge */}
-                          <div className="absolute -top-2 -left-2 z-10 w-7 h-7 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center shadow-md">
+                          <div className="absolute -top-2 -left-2 z-10 w-7 h-7 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center shadow-md group-hover:-translate-y-1 group-hover:-translate-x-1 transition-transform duration-200">
                             #{idx + 1}
                           </div>
                           <SkillCard

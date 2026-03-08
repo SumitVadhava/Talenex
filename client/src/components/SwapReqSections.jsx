@@ -560,7 +560,7 @@ export const SwapCard = ({
 
     const generateGoogleCalendarLink = (swap) => {
         try {
-            console.log("Generating link for swap:", swap);
+            // console.log("Generating link for swap:", swap);
             let startDate;
 
             if (swap.rawProposedTime && swap.rawProposedTime.includes('T')) {
@@ -606,7 +606,7 @@ export const SwapCard = ({
             const recur = encodeURIComponent('RRULE:FREQ=DAILY');
 
             const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${dates}&recur=${recur}`;
-            console.log("Generated URL:", url);
+            // console.log("Generated URL:", url);
             return url;
         } catch (e) {
             console.error("Error generating calendar link:", e);

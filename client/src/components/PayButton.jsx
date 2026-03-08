@@ -60,7 +60,7 @@ function PayButtonTest() {
       amount: 500 * 100, // ₹500 in paise
       currency: "INR",
       handler: function (response) {    
-        console.log("Payment Success:", response);
+        // console.log("Payment Success:", response);
         alert("Payment Success (Frontend Test Only) ✅\nPaymentId: " + response.razorpay_payment_id);
       }
     };
