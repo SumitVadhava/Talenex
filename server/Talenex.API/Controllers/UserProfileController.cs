@@ -15,12 +15,14 @@ namespace Talenex.API.Controllers
     public class UserProfileController : ControllerBase
     {
         private readonly IService<UserProfile> _service;
+        private readonly IUserReviewRepository _userReviewRepository;
         private readonly IValidator<CreateUserProfileDto> _createValidator;
         private readonly IValidator<UpdateUserProfileDto> _updateValidator;
 
-        public UserProfileController(IService<UserProfile> service,IValidator<CreateUserProfileDto> createValidator, IValidator<UpdateUserProfileDto> updateValidator)
+        public UserProfileController(IService<UserProfile> service, IUserReviewRepository userReviewRepository, IValidator<CreateUserProfileDto> createValidator, IValidator<UpdateUserProfileDto> updateValidator)
         {
             _service = service;
+            _userReviewRepository = userReviewRepository;
             _createValidator = createValidator;
             _updateValidator = updateValidator;
         }
@@ -88,6 +90,9 @@ namespace Talenex.API.Controllers
                 });
             }
 
+            bool nameChanged = existing.FullName != dto.FullName;
+            bool photoChanged = existing.ProfilePhotoUrl != dto.ProfilePhotoUrl;
+
             existing.FullName = dto.FullName;
             existing.Username = dto.Username;
             existing.Bio = dto.Bio;
@@ -96,9 +101,23 @@ namespace Talenex.API.Controllers
             existing.Latitude = dto.Latitude;
             existing.Longitude = dto.Longitude;
 
-            
+            var updated = await _service.UpdateAsync(existing);
 
-            return Ok(await _service.UpdateAsync(existing));
+            if (nameChanged || photoChanged)
+            {
+                var reviews = await _userReviewRepository.GetByUserIdAsync(existing.UserId);
+                if (reviews != null && reviews.Any())
+                {
+                    foreach (var review in reviews)
+                    {
+                        if (nameChanged) review.ReviewerName = dto.FullName;
+                        if (photoChanged) review.ReviewerAvatar = dto.ProfilePhotoUrl ?? string.Empty;
+                        await _userReviewRepository.UpdateAsync(review);
+                    }
+                }
+            }
+
+            return Ok(updated);
         }
 
         [HttpDelete("{id}")]
