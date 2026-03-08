@@ -345,69 +345,79 @@ const ProfilePage = () => {
   };
 
   const updateProfile = async () => {
-    const id = sectionIds.profile;
+    const profileId = sectionIds.profile;
+    if (!profileId) {
+      throw new Error("Profile ID missing. Please refresh the page and try again.");
+    }
+
     const payload = {
       fullName: editedUser.name || "",
-      username: user.username,
+      username: editedUser.username || user.username || "",
       bio: editedUser.bio || "",
       profilePhotoUrl: editedUser.avatarUrl,
       location: editedUser.location || "",
-      latitude: user.latitude,
-      longitude: user.longitude,
+      latitude: editedUser.latitude || user.latitude,
+      longitude: editedUser.longitude || user.longitude,
     };
 
-    // console.log("profile payload", payload);
-
-    if (!id) {
-      console.log(`No ID found for section: profile`);
-      return;
-    }
-
     await api.put(
-      `/UserProfile/${id}`,
+      `/UserProfile/${profileId}`,
       payload,
     );
-    const existingMetadata = clerkUser.unsafeMetadata || {};
-
-    await clerkUser.update({
-      unsafeMetadata: {
-        ...existingMetadata,// ✅ keeps ALL existing keys
-        fullName: editedUser.name,
-        profile: {
-          ...(existingMetadata.profile || {}), // ✅ keeps profile.bio, username, etc.
-          avatarUrl: editedUser.avatarUrl       // ✅ only updates avatar
+    // 2. Secondary Syncs (Background/Non-blocking)
+    const syncExternalServices = async () => {
+      // Clerk Metadata Sync
+      if (clerkUser) {
+        try {
+          const existingMetadata = clerkUser.unsafeMetadata || {};
+          await clerkUser.update({
+            unsafeMetadata: {
+              ...existingMetadata,
+              fullName: editedUser.name,
+              profile: {
+                ...(existingMetadata.profile || {}),
+                avatarUrl: editedUser.avatarUrl
+              }
+            }
+          });
+        } catch (err) {
+          console.error("Clerk sync failed:", err);
         }
       }
-    });
 
-    // Backend sync to Stream Chat
-    try {
-      await api.post("/stream/user/upsert", {
-        fullName: editedUser.name,
-        profilePic: editedUser.avatarUrl
-      });
-      // console.log("Stream profile sync successful");
-    } catch (err) {
-      console.error("Error syncing profile with Stream:", err);
-    }
+      // Stream Chat Sync
+      try {
+        await api.post("/stream/user/upsert", {
+          fullName: editedUser.name,
+          profilePic: editedUser.avatarUrl
+        });
+      } catch (err) {
+        console.error("Stream sync failed:", err);
+      }
+    };
+
+    // Fire and forget
+    syncExternalServices();
   };
 
   const [isSaving, setIsSaving] = useState(false);
 
   const handleEditToggle = () => {
-    setEditedUser(user);
+    setEditedUser({ ...user });
     setIsEditing(true);
   };
 
   const handleSave = async () => {
+    if (isSaving) return;
     setIsSaving(true);
     try {
       await Promise.all([updateProfile(), updateSkills()]);
 
-      setUser(editedUser);
+      setUser({ ...editedUser });
       setIsEditing(false);
-      // Simulate batch save for General tab
-      // console.log("[PUT] Batch update for General profile:", editedUser);
+    } catch (error) {
+      console.error("Save failed:", error);
+      alert(error.response?.data?.errors?.join("\n") || error.message || "An unexpected error occurred while saving.");
     } finally {
       setIsSaving(false);
     }
