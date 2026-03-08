@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Talenex.Domain.Entities
 {
@@ -15,10 +16,12 @@ namespace Talenex.Domain.Entities
         [ForeignKey("User")]
         public Guid UserId { get; set; }
 
+        [JsonIgnore]
         public User User { get; set; }
 
         public Guid? ReviewerId { get; set; }
 
+        [JsonIgnore]
         [ForeignKey("ReviewerId")]
         public UserProfile? UserProfile { get; set; }
         
