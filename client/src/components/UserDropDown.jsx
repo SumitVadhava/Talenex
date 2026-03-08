@@ -19,7 +19,34 @@ export default function UserDropdown() {
     useEffect(() => {
         if (!isLoaded || !isSignedIn) return;
 
-        // console.log("user from Clerk:", user.unsafeMetadata);
+        const handleKeyDown = (e) => {
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName) || e.target.isContentEditable) {
+                return;
+            }
+
+            const isModifier = e.ctrlKey || e.metaKey;
+            if (isModifier) {
+                switch (e.key.toLowerCase()) {
+                    case 'a':
+                        e.preventDefault();
+                        navigate("/user-profile");
+                        setIsOpen(false);
+                        break;
+                    case 'p':
+                        e.preventDefault();
+                        navigate("/pricing");
+                        setIsOpen(false);
+                        break;
+                    case 'l':
+                        e.preventDefault();
+                        signOut(() => {
+                            localStorage.clear("token");
+                            navigate('/');
+                        });
+                        break;
+                }
+            }
+        };
 
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -27,12 +54,14 @@ export default function UserDropdown() {
             }
         };
 
+        document.addEventListener("keydown", handleKeyDown);
         document.addEventListener("mousedown", handleClickOutside);
 
         return () => {
+            document.removeEventListener("keydown", handleKeyDown);
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [isLoaded, isSignedIn]);
+    }, [isLoaded, isSignedIn, navigate, signOut]);
 
 
     return (
@@ -85,6 +114,7 @@ export default function UserDropdown() {
                                 <Settings className="w-5 h-5 text-slate-600" />
                             </div>
                             <span className="font-medium">Manage account</span>
+                            <span className="ml-auto text-xs font-semibold text-slate-400">Ctrl + A</span>
                         </button>
 
                         <button
@@ -98,6 +128,7 @@ export default function UserDropdown() {
                                 <Crown className="w-5 h-5 text-slate-600" />
                             </div>
                             <span className="font-medium">Explore Premium</span>
+                            <span className="ml-auto text-xs font-semibold text-slate-400">Ctrl + P</span>
                         </button>
 
                         <button
@@ -113,6 +144,7 @@ export default function UserDropdown() {
                                 <LogOut className="w-5 h-5 text-slate-600" />
                             </div>
                             <span className="font-medium">Sign out</span>
+                            <span className="ml-auto text-xs font-semibold text-slate-400">Ctrl + L</span>
                         </button>
                     </div>
 

@@ -471,12 +471,14 @@ const App = () => {
             // Get reviewer info from Clerk user object
             const reviewerName = userData?.fullName || user?.fullName;
             const reviewerAvatar = userData?.profilePhotoUrl || user?.unsafeMetadata?.profile?.avatarUrl;
+            const reviewerId = userData?.profileId;
 
             // Prepare the request body according to backend API spec
             const requestBody = {
                 userId: selectedSwapForReview?.partnerId, // The partner's userId (person being reviewed)
                 reviewerAvatar: reviewerAvatar,
                 reviewerName: reviewerName,
+                reviewerId: reviewerId,
                 rating: Number(reviewData.rating),
                 reviewMsg: reviewData.review
             };

@@ -233,7 +233,7 @@ export default function AIDemoPopup({ onClose, onResults }) {
     setIsLoading(true);
     try {
       const matchedIds = await fetchAIMatches({ requiredSkills: [targetSkill], topN: topCount });
-      console.log('[AiMatch] Backend returned IDs:', matchedIds);
+      // console.log('[AiMatch] Backend returned IDs:', matchedIds);
       onResults(matchedIds);
       onClose();
     } catch (err) {
@@ -302,7 +302,7 @@ export default function AIDemoPopup({ onClose, onResults }) {
                     <button
                       key={s}
                       onClick={() => addSkill(s)}
-                      className={`w-full text-left px-4 py-2 text-sm transition-all flex items-center justify-between group 
+                      className={`w-full text-left px-4 py-2 text-sm transition-all flex items-center justify-between group cursor-pointer
                         ${idx === selectedIndex ? 'bg-indigo-50 text-indigo-700 shadow-sm' : 'text-slate-700 hover:bg-slate-50'}`}
                     >
                       <span className={`font-medium ${idx === selectedIndex ? 'translate-x-1' : ''} transition-transform duration-200`}>

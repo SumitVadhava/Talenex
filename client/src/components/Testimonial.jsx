@@ -240,7 +240,7 @@ export default function TestimonialSection({ testimonialsRef }) {
         const fetchTestimonials = async () => {
             try {
                 const response = await api.get("/rate-us");
-                console.log("Raw Testimonials API Response:", response.data);
+                // console.log("Raw Testimonials API Response:", response.data);
 
                 let data = response.data;
                 if (data && data.$values) data = data.$values;
@@ -270,7 +270,7 @@ export default function TestimonialSection({ testimonialsRef }) {
 
                 // Sort by latest and take 10
                 const sorted = mapped.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
-                console.log("Mapped and Sorted Testimonials:", sorted);
+                // console.log("Mapped and Sorted Testimonials:", sorted);
                 setTestimonials(sorted);
             } catch (error) {
                 console.error("Error fetching testimonials:", error);

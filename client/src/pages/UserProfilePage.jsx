@@ -362,7 +362,7 @@ const UserProfilePage = () => {
                     )}
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent side="bottom">
                   <p>{isCopied ? "Copied!" : "Share Profile"}</p>
                 </TooltipContent>
               </Tooltip>
@@ -410,9 +410,9 @@ const UserProfilePage = () => {
               </div>
 
               <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
-                <TooltipProvider>
+                {/* <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger asChild>
+                    <TooltipTrigger asChild> */}
                       <Button
                         variant="outline"
                         size="icon"
@@ -422,12 +422,12 @@ const UserProfilePage = () => {
                       >
                         <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
                       </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
+                    {/* </TooltipTrigger>
+                    <TooltipContent side="bottom">
                       <p>{isFavorite ? "Remove from Favourites" : "Add to Favourites"}</p>
                     </TooltipContent>
                   </Tooltip>
-                </TooltipProvider>
+                </TooltipProvider> */}
                 <Button
                   variant="outline"
                   onClick={() => isChatReady && openChatWithUser(userData.id)}

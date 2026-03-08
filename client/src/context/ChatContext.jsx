@@ -23,7 +23,7 @@ export const ChatProvider = ({ children }) => {
         }
 
         const init = async () => {
-            console.log("[ChatContext] Auth ready (v" + authVersion + "), initializing Stream...");
+            // console.log("[ChatContext] Auth ready (v" + authVersion + "), initializing Stream...");
             try {
 
                 const res = await api.get(`/User/Details/${userId}`, {

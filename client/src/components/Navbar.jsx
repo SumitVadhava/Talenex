@@ -14,7 +14,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useUser, SignedIn, SignedOut, useClerk } from "@clerk/clerk-react";
 import UserDropdown from "./UserDropDown";
 import { LogOut, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
 export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsRef }) {
   const navigate = useNavigate();
@@ -23,6 +24,42 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
   const pathName = useLocation();
   const { isLoaded, isSignedIn, user } = useUser();
   const { signOut } = useClerk();
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!isSignedIn) return;
+
+      // Ignore if user is typing in an input or textarea
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName) || e.target.isContentEditable) {
+        return;
+      }
+
+      const isModifier = e.ctrlKey || e.metaKey;
+      if (isModifier) {
+        switch (e.key.toLowerCase()) {
+          case 'e':
+            e.preventDefault();
+            navigate('/home');
+            break;
+          case 's':
+            e.preventDefault();
+            navigate('/my-swaps');
+            break;
+          case 'm':
+            e.preventDefault();
+            window.open(window.location.origin + "/messages", "_blank");
+            break;
+          case 'k':
+            e.preventDefault();
+            navigate('/join/live-room');
+            break;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate, isSignedIn]);
 
   // const scrollToSection = (ref) => {
   //   ref.current?.scrollIntoView({ behavior: "smooth" });
@@ -52,10 +89,10 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
       },
     ],
     user: [
-      { label: "Explore", href: "/home" },
-      { label: "My Swaps", href: "/my-swaps" },
-      { label: "Messages", href: "/messages" },
-      { label: "Connect", href: "/join/live-room" }
+      { label: "Explore", href: "/home", shortcut: "Ctrl + E" },
+      { label: "My Swaps", href: "/my-swaps", shortcut: "Ctrl + S" },
+      { label: "Messages", href: "/messages", shortcut: "Ctrl + M" },
+      { label: "Connect", href: "/join/live-room", shortcut: "Ctrl + K" }
     ]
   };
 
@@ -75,37 +112,55 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
             <NavigationMenuList className="gap-8">
               {(isSignedIn ? navLinks["user"] : navLinks["default"]).map((link) => {
                 const isActive = link.href && location.pathname === link.href;
+
+                const linkElement = (
+                  <NavigationMenuLink
+                    className={`text-md font-semibold cursor-pointer px-3 py-2 rounded-lg transition-colors ${isActive ? 'bg-slate-50' : 'hover:bg-slate-25'
+                      }`}
+                    href={link.href}
+                    onClick={(e) => {
+                      // Use href for route navigation, action+ref for in-page scroll
+                      if (link.href) {
+                        e.preventDefault();
+                        if (link.href === "/messages") {
+                          const url = window.location.origin + "/messages";
+                          window.open(url, "_blank");
+                        } else {
+                          navigate(link.href);
+                        }
+                      } else if (link.action && link.ref) {
+                        e.preventDefault();
+                        if (pathName.pathname === "/") {
+                          link.action(link.ref);
+                        } else {
+                          navigate("/");
+                          setTimeout(() => {
+                            link.action(link.ref);
+                          }, 100);
+                        }
+                      }
+                    }}
+                  >
+                    {link.label}
+                  </NavigationMenuLink>
+                );
+
                 return (
                   <NavigationMenuItem key={link.label}>
-                    <NavigationMenuLink
-                      className={`text-md font-semibold cursor-pointer px-3 py-2 rounded-lg transition-colors ${isActive ? 'bg-slate-50' : 'hover:bg-slate-25'
-                        }`}
-                      href={link.href}
-                      onClick={(e) => {
-                        // Use href for route navigation, action+ref for in-page scroll
-                        if (link.href) {
-                          e.preventDefault();
-                          if (link.href === "/messages") {
-                            const url = window.location.origin + "/messages";
-                            window.open(url, "_blank");
-                          } else {
-                            navigate(link.href);
-                          }
-                        } else if (link.action && link.ref) {
-                          e.preventDefault();
-                          if(pathName.pathname === "/") {
-                            link.action(link.ref);
-                          } else {
-                            navigate("/");
-                            setTimeout(() => {
-                              link.action(link.ref);
-                            }, 100);
-                          }
-                        }
-                      }}
-                    >
-                      {link.label}
-                    </NavigationMenuLink>
+                    {link.shortcut ? (
+                      <TooltipProvider>
+                        <Tooltip delayDuration={300}>
+                          <TooltipTrigger asChild>
+                            {linkElement}
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom">
+                            <p>{link.shortcut}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ) : (
+                      linkElement
+                    )}
                   </NavigationMenuItem>
                 );
               })}

@@ -223,7 +223,7 @@ export const SettingsTab = ({ data, onUpdate }) => {
               variant="destructive"
               disabled={confirmationText !== CONFIRMATION_STRING}
               onClick={() => {
-                console.log("ACCOUNT DELETED");
+                // console.log("ACCOUNT DELETED");
                 // TODO: Perform actual deletion
                 setIsSecondDialogOpen(false);
                 setConfirmationText("");

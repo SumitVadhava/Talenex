@@ -350,7 +350,7 @@ export default function Step1BasicInfo({ formData, updateFormData, onNext }) {
         <Button
           onClick={() => {
             onNext();
-            console.log(formData);
+            // console.log(formData);
           }}
           disabled={!isFormValid}
           className="w-full md:w-auto px-8 py-3 h-12 text-base bg-indigo-600 hover:bg-indigo-700 cursor-pointer"
