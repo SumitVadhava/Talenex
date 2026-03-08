@@ -35,8 +35,16 @@ namespace Talenex.infrastructure.Repositories
         }
         public async Task<T> UpdateAsync(T entity)
         {
-            _table.Attach(entity);
-            _db.Entry(entity).State = EntityState.Modified;
+            var trackedEntity = _db.ChangeTracker.Entries<T>().FirstOrDefault(e => e.Entity.Id == entity.Id);
+            if (trackedEntity == null)
+            {
+                _table.Attach(entity);
+                _db.Entry(entity).State = EntityState.Modified;
+            }
+            else if (trackedEntity.Entity != entity)
+            {
+                _db.Entry(trackedEntity.Entity).CurrentValues.SetValues(entity);
+            }
 
             await _db.SaveChangesAsync();
             return entity;

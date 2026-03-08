@@ -93,16 +93,6 @@ namespace Talenex.API.Controllers
             bool nameChanged = existing.FullName != dto.FullName;
             bool photoChanged = existing.ProfilePhotoUrl != dto.ProfilePhotoUrl;
 
-            existing.FullName = dto.FullName;
-            existing.Username = dto.Username;
-            existing.Bio = dto.Bio;
-            existing.ProfilePhotoUrl = dto.ProfilePhotoUrl;
-            existing.Location = dto.Location;
-            existing.Latitude = dto.Latitude;
-            existing.Longitude = dto.Longitude;
-
-            var updated = await _service.UpdateAsync(existing);
-
             if (nameChanged || photoChanged)
             {
                 var reviews = await _userReviewRepository.GetByReviewerIdAsync(existing.Id);
@@ -112,10 +102,19 @@ namespace Talenex.API.Controllers
                     {
                         if (nameChanged) review.ReviewerName = dto.FullName;
                         if (photoChanged) review.ReviewerAvatar = dto.ProfilePhotoUrl ?? string.Empty;
-                        await _userReviewRepository.UpdateAsync(review);
                     }
                 }
             }
+
+            existing.FullName = dto.FullName;
+            existing.Username = dto.Username;
+            existing.Bio = dto.Bio;
+            existing.ProfilePhotoUrl = dto.ProfilePhotoUrl;
+            existing.Location = dto.Location;
+            existing.Latitude = dto.Latitude;
+            existing.Longitude = dto.Longitude;
+
+            var updated = await _service.UpdateAsync(existing);
 
             return Ok(updated);
         }
