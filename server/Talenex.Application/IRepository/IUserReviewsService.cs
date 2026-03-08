@@ -11,6 +11,7 @@ namespace Talenex.Application.IRepository
     public interface IUserReviewsService
     {
         Task<List<UserReviews>> GetByUserIdAsync(Guid userId);
+        Task<List<UserReviews>> GetByReviewerIdAsync(Guid reviewerId);
         Task AddReviewAsync(CreateUserReviewDto dto);
     }
 

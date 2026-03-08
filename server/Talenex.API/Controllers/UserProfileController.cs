@@ -105,7 +105,7 @@ namespace Talenex.API.Controllers
 
             if (nameChanged || photoChanged)
             {
-                var reviews = await _userReviewRepository.GetByUserIdAsync(existing.UserId);
+                var reviews = await _userReviewRepository.GetByReviewerIdAsync(existing.Id);
                 if (reviews != null && reviews.Any())
                 {
                     foreach (var review in reviews)

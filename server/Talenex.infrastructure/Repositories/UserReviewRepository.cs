@@ -23,7 +23,13 @@ namespace Talenex.infrastructure.Repositories
                 .ToListAsync();
         }
 
-            
+        public async Task<List<UserReviews>> GetByReviewerIdAsync(Guid reviewerId)
+        {
+            return await _table
+                .Where(r => r.ReviewerId == reviewerId)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToListAsync();
+        }
     }
 
 }

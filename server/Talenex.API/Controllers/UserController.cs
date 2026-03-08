@@ -160,6 +160,7 @@ namespace Talenex.API.Controllers
                                 : user.UserReviews.Select(r => new UserReviewDto
                                 {
                                     Id = r.Id,
+                                    ReviewerId = r.ReviewerId,
                                     ReviewerAvatar = r.ReviewerAvatar,
                                     ReviewerName = r.ReviewerName,
                                     Rating = r.Rating,
@@ -301,6 +302,7 @@ namespace Talenex.API.Controllers
                                 : user.UserReviews.Select(r => new UserReviewDto
                                 {
                                     Id = r.Id,
+                                    ReviewerId = r.ReviewerId,
                                     ReviewerAvatar = r.ReviewerAvatar,
                                     ReviewerName = r.ReviewerName,
                                     Rating = r.Rating,
@@ -434,6 +436,7 @@ namespace Talenex.API.Controllers
                                  : user.UserReviews.Select(r => new UserReviewDto
                                  {
                                      Id = r.Id,
+                                     ReviewerId = r.ReviewerId,
                                      ReviewerAvatar = r.ReviewerAvatar,
                                      ReviewerName = r.ReviewerName,
                                      Rating = r.Rating,

@@ -210,6 +210,12 @@ namespace Talenex.infrastructure.Data
 
                 r.Property(r => r.CreatedAt)
                     .IsRequired();
+
+                r.HasOne(r => r.UserProfile)
+                    .WithMany(p => p.WrittenReviews)
+                    .HasForeignKey(r => r.ReviewerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
             });
 
 

@@ -31,5 +31,7 @@ namespace Talenex.Domain.Entities
         public string Location { get; set; }
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
+
+        public ICollection<UserReviews> WrittenReviews { get; set; } = new List<UserReviews>();
     }
 }

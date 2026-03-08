@@ -17,6 +17,11 @@ namespace Talenex.Domain.Entities
 
         public User User { get; set; }
 
+        public Guid? ReviewerId { get; set; }
+
+        [ForeignKey("ReviewerId")]
+        public UserProfile? UserProfile { get; set; }
+        
         public string ReviewerAvatar { get; set; } = string.Empty;
 
         public string ReviewerName { get; set; } = string.Empty;

@@ -12,7 +12,9 @@ namespace Talenex.Application.DTOs.CreateDtos
         public Guid UserId { get; set; }
 
         [Required]
+        public Guid ReviewerId { get; set; }
 
+        [Required]
         public string ReviewerAvatar { get; set; }
 
         [Required]

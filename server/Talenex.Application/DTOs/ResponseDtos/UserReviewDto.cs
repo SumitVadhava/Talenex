@@ -11,6 +11,8 @@ namespace Talenex.Application.DTOs.ResponseDtos
     {
         public Guid Id { get; set; }
 
+        public Guid? ReviewerId { get; set; }
+
         public string ReviewerAvatar { get; set; }
 
         public string ReviewerName { get; set; }

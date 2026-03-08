@@ -40,6 +40,7 @@ public class UserReviewService : IUserReviewsService
         {
             Id = Guid.NewGuid(),
             UserId = user.UserId,
+            ReviewerId = dto.ReviewerId,
             ReviewerAvatar = dto.ReviewerAvatar,
             ReviewerName = dto.ReviewerName,
             Rating = dto.Rating,
@@ -89,6 +90,11 @@ public class UserReviewService : IUserReviewsService
             );
         }
 
+    }
+
+    public async Task<List<UserReviews>> GetByReviewerIdAsync(Guid reviewerId)
+    {
+        return await _userReviewRepository.GetByReviewerIdAsync(reviewerId);
     }
 
 
