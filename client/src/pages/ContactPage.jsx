@@ -68,7 +68,6 @@ export default function ContactPage() {
 
     return (
         <div className="relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            {/* Background Grid Pattern */}
             <div className="fixed inset-0 z-0 w-full h-full overflow-hidden pointer-events-none">
                 <GridPattern strokeDasharray={"4 5"} width={50} height={50} className="stroke-zinc-500 opacity-20" />
             </div>
