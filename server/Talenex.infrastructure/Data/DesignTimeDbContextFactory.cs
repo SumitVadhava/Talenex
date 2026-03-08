@@ -11,7 +11,7 @@ namespace Talenex.infrastructure.Data
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDBContext>();
 
-            optionsBuilder.UseSqlServer("Server=tcp:talenex-server.database.windows.net,1433;Database=TalenexDB;User Id=SumitVadhava;Password=@Sumit806;Encrypt=True;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("Server=tcp:talenex-server-v1.database.windows.net,1433;Database=TalenexDB;User Id=SumitVadhava7171;Password=@Sumit806;Encrypt=True;TrustServerCertificate=True;");
 
             return new AppDBContext(optionsBuilder.Options);
         }
