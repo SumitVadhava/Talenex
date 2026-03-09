@@ -70,9 +70,9 @@ export function UserProvider({ children }) {
                   ...prev,
                   isPremium: detailRes.data.isPremium === true || detailRes.data.isPremium === 'true',
                   premiumPlan: detailRes.data.premiumPlan || "",
-                  fullName: detailRes.data.profile.fullName || "",
-                  profilePhotoUrl: detailRes.data.profile.profilePhotoUrl || "",
-                  profileId: detailRes.data.profile.id || "",
+                  fullName: detailRes.data.profile?.fullName || "",
+                  profilePhotoUrl: detailRes.data.profile?.profilePhotoUrl || "",
+                  profileId: detailRes.data.profile?.id || "",
                   // Also update profile info if needed
                 };
                 // console.log("Updated UserData in Context:", updated);
