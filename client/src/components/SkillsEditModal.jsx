@@ -311,13 +311,22 @@ export const SkillsEditModal = ({ isOpen, onClose, type, initialData, onSave }) 
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => fileInputRef.current?.click()}
-                                                    className="text-xs text-zinc-500 hover:text-zinc-800 font-medium underline px-2 py-1"
-                                                >
-                                                    Change
-                                                </button>
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => fileInputRef.current?.click()}
+                                                        className="text-xs text-zinc-500 hover:text-zinc-800 font-medium underline px-2 py-1 cursor-pointer"
+                                                    >
+                                                        Change
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setFormData((prev) => ({ ...prev, certificateURL: null, file: null }))}
+                                                        className="text-xs text-red-500 hover:text-red-700 font-medium underline px-2 py-1 cursor-pointer"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
                                             </div>
                                         ) : (
                                             <div
