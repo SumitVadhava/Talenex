@@ -296,6 +296,29 @@ export const SkillsEditModal = ({ isOpen, onClose, type, initialData, onSave }) 
                                                     <X size={16} />
                                                 </button>
                                             </div>
+                                        ) : formData.certificateURL ? (
+                                            <div className="border border-zinc-200 bg-zinc-50 rounded-lg p-3 flex items-center justify-between">
+                                                <div className="flex items-center gap-3 overflow-hidden">
+                                                    <div className="w-8 h-8 rounded bg-white border border-zinc-200 flex items-center justify-center text-zinc-500 shrink-0 overflow-hidden">
+                                                        <img src={formData.certificateURL} alt="cert" className="w-full h-full object-cover" />
+                                                    </div>
+                                                    <div className="truncate">
+                                                        <p className="text-sm font-medium text-zinc-900 truncate">
+                                                            Current Certificate
+                                                        </p>
+                                                        <a href={formData.certificateURL} target="_blank" rel="noreferrer" className="text-xs text-blue-600 hover:underline">
+                                                            View current file
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => fileInputRef.current?.click()}
+                                                    className="text-xs text-zinc-500 hover:text-zinc-800 font-medium underline px-2 py-1"
+                                                >
+                                                    Change
+                                                </button>
+                                            </div>
                                         ) : (
                                             <div
                                                 onDragEnter={handleDrag}

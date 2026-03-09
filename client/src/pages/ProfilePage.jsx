@@ -39,6 +39,7 @@ import api from "../api/axios";
 import qs from "qs";
 import { useUser } from "@clerk/clerk-react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState("general");
@@ -150,6 +151,8 @@ const ProfilePage = () => {
           name: skill.title,
           level: skill.level,
           category: skill.category,
+          description: skill.description || "",
+          certificateURL: skill.certificateURL || "",
         })) || [],
 
       skillsWanted:
@@ -321,6 +324,18 @@ const ProfilePage = () => {
     }));
   };
 
+  const uploadSkillCertificate = async (file) => {
+    if (!file) return null;
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "Certificates");
+    const res = await axios.post(
+      "https://api.cloudinary.com/v1_1/dpwes05hc/raw/upload",
+      formData,
+    );
+    return res.data.secure_url;
+  };
+
   const updateSkills = async () => {
     const id = sectionIds.skills;
 
@@ -328,14 +343,27 @@ const ProfilePage = () => {
       console.log(`No ID found for section: skills`);
       return;
     }
-    await api.put(
-      `/UserSkills/${id}`,
-      {
-        skillsOffered: editedUser.skillsOffered.map((s) => ({
+
+    const processedOfferedSkills = await Promise.all(
+      editedUser.skillsOffered.map(async (s) => {
+        let certificateURL = s.certificateURL;
+        if (s.file) {
+          certificateURL = await uploadSkillCertificate(s.file);
+        }
+        return {
           title: s.name,
           category: s.category,
           level: s.level,
-        })),
+          description: s.description || "",
+          certificateURL: certificateURL || "",
+        };
+      })
+    );
+
+    await api.put(
+      `/UserSkills/${id}`,
+      {
+        skillsOffered: processedOfferedSkills,
         skillsWanted: editedUser.skillsWanted.map((s) => ({
           name: s.name,
           level: s.level,
@@ -413,7 +441,21 @@ const ProfilePage = () => {
     try {
       await Promise.all([updateProfile(), updateSkills()]);
 
-      setUser({ ...editedUser });
+      // Re-derive user data to include updated certificates
+      const updatedUser = {
+        ...editedUser,
+        certificates: editedUser.skillsOffered
+          .filter(s => s.certificateURL || s.file)
+          .map((s, index) => ({
+            id: index.toString(),
+            title: s.name,
+            certificateURL: s.certificateURL // This might still be old if we don't fetch again, but it's better than nothing
+          }))
+      };
+
+      // Best approach: Refetch data to ensure everything is in sync
+      await fetchData(id);
+
       setIsEditing(false);
     } catch (error) {
       console.error("Save failed:", error);
