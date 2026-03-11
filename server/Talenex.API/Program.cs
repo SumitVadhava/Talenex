@@ -25,7 +25,7 @@ var builder = WebApplication.CreateBuilder(args);
 // ==========================
 builder.Services.AddControllers();
 
-//builder.WebHost.UseUrls("http://0.0.0.0:10000");
+builder.WebHost.UseUrls("http://0.0.0.0:10000");
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
