@@ -16,6 +16,10 @@ export const mapUsersApiToSkillsList = (users) => {
           rating: user.reputation?.averageRating ?? 0,
           reviewCount: user.reputation?.totalReviews ?? 0,
           totalSwapsCompleted: user.reputation?.totalSwapsCompleted ?? 0,
+          showLocation: user.privacy?.showLocation ?? true,
+          availableOnWeekdays: user.availability?.availableOnWeekdays ?? true,
+          availableOnWeekends: user.availability?.availableOnWeekends ?? true,
+          notifyOnRequest: user.notifications?.notifyOnSwapRequest ?? true,
         },
 
         // 🔥 ALL OFFERED SKILLS

@@ -1497,7 +1497,7 @@ const Homepage = () => {
                     Clear
                   </button>
                 </div>
-                
+
 
                 {/* AI-matched cards */}
                 {aiMatchIds.length === 0 ? (

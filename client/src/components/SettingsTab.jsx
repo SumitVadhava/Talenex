@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, Input, Select } from './ui/Primitives';
-import { Settings as SettingsIcon, Trash2, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { Settings as SettingsIcon, Trash2, ShieldCheck, AlertTriangle, Crown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useDebounce } from '../hooks/useDebounce';
 import {
@@ -15,6 +15,7 @@ import { Button } from "./ui/button";
 
 export const SettingsTab = ({ data, onUpdate }) => {
   const [email, setEmail] = useState(data.email);
+  const [premiumPlan, setPremiumPlan] = useState(data.premiumPlan === "Free" ? "Free Tier" : data.premiumPlan);
   const debouncedEmail = useDebounce(email, 800);
 
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
@@ -67,7 +68,6 @@ export const SettingsTab = ({ data, onUpdate }) => {
               type="email"
               value={email}
               disabled
-              onChange={(e) => setEmail(e.target.value)}
               className="max-w-md"
             />
             <p className="text-sm text-muted-foreground">This is the email associated with your account.</p>
@@ -76,6 +76,19 @@ export const SettingsTab = ({ data, onUpdate }) => {
           <div className="h-px bg-border/50" />
 
           <div className="grid gap-3">
+            <div className='flex items-center space-x-2'>
+              <label className="text-base font-medium text-foreground">Current Plan</label>
+              <Crown className="w-4 h-4 text-amber-300 mb-2" />
+            </div>
+            <Input
+              type="text"
+              value={premiumPlan}
+              disabled
+              className="max-w-md"
+            />
+            <p className="text-sm text-muted-foreground">This is the current plan associated with your account.</p>
+          </div>
+          {/* <div className="grid gap-3">
             <label className="text-base font-medium text-foreground">Language</label>
             <Select
               value={data.language}
@@ -88,7 +101,7 @@ export const SettingsTab = ({ data, onUpdate }) => {
               <option value="de">German</option>
             </Select>
             <p className="text-sm text-muted-foreground">Select your preferred language for the interface.</p>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
 
@@ -230,7 +243,7 @@ export const SettingsTab = ({ data, onUpdate }) => {
               }}
               className="bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer"
             >
-              Delete My Account
+              Delete Account
             </Button>
           </DialogFooter>
         </DialogContent>

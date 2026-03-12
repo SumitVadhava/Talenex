@@ -1663,8 +1663,8 @@ const MatchingChart = ({ cardColor = '#8b5cf6' }) => {
 
       {/* AI Label */}
       <div className="mt-4 text-center">
-        <div className="text-sm font-semibold text-gray-700">Neural Matching Engine</div>
-        <div className="text-xs text-gray-500">AI-powered skill compatibility</div>
+        <div className="text-sm font-semibold text-gray-700">AI Matching Engine</div>
+        <div className="text-xs text-gray-500">Groq-powered skill matching</div>
       </div>
     </div>
   );
@@ -1950,9 +1950,9 @@ const ChatPreview = () => {
 // Rating Display
 const RatingDisplay = () => {
   const ratings = [
-    { label: 'Teaching Quality', value: 4.6, max: 5 },
-    { label: 'Communication', value: 4.6, max: 5 },
-    { label: 'Punctuality', value: 4.7, max: 5 },
+    { label: 'UI/UX Design', value: 4.6, max: 5 },
+    { label: 'Matching Accuracy', value: 4.6, max: 5 },
+    { label: 'Help & Support', value: 4.7, max: 5 },
     { label: 'Overall Experience', value: 4.6, max: 5 }
   ];
 
@@ -1987,7 +1987,7 @@ const RatingDisplay = () => {
       </div>
       {ratings.map((rating, i) => (
         <div key={i} className="flex items-center gap-3">
-          <span className="text-xs font-medium text-gray-600 w-24 text-right">{rating.label}</span>
+          <span className="text-xs font-medium text-gray-600 w-30 text-right">{rating.label}</span>
           <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full transition-all duration-1000 ease-out"

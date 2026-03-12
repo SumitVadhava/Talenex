@@ -122,8 +122,8 @@ export const Header = ({
           onClick={() => isEditing && fileInputRef.current?.click()}
         >
           <img
-            src={user.avatarUrl}
-            alt={user.name}
+            src={user?.avatarUrl}
+            alt={user?.name}
             className={`h-full w-full object-cover transition-transform duration-500 ${isEditing ? "group-hover:scale-110" : ""
               }`}
           />
@@ -149,7 +149,7 @@ export const Header = ({
                   e.stopPropagation();
                   handleAvatarSelect(avatar);
                 }}
-                className={`h-8 w-8 rounded-full border-2 transition-all hover:scale-110 overflow-hidden ${user.avatarUrl === avatar ? "border-indigo-600 ring-2 ring-indigo-100" : "border-zinc-200"
+                className={`h-8 w-8 rounded-full border-2 transition-all hover:scale-110 overflow-hidden ${user?.avatarUrl === avatar ? "border-indigo-600 ring-2 ring-indigo-100" : "border-zinc-200"
                   }`}
               >
                 <img src={avatar} alt={`Avatar ${index}`} className="h-full w-full object-cover" />
@@ -172,27 +172,27 @@ export const Header = ({
           {isEditing ? (
             <div className="space-y-2 mb-2">
               <Input
-                value={user.name}
+                value={user?.name}
                 onChange={(e) => onUserChange?.("name", e.target.value)}
                 className="text-xl md:text-2xl font-bold h-12"
                 placeholder="Your Name"
               />
               <p className="text-muted-foreground font-medium px-3 py-2">
-                {user.handle}
+                {user?.handle}
               </p>
             </div>
           ) : (
             <>
               <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight flex items-center gap-2">
-                {user.name}
-                {user.isPremium && (
+                {user?.name}
+                {user?.isPremium && (
                   <div className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-300 rounded-full text-amber-700 text-[11px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider select-none ml-1 transform translate-y-[2px]">
                     <Crown className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
                     PRO
                   </div>
                 )}
               </h2>
-              <p className="text-muted-foreground font-medium ">{user.handle}</p>
+              <p className="text-muted-foreground font-medium ">{user?.handle}</p>
             </>
           )}
         </div>
@@ -202,13 +202,13 @@ export const Header = ({
             <MapPin size={16} className="shrink-0" />
             {isEditing ? (
               <Input
-                value={user.location}
+                value={user?.location}
                 onChange={(e) => onUserChange?.("location", e.target.value)}
                 className="h-8 max-w-[200px]"
                 placeholder="City, Country"
               />
             ) : (
-              <span>{user.location}</span>
+              <span>{user?.location}</span>
             )}
           </div>
         </div>

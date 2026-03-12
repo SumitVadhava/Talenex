@@ -80,9 +80,9 @@ export const SkillsSection = ({
           <CardContent className="flex-1">
             <div className="flex flex-wrap gap-2">
               <AnimatePresence>
-                {offered.map((skill) => (
+                {offered?.map((skill) => (
                   <motion.div
-                    key={skill.id}
+                    key={skill?.id}
                     layout
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -90,8 +90,8 @@ export const SkillsSection = ({
                   >
                     <Badge variant="secondary" className="pl-3 pr-2 py-1.5 text-sm bg-emerald-50 text-emerald-700 border-emerald-100 flex items-center gap-2">
                       <span>
-                        {skill.name || skill.title}
-                        <span className="ml-1 opacity-60 text-xs font-normal">| {skill.level}</span>
+                        {skill?.name || skill?.title}
+                        <span className="ml-1 opacity-60 text-xs font-normal">| {skill?.level}</span>
                       </span>
                       {isEditing && (
                         <div className="flex items-center gap-1 ml-1 border-l border-emerald-200 pl-2">
@@ -102,7 +102,7 @@ export const SkillsSection = ({
                             <Pencil size={12} />
                           </button>
                           <button
-                            onClick={() => handleRemove(skill.id, 'offered')}
+                            onClick={() => handleRemove(skill?.id, 'offered')}
                             className="hover:bg-emerald-200 rounded-full p-0.5 transition-colors text-emerald-600"
                           >
                             <X size={12} />
@@ -113,7 +113,7 @@ export const SkillsSection = ({
                   </motion.div>
                 ))}
               </AnimatePresence>
-              {offered.length === 0 && !isEditing && (
+              {offered?.length === 0 && !isEditing && (
                 <p className="text-sm text-muted-foreground italic">No skills offered yet.</p>
               )}
             </div>
@@ -144,9 +144,9 @@ export const SkillsSection = ({
           <CardContent className="flex-1">
             <div className="flex flex-wrap gap-2">
               <AnimatePresence>
-                {wanted.map((skill) => (
+                {wanted?.map((skill) => (
                   <motion.div
-                    key={skill.id}
+                    key={skill?.id}
                     layout
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -154,7 +154,7 @@ export const SkillsSection = ({
                   >
                     <Badge variant="secondary" className="pl-3 pr-2 py-1.5 text-sm bg-pink-50 text-pink-700 border-pink-100 flex items-center gap-2">
                       <span>
-                        {skill.name}
+                        {skill?.name}
                         <span className="ml-1 opacity-60 text-xs font-normal">| {skill.level}</span>
                       </span>
                       {isEditing && (
@@ -177,7 +177,7 @@ export const SkillsSection = ({
                   </motion.div>
                 ))}
               </AnimatePresence>
-              {wanted.length === 0 && !isEditing && (
+              {wanted?.length === 0 && !isEditing && (
                 <p className="text-sm text-muted-foreground italic">No skills wanted yet.</p>
               )}
             </div>

@@ -57,9 +57,9 @@ export const PrivacyTab = ({ data, onUpdate, readOnly }) => {
             />
           </div>
 
-          <div className="h-px bg-border/50" />
+          {/* <div className="h-px bg-border/50" /> */}
 
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <div className="space-y-1.5">
               <label className="text-base font-medium text-foreground">Show Skills</label>
               <p className="text-sm text-muted-foreground">Make your offered and wanted skills visible.</p>
@@ -69,7 +69,7 @@ export const PrivacyTab = ({ data, onUpdate, readOnly }) => {
               checked={data.showSkills}
               onCheckedChange={(checked) => handleChange('showSkills', checked)}
             />
-          </div>
+          </div> */}
         </CardContent>
       </Card>
     </motion.div>

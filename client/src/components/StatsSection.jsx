@@ -22,28 +22,28 @@ export const StatsSection = ({ stats }) => {
   const statItems = [
     {
       label: 'Swaps Completed',
-      value: stats.totalSwapsCompleted,
+      value: stats?.totalSwapsCompleted,
       icon: ArrowLeftRight,
       color: 'text-blue-500',
       bg: 'bg-blue-50'
     },
     {
       label: 'Total Reviews',
-      value: `${stats.totalReviews}`,
+      value: `${stats?.totalReviews}`,
       icon: UserCheck,
       color: 'text-green-500',
       bg: 'bg-green-50'
     },
     {
       label: 'Avg.Rating',
-      value: stats.rating,
+      value: stats?.rating,
       icon: Star,
       color: 'text-amber-500',
       bg: 'bg-amber-50'
     },
     {
       label: 'Member Since',
-      value: stats.memberSince,
+      value: stats?.memberSince,
       icon: Calendar,
       color: 'text-purple-500',
       bg: 'bg-purple-50'

@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, Switch, Select } from './ui/Primitives';
-import { Clock, Calendar } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Clock, Calendar, AlertCircle, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const AvailabilityTab = ({ data, onUpdate, readOnly }) => {
-  // Direct update wrapper for instant save
+  const [toast, setToast] = useState(null);
+
+  // Auto-dismiss toast after 3.5s
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 3500);
+    return () => clearTimeout(t);
+  }, [toast]);
+
   const handleChange = (field, value) => {
-    // console.log(field, value);
+    // Guard: both weekdays & weekends cannot be false simultaneously
+    if (!value) {
+      const otherField = field === 'weekdays' ? 'weekends' : 'weekdays';
+      if (!data[otherField]) {
+        setToast('You must be available on at least one — weekdays or weekends.');
+        return;
+      }
+    }
     onUpdate({ [field]: value });
   };
 
@@ -22,6 +37,28 @@ export const AvailabilityTab = ({ data, onUpdate, readOnly }) => {
         <h2 className="text-2xl font-bold tracking-tight text-foreground">Availability Settings</h2>
         <p className="text-muted-foreground mt-1">Manage your schedule and preferences for skill swaps.</p>
       </div>
+
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            key="avail-toast"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25 }}
+            className="flex items-start gap-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-xl px-4 py-3 shadow-sm"
+          >
+            <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0 text-amber-500" />
+            <p className="text-sm font-medium flex-1">{toast}</p>
+            <button
+              onClick={() => setToast(null)}
+              className="flex-shrink-0 text-amber-400 hover:text-amber-700 transition-colors cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Card>
         <CardHeader className="pb-4">

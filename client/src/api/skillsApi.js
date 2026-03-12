@@ -11,7 +11,7 @@ export const fetchSkills = async () => {
 
   const response = await api.get("/User/All", {
     params: {
-      include: ["Profile", "Skills", "Reputation", "Reviews"],
+      include: ["Profile", "Skills", "Reputation", "Reviews", "Privacy", "Availability", "Notifications"],
     },
     paramsSerializer: (params) =>
       qs.stringify(params, { arrayFormat: "repeat" }),

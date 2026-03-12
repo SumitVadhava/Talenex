@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import { Button } from "./components/ui/button";
 import { DotPattern } from "./components/ui/dot-pattern";
 import LandingPage from "./pages/LandingPage";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate, matchPath } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { SignOutButton } from "@clerk/clerk-react";
@@ -30,9 +30,12 @@ import ScrollToTop from "./components/ScrollToTop";
 import ChatsPage from "./pages/ChatsPage";
 import PaymentPage from "./pages/PaymentPage";
 import PricingPage from "./pages/PricingPage";
+import ErrorPage from "./pages/ErrorPage";
+import { setNavigate } from "./utils/navigationHelper";
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const featureRef = useRef(null);
   const workflowRef = useRef(null);
   const testimonialsRef = useRef(null);
@@ -53,13 +56,41 @@ function App() {
     "/terms",
     "/privacy",
     "/payment",
-    "/messages"
+    "/messages",
+    "/bad-request",
+    "/unauthorized",
+    "/access-denied",
+    "/server-error",
+    "/maintenance",
   ];
 
-  const [hideNavbar, setHideNavbar] = useState(hideNavbarRoutes.includes(location.pathname));
+  // All explicitly defined route patterns — if the current path matches none of
+  // these, the * catch-all is active (404) and the navbar should also be hidden.
+  const KNOWN_ROUTES = [
+    "/", "/home", "/sign-in/*", "/sign-up/*", "/sign-out",
+    "/onboarding", "/user-profile", "/user-profile/:id",
+    "/user-details", "/user-details/:id",
+    "/swap-request", "/messages", "/my-swaps",
+    "/contact", "/faq", "/terms", "/privacy",
+    "/ai-match", "/join/:roomId", "/pricing", "/payment",
+    "/bad-request", "/unauthorized", "/access-denied", "/server-error", "/maintenance",
+  ];
+
+  const isKnownRoute = (pathname) =>
+    KNOWN_ROUTES.some((pattern) => matchPath(pattern, pathname));
+
+  const shouldHideNavbar = (pathname) =>
+    hideNavbarRoutes.includes(pathname) || !isKnownRoute(pathname);
+
+  const [hideNavbar, setHideNavbar] = useState(shouldHideNavbar(location.pathname));
+
+  // Register navigate for the Axios interceptor (runs once on mount)
+  useEffect(() => {
+    setNavigate(navigate);
+  }, [navigate]);
 
   useEffect(() => {
-    setHideNavbar(hideNavbarRoutes.includes(location.pathname));
+    setHideNavbar(shouldHideNavbar(location.pathname));
   }, [location.pathname]);
 
   return (
@@ -239,6 +270,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* ── Error / Status routes ── */}
+        <Route path="/bad-request" element={<ErrorPage code={400} />} />
+        <Route path="/unauthorized" element={<ErrorPage code={401} />} />
+        <Route path="/access-denied" element={<ErrorPage code={403} />} />
+        <Route path="/server-error" element={<ErrorPage code={500} />} />
+        <Route path="/maintenance" element={<ErrorPage code="maintenance" />} />
+
+        {/* Catch-all — must be last */}
+        <Route path="*" element={<ErrorPage code={404} />} />
       </Routes>
 
 

@@ -64,6 +64,7 @@ export const ChatProvider = ({ children }) => {
                     { presence: true }
                 );
 
+
                 // console.log("[ChatContext] Stream connected successfully for:", userId);
                 setClient(chatClient);
             } catch (err) {

@@ -22,6 +22,7 @@ import {
   FileText,
   UserCheckIcon,
   Heart,
+  InfoIcon,
 } from "lucide-react";
 import b1 from "../assets/b-1.png";
 import b2 from "../assets/b-2.png";
@@ -105,6 +106,9 @@ const UserProfilePage = () => {
         rating: apiUser.reputation?.averageRating ?? 0,
         reviewCount: apiUser.reputation?.totalReviews ?? 0,
         totalSwapsCompleted: apiUser.reputation?.totalSwapsCompleted ?? 0,
+        showLocation: apiUser.privacy?.showLocation ?? true,
+        availableOnWeekdays: apiUser.availability?.availableOnWeekdays ?? true,
+        availableOnWeekends: apiUser.availability?.availableOnWeekends ?? true,
       },
       offeredSkills: apiUser.skills?.skillsOffered?.map((skill) => ({
         title: skill.title,
@@ -140,7 +144,7 @@ const UserProfilePage = () => {
       // Adjust endpoint if necessary based on actual backend route, e.g., /User/${id} or via query
       const response = await api.get(`/User/Details/${id}`, {
         params: {
-          include: ["Profile", "Skills", "Reputation", "Reviews"],
+          include: ["Profile", "Skills", "Reputation", "Reviews", "Privacy", "Availability", "Notifications"],
         },
         paramsSerializer: (params) =>
           qs.stringify(params, { arrayFormat: "repeat" }),
@@ -386,17 +390,51 @@ const UserProfilePage = () => {
                 ></div>
               </div>
 
-              <div className="flex-1 space-y-1 mt-2 md:mt-0 text-center md:text-left">
+              <div className={`flex-1 space-y-1.5 mt-2 md:mt-0 text-center md:text-left ${userData?.user.showLocation ? '' : 'mb-3'}`}>
                 <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
                   <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
                     {userData?.user.name}
                   </h1>
+                  {(!userData?.user.availableOnWeekdays || !userData?.user.availableOnWeekends) && (
+                    <div className="relative group/avail inline-flex items-center mt-2">
+                      <InfoIcon className="w-4 h-4 text-slate-400 hover:text-indigo-500 cursor-pointer transition-colors duration-200" />
+                      <div className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 z-50 w-56 opacity-0 scale-95 group-hover/avail:opacity-100 group-hover/avail:scale-100 transition-all duration-200 origin-left">
+                        <div className="bg-white border border-slate-200 rounded-xl shadow-xl p-3.5">
+                          <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                            {/* <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span> */}
+                            Availability
+                          </p>
+                          <div className="space-y-1.5">
+                            {!userData?.user.availableOnWeekdays && (
+                              <div className="flex items-center gap-2 text-xs text-slate-600">
+                                <span className="flex-shrink-0 w-4 h-4 rounded-full bg-red-100 flex items-center justify-center">
+                                  <span className="block w-1.5 h-1.5 rounded-full bg-red-400"></span>
+                                </span>
+                                Not available on weekdays
+                              </div>
+                            )}
+                            {!userData?.user.availableOnWeekends && (
+                              <div className="flex items-center gap-2 text-xs text-slate-600">
+                                <span className="flex-shrink-0 w-4 h-4 rounded-full bg-red-100 flex items-center justify-center">
+                                  <span className="block w-1.5 h-1.5 rounded-full bg-red-400"></span>
+                                </span>
+                                Not available on weekends
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex items-center justify-center md:justify-start text-slate-500 gap-1 text-sm font-medium">
-                  <MapPin className="w-4 h-4" />
-                  <span>{userData?.user.location}</span>
-                </div>
+                {/* {userData?.user} */}
+                {userData?.user.showLocation && (
+                  <div className="flex items-center justify-center md:justify-start text-slate-500 gap-1 text-sm font-medium">
+                    <MapPin className="w-4 h-4" />
+                    <span>{userData?.user.location}</span>
+                  </div>
+                )}
 
                 <div className="flex items-center justify-center md:justify-start gap-2 pt-1">
                   <div className="flex items-center bg-amber-50 text-amber-700 border border-amber-100 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide hover:bg-amber-100 transition-colors">
@@ -413,16 +451,16 @@ const UserProfilePage = () => {
                 {/* <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild> */}
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className={`border-slate-200 transition-all transform hover:-translate-y-1 cursor-pointer ${isFavorite ? 'text-red-500 bg-red-50 border-red-100 hover:bg-red-100 hover:text-red-500' : 'text-slate-400 hover:text-red-500 hover:bg-red-50'}`}
-                        onClick={handleToggleFavorite}
-                        disabled={favoriteMutation.isLoading}
-                      >
-                        <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
-                      </Button>
-                    {/* </TooltipTrigger>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={`border-slate-200 transition-all transform hover:-translate-y-1 cursor-pointer ${isFavorite ? 'text-red-500 bg-red-50 border-red-100 hover:bg-red-100 hover:text-red-500' : 'text-slate-400 hover:text-red-500 hover:bg-red-50'}`}
+                  onClick={handleToggleFavorite}
+                  disabled={favoriteMutation.isLoading}
+                >
+                  <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
+                </Button>
+                {/* </TooltipTrigger>
                     <TooltipContent side="bottom">
                       <p>{isFavorite ? "Remove from Favourites" : "Add to Favourites"}</p>
                     </TooltipContent>

@@ -99,7 +99,7 @@ const ProfilePage = () => {
         },
       );
       // console.log(response.data);
-      // console.log("Fetched user data:", response.data);
+      console.log("Fetched user data:", response.data);
 
       const mapped = mapApiUserToMockUser(response.data);
       setSectionIds({
@@ -210,6 +210,7 @@ const ProfilePage = () => {
         settings: {
           email: api.email || "",
           language: "en",
+          premiumPlan: api.premiumPlan || "",
           twoFactor: false,
         },
       },
@@ -546,23 +547,23 @@ const ProfilePage = () => {
                 <h3 className="text-lg font-semibold mb-2">About</h3>
                 {isEditing ? (
                   <Textarea
-                    value={editedUser.bio}
+                    value={editedUser?.bio}
                     onChange={(e) => handleUserChange("bio", e.target.value)}
                     className="w-full min-h-[120px]"
                     placeholder="Tell the community about yourself..."
                   />
                 ) : (
                   <p className="text-muted-foreground leading-relaxed max-w-3xl whitespace-pre-wrap">
-                    {user.bio}
+                    {user?.bio}
                   </p>
                 )}
               </div>
 
-              <StatsSection stats={user.stats} />
+              <StatsSection stats={user?.stats} />
 
               <SkillsSection
-                offered={displayUser.skillsOffered}
-                wanted={displayUser.skillsWanted}
+                offered={displayUser?.skillsOffered}
+                wanted={displayUser?.skillsWanted}
                 isEditing={isEditing}
                 onUpdateOffered={(skills) =>
                   handleSkillsChange("offered", skills)
@@ -576,8 +577,8 @@ const ProfilePage = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
                 <div className="space-y-6">
                   <AchievementsSection
-                    achievements={user.achievements}
-                    swapsCompleted={user.stats.totalSwapsCompleted}
+                    achievements={user?.achievements}
+                    swapsCompleted={user?.stats?.totalSwapsCompleted}
                   />
                 </div>
                 {/* Reviews & Ratings Section */}
@@ -591,11 +592,11 @@ const ProfilePage = () => {
                         <div className="flex items-center bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-full">
                           <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500 mr-1.5" />
                           <span className="text-sm font-bold text-amber-700">
-                            {user.stats?.rating?.toFixed(1) || "0.0"}
+                            {user?.stats?.rating?.toFixed(1) || "0.0"}
                           </span>
                           <span className="mx-1 text-amber-300">|</span>
                           <span className="text-xs font-semibold text-amber-600">
-                            {sortedReviews.length || 0} reviews
+                            {sortedReviews?.length || 0} reviews
                           </span>
                         </div>
                       </div>
@@ -616,10 +617,10 @@ const ProfilePage = () => {
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-0 p-0">
-                    {sortedReviews && sortedReviews.length > 0 ? (
+                    {sortedReviews && sortedReviews?.length > 0 ? (
                       <>
                         <div className={`divide-y divide-slate-100 ${showAllReviews ? 'max-h-[500px] overflow-y-auto' : ''}`}>
-                          {displayedReviews.map((review, i) => (
+                          {displayedReviews?.map((review, i) => (
                             <div
                               key={review.id || i}
                               className="group p-6 hover:bg-slate-50/50 transition-all duration-300"
@@ -676,7 +677,7 @@ const ProfilePage = () => {
                               ) : (
                                 <>
                                   <ChevronDown className="w-4 h-4 mr-2" />
-                                  Show All {sortedReviews.length} Reviews
+                                  Show All {sortedReviews?.length} Reviews
                                 </>
                               )}
                             </Button>
@@ -708,26 +709,26 @@ const ProfilePage = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="h-full">
-                  {user.certificates && user.certificates.length > 0 ? (
+                  {user?.certificates && user?.certificates?.length > 0 ? (
                     <div className="space-y-4 pt-4">
-                      {user.certificates.map((cert, i) => (
+                      {user?.certificates?.map((cert, i) => (
                         <div
                           key={i}
                           className="flex items-center gap-3 p-3 rounded-lg border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-colors"
                         >
                           <div className="h-12 w-12 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0 overflow-hidden border border-slate-200">
                             <img
-                              src={cert.certificateURL}
-                              alt={cert.title}
+                              src={cert?.certificateURL}
+                              alt={cert?.title}
                               className="h-full w-full object-cover select-none pointer-events-none"
                             />
                           </div>
                           <div className="min-w-0 flex-1">
                             <p className="text-sm font-medium text-slate-900 truncate">
-                              {cert.title}
+                              {cert?.title}
                             </p>
                             <a
-                              href={cert.certificateURL}
+                              href={cert?.certificateURL}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-xs text-blue-600 hover:text-blue-700 hover:underline"
@@ -754,7 +755,7 @@ const ProfilePage = () => {
         return (
           <AvailabilityTab
             key="availability"
-            data={user.preferences.availability}
+            data={user?.preferences?.availability}
             onUpdate={updateAvailability}
             readOnly={isReadOnly}
           />
@@ -763,7 +764,7 @@ const ProfilePage = () => {
         return (
           <NotificationsTab
             key="notifications"
-            data={user.preferences.notifications}
+            data={user?.preferences?.notifications}
             onUpdate={updateNotifications}
             readOnly={isReadOnly}
           />
@@ -772,18 +773,18 @@ const ProfilePage = () => {
         return (
           <PrivacyTab
             key="privacy"
-            data={user.preferences.privacy}
+            data={user?.preferences?.privacy}
             onUpdate={updatePrivacy}
             readOnly={isReadOnly}
           />
         );
       case "rate-us":
-        return <RateUsTab key="rate-us" id={user.id} name={user.name} email={user.handle} profileImg={user.avatarUrl} />;
+        return <RateUsTab key="rate-us" id={user?.id} name={user?.name} email={user?.handle} profileImg={user?.avatarUrl} />;
       case "settings":
         return (
           <SettingsTab
             key="settings"
-            data={user.preferences.settings}
+            data={user?.preferences?.settings}
             onUpdate={(data) => updateUser("settings", data)}
           />
         );

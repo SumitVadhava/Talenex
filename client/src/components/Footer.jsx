@@ -308,8 +308,8 @@ const Footer = () => {
             {/* Large Background Text — placed after footer */}
             <div className="relative flex items-center justify-center overflow-hidden pointer-events-none z-0 mt-4">
                 <h1
-                    className="text-[20vw] font-bold text-gray-100 select-none transition-all duration-1000"
-                    style={{ lineHeight: '0.85' }}
+                    className="text-[20vw] font-bold bg-linear-to-b from-gray-400 via-gray-300 via-gray-200 to-gray-100 bg-clip-text text-transparent select-none transition-all duration-1000"
+                    style={{ lineHeight: "0.85" }}
                 >
                     Talenex
                 </h1>

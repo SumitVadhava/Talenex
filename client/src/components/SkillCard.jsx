@@ -10,6 +10,8 @@ const SkillCard = ({ skill, isFavorite, isOnline: realTimeOnline }) => {
   const isOnline = realTimeOnline !== undefined ? realTimeOnline : skill.isOnline;
 
   const handleSwapClick = () => {
+    // console.log("skill : ", skill);
+
     navigate("/user-details", {
       state: {
         userData: skill,

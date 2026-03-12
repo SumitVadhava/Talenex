@@ -136,10 +136,13 @@ export default function SwapRequestForm({ onClose }) {
         requestPayload,
       );
 
-      const emailResponse = await api.post(
-        "/swap-request/send",
-        emailrequestPayload,
-      );
+
+      if (userData?.user?.notifyOnRequest) {
+        const emailResponse = await api.post(
+          "/swap-request/send",
+          emailrequestPayload,
+        );
+      }
 
       // console.log("Swap request created:", response.data);
       // console.log("Email request sent:", emailResponse.data);

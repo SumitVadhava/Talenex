@@ -31,7 +31,7 @@ export const NotificationsTab = ({ data, onUpdate, readOnly }) => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <div className="space-y-1.5">
               <label className="text-base font-medium text-foreground">Notify on Message</label>
               <p className="text-sm text-muted-foreground">Receive alerts when you get a new direct message.</p>
@@ -41,9 +41,9 @@ export const NotificationsTab = ({ data, onUpdate, readOnly }) => {
               checked={data.message}
               onCheckedChange={(checked) => handleChange('message', checked)}
             />
-          </div>
+          </div> */}
 
-          <div className="h-px bg-border/50" />
+          {/* <div className="h-px bg-border/50" /> */}
 
           <div className="flex items-center justify-between">
             <div className="space-y-1.5">
