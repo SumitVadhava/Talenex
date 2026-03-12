@@ -26,7 +26,7 @@ api.interceptors.response.use(
     // Map status codes → error routes
     const STATUS_ROUTES = {
       400: "/bad-request",
-      401: "/unauthorized",
+      // 401: "/unauthorized",
       403: "/access-denied",
       404: "/404",
       500: "/server-error",

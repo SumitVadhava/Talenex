@@ -163,12 +163,12 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
                     <div className="relative inline-flex items-center">
                       {link.label}
                       {link.label === "Messages" && totalUnreadCount > 0 && (
-                        <span className="absolute -top-2.5 -right-4 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-black px-1 text-[11px] font-bold text-white border-2 border-white shadow-sm">
-                          {totalUnreadCount}
+                        <span className="absolute -top-2.5 -right-4 h-5 min-w-[20px] flex justify-center rounded-full bg-black text-[11px] font-bold text-white border-2 border-white shadow-sm">
+                          <span>{totalUnreadCount}</span>
                         </span>
                       )}
                       {link.label === "My Swaps" && pendingSwapsCount > 0 && (
-                        <span className="absolute -top-2.5 -right-4 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-black px-1 text-[11px] font-bold text-white border-2 border-white shadow-sm">
+                        <span className="absolute -top-2.5 -right-4 flex h-5 min-w-[20px] justify-center rounded-full bg-black px-1 text-[11px] font-bold text-white border-2 border-white shadow-sm">
                           {pendingSwapsCount}
                         </span>
                       )}
