@@ -1039,7 +1039,12 @@ const Homepage = () => {
     queryFn: async () => {
       if (!client || !skills.length) return {};
       const userIds = skills.map((s) => s.id);
-      const response = await client.queryUsers({ id: { $in: userIds } });
+      const response = await client.queryUsers(
+        { id: { $in: userIds } },
+        { last_active: -1 },
+        { limit: userIds.length, presence: true }
+      );
+      // console.log("Presence response : ", response);
       const map = {};
       response.users.forEach((u) => {
         map[u.id] = u.online;
