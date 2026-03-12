@@ -17,7 +17,7 @@ export const useChat = () => {
             // Ensure the other user exists in Stream Chat before creating a channel
             let targetUserId = otherUserId;
             try {
-                const syncRes = await api.post(`/stream/user/sync/${otherUserId}`);
+                const syncRes = await api.post(`/stream/user/sync/${otherUserId}`, null, { skipRedirect: true });
                 console.log("[useChat] User sync success:", syncRes.data);
                 if (syncRes.data?.userId) {
                     targetUserId = syncRes.data.userId;

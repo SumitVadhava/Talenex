@@ -33,6 +33,10 @@ api.interceptors.response.use(
     };
 
     if (status && STATUS_ROUTES[status]) {
+      // If the request specifically asks to skip redirect (e.g. background syncs), don't navigate
+      if (status === 404 && error.config?.skipRedirect) {
+        return Promise.reject(error);
+      }
       navigateTo(STATUS_ROUTES[status]);
     }
     // 5xx other than 500 also go to /server-error
