@@ -57,9 +57,9 @@ export const NotificationsTab = ({ data, onUpdate, readOnly }) => {
             />
           </div>
 
-          <div className="h-px bg-border/50" />
+          {/* <div className="h-px bg-border/50" />  */}
 
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <div className="space-y-1.5">
               <label className="text-base font-medium text-foreground">Notify on Rating Received</label>
               <p className="text-sm text-muted-foreground">Be alerted when a partner reviews your session.</p>
@@ -69,7 +69,7 @@ export const NotificationsTab = ({ data, onUpdate, readOnly }) => {
               checked={data.rating}
               onCheckedChange={(checked) => handleChange('rating', checked)}
             />
-          </div>
+          </div> */}
         </CardContent>
       </Card>
     </motion.div>

@@ -13,6 +13,7 @@ export const ChatProvider = ({ children }) => {
     const [activeChannel, setActiveChannel] = useState(null);
     const [pendingChannelCid, setPendingChannelCid] = useState(null);
     const { userData, authVersion } = useContext(UserContext);
+    const [totalUnreadCount, setTotalUnreadCount] = useState(0);
 
     useEffect(() => {
         const userId = localStorage.getItem("userId");
@@ -78,9 +79,27 @@ export const ChatProvider = ({ children }) => {
         };
     }, [authVersion]);
 
+    useEffect(() => {
+        if (!client) return;
+
+        setTotalUnreadCount(client.user?.total_unread_count || 0);
+
+        const handleUnreadChange = (e) => {
+            setTotalUnreadCount(e.total_unread_count || 0);
+        };
+
+        client.on("notification.message_new", handleUnreadChange);
+        client.on("notification.mark_read", handleUnreadChange);
+
+        return () => {
+            client.off("notification.message_new", handleUnreadChange);
+            client.off("notification.mark_read", handleUnreadChange);
+        };
+    }, [client]);
+
     return (
         <ChatContext.Provider
-            value={{ client, setClient, activeChannel, setActiveChannel, pendingChannelCid, setPendingChannelCid }}
+            value={{ client, setClient, activeChannel, setActiveChannel, pendingChannelCid, setPendingChannelCid, totalUnreadCount }}
         >
             {children}
         </ChatContext.Provider>

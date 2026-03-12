@@ -14,8 +14,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useUser, SignedIn, SignedOut, useClerk } from "@clerk/clerk-react";
 import UserDropdown from "./UserDropDown";
 import { LogOut, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import { useTalenexChat } from "@/context/ChatContext";
+import { useQuery } from "@tanstack/react-query";
+import { fetchSwaps } from "@/api/swapsApi";
+import { SwapStatus } from "@/constants/swapStatus";
+import { UserContext } from "@/context/UserContext";
 
 export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsRef }) {
   const navigate = useNavigate();
@@ -24,6 +29,17 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
   const pathName = useLocation();
   const { isLoaded, isSignedIn, user } = useUser();
   const { signOut } = useClerk();
+  const { totalUnreadCount } = useTalenexChat();
+  const { authVersion } = useContext(UserContext);
+
+  const { data: swaps = [] } = useQuery({
+    queryKey: ['swaps'],
+    queryFn: fetchSwaps,
+    enabled: isSignedIn && authVersion > 0,
+    staleTime: 1000 * 60, // 1 minute
+  });
+
+  const pendingSwapsCount = swaps.filter(s => s.status === SwapStatus.PENDING).length;
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -131,7 +147,10 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
                       } else if (link.action && link.ref) {
                         e.preventDefault();
                         if (pathName.pathname === "/") {
-                          link.action(link.ref);
+                          navigate("/");
+                          setTimeout(() => {
+                            link.action(link.ref);
+                          }, 100);
                         } else {
                           navigate("/");
                           setTimeout(() => {
@@ -141,7 +160,19 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
                       }
                     }}
                   >
-                    {link.label}
+                    <div className="relative inline-flex items-center">
+                      {link.label}
+                      {link.label === "Messages" && totalUnreadCount > 0 && (
+                        <span className="absolute -top-2.5 -right-4 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-black px-1 text-[11px] font-bold text-white border-2 border-white shadow-sm">
+                          {totalUnreadCount}
+                        </span>
+                      )}
+                      {link.label === "My Swaps" && pendingSwapsCount > 0 && (
+                        <span className="absolute -top-2.5 -right-4 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-black px-1 text-[11px] font-bold text-white border-2 border-white shadow-sm">
+                          {pendingSwapsCount}
+                        </span>
+                      )}
+                    </div>
                   </NavigationMenuLink>
                 );
 
@@ -238,7 +269,19 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
                           }
                         }}
                       >
-                        {link.label}
+                        <div className="relative inline-flex items-center">
+                          {link.label}
+                          {link.label === "Messages" && totalUnreadCount > 0 && (
+                            <span className="ml-2 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-black px-1.5 text-[11px] font-bold text-white shadow-sm">
+                              {totalUnreadCount > 9 ? "9+" : totalUnreadCount}
+                            </span>
+                          )}
+                          {link.label === "My Swaps" && pendingSwapsCount > 0 && (
+                            <span className="ml-2 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-black px-1.5 text-[11px] font-bold text-white shadow-sm">
+                              {pendingSwapsCount}
+                            </span>
+                          )}
+                        </div>
                       </button>
                     );
                   })}
