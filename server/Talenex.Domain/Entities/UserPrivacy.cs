@@ -20,7 +20,7 @@ namespace Talenex.Domain.Entities
         public bool IsProfilePublic { get; set; } = true;
         public bool ShowLocation { get; set; } = true;
         public bool ShowSkills { get; set; } = true;
-        public string AllowMessagesFrom { get; set; }
+        public bool AllowMessagesFrom { get; set; } = true;
     }
 
 }

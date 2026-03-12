@@ -269,9 +269,8 @@ namespace Talenex.infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AllowMessagesFrom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("AllowMessagesFrom")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsProfilePublic")
                         .HasColumnType("bit");

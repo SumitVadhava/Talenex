@@ -12,8 +12,8 @@ using Talenex.infrastructure.Data;
 namespace Talenex.infrastructure.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20260228151709_alterUsersTable")]
-    partial class alterUsersTable
+    [Migration("20260312143653_alterPrivacyEntity")]
+    partial class alterPrivacyEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,10 @@ namespace Talenex.infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
                         .HasDefaultValue("INR");
+
+                    b.Property<string>("PlanName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RazorpayOrderId")
                         .IsRequired()
@@ -268,9 +272,8 @@ namespace Talenex.infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AllowMessagesFrom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("AllowMessagesFrom")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsProfilePublic")
                         .HasColumnType("bit");
@@ -388,6 +391,9 @@ namespace Talenex.infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("ReviewerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ReviewerName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -396,6 +402,8 @@ namespace Talenex.infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReviewerId");
 
                     b.HasIndex("UserId");
 
@@ -578,6 +586,11 @@ namespace Talenex.infrastructure.Migrations
 
             modelBuilder.Entity("Talenex.Domain.Entities.UserReviews", b =>
                 {
+                    b.HasOne("Talenex.Domain.Entities.UserProfile", "UserProfile")
+                        .WithMany("WrittenReviews")
+                        .HasForeignKey("ReviewerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Talenex.Domain.Entities.User", "User")
                         .WithMany("UserReviews")
                         .HasForeignKey("UserId")
@@ -585,6 +598,8 @@ namespace Talenex.infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+
+                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("Talenex.Domain.Entities.UserSkills", b =>
@@ -643,6 +658,11 @@ namespace Talenex.infrastructure.Migrations
 
                     b.Navigation("UserSkills")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Talenex.Domain.Entities.UserProfile", b =>
+                {
+                    b.Navigation("WrittenReviews");
                 });
 #pragma warning restore 612, 618
         }

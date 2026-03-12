@@ -8,11 +8,11 @@ namespace Talenex.Application.DTOs.UpdateDtos
 {
     public class UpdateUserPrivacyDto
     {
-        public bool IsProfilePublic { get; set; }
-        public bool ShowLocation { get; set; }
-        public bool ShowSkills { get; set; }
+        public bool IsProfilePublic { get; set; } = true;
+        public bool ShowLocation { get; set; } = true;
+        public bool ShowSkills { get; set; } = true;
 
-        public string? AllowMessagesFrom { get; set; }
+        public bool AllowMessagesFrom { get; set; } = true;
     }
 
 }

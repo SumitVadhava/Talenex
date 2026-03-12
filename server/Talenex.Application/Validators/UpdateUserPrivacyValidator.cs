@@ -10,13 +10,20 @@ namespace Talenex.Application.Validators
         {
 
             RuleFor(x => x.AllowMessagesFrom)
-                 .Must(value =>
-                     value.Equals("everyone", StringComparison.OrdinalIgnoreCase) ||
-                     value.Equals("friends", StringComparison.OrdinalIgnoreCase) ||
-                     value.Equals("no-one", StringComparison.OrdinalIgnoreCase)
-                 )
-                 .When(x => !string.IsNullOrWhiteSpace(x.AllowMessagesFrom))
-                 .WithMessage("AllowMessagesFrom must be everyone, friends, or no-one");
+                  .NotNull()
+                  .WithMessage("Null not allow");
+
+            RuleFor(x => x.ShowLocation)
+               .NotNull()
+               .WithMessage("Null not allow");
+
+            RuleFor(x => x.IsProfilePublic)
+              .NotNull()
+              .WithMessage("Null not allow");
+
+            RuleFor(x => x.ShowSkills)
+             .NotNull()
+             .WithMessage("Null not allow");
         }
 
     }

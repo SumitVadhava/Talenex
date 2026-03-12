@@ -113,7 +113,7 @@ namespace Talenex.infrastructure.Services
                 IsProfilePublic = true,
                 ShowLocation = true,
                 ShowSkills = true,
-                AllowMessagesFrom = "everyone"
+                AllowMessagesFrom = true
             };
 
             await _privacyRepository.AddAsync(userPrivacy);

@@ -9,15 +9,15 @@ namespace Talenex.Application.DTOs.ResponseDtos
 {
     public class UserPrivacyDto
     {
-        //[Required]
+      
         public Guid Id { get; set; }
 
         public bool IsProfilePublic { get; set; } = true;
         public bool ShowLocation { get; set; } = true;
         public bool ShowSkills { get; set; } = true;
 
-        // example values: "everyone", "friends", "no-one"
-        public string? AllowMessagesFrom { get; set; }
+       
+        public bool AllowMessagesFrom { get; set; } = true;
 
     }
 }

@@ -57,7 +57,7 @@ namespace Talenex.API.Controllers
                 IsProfilePublic = dto.IsProfilePublic,
                 ShowLocation = dto.ShowLocation,
                 ShowSkills = dto.ShowSkills,
-                AllowMessagesFrom = dto.AllowMessagesFrom ?? "everyone"
+                AllowMessagesFrom = dto.AllowMessagesFrom
 
             };
 
@@ -86,7 +86,7 @@ namespace Talenex.API.Controllers
             existing.IsProfilePublic = dto.IsProfilePublic;
             existing.ShowLocation = dto.ShowLocation;
             existing.ShowSkills = dto.ShowSkills;
-            existing.AllowMessagesFrom = dto.AllowMessagesFrom ?? existing.AllowMessagesFrom;
+            existing.AllowMessagesFrom = dto.AllowMessagesFrom;
 
             return Ok(await _service.UpdateAsync(existing));
         }
