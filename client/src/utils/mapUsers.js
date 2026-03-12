@@ -20,6 +20,7 @@ export const mapUsersApiToSkillsList = (users) => {
           availableOnWeekdays: user.availability?.availableOnWeekdays ?? true,
           availableOnWeekends: user.availability?.availableOnWeekends ?? true,
           notifyOnRequest: user.notifications?.notifyOnSwapRequest ?? true,
+          allowMessages: user.privacy?.allowMessagesFrom ?? true
         },
 
         // 🔥 ALL OFFERED SKILLS

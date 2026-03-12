@@ -151,7 +151,7 @@ const ErrorPage = ({ code: codeProp }) => {
               className="flex flex-col items-center lg:items-start text-center lg:text-left order-2 w-full max-w-2xl mx-auto lg:mx-0"
             >
               {/* Slim monochrome badge */}
-              <span className="inline-flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-slate-400 border border-slate-200 rounded-full px-4 py-2 mb-6 sm:mb-8 bg-white/50 backdrop-blur-sm">
+              <span className="inline-flex items-center gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-slate-400 border border-slate-400 rounded-full px-4 py-2 mb-6 sm:mb-8 bg-white/50 backdrop-blur-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-pulse inline-block" />
                 Error {config.code}
               </span>

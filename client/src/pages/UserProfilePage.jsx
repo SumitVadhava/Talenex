@@ -395,33 +395,54 @@ const UserProfilePage = () => {
                   <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
                     {userData?.user.name}
                   </h1>
-                  {(!userData?.user.availableOnWeekdays || !userData?.user.availableOnWeekends) && (
+                  {(!userData?.user.availableOnWeekdays || !userData?.user.availableOnWeekends || !userData?.user.allowMessages) && (
                     <div className="relative group/avail inline-flex items-center mt-2">
                       <InfoIcon className="w-4 h-4 text-slate-400 hover:text-indigo-500 cursor-pointer transition-colors duration-200" />
                       <div className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 z-50 w-56 opacity-0 scale-95 group-hover/avail:opacity-100 group-hover/avail:scale-100 transition-all duration-200 origin-left">
                         <div className="bg-white border border-slate-200 rounded-xl shadow-xl p-3.5">
-                          <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-                            {/* <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span> */}
-                            Availability
-                          </p>
-                          <div className="space-y-1.5">
-                            {!userData?.user.availableOnWeekdays && (
-                              <div className="flex items-center gap-2 text-xs text-slate-600">
-                                <span className="flex-shrink-0 w-4 h-4 rounded-full bg-red-100 flex items-center justify-center">
-                                  <span className="block w-1.5 h-1.5 rounded-full bg-red-400"></span>
-                                </span>
-                                Not available on weekdays
-                              </div>
-                            )}
-                            {!userData?.user.availableOnWeekends && (
-                              <div className="flex items-center gap-2 text-xs text-slate-600">
-                                <span className="flex-shrink-0 w-4 h-4 rounded-full bg-red-100 flex items-center justify-center">
-                                  <span className="block w-1.5 h-1.5 rounded-full bg-red-400"></span>
-                                </span>
-                                Not available on weekends
-                              </div>
-                            )}
-                          </div>
+                          {(!userData?.user.availableOnWeekdays || !userData?.user.availableOnWeekends) && <div className="mb-3">
+                            <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                              {/* <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span> */}
+                              Availability
+                            </p>
+                            <div className="space-y-1.5">
+                              {!userData?.user.availableOnWeekdays && (
+                                <div className="flex items-center gap-2 text-xs text-slate-600">
+                                  <span className="flex-shrink-0 w-4 h-4 rounded-full bg-red-100 flex items-center justify-center">
+                                    <span className="block w-1.5 h-1.5 rounded-full bg-red-400"></span>
+                                  </span>
+                                  Not available on weekdays
+                                </div>
+                              )}
+                              {!userData?.user.availableOnWeekends && (
+                                <div className="flex items-center gap-2 text-xs text-slate-600">
+                                  <span className="flex-shrink-0 w-4 h-4 rounded-full bg-red-100 flex items-center justify-center">
+                                    <span className="block w-1.5 h-1.5 rounded-full bg-red-400"></span>
+                                  </span>
+                                  Not available on weekends
+                                </div>
+                              )}
+
+                            </div>
+                          </div>}
+                          {(!userData?.user.allowMessages) && <Separator className="bg-slate-200 mb-3" />}
+
+                          {(!userData?.user.allowMessages) && <div>
+                            <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                              {/* <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span> */}
+                              Messages
+                            </p>
+                            <div className="space-y-1.5">
+                              {!userData?.user.allowMessages && (
+                                <div className="flex items-center gap-2 text-xs text-slate-600">
+                                  <span className="flex-shrink-0 w-4 h-4 rounded-full bg-red-100 flex items-center justify-center">
+                                    <span className="block w-1.5 h-1.5 rounded-full bg-red-400"></span>
+                                  </span>
+                                  Not accepting messages
+                                </div>
+                              )}
+                            </div>
+                          </div>}
                         </div>
                       </div>
                     </div>
@@ -466,7 +487,7 @@ const UserProfilePage = () => {
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider> */}
-                <Button
+                {userData?.user.allowMessages && <Button
                   variant="outline"
                   onClick={() => isChatReady && openChatWithUser(userData.id)}
                   disabled={!isChatReady}
@@ -483,7 +504,7 @@ const UserProfilePage = () => {
                       Connecting...
                     </>
                   )}
-                </Button>
+                </Button>}
                 <Button
                   className="flex-1 md:flex-none bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-200 hover:shadow-purple-300 transition-all transform hover:-translate-y-0.5 cursor-pointer"
                   onClick={() => navigate("/swap-request", {
@@ -504,7 +525,7 @@ const UserProfilePage = () => {
           {/* Left Column: Stats */}
           <div className="space-y-6">
             <Card className="shadow-sm border-slate-200 overflow-hidden gap-0">
-              <CardHeader className="border-b border-slate-50 bg-slate-50/50">
+              <CardHeader className="mb-4">
                 <CardTitle className="text-base font-bold text-slate-800">
                   Community Stats
                 </CardTitle>
@@ -559,7 +580,7 @@ const UserProfilePage = () => {
           {/* Right Column: Skills */}
           <div className="md:col-span-2 space-y-6">
             <Card className="shadow-sm border-slate-200 h-full gap-0">
-              <CardHeader className="border-b border-slate-50 bg-slate-50/50">
+              <CardHeader className="mb-4">
                 <CardTitle className="text-base font-bold text-slate-800">
                   Skills Exchange
                 </CardTitle>

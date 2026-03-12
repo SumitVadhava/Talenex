@@ -33,13 +33,13 @@ export const PrivacyTab = ({ data, onUpdate, readOnly }) => {
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="space-y-1.5">
-              <label className="text-base font-medium text-foreground">Public Profile</label>
-              <p className="text-sm text-muted-foreground">Allow anyone to view your profile without logging in.</p>
+              <label className="text-base font-medium text-foreground">Allow Message</label>
+              <p className="text-sm text-muted-foreground">Allow other users to send you messages.</p>
             </div>
             <Switch
               disabled={readOnly}
-              checked={data.publicProfile}
-              onCheckedChange={(checked) => handleChange('publicProfile', checked)}
+              checked={data.allowMessagesFrom}
+              onCheckedChange={(checked) => handleChange('allowMessagesFrom', checked)}
             />
           </div>
 

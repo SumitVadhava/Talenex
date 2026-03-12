@@ -203,6 +203,7 @@ const ProfilePage = () => {
 
         privacy: {
           publicProfile: api.privacy?.isProfilePublic ?? true,
+          allowMessagesFrom: api.privacy?.allowMessagesFrom ?? true,
           showLocation: api.privacy?.showLocation ?? true,
           showSkills: api.privacy?.showSkills ?? true,
         },
@@ -314,6 +315,8 @@ const ProfilePage = () => {
     await putSection("privacy", {
       isProfilePublic:
         merged.publicProfile !== undefined ? merged.publicProfile : true,
+      allowMessagesFrom:
+        merged.allowMessagesFrom !== undefined ? merged.allowMessagesFrom : true,
       showLocation:
         merged.showLocation !== undefined ? merged.showLocation : true,
       showSkills: merged.showSkills !== undefined ? merged.showSkills : true,
