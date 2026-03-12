@@ -271,13 +271,13 @@ function App() {
           }
         />
 
-        {/* ── Error / Status routes ── */}
+        
         <Route path="/bad-request" element={<ErrorPage code={400} />} />
         <Route path="/access-denied" element={<ErrorPage code={403} />} />
         <Route path="/server-error" element={<ErrorPage code={500} />} />
         <Route path="/maintenance" element={<ErrorPage code="maintenance" />} />
 
-        {/* Catch-all — must be last */}
+        
         <Route path="*" element={<ErrorPage code={404} />} />
       </Routes>
 
