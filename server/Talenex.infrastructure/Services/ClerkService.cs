@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +38,21 @@ namespace Talenex.infrastructure.Services
 
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<ClerkUserDto>(json)!;
+        }
+        public async Task DeleterUserAsync(string clerkUserId)
+        {
+
+            var request = new HttpRequestMessage(
+                HttpMethod.Delete,
+                $"https://api.clerk.com/v1/users/{clerkUserId}"
+            );
+
+            request.Headers.Authorization =
+                new AuthenticationHeaderValue("Bearer", _secretKey);
+
+            var response = await _httpClient.SendAsync(request);
+            
+            response.EnsureSuccessStatusCode();
         }
     }
 }

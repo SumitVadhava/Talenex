@@ -6,5 +6,7 @@ namespace Talenex.Application.IRepository
     public interface IClerkService
     {
         Task<ClerkUserDto> GetUserAsync(string clerkUserId);
+
+        Task DeleterUserAsync(string clerkUserId);
     }
 }

@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,15 +20,17 @@ namespace Talenex.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IService<User> _service;
+        private readonly IClerkService _clerkService;
         private readonly IUserService _userService;
 
         private readonly IValidator<UpdateUserDto> _updateValidator;
 
 
-        public UserController(IService<User> service,IUserService userService,IValidator<UpdateUserDto> updateValidator)
+        public UserController(IService<User> service,IUserService userService,IClerkService clerkService,IValidator<UpdateUserDto> updateValidator)
         {
             _service = service;
             _userService = userService;
+            _clerkService = clerkService;
             _updateValidator = updateValidator;
         }
 
@@ -296,7 +298,7 @@ namespace Talenex.API.Controllers
                         break;
 
                     case UserInclude.Reviews:
-                        // Assuming UserReviews is a collection of review entities
+
                         response.Reviews = user.UserReviews == null
                                 ? new List<UserReviewDto>()
                                 : user.UserReviews.Select(r => new UserReviewDto
@@ -489,15 +491,24 @@ namespace Talenex.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
+            var existingUser = await _service.GetByIdAsync(id);
+
+            if (existingUser == null)
+                return NotFound(new {Message = "User not found"});
+
+            var clerkUserId = existingUser.ClerkUserId;
+
+            if (clerkUserId == null)
+                return NotFound(new {Message = "User's ClerkId is not found"});
+
+            await _clerkService.DeleterUserAsync(clerkUserId);
+
             var deleted = await _service.DeleteAsync(id);
-            return deleted != null ? Ok() : NotFound();
+
+            return deleted!= null ? Ok() : NotFound();
         }
 
-        // ─────────────────────────────────────────────────────
-        //  POST api/User/AiMatch
-        //  Body: { requiredSkills: ["React", "Python"], topN: 5 }
-        //  Returns: { matchedIds: ["guid1", "guid2", ...] }
-        // ─────────────────────────────────────────────────────
+
         [HttpPost("AiMatch")]
         public async Task<IActionResult> AiMatch(
             [FromBody] Talenex.Application.DTOs.CreateDtos.AIMatchRequestDto dto,
