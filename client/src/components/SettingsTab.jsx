@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, Input, Select } from './ui/Primitives';
 import { Settings as SettingsIcon, Trash2, ShieldCheck, AlertTriangle, Crown } from 'lucide-react';
 import { motion } from 'framer-motion';
+import api from '../api/axios';
 import { useDebounce } from '../hooks/useDebounce';
+import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
   DialogContent,
@@ -14,6 +16,7 @@ import {
 import { Button } from "./ui/button";
 
 export const SettingsTab = ({ data, onUpdate }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState(data.email);
   const [premiumPlan, setPremiumPlan] = useState(data.premiumPlan === "Free" ? "Free Tier" : data.premiumPlan);
   const debouncedEmail = useDebounce(email, 800);
@@ -23,12 +26,10 @@ export const SettingsTab = ({ data, onUpdate }) => {
   const [confirmationText, setConfirmationText] = useState("");
   const CONFIRMATION_STRING = "Delete Account";
 
-  // Sync prop changes to local state (in case update comes from outside)
   useEffect(() => {
     setEmail(data.email);
   }, [data.email]);
 
-  // Debounce effect for Email
   useEffect(() => {
     if (debouncedEmail !== data.email) {
       onUpdate({ email: debouncedEmail });
@@ -37,6 +38,22 @@ export const SettingsTab = ({ data, onUpdate }) => {
 
   const handleInstantChange = (field, value) => {
     onUpdate({ [field]: value });
+  };
+
+  const handleDelete = async () => {
+    try {
+      const userId = localStorage.getItem("UserId");
+      if (userId) {
+        await api.delete(`/User/${userId}`);
+        localStorage.clear();
+        navigate('/');
+      }
+    } catch (error) {
+      console.error("Failed to delete account:", error);
+    } finally {
+      setIsSecondDialogOpen(false);
+      setConfirmationText("");
+    }
   };
 
   return (
@@ -88,56 +105,8 @@ export const SettingsTab = ({ data, onUpdate }) => {
             />
             <p className="text-sm text-muted-foreground">This is the current plan associated with your account.</p>
           </div>
-          {/* <div className="grid gap-3">
-            <label className="text-base font-medium text-foreground">Language</label>
-            <Select
-              value={data.language}
-              onChange={(e) => handleInstantChange('language', e.target.value)}
-              className="max-w-md"
-            >
-              <option value="en">English (US)</option>
-              <option value="es">Spanish</option>
-              <option value="fr">French</option>
-              <option value="de">German</option>
-            </Select>
-            <p className="text-sm text-muted-foreground">Select your preferred language for the interface.</p>
-          </div> */}
         </CardContent>
       </Card>
-
-      {/* <Card>
-         <CardHeader className="pb-4">
-            <CardTitle className="flex items-center gap-2.5 text-lg">
-               <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                  <ShieldCheck size={20} />
-               </div>
-              Security & Authentication
-            </CardTitle>
-         </CardHeader>
-         <CardContent className="space-y-6">
-            <div className="flex items-center justify-between">
-               <div className="space-y-1.5">
-                  <h4 className="text-base font-medium text-foreground">Password</h4>
-                  <p className="text-sm text-muted-foreground">Last changed 3 months ago</p>
-               </div>
-               <button className="px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md text-sm font-medium transition-colors">
-                  Change Password
-               </button>
-            </div>
-            
-            <div className="h-px bg-border/50" />
-
-            <div className="flex items-center justify-between">
-               <div className="space-y-1.5">
-                  <h4 className="text-base font-medium text-foreground">Two-Factor Authentication</h4>
-                  <p className="text-sm text-muted-foreground">Add an extra layer of security to your account.</p>
-               </div>
-               <button className="px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md text-sm font-medium transition-colors">
-                  Enable 2FA
-               </button>
-            </div>
-         </CardContent>
-      </Card> */}
 
       <Card className="border-red-100 bg-red-50/30">
         <CardHeader className="pb-4">
@@ -235,12 +204,7 @@ export const SettingsTab = ({ data, onUpdate }) => {
             <Button
               variant="destructive"
               disabled={confirmationText !== CONFIRMATION_STRING}
-              onClick={() => {
-                // console.log("ACCOUNT DELETED");
-                // TODO: Perform actual deletion
-                setIsSecondDialogOpen(false);
-                setConfirmationText("");
-              }}
+              onClick={handleDelete}
               className="bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer"
             >
               Delete Account

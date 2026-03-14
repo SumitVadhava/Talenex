@@ -123,7 +123,7 @@ export const RAINBOW_STYLE = `
 const COMMON_SKILLS = [
   "React", "React Native", "Node.js", "Express.js", "MongoDB", "Python",
   "Django", "Flask", "Java", "Spring Boot", "UI/UX Design", "Figma", "CSS",
-  "Tailwind CSS", "TypeScript", "JavaScript", "ASP .NET Core", "C#",
+  "Tailwind CSS", "TypeScript", "JavaScript", "ASP .NET Core", "C Language", "C#",
   "C++", "SQL", "PostgreSQL", "Docker", "AWS", "Machine Learning",
   "Data Science", "Graphic Design", "Video Editing", "Marketing", "SEO"
 ].sort();
