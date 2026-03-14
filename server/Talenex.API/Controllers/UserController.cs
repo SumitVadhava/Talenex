@@ -1,4 +1,4 @@
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -501,7 +501,14 @@ namespace Talenex.API.Controllers
             if (clerkUserId == null)
                 return NotFound(new {Message = "User's ClerkId is not found"});
 
-            await _clerkService.DeleterUserAsync(clerkUserId);
+            try
+            {
+                await _clerkService.DeleterUserAsync(clerkUserId);
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"[UserController] Clerk deletion failed for {clerkUserId}: {ex.Message}");
+            }
 
             var deleted = await _service.DeleteAsync(id);
 
@@ -515,7 +522,6 @@ namespace Talenex.API.Controllers
             [FromServices] IHttpClientFactory httpClientFactory,
             [FromServices] IConfiguration configuration)
         {
-            // 1. Identify the requesting user from JWT (Handle Guid or Clerk String sub)
             var userIdClaim = User.FindFirst("sub") ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
             Guid? requestingUserId = null;
             if (userIdClaim != null)
