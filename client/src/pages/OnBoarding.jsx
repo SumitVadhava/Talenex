@@ -138,7 +138,7 @@ export default function OnBoarding() {
       try {
         const token = await getToken({ template: "customJWT" });
 
-        // console.log("Fetched token:", token);
+        console.log("Fetched token:", token);
 
         var response = await api.post(
           "/auth/",
@@ -158,7 +158,7 @@ export default function OnBoarding() {
       }
     };
 
-    fetchAndSendToken();
+    // fetchAndSendToken();
 
     if (user?.unsafeMetadata?.onboardingCompleted) {
       navigate("/home");

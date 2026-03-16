@@ -51,7 +51,8 @@ export const SettingsTab = ({ data, onUpdate }) => {
       const userId = localStorage.getItem("userId");
       if (userId) {
         await api.delete(`/User/${userId}`);
-        localStorage.clear();
+        localStorage.clear("token");
+        localStorage.clear("userId");
         await signOut();
         navigate('/');
       }

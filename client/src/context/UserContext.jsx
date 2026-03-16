@@ -22,12 +22,12 @@ export function UserProvider({ children }) {
 
   useEffect(() => {
     if (isLoaded) {
-      if (isSignedIn && user && user.username) {
+      if (isSignedIn && user) {
         // Prefer unsafeMetadata (onboarding data) or fallback to Clerk profile
         const profile = user.unsafeMetadata?.profile || {};
         setUserData(prev => ({
           ...prev,
-          fullName: user.fullName ||  "",
+          fullName: user.fullName,
           email: user.primaryEmailAddress?.emailAddress || "",
           profilePhotoUrl: profile.avatarUrl || user.imageUrl || "",
           // Don't overwrite isPremium/premiumPlan if they already exist from a previous fetch
