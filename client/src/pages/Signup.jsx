@@ -3,7 +3,7 @@ import { SignUp } from "@clerk/clerk-react";
 export default function Signup() {
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <SignUp routing="path" path="/sign-up" signInUrl="/sign-in" afterSignOutUrl="/onboarding"
+      <SignUp routing="path" path="/sign-up" signInUrl="/sign-in" fallbackRedirectUrl="/onboarding"
       appearance={{
           elements: {
             rootBox: {

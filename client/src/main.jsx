@@ -31,8 +31,8 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById('root')).render(
   // <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl='/'>
-      <GoogleOneTap cancelOnTapOutside={true} />
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl='/' signInUrl='/sign-in' signUpUrl='/sign-up'>
+      <GoogleOneTap cancelOnTapOutside={true} signUpUrl="/sign-up" signInUrl="/sign-in" />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           {/* <OnBoarding /> */}
