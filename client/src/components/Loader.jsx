@@ -46,11 +46,8 @@ const Loader = () => {
         </div>
       </div>
 
-      {/* Progress bar container */}
       <div className="relative">
-        {/* Background bar */}
         <div className="h-2 w-full bg-zinc-100 rounded-full overflow-hidden shadow-inner">
-          {/* Animated progress bar */}
           <div 
             className="h-full bg-gradient-to-r from-zinc-800 via-zinc-900 to-zinc-800 rounded-full transition-all duration-700 ease-out relative"
             style={{ width: `${progress}%` }}
