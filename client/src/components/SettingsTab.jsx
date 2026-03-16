@@ -42,7 +42,7 @@ export const SettingsTab = ({ data, onUpdate }) => {
 
   const handleDelete = async () => {
     try {
-      const userId = localStorage.getItem("UserId");
+      const userId = localStorage.getItem("userId");
       if (userId) {
         await api.delete(`/User/${userId}`);
         localStorage.clear();
