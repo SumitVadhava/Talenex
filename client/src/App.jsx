@@ -50,6 +50,7 @@ function App() {
     "/sign-in/verify-email-address",
     "/sign-up/verify-email-address",
     "/sign-in/factor-one",
+    "/sign-up/continue",
     "/onboarding",
     "/contact",
     "/faq",
@@ -80,7 +81,10 @@ function App() {
     KNOWN_ROUTES.some((pattern) => matchPath(pattern, pathname));
 
   const shouldHideNavbar = (pathname) =>
-    hideNavbarRoutes.includes(pathname) || !isKnownRoute(pathname);
+    hideNavbarRoutes.includes(pathname) ||
+    pathname.startsWith("/sign-up/") ||
+    pathname.startsWith("/sign-in/") ||
+    !isKnownRoute(pathname);
 
   const [hideNavbar, setHideNavbar] = useState(shouldHideNavbar(location.pathname));
 
