@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, Input, Select } from './ui/Primitives';
-import { Settings as SettingsIcon, Trash2, ShieldCheck, AlertTriangle, Crown } from 'lucide-react';
+import { Settings as SettingsIcon, Trash2, ShieldCheck, AlertTriangle, Crown, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import api from '../api/axios';
 import { useDebounce } from '../hooks/useDebounce';
@@ -14,9 +14,11 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
+import { useClerk } from "@clerk/clerk-react";
 
 export const SettingsTab = ({ data, onUpdate }) => {
   const navigate = useNavigate();
+  const { signOut } = useClerk();
   const [email, setEmail] = useState(data.email);
   const [premiumPlan, setPremiumPlan] = useState(data.premiumPlan === "Free" ? "Free Tier" : data.premiumPlan);
   const debouncedEmail = useDebounce(email, 800);
@@ -24,6 +26,7 @@ export const SettingsTab = ({ data, onUpdate }) => {
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);
   const [isSecondDialogOpen, setIsSecondDialogOpen] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
   const CONFIRMATION_STRING = "Delete Account";
 
   useEffect(() => {
@@ -41,16 +44,24 @@ export const SettingsTab = ({ data, onUpdate }) => {
   };
 
   const handleDelete = async () => {
+    console.log("handle delete hitted");
+    
+    setIsDeleting(true);
     try {
-      const userId = localStorage.getItem("UserId");
+      const userId = localStorage.getItem("userId");
+      console.log(userId);
+      
       if (userId) {
-        await api.delete(`/User/${userId}`);
+        const response = await api.delete(`/User/${userId}`);
+        console.log(response.data);
         localStorage.clear();
+        await signOut();
         navigate('/');
       }
     } catch (error) {
       console.error("Failed to delete account:", error);
     } finally {
+      setIsDeleting(false);
       setIsSecondDialogOpen(false);
       setConfirmationText("");
     }
@@ -203,11 +214,18 @@ export const SettingsTab = ({ data, onUpdate }) => {
             </Button>
             <Button
               variant="destructive"
-              disabled={confirmationText !== CONFIRMATION_STRING}
+              disabled={confirmationText !== CONFIRMATION_STRING || isDeleting}
               onClick={handleDelete}
-              className="bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer"
+              className="bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white cursor-pointer flex items-center justify-center"
             >
-              Delete Account
+              {isDeleting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                "Delete Account"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
