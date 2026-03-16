@@ -13,7 +13,6 @@ const Loader = () => {
   ];
 
   useEffect(() => {
-    // Simulate realistic loading with multiple stages
     const stages = [
       { delay: 200, value: 15 },
       { delay: 600, value: 28 },
@@ -44,15 +43,11 @@ const Loader = () => {
       <div className="flex justify-center mb-8">
         <div className="relative">
           <div className="w-16 h-16 border-4 border-zinc-200 border-t-zinc-900 rounded-full animate-spin"></div>
-          {/* <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-b-zinc-700 rounded-full animate-spin" style={{ animationDuration: '1.5s', animationDirection: 'reverse' }}></div> */}
         </div>
       </div>
 
-      {/* Progress bar container */}
       <div className="relative">
-        {/* Background bar */}
         <div className="h-2 w-full bg-zinc-100 rounded-full overflow-hidden shadow-inner">
-          {/* Animated progress bar */}
           <div 
             className="h-full bg-gradient-to-r from-zinc-800 via-zinc-900 to-zinc-800 rounded-full transition-all duration-700 ease-out relative"
             style={{ width: `${progress}%` }}
