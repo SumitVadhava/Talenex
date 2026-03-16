@@ -75,7 +75,7 @@ const ERROR_CONFIG = {
     description:
       "An unexpected error occurred on our end. Our team has been notified. Please try again in a moment.",
     icon: ServerCrash,
-    primaryAction: { label: "Try Again", icon: RefreshCw, action: "reload" },
+    // primaryAction: { label: "Try Again", icon: RefreshCw, action: "reload" },
     secondaryAction: { label: "Go Home", icon: Home, to: "/" },
     illustration: img500
   },
@@ -172,7 +172,7 @@ const ErrorPage = ({ code: codeProp }) => {
               {/* Actions */}
               <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
                 {/* Primary — solid black */}
-                <motion.button
+                {primaryAction && <motion.button
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => handleAction(primaryAction)}
@@ -180,7 +180,7 @@ const ErrorPage = ({ code: codeProp }) => {
                 >
                   <primaryAction.icon className="w-5 h-5" />
                   {primaryAction.label}
-                </motion.button>
+                </motion.button>}
 
                 {/* Secondary — outlined */}
                 {secondaryAction && (

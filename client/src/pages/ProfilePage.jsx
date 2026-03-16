@@ -99,7 +99,7 @@ const ProfilePage = () => {
         },
       );
       // console.log(response.data);
-      console.log("Fetched user data:", response.data);
+      // console.log("Fetched user data:", response.data);
 
       const mapped = mapApiUserToMockUser(response.data);
       setSectionIds({
