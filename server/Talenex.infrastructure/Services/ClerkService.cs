@@ -52,7 +52,11 @@ namespace Talenex.infrastructure.Services
 
             var response = await _httpClient.SendAsync(request);
             
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"[ClerkService] Delete failed for {clerkUserId}. Status: {response.StatusCode}, Error: {error}");
+            }
         }
     }
 }

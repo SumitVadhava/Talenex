@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -501,18 +501,11 @@ namespace Talenex.API.Controllers
             if (clerkUserId == null)
                 return NotFound(new {Message = "User's ClerkId is not found"});
 
-            try
-            {
-                await _clerkService.DeleterUserAsync(clerkUserId);
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"[UserController] Clerk deletion failed for {clerkUserId}: {ex.Message}");
-            }
+            await _clerkService.DeleterUserAsync(clerkUserId);
 
             var deleted = await _service.DeleteAsync(id);
 
-            return deleted!= null ? Ok() : NotFound();
+            return deleted != null ? Ok() : NotFound();
         }
 
 
