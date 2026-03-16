@@ -22,12 +22,12 @@ export function UserProvider({ children }) {
 
   useEffect(() => {
     if (isLoaded) {
-      if (isSignedIn && user) {
+      if (isSignedIn && user && user.username) {
         // Prefer unsafeMetadata (onboarding data) or fallback to Clerk profile
         const profile = user.unsafeMetadata?.profile || {};
         setUserData(prev => ({
           ...prev,
-          fullName: user.fullName || "",
+          fullName: user.fullName ||  "",
           email: user.primaryEmailAddress?.emailAddress || "",
           profilePhotoUrl: profile.avatarUrl || user.imageUrl || "",
           // Don't overwrite isPremium/premiumPlan if they already exist from a previous fetch
@@ -90,10 +90,13 @@ export function UserProvider({ children }) {
           authenticate();
         }
       } else {
+        // Automatically clear local storage if Clerk says the user is logged out
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
         setLoading(false);
       }
     }
-  }, [isLoaded, isSignedIn, user, getToken]);
+  }, [isLoaded, isSignedIn, user, user?.username, getToken]);
 
   return (
     <UserContext.Provider value={{ userData, setUserData, loading, authVersion }}>

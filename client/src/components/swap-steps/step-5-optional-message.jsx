@@ -14,7 +14,13 @@ export default function Step5OptionalMessage({
   const maxChars = 1000;
 
   const handleNext = () => {
-    onNext({ message });
+    if (message.trim()) {
+      onNext({ message });
+    }
+  };
+
+  const handleSkip = () => {
+    onNext({ message: '' });
   };
 
   return (
@@ -81,7 +87,7 @@ export default function Step5OptionalMessage({
           <Button
             type="button"
             variant="outline"
-            onClick={handleNext}
+            onClick={handleSkip}
             className="w-full sm:w-auto px-6 sm:px-8 bg-transparent cursor-pointer"
           >
             Skip this step
@@ -90,7 +96,8 @@ export default function Step5OptionalMessage({
           <Button
             type="button"
             onClick={handleNext}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 cursor-pointer"
+            disabled={!message.trim()}
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Next
           </Button>

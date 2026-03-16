@@ -70,6 +70,14 @@ export default function Step3WantedSkills({
     setEditingId(null);
   };
 
+  const handleNext = () => {
+    if (formData.wantedSkills.length === 0) {
+      notification.warning({ message: "Please add at least one wanted skill, or click 'Skip for now'" });
+      return;
+    }
+    onFinish();
+  };
+
   // const handleFinish = () => {
   //   console.log("Full Onboarding Data:", formData);
   //   alert("Setup Complete! Welcome to Telnex.");
@@ -196,11 +204,11 @@ export default function Step3WantedSkills({
           Back
         </Button>
         <div className="flex items-center gap-4">
-          <button className="text-sm font-medium text-zinc-500 hover:text-zinc-800 transition-colors cursor-pointer">
+          <button onClick={onFinish} className="text-sm font-medium text-zinc-500 hover:text-zinc-800 transition-colors cursor-pointer">
             Skip for now
           </button>
           <Button
-            onClick={onFinish}
+            onClick={handleNext}
             className="bg-indigo-600 hover:bg-indigo-700 px-8 cursor-pointer"
           >
             Next

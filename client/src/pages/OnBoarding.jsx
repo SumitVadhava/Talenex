@@ -223,7 +223,7 @@ export default function OnBoarding() {
 
           // Clerk info
           clerkUserId: user.id,
-          fullName: user.fullName || formData.username,
+          fullName: user.fullName || formData.username || "",
           email: user.primaryEmailAddress?.emailAddress,
           imageUrl: user.imageUrl,
 
@@ -272,7 +272,7 @@ export default function OnBoarding() {
 
         const onboardingPayload = {
           profile: {
-            fullName: user.fullName || formData.username,
+            fullName: user.fullName || formData.username || "",
             username: formData.username,
             bio: formData.bio,
             profilePhotoUrl: formData.profilePhotoUrl || "",
@@ -309,7 +309,7 @@ export default function OnBoarding() {
           );
 
           setUserData({
-            fullName: user.fullName || formData.username,
+            fullName: user.fullName || formData.username || "",
             email: user.primaryEmailAddress?.emailAddress,
             profilePhotoUrl: formData.profilePhotoUrl || "",
           });

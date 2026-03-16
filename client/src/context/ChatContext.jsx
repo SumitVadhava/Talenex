@@ -30,6 +30,7 @@ export const ChatProvider = ({ children }) => {
                 const res = await api.get(`/User/Details/${userId}`, {
                     params: { include: ["Profile"] },
                     paramsSerializer: (params) => qs.stringify(params, { arrayFormat: "repeat" }),
+                    skipRedirect: true,
                 });
                 const backendUserData = res.data;
                 // console.log("[ChatContext] Backend user data fetched for Stream profile sync.");

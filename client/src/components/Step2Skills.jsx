@@ -137,6 +137,14 @@ export default function Step2Skills({
     });
   };
 
+  const handleNext = () => {
+    if (formData.offeredSkills.length === 0) {
+      notification.warning({ message: "Please add at least one offered skill to proceed." });
+      return;
+    }
+    onNext();
+  };
+
   const getCategoryIcon = (cat) => {
     switch (cat) {
       case "development":
@@ -566,7 +574,7 @@ export default function Step2Skills({
         </Button>
 
         <Button
-          onClick={onNext}
+          onClick={handleNext}
           className="bg-indigo-600 hover:bg-indigo-700 cursor-pointer"
         >
           Next: Skills Wanted
