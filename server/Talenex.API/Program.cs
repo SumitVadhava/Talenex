@@ -1,4 +1,4 @@
-﻿// 3rd attempt
+// 3rd attempt
 
 using Application.IRepository;
 using FluentValidation;
@@ -223,12 +223,19 @@ var app = builder.Build();
 // ==========================
 // HTTP Pipeline
 // ==========================
+app.UseStaticFiles(); // Required to serve custom CSS and favicon from wwwroot
+
 // Enable Swagger for ALL environments to make it easier to test on Render
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Talenex API V1");
-    c.RoutePrefix = "swagger"; // Swagger UI will be at /swagger
+    c.RoutePrefix = "swagger"; 
+    c.EnableFilter();    
+    c.DocumentTitle = "Talenex API Docs";
+    c.HeadContent = "<link rel='icon' type='image/png' href='/swagger-ui/favicon.png'>";
+    c.DisplayRequestDuration();
+    c.InjectStylesheet("/swagger-ui/custom.css");
 });
 
 app.UseHttpsRedirection();
