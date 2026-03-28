@@ -63,6 +63,7 @@ function App() {
     "/access-denied",
     "/server-error",
     "/maintenance",
+    "/" // yaaad rakhje nakar fati jase....
   ];
 
   // All explicitly defined route patterns — if the current path matches none of
