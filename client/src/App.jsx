@@ -189,16 +189,22 @@ function App() {
           </ProtectedRoute>}
         />
 
+      {/*<Route
+        //   path="/"
+        //   element={
+        //     <LandingPage
+        //       featureRef={featureRef}
+        //       workflowRef={workflowRef}
+        //       testimonialsRef={testimonialsRef}
+        //       heroRef={heroRef}
+        //     />
+        //   }
+        // />*/}
+
+
         <Route
           path="/"
-          element={
-            <LandingPage
-              featureRef={featureRef}
-              workflowRef={workflowRef}
-              testimonialsRef={testimonialsRef}
-              heroRef={heroRef}
-            />
-          }
+           element={<ErrorPage code="maintenance" />}
         />
 
         <Route
