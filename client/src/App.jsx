@@ -63,7 +63,6 @@ function App() {
     "/access-denied",
     "/server-error",
     "/maintenance",
-    "/" // yaaad rakhje nakar fati jase....
   ];
 
   // All explicitly defined route patterns — if the current path matches none of
@@ -190,23 +189,23 @@ function App() {
           </ProtectedRoute>}
         />
 
-      {/*<Route
-        //   path="/"
-        //   element={
-        //     <LandingPage
-        //       featureRef={featureRef}
-        //       workflowRef={workflowRef}
-        //       testimonialsRef={testimonialsRef}
-        //       heroRef={heroRef}
-        //     />
-        //   }
-        // />*/}
+      <Route
+           path="/"
+           element={
+             <LandingPage
+               featureRef={featureRef}
+               workflowRef={workflowRef}
+               testimonialsRef={testimonialsRef}
+               heroRef={heroRef}
+             />
+           }
+        />
 
 
-        <Route
+        {/*<Route
           path="/"
            element={<ErrorPage code="maintenance" />}
-        />
+        />*/}
 
         <Route
           path="/home"
