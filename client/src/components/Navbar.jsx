@@ -15,14 +15,24 @@ import { useUser, SignedIn, SignedOut, useClerk } from "@clerk/clerk-react";
 import UserDropdown from "./UserDropDown";
 import { LogOut, X } from "lucide-react";
 import { useState, useEffect, useContext } from "react";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 import { useTalenexChat } from "@/context/ChatContext";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSwaps } from "@/api/swapsApi";
 import { SwapStatus } from "@/constants/swapStatus";
 import { UserContext } from "@/context/UserContext";
 
-export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsRef }) {
+export default function Navbar({
+  heroRef,
+  featureRef,
+  workflowRef,
+  testimonialsRef,
+}) {
   const navigate = useNavigate();
   const location = useLocation();
   const [userData, setUserData] = useState(null);
@@ -33,48 +43,53 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
   const { authVersion } = useContext(UserContext);
 
   const { data: swaps = [] } = useQuery({
-    queryKey: ['swaps'],
+    queryKey: ["swaps"],
     queryFn: fetchSwaps,
     enabled: isSignedIn && authVersion > 0,
     staleTime: 1000 * 60, // 1 minute
   });
 
-  const pendingSwapsCount = swaps.filter(s => s.status === SwapStatus.PENDING).length;
+  const pendingSwapsCount = swaps.filter(
+    (s) => s.status === SwapStatus.PENDING,
+  ).length;
 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!isSignedIn) return;
 
       // Ignore if user is typing in an input or textarea
-      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName) || e.target.isContentEditable) {
+      if (
+        ["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName) ||
+        e.target.isContentEditable
+      ) {
         return;
       }
 
       const isModifier = e.ctrlKey || e.metaKey;
       if (isModifier) {
         switch (e.key.toLowerCase()) {
-          case 'e':
+          case "e":
             e.preventDefault();
-            navigate('/home');
+            navigate("/home");
             break;
-          case 's':
+          case "s":
             e.preventDefault();
-            navigate('/my-swaps');
+            navigate("/my-swaps");
             break;
-          case 'm':
+          case "m":
             e.preventDefault();
             window.open(window.location.origin + "/messages", "_blank");
             break;
-          case 'k':
+          case "k":
             e.preventDefault();
-            navigate('/join/live-room');
+            navigate("/join/live-room");
             break;
         }
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [navigate, isSignedIn]);
 
   // const scrollToSection = (ref) => {
@@ -108,8 +123,8 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
       { label: "Explore", href: "/home", shortcut: "Ctrl + E" },
       { label: "My Swaps", href: "/my-swaps", shortcut: "Ctrl + S" },
       { label: "Messages", href: "/messages", shortcut: "Ctrl + M" },
-      { label: "Connect", href: "/join/live-room", shortcut: "Ctrl + K" }
-    ]
+      { label: "Connect", href: "/join/live-room", shortcut: "Ctrl + K" },
+    ],
   };
 
   const [isOpen, setIsOpen] = useState(false);
@@ -126,75 +141,78 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
         <div className="hidden md:flex">
           <NavigationMenu>
             <NavigationMenuList className="gap-8">
-              {(isSignedIn ? navLinks["user"] : navLinks["default"]).map((link) => {
-                const isActive = link.href && location.pathname === link.href;
+              {(isSignedIn ? navLinks["user"] : navLinks["default"]).map(
+                (link) => {
+                  const isActive = link.href && location.pathname === link.href;
 
-                const linkElement = (
-                  <NavigationMenuLink
-                    className={`text-md font-semibold cursor-pointer px-3 py-2 rounded-lg transition-colors ${isActive ? 'bg-slate-50' : 'hover:bg-slate-25'
+                  const linkElement = (
+                    <NavigationMenuLink
+                      className={`text-md font-semibold cursor-pointer px-3 py-2 rounded-lg transition-colors ${
+                        isActive ? "bg-slate-50" : "hover:bg-slate-25"
                       }`}
-                    href={link.href}
-                    onClick={(e) => {
-                      // Use href for route navigation, action+ref for in-page scroll
-                      if (link.href) {
-                        e.preventDefault();
-                        if (link.href === "/messages") {
-                          const url = window.location.origin + "/messages";
-                          window.open(url, "_blank");
-                        } else {
-                          navigate(link.href);
+                      href={link.href}
+                      onClick={(e) => {
+                        // Use href for route navigation, action+ref for in-page scroll
+                        if (link.href) {
+                          e.preventDefault();
+                          if (link.href === "/messages") {
+                            const url = window.location.origin + "/messages";
+                            window.open(url, "_blank");
+                          } else {
+                            navigate(link.href);
+                          }
+                        } else if (link.action && link.ref) {
+                          e.preventDefault();
+                          if (pathName.pathname === "/") {
+                            navigate("/");
+                            setTimeout(() => {
+                              link.action(link.ref);
+                            }, 100);
+                          } else {
+                            navigate("/");
+                            setTimeout(() => {
+                              link.action(link.ref);
+                            }, 100);
+                          }
                         }
-                      } else if (link.action && link.ref) {
-                        e.preventDefault();
-                        if (pathName.pathname === "/") {
-                          navigate("/");
-                          setTimeout(() => {
-                            link.action(link.ref);
-                          }, 100);
-                        } else {
-                          navigate("/");
-                          setTimeout(() => {
-                            link.action(link.ref);
-                          }, 100);
-                        }
-                      }
-                    }}
-                  >
-                    <div className="relative inline-flex items-center">
-                      {link.label}
-                      {link.label === "Messages" && totalUnreadCount > 0 && (
-                        <span className="absolute -top-2.5 -right-4 h-5 min-w-[20px] flex justify-center rounded-full bg-black text-[11px] font-bold text-white border-2 border-white shadow-sm">
-                          <span>{totalUnreadCount}</span>
-                        </span>
-                      )}
-                      {link.label === "My Swaps" && pendingSwapsCount > 0 && (
-                        <span className="absolute -top-2.5 -right-4 flex h-5 min-w-[20px] justify-center rounded-full bg-black px-1 text-[11px] font-bold text-white border-2 border-white shadow-sm">
-                          {pendingSwapsCount}
-                        </span>
-                      )}
-                    </div>
-                  </NavigationMenuLink>
-                );
+                      }}
+                    >
+                      <div className="relative inline-flex items-center">
+                        {link.label}
+                        {link.label === "Messages" && totalUnreadCount > 0 && (
+                          <span className="absolute -top-2.5 -right-4 h-5 min-w-[20px] flex justify-center rounded-full bg-black text-[11px] font-bold text-white border-2 border-white shadow-sm">
+                            <span>{totalUnreadCount}</span>
+                          </span>
+                        )}
+                        {link.label === "My Swaps" && pendingSwapsCount > 0 && (
+                          <span className="absolute -top-2.5 -right-4 flex h-5 min-w-[20px] justify-center rounded-full bg-black px-1 text-[11px] font-bold text-white border-2 border-white shadow-sm">
+                            {pendingSwapsCount}
+                          </span>
+                        )}
+                      </div>
+                    </NavigationMenuLink>
+                  );
 
-                return (
-                  <NavigationMenuItem key={link.label}>
-                    {link.shortcut ? (
-                      <TooltipProvider>
-                        <Tooltip delayDuration={300}>
-                          <TooltipTrigger asChild>
-                            {linkElement}
-                          </TooltipTrigger>
-                          <TooltipContent side="bottom">
-                            <p>{link.shortcut}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    ) : (
-                      linkElement
-                    )}
-                  </NavigationMenuItem>
-                );
-              })}
+                  return (
+                    <NavigationMenuItem key={link.label}>
+                      {link.shortcut ? (
+                        <TooltipProvider>
+                          <Tooltip delayDuration={300}>
+                            <TooltipTrigger asChild>
+                              {linkElement}
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom">
+                              <p>{link.shortcut}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      ) : (
+                        linkElement
+                      )}
+                    </NavigationMenuItem>
+                  );
+                },
+              )}
             </NavigationMenuList>
           </NavigationMenu>
         </div>
@@ -232,14 +250,20 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
               </Button>
             </SheetTrigger>
 
-            <SheetContent side="top" className="w-full h-auto pb-5 pt-6 px-6 border-b shadow-2xl [&>button]:top-9 [&>button]:right-6 [&>button]:cursor-pointer [&>button>svg]:size-6">
+            <SheetContent
+              side="top"
+              className="w-full h-auto pb-5 pt-6 px-6 border-b shadow-2xl [&>button]:top-9 [&>button]:right-6 [&>button]:cursor-pointer [&>button>svg]:size-6"
+            >
               <div className="flex flex-col gap-6">
                 {/* Header inside drawer */}
                 <div className="flex justify-between items-center h-12">
-                  <div onClick={() => {
-                    navigate("/");
-                    setIsOpen(false);
-                  }} className="cursor-pointer">
+                  <div
+                    onClick={() => {
+                      navigate("/");
+                      setIsOpen(false);
+                    }}
+                    className="cursor-pointer"
+                  >
                     <img src={Logo} className="h-8 w-auto" alt="Logo" />
                   </div>
                   {/* Spacer to balance the logo against the close button */}
@@ -247,44 +271,52 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
 
                 {/* Nav Links */}
                 <div className="flex flex-col gap-1">
-                  {(isSignedIn ? navLinks["user"] : navLinks["default"]).map((link) => {
-                    const isActive = link.href && location.pathname === link.href;
-                    return (
-                      <button
-                        key={link.label}
-                        className={`text-left text-lg font-semibold py-4 px-4 rounded-xl transition-all duration-200 cursor-pointer ${isActive
-                          ? 'bg-slate-100 text-primary scale-[1.02]'
-                          : 'text-slate-600 hover:bg-slate-50'
+                  {(isSignedIn ? navLinks["user"] : navLinks["default"]).map(
+                    (link) => {
+                      const isActive =
+                        link.href && location.pathname === link.href;
+                      return (
+                        <button
+                          key={link.label}
+                          className={`text-left text-lg font-semibold py-4 px-4 rounded-xl transition-all duration-200 cursor-pointer ${
+                            isActive
+                              ? "bg-slate-100 text-primary scale-[1.02]"
+                              : "text-slate-600 hover:bg-slate-50"
                           }`}
-                        onClick={() => {
-                          setIsOpen(false);
-                          if (link.href) {
-                            if (link.href === "/messages") {
-                              window.open(link.href, "_blank");
-                            } else {
-                              navigate(link.href);
+                          onClick={() => {
+                            setIsOpen(false);
+                            if (link.href) {
+                              if (link.href === "/messages") {
+                                window.open(link.href, "_blank");
+                              } else {
+                                navigate(link.href);
+                              }
+                            } else if (link.action && link.ref) {
+                              link.action(link.ref);
                             }
-                          } else if (link.action && link.ref) {
-                            link.action(link.ref);
-                          }
-                        }}
-                      >
-                        <div className="relative inline-flex items-center">
-                          {link.label}
-                          {link.label === "Messages" && totalUnreadCount > 0 && (
-                            <span className="ml-2 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-black px-1.5 text-[11px] font-bold text-white shadow-sm">
-                              {totalUnreadCount > 9 ? "9+" : totalUnreadCount}
-                            </span>
-                          )}
-                          {link.label === "My Swaps" && pendingSwapsCount > 0 && (
-                            <span className="ml-2 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-black px-1.5 text-[11px] font-bold text-white shadow-sm">
-                              {pendingSwapsCount}
-                            </span>
-                          )}
-                        </div>
-                      </button>
-                    );
-                  })}
+                          }}
+                        >
+                          <div className="relative inline-flex items-center">
+                            {link.label}
+                            {link.label === "Messages" &&
+                              totalUnreadCount > 0 && (
+                                <span className="ml-2 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-black px-1.5 text-[11px] font-bold text-white shadow-sm">
+                                  {totalUnreadCount > 9
+                                    ? "9+"
+                                    : totalUnreadCount}
+                                </span>
+                              )}
+                            {link.label === "My Swaps" &&
+                              pendingSwapsCount > 0 && (
+                                <span className="ml-2 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-black px-1.5 text-[11px] font-bold text-white shadow-sm">
+                                  {pendingSwapsCount}
+                                </span>
+                              )}
+                          </div>
+                        </button>
+                      );
+                    },
+                  )}
                 </div>
 
                 {/* Bottom Actions */}
@@ -293,18 +325,25 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
                     <div className="flex items-center justify-between bg-slate-50 p-4 rounded-2xl">
                       <div className="flex items-center gap-3 cursor-pointer">
                         <img
-                          src={user?.unsafeMetadata?.profile?.avatarUrl || user?.imageUrl || "/api/placeholder/40/40"}
+                          src={
+                            user?.unsafeMetadata?.profile?.avatarUrl ||
+                            user?.imageUrl ||
+                            "/api/placeholder/40/40"
+                          }
                           className="w-12 h-12 rounded-full border-2 border-white shadow-sm"
                           alt="User"
                           onClick={() => {
                             setIsOpen(false);
-                            navigate('/user-profile');
+                            navigate("/user-profile");
                           }}
                         />
-                        <div className="flex flex-col min-w-0" onClick={() => {
-                          setIsOpen(false);
-                          navigate('/user-profile');
-                        }}>
+                        <div
+                          className="flex flex-col min-w-0"
+                          onClick={() => {
+                            setIsOpen(false);
+                            navigate("/user-profile");
+                          }}
+                        >
                           <span className="font-bold text-slate-900 truncate">
                             {user?.fullName || "User"}
                           </span>
@@ -315,7 +354,7 @@ export default function Navbar({ heroRef, featureRef, workflowRef, testimonialsR
                           setIsOpen(false);
                           signOut(() => {
                             localStorage.clear("token");
-                            navigate('/sign-in');
+                            navigate("/sign-in");
                           });
                         }}
                         className="p-3 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all cursor-pointer"
