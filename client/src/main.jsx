@@ -6,7 +6,7 @@ import './index.css'
 import App from './App.jsx'
 import { ClerkProvider } from '@clerk/clerk-react'
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { GoogleOneTap } from "@clerk/clerk-react";  // << import here
+import { GoogleOneTap } from "@clerk/clerk-react";
 import OnBoarding from './pages/OnBoarding';
 import UserProfilePage from './pages/UserProfilePage';
 import Step1BasicInfo from './components/Step1BasicInfo';
@@ -20,8 +20,8 @@ const Goggle_OAuth_CLIENTID = import.meta.env.VITE_GOOGLE_CLIENT_ID || ""
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 60,      // 1 hour no refetch
-      cacheTime: 1000 * 60 * 60 * 6,      // keep cache 6 hours
+      staleTime: 1000 * 60 * 60,     
+      cacheTime: 1000 * 60 * 60 * 6,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       retry: 1,
@@ -30,20 +30,16 @@ const queryClient = new QueryClient({
 });
 
 createRoot(document.getElementById('root')).render(
-  // <StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl='/' signInUrl='/sign-in' signUpUrl='/sign-up'>
-      <GoogleOneTap cancelOnTapOutside={true} signUpUrl="/sign-up" signInUrl="/sign-in" />
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          {/* <OnBoarding /> */}
-          <UserProvider>
-            <ChatProvider>
-              <App />
-            </ChatProvider>
-          </UserProvider>
-          {/* <UserProfilePage /> */}
-        </BrowserRouter>
-      </QueryClientProvider>
-    </ClerkProvider>
-  // </StrictMode>
+  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl='/' signInUrl='/sign-in' signUpUrl='/sign-up'>
+    <GoogleOneTap cancelOnTapOutside={true} signUpUrl="/sign-up" signInUrl="/sign-in" />
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <UserProvider>
+          <ChatProvider>
+            <App />
+          </ChatProvider>
+        </UserProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
+  </ClerkProvider>
 )

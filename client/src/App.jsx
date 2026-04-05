@@ -40,7 +40,6 @@ function App() {
   const workflowRef = useRef(null);
   const testimonialsRef = useRef(null);
   const heroRef = useRef(null);
-  // const { signIn } = useSignIn();
 
   const hideNavbarRoutes = [
     "/sign-in",
@@ -65,8 +64,6 @@ function App() {
     "/maintenance",
   ];
 
-  // All explicitly defined route patterns — if the current path matches none of
-  // these, the * catch-all is active (404) and the navbar should also be hidden.
   const KNOWN_ROUTES = [
     "/", "/home", "/sign-in/*", "/sign-up/*", "/sign-out",
     "/onboarding", "/user-profile", "/user-profile/:id",

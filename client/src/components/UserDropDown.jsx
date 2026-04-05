@@ -185,7 +185,7 @@ export default function UserDropdown() {
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
                             <button
                                 onClick={() => setShowSignOutModal(false)}
