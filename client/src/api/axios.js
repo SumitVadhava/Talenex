@@ -1,18 +1,15 @@
 import axios from "axios";
 import { navigateTo } from "../utils/navigationHelper";
 
-// ─── Constants ────────────────────────────────────────────────────────────────
 const MAX_RETRIES = 3;
-const BASE_DELAY_MS = 800; // 800 → 1600 → 3200 ms
+const BASE_DELAY_MS = 800;
 
-/** Returns a Promise that resolves after `ms` milliseconds. */
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "https://localhost:5000/api",
 });
 
-// REQUEST INTERCEPTOR — attach auth token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
