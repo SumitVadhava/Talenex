@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 export const AvailabilityTab = ({ data, onUpdate, readOnly }) => {
   const [toast, setToast] = useState(null);
 
-  // Auto-dismiss toast after 3.5s
   useEffect(() => {
     if (!toast) return;
     const t = setTimeout(() => setToast(null), 3500);
@@ -14,7 +13,7 @@ export const AvailabilityTab = ({ data, onUpdate, readOnly }) => {
   }, [toast]);
 
   const handleChange = (field, value) => {
-    // Guard: both weekdays & weekends cannot be false simultaneously
+    
     if (!value) {
       const otherField = field === 'weekdays' ? 'weekends' : 'weekdays';
       if (!data[otherField]) {
