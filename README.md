@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center"><img src="./client/public/favicon.png" alt="Talenex Logo" width="200" height="200"> Talenex</h1>
+  <h1 align="center"><img src="./client/public/favicon.png" alt="Talenex Logo" width="50" height="50"> Talenex</h1>
   <p align="center">
     <strong>Learn Grow Together.</strong>
   </p>
