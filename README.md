@@ -1,7 +1,7 @@
 <p align="center">
-  <h1 align="center">🤝 Talenex</h1>
+  <h1 align="center"><img src="./client/public/favicon.png" alt="Talenex Logo" width="200" height="200"> Talenex</h1>
   <p align="center">
-    <strong>Swap Skills. Grow Together.</strong>
+    <strong>Learn Grow Together.</strong>
   </p>
   <p align="center">
     A full-stack skill-swapping platform where users discover, connect, and exchange expertise through real-time chat, video calls, and AI-powered matching.
@@ -125,12 +125,12 @@
 ```
 ┌──────────────────────────────────────────────────────────┐
 │                        CLIENT                            │
-│  React 19 + Vite + Tailwind CSS                         │
-│  ┌──────────┐  ┌───────────┐  ┌──────────┐              │
-│  │  Clerk   │  │  Stream   │  │  Zego    │              │
-│  │  Auth    │  │  Chat     │  │  Video   │              │
-│  └────┬─────┘  └─────┬─────┘  └────┬─────┘              │
-│       │              │             │                     │
+│  React 19 + Vite + Tailwind CSS                          │
+│  ┌──────────┐  ┌───────────┐  ┌──────────┐               │
+│  │  Clerk   │  │  Stream   │  │  Zego    │               │
+│  │  Auth    │  │  Chat     │  │  Video   │               │
+│  └────┬─────┘  └─────┬─────┘  └────┬─────┘               │
+│       │              │             │                     |
 │  ┌────┴──────────────┴─────────────┴────┐                │
 │  │         Axios + React Query          │                │
 │  └──────────────────┬───────────────────┘                │
@@ -145,10 +145,10 @@
 │  │  Payment · Review · Profile · ...    │                │
 │  └──────────────────┬───────────────────┘                │
 │                     │                                    │
-│  ┌─────────┐  ┌─────┴─────┐  ┌───────────┐              │
-│  │ SignalR │  │  Services │  │ Validators│              │
-│  │ SwapHub │  │  (11)     │  │ (Fluent)  │              │
-│  └─────────┘  └─────┬─────┘  └───────────┘              │
+│  ┌─────────┐  ┌─────┴─────┐  ┌───────────┐               │
+│  │ SignalR │  │  Services │  │ Validators│               │
+│  │ SwapHub │  │  (11)     │  │ (Fluent)  │               │
+│  └─────────┘  └─────┬─────┘  └───────────┘               │
 │                     │                                    │
 │  ┌──────────────────┴───────────────────┐                │
 │  │     Repository Layer (Generic)       │                │
@@ -309,7 +309,6 @@ VITE_RAZORPAY_KEY=your_razorpay_key_id
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=...;Database=TalenexDB;...",
-    "Redis": ""                               // Optional — for future caching
   },
   "Clerk": {
     "Authority": "https://your-clerk-domain",
@@ -319,7 +318,7 @@ VITE_RAZORPAY_KEY=your_razorpay_key_id
     "Key": "your-256-bit-secret-key",
     "Issuer": "Talenex.API",
     "Audience": "Talenex.Client",
-    "ExpiresInMinutes": 500
+    "ExpiresInMinutes": "add minutes here"
   },
   "Email": {
     "SmtpHost": "smtp.gmail.com",
@@ -341,14 +340,12 @@ VITE_RAZORPAY_KEY=your_razorpay_key_id
     "Secret": "your_razorpay_secret"
   },
   "Groq": {
-    "ApiKey": "your_groq_api_key"             // For AI Match feature
+    "ApiKey": "your_groq_api_key"           
   }
 }
 ```
 
----
-
-## 🚢 Deployment
+## 🚀 Deployment
 
 ### Frontend → Vercel
 The client is configured for Vercel with SPA rewrites via `vercel.json`. Push to `main` and connect the repo to Vercel for automatic deployments.
@@ -400,13 +397,6 @@ Interactive API documentation is available via Swagger UI at:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
 
 <p align="center">
   Built with ❤️ by <a href="https://github.com/SumitVadhava">Sumit Vadhava</a> & <a href="https://github.com/Meet1611">Meet Parmar</a>
