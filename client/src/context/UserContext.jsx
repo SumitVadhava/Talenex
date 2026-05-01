@@ -44,13 +44,13 @@ export function UserProvider({ children }) {
                 return;
               }
 
-              console.log("Generated Token:", token);
+              // console.log("Generated Token:", token);
 
               const response = await api.post("/auth/", {}, {
                 headers: { Authorization: `Bearer ${token}` },
               });
 
-              console.log("Auth Response Data:", response.data);
+              // console.log("Auth Response Data:", response.data);
 
               localStorage.setItem("token", response.data.token);
               localStorage.setItem("userId", response.data.userId);

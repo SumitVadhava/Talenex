@@ -128,7 +128,7 @@ const Filters = ({ filters, setFilters, showFavoritesOnly, setShowFavoritesOnly 
 
       <Button
         variant="ghost"
-        className="w-full text-slate-500 hover:bg-red-50 hover:text-slate-600"
+        className="w-full cursor-pointer text-slate-500 hover:bg-red-50 hover:text-slate-600"
         onClick={() => {
           setFilters({
             category: ['all'],
