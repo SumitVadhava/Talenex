@@ -18,7 +18,6 @@
     <img src="https://img.shields.io/badge/React-19-blue?logo=react" alt="React 19" />
     <img src="https://img.shields.io/badge/Vite-7-646CFF?logo=vite" alt="Vite 7" />
     <img src="https://img.shields.io/badge/SQL_Server-Database-red?logo=microsoftsqlserver" alt="SQL Server" />
-    <img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License" />
   </p>
 </p>
 
